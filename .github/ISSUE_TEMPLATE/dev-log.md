@@ -1,7 +1,7 @@
 ---
 name: Dev log
 about: Dev log
-title: "[Dev Log] 이름 / 날짜"
+title: "[\U0001F4DADev Log] 이름 / 날짜"
 labels: ''
 assignees: ''
 

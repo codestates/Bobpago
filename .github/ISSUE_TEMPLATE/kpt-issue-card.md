@@ -1,7 +1,7 @@
 ---
 name: KPT Issue card
 about: KPT Issue card
-title: "[KPT]  주차 요일 회고록"
+title: "[\U0001F680KPT]  주차 요일 회고록"
 labels: ''
 assignees: ''
 

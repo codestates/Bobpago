@@ -1,7 +1,7 @@
 ---
 name: Error Handling
 about: Error Handling
-title: "[Err] "
+title: "[\U0001F6A8Err Handling] "
 labels: ''
 assignees: ''
 
