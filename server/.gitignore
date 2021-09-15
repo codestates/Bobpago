@@ -1,13 +1,27 @@
+# compiled output
+/dist
 /node_modules
 
+# dotenv
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
 
-package-lock.json
+# pem
 *.pem
 
-../.idea
-../.vscode
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+
+# IDEs and editors
+/.idea
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
