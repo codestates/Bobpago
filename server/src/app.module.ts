@@ -16,13 +16,7 @@ import { RecipeIngredient } from './entities/recipe-ingredient.entity';
 @Module({
   imports: [
     TypeOrmModule.forRoot(typeORMConfig),
-    TypeOrmModule.forFeature([
-      Comment,
-      Ingredient,
-      Recipe,
-      User,
-      RecipeIngredient,
-    ]),
+    TypeOrmModule.forFeature([Comment, Ingredient, Recipe, RecipeIngredient]),
     MeModule,
     AuthModule,
     CommentsModule,
