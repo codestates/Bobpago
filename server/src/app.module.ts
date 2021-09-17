@@ -6,17 +6,13 @@ import { RecipesModule } from './recipes/recipes.module';
 import { IngredientsModule } from './ingredients/ingredients.module';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
 import { typeORMConfig } from './config/typeorm.config';
-import { Comment } from './entities/comment.entity';
-import { Ingredient } from './entities/ingredient.entity';
-import { Recipe } from './entities/recipe.entity';
-import { User } from './entities/user.entity';
-import { RecipeIngredient } from './entities/recipe-ingredient.entity';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     TypeOrmModule.forRoot(typeORMConfig),
-    TypeOrmModule.forFeature([Comment, Ingredient, Recipe, RecipeIngredient]),
     MeModule,
     AuthModule,
     CommentsModule,
