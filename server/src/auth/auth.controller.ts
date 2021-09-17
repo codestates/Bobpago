@@ -6,37 +6,64 @@ import {
   Patch,
   Param,
   Delete,
+  ValidationPipe,
+  Header,
+  Query,
+  UseGuards,
+  Headers,
+  Req,
+  Res,
 } from '@nestjs/common';
+import { request, Request, Response } from 'express';
 import { AuthService } from './auth.service';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { CheckAuthDto } from './dto/check-auth.dto';
+import { JwtAccessAuthGuard } from './jwt-access/jwt-access.guard';
+import { JwtRefreshAuthGuard } from './jwt-refresh/jwt-refresh.guard';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post()
-  create(@Body() createAuthDto: CreateAuthDto) {
-    return this.authService.create(createAuthDto);
+  @Post('/signin')
+  signin(
+    @Body(ValidationPipe) checkAuthDto: CheckAuthDto,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<{ accessToken: string }> {
+    return this.authService.signIn(checkAuthDto, res);
   }
 
-  @Get()
-  findAll() {
-    return this.authService.findAll();
+  @UseGuards(JwtAccessAuthGuard)
+  @Post('/signout')
+  signout(@Res({ passthrough: true }) res: Response): Promise<string> {
+    return this.authService.signOut(res);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
+  @UseGuards(JwtRefreshAuthGuard)
+  @Get('/tokenRequest')
+  generateToken(@Req() req: Request): Promise<{ accessToken: string }> {
+    return this.authService.newGenerateToken(req);
   }
+  // signout(@Headers('Authorization') accessToken: string): Promise<string> {
+  //   return this.authService.signOut(accessToken);
+  // }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
-    return this.authService.update(+id, updateAuthDto);
-  }
+  // @Get()
+  // findAll() {
+  //   return this.authService.findAll();
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.authService.findOne(+id);
+  // }
+
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
+  //   return this.authService.update(+id, updateAuthDto);
+  // }
+
+  //   @Delete(':id')
+  //   remove(@Param('id') id: string) {
+  //     return this.authService.remove(+id);
+  //   }
 }
