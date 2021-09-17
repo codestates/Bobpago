@@ -6,6 +6,7 @@ import {
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 import { Bookmark } from './bookmark.entity';
@@ -16,6 +17,7 @@ import { RecipeReaction } from './recipe-reaction.entity';
 import { Recipe } from './recipe.entity';
 
 @Entity()
+@Unique(['email'])
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
