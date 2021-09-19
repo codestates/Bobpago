@@ -15,12 +15,7 @@ export class MeController {
   @Post('signup')
   async signUp(
     @Body(ValidationPipe) createUserDto: CreateUserDto,
-  ): Promise<string> {
-    await this.meService.signUp(createUserDto);
-    return Object.assign({
-      data: { ...createUserDto },
-      statusCode: 201,
-      statusMsg: `saved successfully`,
-    });
+  ): Promise<any> {
+    return this.meService.signUp(createUserDto);
   }
 }

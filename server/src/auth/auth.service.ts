@@ -17,8 +17,8 @@ export class AuthService {
 
   async signIn(
     checkAuthDto: CheckAuthDto,
-    res: Response,
-  ): Promise<{ accessToken: string }> {
+    setCookie: any,
+  ): Promise<{ accessToken: string; email: string; loginType: string }> {
     const { email, password } = checkAuthDto;
     const user = await this.usersRepository.findOne({ email });
 
@@ -29,11 +29,15 @@ export class AuthService {
         secret: process.env.REFRESH_TOKEN_SECRET,
         expiresIn: process.env.REFRESH_TOKEN_EXPIRATION_TIME,
       });
-      res.cookie('refreshToken', refreshToken);
+      setCookie.cookie('refreshToken', refreshToken);
 
       // access 토큰은 생성해서 반환
       const accessToken = await this.jwtService.sign(payload);
-      return { accessToken };
+      return {
+        accessToken,
+        email: '',
+        loginType: 'email',
+      };
     } else {
       throw new UnauthorizedException('login failed');
     }
@@ -45,31 +49,42 @@ export class AuthService {
     //   throw new UnauthorizedException('login failed');
     // }
   }
-  async signOut(res: Response): Promise<string> {
-    await res.clearCookie('refreshToken');
+  async signOut(setCookie: Response): Promise<string> {
+    await setCookie.clearCookie('refreshToken');
     return 'logout success';
   }
-  // async signOut(accessToken: string): Promise<any> {
-  //   console.log(accessToken);
-  //   const token = accessToken.split(' ')[1];
-  //   console.log(token);
-  //   const payload = await this.jwtService.verify(token);
-  //   console.log(payload);
-  //   const user = await this.usersRepository.findOne({
-  //     email: payload.email,
-  //   });
 
-  //   if (user) {
-  //     return 'success';
-  //   } else {
-  //     throw new UnauthorizedException('logout failed');
-  //   }
-  // }
-  async newGenerateToken(req: Request): Promise<{ accessToken: string }> {
-    if (req.user) {
-      console.log(req.user);
-      const accessToken = await this.jwtService.sign(req.user);
+  async newGenerateToken(user: User): Promise<{ accessToken: string }> {
+    if (user) {
+      const accessToken = await this.jwtService.sign(user);
       return { accessToken };
+    }
+  }
+
+  async kakaoSignin(user: any, setCookie: Response): Promise<any> {
+    const data = await this.usersRepository.findOne({
+      email: user.email,
+    });
+    if (!data) {
+      const userInfo = await this.usersRepository.create({
+        email: user.email,
+        nickname: user.nickname,
+      });
+      await this.usersRepository.save(userInfo);
+      setCookie.cookie('refreshToken', user.refreshToken);
+      return {
+        accessToken: user.accessToken,
+        ...userInfo,
+        loginType: 'kakao',
+      };
+    } else {
+      setCookie.cookie('refreshToken', user.refreshToken);
+      return {
+        accessToken: user.accessToken,
+        email: user.email,
+        nickname: user.nickname,
+        loginType: 'kakao',
+      };
     }
   }
 }
