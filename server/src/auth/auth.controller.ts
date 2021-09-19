@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import {
   Controller,
   Get,
@@ -14,11 +15,14 @@ import {
   Req,
   Res,
 } from '@nestjs/common';
-import { request, Request, Response } from 'express';
+import { Request, Response } from 'express';
+import { GetUser, SetCookie } from 'src/common/decorator';
+import { User } from 'src/entities/user.entity';
 import { AuthService } from './auth.service';
 import { CheckAuthDto } from './dto/check-auth.dto';
-import { JwtAccessAuthGuard } from './jwt-access/jwt-access.guard';
-import { JwtRefreshAuthGuard } from './jwt-refresh/jwt-refresh.guard';
+import { JwtAccessAuthGuard } from './jwt/jwt-access.guard';
+import { JwtRefreshAuthGuard } from './jwt/jwt-refresh.guard';
+import { KakaoAccessAuthGuard } from './kakao/kakao-access.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -27,25 +31,41 @@ export class AuthController {
   @Post('/signin')
   signin(
     @Body(ValidationPipe) checkAuthDto: CheckAuthDto,
-    @Res({ passthrough: true }) res: Response,
-  ): Promise<{ accessToken: string }> {
-    return this.authService.signIn(checkAuthDto, res);
+    // @Res({ passthrough: true }) res: Response,
+    @SetCookie() setCookie: Response,
+  ): Promise<{ accessToken: string; email: string; loginType: string }> {
+    return this.authService.signIn(checkAuthDto, setCookie);
   }
 
   @UseGuards(JwtAccessAuthGuard)
   @Post('/signout')
-  signout(@Res({ passthrough: true }) res: Response): Promise<string> {
-    return this.authService.signOut(res);
+  signout(@SetCookie() setCookie: Response): Promise<string> {
+    return this.authService.signOut(setCookie);
   }
 
   @UseGuards(JwtRefreshAuthGuard)
   @Get('/tokenRequest')
-  generateToken(@Req() req: Request): Promise<{ accessToken: string }> {
-    return this.authService.newGenerateToken(req);
+  generateToken(@GetUser() user: User): Promise<{ accessToken: string }> {
+    return this.authService.newGenerateToken(user);
   }
   // signout(@Headers('Authorization') accessToken: string): Promise<string> {
   //   return this.authService.signOut(accessToken);
   // }
+
+  @UseGuards(KakaoAccessAuthGuard)
+  @Get('/kakao')
+  kakaoAuth(@GetUser() user: User): void {
+    console.log(user);
+  }
+
+  @UseGuards(KakaoAccessAuthGuard)
+  @Get('/kakao/redirect')
+  kakaoAuthRedirect(
+    @GetUser() user: any,
+    @SetCookie() setCookie: Response,
+  ): Promise<any> {
+    return this.authService.kakaoSignin(user, setCookie);
+  }
 
   // @Get()
   // findAll() {

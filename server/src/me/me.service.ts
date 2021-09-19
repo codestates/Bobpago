@@ -14,7 +14,7 @@ export class MeService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
   ) {}
-  async signUp(createUserDto: CreateUserDto): Promise<void> {
+  async signUp(createUserDto: CreateUserDto): Promise<any> {
     console.log(createUserDto);
     const { email, password, nickname } = createUserDto;
     // const salt = await bcrypt.genSalt();
@@ -22,6 +22,11 @@ export class MeService {
     const user = this.usersRepository.create({ email, password, nickname });
     try {
       await this.usersRepository.save(user); // 유니크 조건에 통과했을때
+      return {
+        data: { ...createUserDto },
+        statusCode: 201,
+        statusMsg: `saved successfully`,
+      };
     } catch (err) {
       if (err.code === 'ER_DUP_ENTRY') {
         // 유니크 조건 통과 안됬을때
