@@ -8,6 +8,7 @@ import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { typeORMConfig } from './config/typeorm.config';
+import { ImageModule } from './image/image.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { typeORMConfig } from './config/typeorm.config';
     RecipesModule,
     IngredientsModule,
     UsersModule,
+    ImageModule,
   ],
 })
 export class AppModule {}
