@@ -8,82 +8,63 @@ import {
   Param,
   Delete,
   ValidationPipe,
-  Header,
   Query,
-  UseGuards,
-  Headers,
-  Req,
   Res,
+  Headers,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
-import { GetUser, SetCookie } from 'src/common/decorator';
+import { Response } from 'express';
+import { GetUser } from 'src/common/decorator';
+import { ResType } from 'src/common/response-type';
 import { User } from 'src/entities/user.entity';
 import { AuthService } from './auth.service';
 import { CheckAuthDto } from './dto/check-auth.dto';
-import { JwtAccessAuthGuard } from './jwt/jwt-access.guard';
-import { JwtRefreshAuthGuard } from './jwt/jwt-refresh.guard';
-import { KakaoAccessAuthGuard } from './kakao/kakao-access.guard';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('/signin')
-  signin(
-    @Body(ValidationPipe) checkAuthDto: CheckAuthDto,
-    // @Res({ passthrough: true }) res: Response,
-    @SetCookie() setCookie: Response,
-  ): Promise<{ accessToken: string; email: string; loginType: string }> {
-    return this.authService.signIn(checkAuthDto, setCookie);
+  signIn(@Body(ValidationPipe) checkAuthDto: CheckAuthDto): Promise<ResType> {
+    return this.authService.signIn(checkAuthDto);
   }
 
-  @UseGuards(JwtAccessAuthGuard)
   @Post('/signout')
-  signout(@SetCookie() setCookie: Response): Promise<string> {
-    return this.authService.signOut(setCookie);
+  signOut(
+    @GetUser() user: User,
+    @Query('tokenType') tokenType: string,
+    @Headers('Authorization') accessToken: string,
+  ): Promise<ResType> {
+    return this.authService.signOut(user, tokenType, accessToken);
   }
 
-  @UseGuards(JwtRefreshAuthGuard)
-  @Get('/tokenRequest')
-  generateToken(@GetUser() user: User): Promise<{ accessToken: string }> {
-    return this.authService.newGenerateToken(user);
+  @Get('/:userId/tokenRequest')
+  generateToken(
+    @Param('userId') userId: string,
+    @Query('tokenType') tokenType: string,
+  ): Promise<ResType> {
+    return this.authService.newGenerateToken(userId, tokenType);
   }
-  // signout(@Headers('Authorization') accessToken: string): Promise<string> {
-  //   return this.authService.signOut(accessToken);
-  // }
 
-  @UseGuards(KakaoAccessAuthGuard)
   @Get('/kakao')
-  kakaoAuth(@GetUser() user: User): void {
-    console.log(user);
+  kakaoAuth(@Res({ passthrough: true }) res: Response): Promise<any> {
+    return this.authService.kakaoAuthRedirect(res);
   }
 
-  @UseGuards(KakaoAccessAuthGuard)
   @Get('/kakao/redirect')
-  kakaoAuthRedirect(
-    @GetUser() user: any,
-    @SetCookie() setCookie: Response,
-  ): Promise<any> {
-    return this.authService.kakaoSignin(user, setCookie);
+  kakaoSignIn(@Query('code') code: string): Promise<ResType> {
+    return this.authService.kakaoSignIn(code);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.authService.findAll();
-  // }
+  @Get('/naver')
+  naverAuth(@Res({ passthrough: true }) res: Response): Promise<any> {
+    return this.authService.naverAuthRedirect(res);
+  }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.authService.findOne(+id);
-  // }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
-  //   return this.authService.update(+id, updateAuthDto);
-  // }
-
-  //   @Delete(':id')
-  //   remove(@Param('id') id: string) {
-  //     return this.authService.remove(+id);
-  //   }
+  @Get('/naver/redirect')
+  naverSignIn(
+    @Query('code') code: string,
+    @Query('state') state: string,
+  ): Promise<ResType> {
+    return this.authService.naverSignIn(code, state);
+  }
 }

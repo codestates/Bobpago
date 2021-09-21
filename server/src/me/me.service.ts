@@ -7,6 +7,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
+import { ResType } from 'src/common/response-type';
+import axios from 'axios';
 
 @Injectable()
 export class MeService {
@@ -25,7 +27,7 @@ export class MeService {
       return {
         data: { ...createUserDto },
         statusCode: 201,
-        statusMsg: `saved successfully`,
+        message: `회원가입이 완료되었습니다.`,
       };
     } catch (err) {
       if (err.code === 'ER_DUP_ENTRY') {
@@ -35,5 +37,86 @@ export class MeService {
         throw new InternalServerErrorException();
       }
     }
+  }
+
+  async getMyInfo(user: User): Promise<ResType> {
+    return {
+      data: { ...user },
+      statusCode: 200,
+      message: `내 정보 조회에 성공하였습니다.`,
+    };
+  }
+
+  async deleteMyInfo(
+    user: User,
+    accessToken: string,
+    tokenType: string,
+  ): Promise<ResType> {
+    // 1. jwt 회원탈퇴 경우
+    if (tokenType === 'jwt') {
+      await this.usersRepository.softDelete({ id: user.id });
+      return {
+        data: null,
+        statusCode: 200,
+        message: `회원탈퇴가 완료되었습니다.`,
+      };
+    }
+
+    // 2. kakao 회원탈퇴 경우
+    else if (tokenType === 'kakao') {
+      await axios.post(
+        'https://kapi.kakao.com/v1/user/unlink',
+        {},
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Authorization: accessToken,
+          },
+          withCredentials: true,
+        },
+      );
+
+      await this.usersRepository.softDelete({ id: user.id });
+      return {
+        data: null,
+        statusCode: 200,
+        message: '회원탈퇴가 완료되었습니다.',
+      };
+    }
+
+    // 3. naver 회원탈퇴 경우
+    else if (tokenType === 'naver') {
+      const formUrlEncoded = (data) => {
+        return Object.keys(data).reduce((acc, curr) => {
+          return acc + `&${curr}=${encodeURIComponent(data[curr])}`;
+        }, '');
+      };
+
+      await axios.post(
+        'https://nid.naver.com/oauth2.0/token',
+        formUrlEncoded({
+          grant_type: 'delete',
+          client_id: process.env.NAVER_CLIENT_ID,
+          client_secret: process.env.NAVER_CLIENT_SECRET,
+          access_token: accessToken.split(' ')[1],
+          service_provider: 'NAVER',
+        }),
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          withCredentials: true,
+        },
+      );
+
+      await this.usersRepository.softDelete({ id: user.id });
+      return {
+        data: null,
+        statusCode: 200,
+        message: '회원탈퇴가 완료되었습니다.',
+      };
+    }
+
+    // 4. google 회원탈퇴 경우
   }
 }
