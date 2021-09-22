@@ -1,6 +1,7 @@
 import {
   Controller,
   Post,
+  Get,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
@@ -43,5 +44,39 @@ export class ImageController {
     console.log(files);
     await this.imageService.uploadImage(files['f1'][0]);
     return files;
+  }
+  @Get('presigned')
+  @UseInterceptors(
+    FilesInterceptor('files', 3, {
+      storage: multerS3({
+        s3: s3,
+        bucket: process.env.AWS_S3_BUCKET_NAME,
+        contentType: multerS3.AUTO_CONTENT_TYPE,
+        acl: 'private',
+        key: function (req, file, cb) {
+          cb(null, file.originalname);
+        },
+      }),
+    }),
+  )
+  async getSignedUrl(@UploadedFiles() files: Express.Multer.File) {
+    return this.imageService.presignedPUTURL(files);
+  }
+  @Post('presigned')
+  @UseInterceptors(
+    FilesInterceptor('files', 3, {
+      storage: multerS3({
+        s3: s3,
+        bucket: process.env.AWS_S3_BUCKET_NAME,
+        contentType: multerS3.AUTO_CONTENT_TYPE,
+        acl: 'private',
+        key: function (req, file, cb) {
+          cb(null, file.originalname);
+        },
+      }),
+    }),
+  )
+  async presignedPUTURL(@UploadedFiles() files: Express.Multer.File) {
+    return this.imageService.presignedGETURL(files);
   }
 }
