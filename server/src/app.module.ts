@@ -44,6 +44,7 @@ export class AppModule implements NestModule {
       { path: 'auth/signout', method: RequestMethod.POST },
       { path: 'me', method: RequestMethod.GET },
       { path: 'me', method: RequestMethod.PATCH },
+      { path: 'me', method: RequestMethod.DELETE },
       { path: ':recipeId/bookmarks', method: RequestMethod.POST },
       { path: ':recipeId/bookmarks', method: RequestMethod.DELETE },
       { path: 'checkMyInfo', method: RequestMethod.POST },
