@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   NestMiddleware,
   NotFoundException,
@@ -21,14 +22,15 @@ export class AuthCheckerMiddleware implements NestMiddleware {
   async use(req: Request, res: Response, next: NextFunction) {
     const { tokenType } = req.query;
     const accessToken = req.headers.authorization.split(' ')[1];
+
     // 1. jwt 토큰인 경우
     if (tokenType === 'jwt') {
       try {
-        const payload = await this.jwtService.verify(accessToken, {
+        const result = await this.jwtService.verify(accessToken, {
           secret: process.env.ACCESS_TOKEN_SECRET,
         });
         const user = await this.usersRepository.findOne({
-          email: payload.email,
+          email: result.email,
         });
         delete user.password;
         delete user.refreshToken;
@@ -38,17 +40,18 @@ export class AuthCheckerMiddleware implements NestMiddleware {
         throw new UnauthorizedException();
       }
     }
+
     // 2. kakao 토큰인 경우
     else if (tokenType === 'kakao') {
       try {
-        const userData = await axios.get('https://kapi.kakao.com/v2/user/me', {
+        const result = await axios.get('https://kapi.kakao.com/v2/user/me', {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
           withCredentials: true,
         });
         const user = await this.usersRepository.findOne({
-          email: userData.data.kakao_account.email,
+          email: result.data.kakao_account.email,
         });
         delete user.password;
         delete user.refreshToken;
@@ -58,22 +61,18 @@ export class AuthCheckerMiddleware implements NestMiddleware {
         throw new UnauthorizedException();
       }
     }
+
     // 3. naver 토큰인 경우
     else if (tokenType === 'naver') {
       try {
-        const userData = await axios.get(
-          'https://openapi.naver.com/v1/nid/me',
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-            withCredentials: true,
+        const result = await axios.get('https://openapi.naver.com/v1/nid/me', {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
           },
-        );
-
-        console.log(userData);
+          withCredentials: true,
+        });
         const user = await this.usersRepository.findOne({
-          email: userData.data.response.email,
+          email: result.data.response.email,
         });
         delete user.password;
         delete user.refreshToken;
@@ -83,11 +82,17 @@ export class AuthCheckerMiddleware implements NestMiddleware {
         throw new UnauthorizedException();
       }
     }
+
     // 4. google 토큰인 경우
     else if (tokenType === 'google') {
       throw new UnauthorizedException();
 
       next();
+    }
+
+    // 5. 잘못된 타입인 경우
+    else {
+      throw new BadRequestException();
     }
   }
 }

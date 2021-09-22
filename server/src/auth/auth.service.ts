@@ -104,10 +104,12 @@ export class AuthService {
         message: '로그아웃에 성공하였습니다.',
       };
     }
+
     // 4. google 로그아웃의 경우
     else if (tokenType === 'google') {
-      throw new UnauthorizedException();
+      return;
     }
+
     // 5. 토큰타입 명시 오류
     else {
       throw new BadRequestException();
@@ -121,10 +123,10 @@ export class AuthService {
         id: +userId,
       });
       try {
-        const payload = await this.jwtService.verify(user.refreshToken, {
+        const result = await this.jwtService.verify(user.refreshToken, {
           secret: process.env.REFRESH_TOKEN_SECRET,
         });
-        const accessToken = this.jwtService.sign({ email: payload.email });
+        const accessToken = this.jwtService.sign({ email: result.email });
         return {
           data: {
             tokenType: 'jwt',
@@ -168,7 +170,6 @@ export class AuthService {
             withCredentials: true,
           },
         );
-
         return {
           data: {
             tokenType: 'kakao',
@@ -240,7 +241,7 @@ export class AuthService {
   }
 
   async kakaoAuthRedirect(res: Response): Promise<any> {
-    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=http://localhost:3000/auth/kakao/redirect`;
+    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}/auth/kakao/redirect`;
     return res.redirect(kakaoAuthUrl);
   }
 
@@ -259,7 +260,7 @@ export class AuthService {
         grant_type: 'authorization_code',
         client_id: process.env.KAKAO_CLIENT_ID,
         client_secret: process.env.KAKAO_CLIENT_SECRET,
-        redirect_uri: 'http://localhost:3000/auth/kakao/redirect',
+        redirect_uri: `${process.env.REDIRECT_URI}/auth/kakao/redirect`,
         code,
       }),
       {
@@ -283,6 +284,7 @@ export class AuthService {
     const nickname = userData.data.properties.nickname;
 
     // 3. 리프레쉬 토큰 db 저장, 4. 회원가입 여부 판단 및 데이터 반환
+    this.usersRepository.restore({ email });
     const user = await this.usersRepository.findOne({ email });
     if (!user) {
       const userInfo = await this.usersRepository.create({
@@ -321,7 +323,7 @@ export class AuthService {
   }
 
   async naverAuthRedirect(res: Response): Promise<any> {
-    const naverAuthUrl = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.NAVER_CLIENT_ID}&redirect_uri=http://localhost:3000/auth/naver/redirect&state=${process.env.NAVER_STATE}`;
+    const naverAuthUrl = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.NAVER_CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}/auth/naver/redirect&state=${process.env.NAVER_STATE}`;
     return res.redirect(naverAuthUrl);
   }
 
@@ -360,11 +362,11 @@ export class AuthService {
       },
       withCredentials: true,
     });
-    console.log(userData);
     const email = userData.data.response.email;
     const nickname = userData.data.response.nickname;
 
     // 3. 리프레쉬 토큰 db 저장, 4. 회원가입 여부 판단 및 데이터 반환
+    this.usersRepository.restore({ email });
     const user = await this.usersRepository.findOne({ email });
     if (!user) {
       const userInfo = await this.usersRepository.create({
