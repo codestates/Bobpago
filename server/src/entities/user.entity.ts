@@ -2,6 +2,7 @@ import {
   BaseEntity,
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   OneToMany,
   OneToOne,
@@ -34,11 +35,17 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   profile: string;
 
+  @Column({ length: 1234, nullable: true })
+  refreshToken: string;
+
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 
   @OneToMany(() => Recipe, (recipe) => recipe.user)
   recipes: Recipe[];
