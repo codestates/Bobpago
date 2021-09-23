@@ -3,8 +3,9 @@ import {
   SHOW_SIGNIN_PAGE,
   SHOW_NOTHING,
 } from "actions/SignUpAndSignIn";
+import { SignUpSignInSlide } from "../types";
 
-const initialState: InitialState = {
+const initialState: SignUpSignInSlide = {
   signUpDisplay: false,
   loginDisplay: false,
 };
@@ -13,13 +14,8 @@ interface Action {
   type: string;
 }
 
-interface InitialState {
-  signUpDisplay: boolean;
-  loginDisplay: boolean;
-}
-
 const SignUpAndSignInReducer = (
-  state: InitialState = initialState,
+  state: SignUpSignInSlide = initialState,
   action: Action
 ) => {
   switch (action.type) {

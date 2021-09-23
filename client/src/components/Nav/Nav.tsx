@@ -9,9 +9,9 @@ import {
   BoardIcon,
 } from "./styles";
 
-const Nav = () => {
+const Nav = ({ opac }: { opac: boolean }) => {
   return (
-    <NavContainer>
+    <NavContainer opac={opac}>
       <NavLogoContainer>Logo</NavLogoContainer>
       <NavEtcContainer>
         <NavEtcUl>
