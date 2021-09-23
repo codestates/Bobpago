@@ -1,5 +1,9 @@
 import React from "react";
 
+interface Props {
+  open: boolean;
+}
+
 const OpenEye = ({ open }: any) => {
   return open ? (
     <svg
