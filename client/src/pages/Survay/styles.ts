@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { main } from "theme";
+import { Search } from "@styled-icons/boxicons-regular/Search";
 
 interface MyProps {
   move?: number;
@@ -120,7 +121,7 @@ export const BadCookerTitleContainer = styled.div`
 export const PostButton = styled.button`
   position: absolute;
   bottom: 15%;
-  right: 0.8%;
+  right: 0;
   width: 10em;
   height: 2.5em;
   background-color: #ce1616;
@@ -136,4 +137,58 @@ export const PostButton = styled.button`
     background-color: red;
     transform: scale(1.1);
   }
+`;
+
+export const GoodCookerContainer = styled.div`
+  width: 80%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(5.5em);
+`;
+
+export const GoodCookerForm = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1em;
+`;
+
+export const GoodCookerTitle = styled.div`
+  font-size: 32px;
+  font-weight: 700;
+  margin-right: 2em;
+
+  @media only screen and (max-width: 768px) {
+    font-size: 16px;
+  }
+`;
+
+export const GoodCookerSearchForm = styled.div`
+  height: 100%;
+  display: flex;
+  align-items: center;
+  position: relative;
+`;
+
+export const GoodCookerSearch = styled.input`
+  height: 90%;
+  width: 100%;
+  padding-left: 2em;
+  border: none;
+  border-radius: 2px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+  outline: none;
+  @media only screen and (max-width: 768px) {
+    font-size: 14px;
+    height: 100%;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+  }
+`;
+
+export const SearchIcon = styled(Search)`
+  width: 15px;
+  position: absolute;
+  left: 7px;
 `;

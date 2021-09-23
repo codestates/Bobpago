@@ -1,5 +1,6 @@
 import { combineReducers } from "redux";
 import SignUpAndSignInReducer from "./SignUpAndSignInReducer";
+import IngredientReducer from "./IngredientReducer";
 import WriteRecipePageReducer from "./WriteRecipePageReducer";
 import WriteRecipeContentsReducer from "./WriteRecipeContentsReducer";
 import {
@@ -16,6 +17,7 @@ export interface RootState {
 
 const rootReducer = combineReducers({
   SignUpAndSignInReducer,
+  IngredientReducer,
   WriteRecipePageReducer,
   WriteRecipeContentsReducer,
 });
