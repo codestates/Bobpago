@@ -21,7 +21,6 @@ export class MeService {
     const { email, password, nickname } = createUserDto;
     // const salt = await bcrypt.genSalt();
     // const hashedPassword = await bcrypt.hash(password, salt);
-    this.usersRepository.restore({ email });
     const user = await this.usersRepository.findOne({ email });
     if (!user) {
       const newUser = this.usersRepository.create({
@@ -65,13 +64,14 @@ export class MeService {
     };
   }
 
-  async deleteMyInfo(
+  async deleteMyAccount(
     user: User,
     accessToken: string,
     tokenType: string,
   ): Promise<ResType> {
     // 1. jwt 회원탈퇴 경우
     if (tokenType === 'jwt') {
+      await this.usersRepository.update(user.id, { refreshToken: null });
       await this.usersRepository.softDelete({ id: user.id });
       return {
         data: null,
@@ -93,7 +93,7 @@ export class MeService {
           withCredentials: true,
         },
       );
-
+      await this.usersRepository.update(user.id, { refreshToken: null });
       await this.usersRepository.softDelete({ id: user.id });
       return {
         data: null,
@@ -126,7 +126,7 @@ export class MeService {
           withCredentials: true,
         },
       );
-
+      await this.usersRepository.update(user.id, { refreshToken: null });
       await this.usersRepository.softDelete({ id: user.id });
       return {
         data: null,
@@ -136,5 +136,14 @@ export class MeService {
     }
 
     // 4. google 회원탈퇴 경우
+  }
+
+  async restoreMyAccount(email: string) {
+    this.usersRepository.restore({ email });
+    return {
+      data: null,
+      statusCode: 200,
+      message: '계정복구가 완료되었습니다.',
+    };
   }
 }
