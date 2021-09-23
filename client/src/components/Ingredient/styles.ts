@@ -1,11 +1,27 @@
 import styled from "styled-components";
 
-export const BadCookerRecipeContainer = styled.div`
-  flex: 8;
+interface CookerRecipeType {
+  check: string;
+}
+
+export const CookerRecipeContainer = styled.div<CookerRecipeType>`
+  /* flex: 8; */
+  height: 50em;
   margin-bottom: 10em;
   display: flex;
   flex-wrap: wrap;
-  /* padding: 1em; */
-  justify-content: space-between;
-  align-items: center;
+  overflow: ${({ check }): any => {
+    if (check === "Good") {
+      return "scroll";
+    } else {
+      return "auto";
+    }
+  }};
+  overflow-x: ${({ check }): any => {
+    if (check === "Good") {
+      return "hidden";
+    } else {
+      return "auto";
+    }
+  }}; ;
 `;

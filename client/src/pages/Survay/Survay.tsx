@@ -15,17 +15,28 @@ import {
   BadCookerContainer,
   BadCookerTitleContainer,
   PostButton,
+  GoodCookerContainer,
+  GoodCookerForm,
+  GoodCookerTitle,
+  GoodCookerSearchForm,
+  GoodCookerSearch,
+  SearchIcon,
 } from "./styles";
 
 import Ball from "components/Svg/Ball/Ball";
 import { useState } from "react";
 import { useEffect } from "react";
 import Ingredient from "components/Ingredient/Ingredient";
+import { useDispatch, useSelector } from "react-redux";
+import { GET_FILTER_DATA } from "actions/IngredientAction";
 
 const Survay = () => {
   const [move, setmove] = useState<number>(window.innerWidth);
   const [left, setLeft] = useState<boolean>(false);
   const [right, setRight] = useState<boolean>(false);
+  const state = useSelector((state) => state.IngredientReducer);
+  const dispatch = useDispatch();
+
   // 최초에 무브 컨테이너를 가운데로 두기위해서 사용한 useState이며, type은 number로 선언한다.
 
   // resize 이벤트가 일어날 때, 위치들이 망가지는 것을 바로잡기 위해서 resize가 일어날 때마다,
@@ -54,6 +65,10 @@ const Survay = () => {
     }
   };
 
+  const handleSearch = (payload: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch({ type: GET_FILTER_DATA, payload: payload.target.value });
+  };
+
   useEffect(() => {
     let resizeTimer: NodeJS.Timeout;
     let windowSizer = () => {
@@ -74,7 +89,7 @@ const Survay = () => {
 
   return (
     <>
-      <Nav />
+      <Nav opac={false} />
       <MainContainer>
         <TotalContainer move={move}>
           <Ball
@@ -98,7 +113,26 @@ const Survay = () => {
             top={10}
             left={140}
           />
-          <GoodCookerPage>asf</GoodCookerPage>
+          <GoodCookerPage>
+            <GoodCookerContainer>
+              <GoodCookerForm>
+                <GoodCookerTitle>
+                  냉장고와 찬장에 있는 재료를 골라주세요!
+                </GoodCookerTitle>
+                <GoodCookerSearchForm>
+                  <GoodCookerSearch
+                    onChange={(e: any) => {
+                      handleSearch(e);
+                    }}
+                    placeholder="식재료를 검색해보세요!"
+                  ></GoodCookerSearch>
+                  <SearchIcon />
+                </GoodCookerSearchForm>
+              </GoodCookerForm>
+              <Ingredient check="Good" />
+              <PostButton>레시피 찾기</PostButton>
+            </GoodCookerContainer>
+          </GoodCookerPage>
           <AreYouGoodPage>
             <TextContainer>
               <HeadText>요리에 일가견이 있으신가요?</HeadText>
@@ -113,7 +147,7 @@ const Survay = () => {
               <BadCookerTitleContainer>
                 냉장고와 찬장에 있는 재료를 골라주세요!
               </BadCookerTitleContainer>
-              <Ingredient />
+              <Ingredient check="Bad" />
               <PostButton>레시피 찾기</PostButton>
             </BadCookerContainer>
           </BadCookerPage>

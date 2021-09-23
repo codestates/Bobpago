@@ -10,10 +10,14 @@ export const ContainerWrapper = styled.div<{ page: number }>`
   box-sizing: border-box;
   left: ${(props) => -props.page * 100 + "%" || "0"};
   transition: all 0.3s;
-  /* overflow: hidden;
-  &:-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera*/
-  } */
+  /* overflow: hidden; */
+  /* &:-webkit-scrollbar {
+    display: none;
+  }  */
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const TitleSlide = styled.div`
