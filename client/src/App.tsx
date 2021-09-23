@@ -13,7 +13,8 @@ import DetailRecipe from "pages/DetailRecipe/DetailRecipe";
 function App() {
   const dispatch = useDispatch();
   return (
-    <div className="app">
+    <div>
+      {/* <Survay /> */}
       {/* <Survay /> */}
       <DetailRecipe />
       {/* <Box /> */}
@@ -22,6 +23,7 @@ function App() {
       </button>
       <SignIn />
       <SignUp /> */}
+      <WriteRecipe />
       {/* <WriteRecipe /> */}
     </div>
   );
