@@ -2,12 +2,17 @@ import styled, { keyframes } from "styled-components";
 import { Email } from "@styled-icons/material-rounded/Email";
 
 export const WholeContainer = styled.div`
-  width: 14em;
-  top: 100%;
+  width: 17em;
   position: fixed;
-  height: 20em;
-  overflow: hidden;
-  border-radius: 10px;
+  height: 25em;
+  text-align: center;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  @media only screen and (max-width: 480px) {
+    width: 100%;
+    height: 100%;
+  }
 `;
 export const EmailIcon = styled(Email)`
   transform: translate(-0.2em, -0.1em);
@@ -15,13 +20,22 @@ export const EmailIcon = styled(Email)`
 `;
 
 export const Container = styled.div`
+  border-radius: 10px;
   position: absolute;
   background-color: #f7f5eb;
   color: #000;
   width: 100%;
-  height: 200vh;
   overflow-x: hidden;
   z-index: 0;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  justify-content: center;
+  @media only screen and (max-width: 480px) {
+    height: 100%;
+  }
 `;
 
 export const Background = styled.div`
@@ -38,7 +52,7 @@ export const BackgroundImg = styled.img`
 
 export const InputContainer = styled.form`
   position: relative;
-  width: 84%;
+  width: 100%;
   padding: 8.5%;
   z-index: 1;
   float: left;
@@ -46,14 +60,18 @@ export const InputContainer = styled.form`
 
 export const Logo = styled.img`
   width: 7em;
-  margin-left: 2.5em;
-  margin-right: 2.5em;
+  display: block;
+  margin: 0 auto;
   margin-top: -0.5em;
+  @media only screen and (max-width: 480px) {
+    width: 12em;
+    margin-top: 0em;
+    margin-bottom: 1em;
+  }
 `;
 export const Placeholder = styled.label`
   text-align: left;
   position: absolute;
-  transform: translateY(1.15em);
   left: 2.7em;
   z-index: 1;
   color: #7a7a76;
@@ -82,8 +100,8 @@ export const InputWrapper = styled.input`
   position: relative;
   border-radius: 3em;
   border: 1.5px solid #c2c2c2;
-  height: 2.1em;
-  width: 86%;
+  height: 2.3em;
+  width: 100%;
   font-size: 14px;
   margin-top: 0.4em;
   margin-bottom: 0.4em;
@@ -93,6 +111,9 @@ export const InputWrapper = styled.input`
   background-color: #fafafa;
   &:focus {
     outline: none;
+  }
+  @media only screen and (max-width: 480px) {
+    height: 3em;
   }
 `;
 const shake = keyframes`
@@ -196,10 +217,14 @@ export const KakaoOAuthContainer = styled(GoogleOAuthContainer)`
 `;
 export const EyeIcon = styled.div`
   position: absolute;
-  right: 1.7em;
-  transform: translateY(-2.3em);
+  right: 1.9em;
+  transform: translateY(-2.5em);
   margin-top: 0.55em;
   margin-bottom: 0.55em;
+  @media only screen and (max-width: 480px) {
+    right: 3em;
+    transform: translateY(-2.7em);
+  }
 `;
 
 export const ButtonWrapper = styled.button`
@@ -221,6 +246,9 @@ export const ButtonWrapper = styled.button`
   overflow: hidden;
   z-index: 0;
   background-color: #f5f5f5;
+  @media only screen and (max-width: 480px) {
+    height: 3em;
+  }
   &:after {
     z-index: 0;
     position: absolute;
