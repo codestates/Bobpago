@@ -54,11 +54,8 @@ export class AuthController {
   }
 
   @Get('kakao/redirect')
-  kakaoSignIn(
-    @Query('code') code: string,
-    @Res({ passthrough: true }) res: Response,
-  ): Promise<ResType> {
-    return this.authService.kakaoSignIn(code, res);
+  kakaoSignIn(@Query('code') code: string): Promise<ResType> {
+    return this.authService.kakaoSignIn(code);
   }
 
   @Get('naver')
@@ -70,8 +67,7 @@ export class AuthController {
   naverSignIn(
     @Query('code') code: string,
     @Query('state') state: string,
-    @Res({ passthrough: true }) res: Response,
   ): Promise<ResType> {
-    return this.authService.naverSignIn(code, state, res);
+    return this.authService.naverSignIn(code, state);
   }
 }
