@@ -8,20 +8,28 @@ import SignUp from "pages/SignUpAndSignIn/SignUp";
 import WriteRecipe from "pages/WriteRecipe/WriteRecipe";
 import { useDispatch } from "react-redux";
 import { showSignIn } from "actions/SignUpAndSignIn";
+<<<<<<< HEAD
 // import { LogoRow } from "components/SignUpAndSignIn/LogoRow";
   
+=======
+import DetailRecipe from "pages/DetailRecipe/DetailRecipe";
+
+>>>>>>> f34fd49b475bb1ecbd478603c5a3f1104dc6a1f2
 function App() {
   const dispatch = useDispatch();
   return (
     <div>
-      <Survay />
+      {/* <Survay /> */}
+      {/* <Survay /> */}
+      <DetailRecipe />
       {/* <Box /> */}
       {/* <button className="test" onClick={() => dispatch(showSignIn())}>
-          click
-        </button> */}
+        click
+      </button>
       <SignIn />
-      <SignUp />
+      <SignUp /> */}
       <WriteRecipe />
+      {/* <WriteRecipe /> */}
     </div>
   );
 }

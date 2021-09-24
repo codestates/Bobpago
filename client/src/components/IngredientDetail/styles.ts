@@ -61,4 +61,8 @@ export const BadCookerRecipe = styled.div<IngredientProps>`
     position: absolute;
     background-color: #ececec;
   }
+
+  @media only screen and (max-width: 768px) {
+    width: 20%;
+  }
 `;

@@ -1,9 +1,12 @@
 import {
   BaseEntity,
+  Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  RelationId,
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from './user.entity';
@@ -12,6 +15,12 @@ import { User } from './user.entity';
 export class Follow extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  followerId: number;
+
+  @Column()
+  followeeId: number;
 
   @CreateDateColumn()
   createdAt: Date;

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import {
   Controller,
   Get,
@@ -7,63 +8,66 @@ import {
   Param,
   Delete,
   ValidationPipe,
-  Header,
   Query,
-  UseGuards,
-  Headers,
-  Req,
   Res,
+  Headers,
+  HttpCode,
 } from '@nestjs/common';
-import { request, Request, Response } from 'express';
+import { Response } from 'express';
+import { GetUser } from 'src/common/decorator';
+import { ResType } from 'src/common/response-type';
+import { User } from 'src/entities/user.entity';
 import { AuthService } from './auth.service';
 import { CheckAuthDto } from './dto/check-auth.dto';
-import { JwtAccessAuthGuard } from './jwt-access/jwt-access.guard';
-import { JwtRefreshAuthGuard } from './jwt-refresh/jwt-refresh.guard';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('/signin')
-  signin(
-    @Body(ValidationPipe) checkAuthDto: CheckAuthDto,
-    @Res({ passthrough: true }) res: Response,
-  ): Promise<{ accessToken: string }> {
-    return this.authService.signIn(checkAuthDto, res);
+  @Post('signin')
+  @HttpCode(200)
+  signIn(@Body(ValidationPipe) checkAuthDto: CheckAuthDto): Promise<ResType> {
+    return this.authService.signIn(checkAuthDto);
   }
 
-  @UseGuards(JwtAccessAuthGuard)
-  @Post('/signout')
-  signout(@Res({ passthrough: true }) res: Response): Promise<string> {
-    return this.authService.signOut(res);
+  @Post('signout')
+  @HttpCode(200)
+  signOut(
+    @GetUser() user: User,
+    @Query('tokenType') tokenType: string,
+    @Headers('Authorization') accessToken: string,
+  ): Promise<ResType> {
+    return this.authService.signOut(user, tokenType, accessToken);
   }
 
-  @UseGuards(JwtRefreshAuthGuard)
-  @Get('/tokenRequest')
-  generateToken(@Req() req: Request): Promise<{ accessToken: string }> {
-    return this.authService.newGenerateToken(req);
+  @Get(':userId/tokenRequest')
+  generateToken(
+    @Param('userId') userId: string,
+    @Query('tokenType') tokenType: string,
+  ): Promise<ResType> {
+    return this.authService.newGenerateToken(userId, tokenType);
   }
-  // signout(@Headers('Authorization') accessToken: string): Promise<string> {
-  //   return this.authService.signOut(accessToken);
-  // }
 
-  // @Get()
-  // findAll() {
-  //   return this.authService.findAll();
-  // }
+  @Get('kakao')
+  kakaoAuth(@Res({ passthrough: true }) res: Response): Promise<any> {
+    return this.authService.kakaoAuthRedirect(res);
+  }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.authService.findOne(+id);
-  // }
+  @Get('kakao/redirect')
+  kakaoSignIn(@Query('code') code: string): Promise<ResType> {
+    return this.authService.kakaoSignIn(code);
+  }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
-  //   return this.authService.update(+id, updateAuthDto);
-  // }
+  @Get('naver')
+  naverAuth(@Res({ passthrough: true }) res: Response): Promise<any> {
+    return this.authService.naverAuthRedirect(res);
+  }
 
-  //   @Delete(':id')
-  //   remove(@Param('id') id: string) {
-  //     return this.authService.remove(+id);
-  //   }
+  @Get('naver/redirect')
+  naverSignIn(
+    @Query('code') code: string,
+    @Query('state') state: string,
+  ): Promise<ResType> {
+    return this.authService.naverSignIn(code, state);
+  }
 }

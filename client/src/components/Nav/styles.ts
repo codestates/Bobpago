@@ -3,12 +3,18 @@ import { ManageAccounts } from "@styled-icons/material-rounded/ManageAccounts";
 import { PostAdd } from "@styled-icons/material/PostAdd";
 import { main } from "theme";
 
-export const NavContainer = styled.div`
+interface NavProps {
+  opac?: boolean;
+}
+
+export const NavContainer = styled.div<NavProps>`
   display: flex;
   justify-content: space-between;
   position: fixed;
   width: 100%;
-  background-color: #ececec;
+  background-color: ${({ opac }): any => {
+    return opac ? "#ececec09" : "#ececec";
+  }};
   color: black;
   align-items: center;
   z-index: 10;

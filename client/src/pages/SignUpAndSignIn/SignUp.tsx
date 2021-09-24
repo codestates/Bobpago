@@ -5,7 +5,6 @@ import {
   Background,
   BackgroundImg,
   InputContainer,
-  Title,
   InputWrapper,
   ButtonWrapper,
   ButtonText,
@@ -14,14 +13,15 @@ import {
   EyeIcon,
   Ask2,
   Logo,
-} from "./styled";
+} from "./styles";
 import gsap from "gsap";
-import Eye from "../../components/SignUpAndSignIn/Eye";
+import Eye from "../../components/Eye/Eye";
 import { useSelector, useDispatch } from "react-redux";
 import { showSignIn, showNothing } from "actions/SignUpAndSignIn";
+import { RootState } from "reducers";
 
 const SignUp = () => {
-  const state = useSelector((state) => state.SignUpAndSignInReducer);
+  const state = useSelector((state: RootState) => state.SignUpAndSignInReducer);
   const { signUpDisplay } = state;
   const dispatch = useDispatch();
   const signUpRef = useRef<HTMLDivElement>(null);
@@ -41,7 +41,9 @@ const SignUp = () => {
   useEffect((): any => {
     if (signUpDisplay) {
       gsap.to(signUpRef.current, { display: "" });
-      gsap.to(signUpRef.current, { top: "10%" });
+      window.innerWidth > 480
+        ? gsap.to(signUpRef.current, { top: "15%" })
+        : gsap.to(signUpRef.current, { top: "0%" });
     } else {
       gsap.to(signUpRef.current, { top: "100%" });
       gsap.to(signUpRef.current, { display: "none" });
