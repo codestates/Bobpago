@@ -13,6 +13,7 @@ import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { typeORMConfig } from './config/typeorm.config';
+import { ImageModule } from './image/image.module';
 import { AuthCheckerMiddleware } from './middleware/auth-checker.middleware';
 import { LoggerMiddleware } from './middleware/logger.middleware';
 import { JwtModule } from '@nestjs/jwt';
@@ -29,6 +30,7 @@ import { User } from './entities/user.entity';
     RecipesModule,
     IngredientsModule,
     UsersModule,
+    ImageModule,
     JwtModule.register({
       secret: process.env.ACCESS_TOKEN_SECRET,
       signOptions: {
@@ -67,6 +69,10 @@ export class AppModule implements NestModule {
       },
       {
         path: 'recipe/:recipeId/comment/:commentId',
+        method: RequestMethod.POST,
+      },
+      {
+        path: 'image/upload',
         method: RequestMethod.POST,
       },
     );
