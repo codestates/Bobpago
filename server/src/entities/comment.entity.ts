@@ -23,6 +23,12 @@ export class Comment extends BaseEntity {
   @Column()
   content: string;
 
+  @Column()
+  userId: number;
+
+  @Column()
+  recipeId: number;
+
   @CreateDateColumn()
   createdAt: Date;
 

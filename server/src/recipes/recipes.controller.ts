@@ -11,7 +11,7 @@ import { RecipesService } from './recipes.service';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
 
-@Controller('recipes')
+@Controller('recipe')
 export class RecipesController {
   constructor(private readonly recipesService: RecipesService) {}
 

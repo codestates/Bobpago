@@ -20,6 +20,9 @@ export class RecipeImage extends BaseEntity {
   @Column()
   description: string;
 
+  @Column()
+  recipeId: number;
+
   @CreateDateColumn()
   createdAt: Date;
 
