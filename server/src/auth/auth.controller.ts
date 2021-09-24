@@ -24,13 +24,13 @@ import { CheckAuthDto } from './dto/check-auth.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('/signin')
+  @Post('signin')
   @HttpCode(200)
   signIn(@Body(ValidationPipe) checkAuthDto: CheckAuthDto): Promise<ResType> {
     return this.authService.signIn(checkAuthDto);
   }
 
-  @Post('/signout')
+  @Post('signout')
   @HttpCode(200)
   signOut(
     @GetUser() user: User,
@@ -40,7 +40,7 @@ export class AuthController {
     return this.authService.signOut(user, tokenType, accessToken);
   }
 
-  @Get('/:userId/tokenRequest')
+  @Get(':userId/tokenRequest')
   generateToken(
     @Param('userId') userId: string,
     @Query('tokenType') tokenType: string,
@@ -48,12 +48,12 @@ export class AuthController {
     return this.authService.newGenerateToken(userId, tokenType);
   }
 
-  @Get('/kakao')
+  @Get('kakao')
   kakaoAuth(@Res({ passthrough: true }) res: Response): Promise<any> {
     return this.authService.kakaoAuthRedirect(res);
   }
 
-  @Get('/kakao/redirect')
+  @Get('kakao/redirect')
   kakaoSignIn(
     @Query('code') code: string,
     @Res({ passthrough: true }) res: Response,
@@ -61,12 +61,12 @@ export class AuthController {
     return this.authService.kakaoSignIn(code, res);
   }
 
-  @Get('/naver')
+  @Get('naver')
   naverAuth(@Res({ passthrough: true }) res: Response): Promise<any> {
     return this.authService.naverAuthRedirect(res);
   }
 
-  @Get('/naver/redirect')
+  @Get('naver/redirect')
   naverSignIn(
     @Query('code') code: string,
     @Query('state') state: string,
