@@ -246,7 +246,7 @@ export class AuthService {
     return res.redirect(kakaoAuthUrl);
   }
 
-  async kakaoSignIn(code: string, res: Response): Promise<ResType> {
+  async kakaoSignIn(code: string): Promise<ResType> {
     // 0. form-urlencoded 인코딩 함수
     const formUrlEncoded = (data) => {
       return Object.keys(data).reduce((acc, curr) => {
@@ -296,14 +296,13 @@ export class AuthService {
       const newUser = await this.usersRepository.findOne({ email });
       delete newUser.password;
       delete newUser.refreshToken;
-      res.status(201);
       return {
         data: {
           tokenType: 'kakao',
           accessToken,
           ...newUser,
         },
-        statusCode: 201,
+        statusCode: 200,
         message: '카카오 소셜 회원가입 및 로그인이 완료되었습니다.',
       };
     } else {
@@ -329,11 +328,7 @@ export class AuthService {
     return res.redirect(naverAuthUrl);
   }
 
-  async naverSignIn(
-    code: string,
-    state: string,
-    res: Response,
-  ): Promise<ResType> {
+  async naverSignIn(code: string, state: string): Promise<ResType> {
     // 0. form-urlencoded 인코딩 함수
     const formUrlEncoded = (data) => {
       return Object.keys(data).reduce((acc, curr) => {
@@ -383,14 +378,13 @@ export class AuthService {
       const newUser = await this.usersRepository.findOne({ email });
       delete newUser.password;
       delete newUser.refreshToken;
-      res.status(201);
       return {
         data: {
           tokenType: 'naver',
           accessToken,
           ...newUser,
         },
-        statusCode: 201,
+        statusCode: 200,
         message: '네이버 소셜 회원가입 및 로그인이 완료되었습니다.',
       };
     } else {
