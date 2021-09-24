@@ -71,6 +71,10 @@ export class AppModule implements NestModule {
         path: 'recipe/:recipeId/comment/:commentId',
         method: RequestMethod.POST,
       },
+      {
+        path: 'image/upload',
+        method: RequestMethod.POST,
+      },
     );
   }
 }
