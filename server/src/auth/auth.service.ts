@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  HttpStatus,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -49,7 +50,7 @@ export class AuthService {
         message: '로그인에 성공하였습니다.',
       };
     } else {
-      throw new UnauthorizedException('login failed');
+      throw new NotFoundException('로그인에 실패하였습니다.');
     }
     // if (user && (await bcrypt.compare(password, user.password))) {
     //   const payload = { email };
@@ -66,7 +67,7 @@ export class AuthService {
   ): Promise<ResType> {
     // 1. jwt 로그아웃의 경우
     if (tokenType === 'jwt') {
-      await this.usersRepository.update(user.id, { refreshToken: '' });
+      await this.usersRepository.update(user.id, { refreshToken: null });
       return {
         data: null,
         statusCode: 200,
@@ -87,7 +88,7 @@ export class AuthService {
           withCredentials: true,
         },
       );
-      await this.usersRepository.update(user.id, { refreshToken: '' });
+      await this.usersRepository.update(user.id, { refreshToken: null });
       return {
         data: null,
         statusCode: 200,
@@ -97,7 +98,7 @@ export class AuthService {
 
     // 3. naver 로그아웃의 경우
     else if (tokenType === 'naver') {
-      await this.usersRepository.update(user.id, { refreshToken: '' });
+      await this.usersRepository.update(user.id, { refreshToken: null });
       return {
         data: null,
         statusCode: 200,
@@ -284,7 +285,6 @@ export class AuthService {
     const nickname = userData.data.properties.nickname;
 
     // 3. 리프레쉬 토큰 db 저장, 4. 회원가입 여부 판단 및 데이터 반환
-    this.usersRepository.restore({ email });
     const user = await this.usersRepository.findOne({ email });
     if (!user) {
       const userInfo = await this.usersRepository.create({
@@ -310,6 +310,7 @@ export class AuthService {
       const newUser = await this.usersRepository.findOne({ email });
       delete newUser.password;
       delete newUser.refreshToken;
+
       return {
         data: {
           tokenType: 'kakao',
@@ -366,7 +367,6 @@ export class AuthService {
     const nickname = userData.data.response.nickname;
 
     // 3. 리프레쉬 토큰 db 저장, 4. 회원가입 여부 판단 및 데이터 반환
-    this.usersRepository.restore({ email });
     const user = await this.usersRepository.findOne({ email });
     if (!user) {
       const userInfo = await this.usersRepository.create({

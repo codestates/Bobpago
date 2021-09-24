@@ -1,5 +1,6 @@
 import {
   BaseEntity,
+  Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
@@ -13,6 +14,12 @@ import { User } from './user.entity';
 export class Bookmark extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  userId: number;
+
+  @Column()
+  recipeId: number;
 
   @CreateDateColumn()
   createdAt: Date;
