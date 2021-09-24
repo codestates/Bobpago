@@ -1,5 +1,6 @@
 import {
   BaseEntity,
+  Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
@@ -15,6 +16,12 @@ import { User } from './user.entity';
 export class CommentReaction extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  userId: number;
+
+  @Column()
+  commentId: number;
 
   @CreateDateColumn()
   createdAt: Date;

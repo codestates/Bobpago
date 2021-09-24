@@ -1,5 +1,6 @@
 import {
   BaseEntity,
+  Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
@@ -15,6 +16,12 @@ import { User } from './user.entity';
 export class RecipeReaction extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  userId: number;
+
+  @Column()
+  recipeId: number;
 
   @CreateDateColumn()
   createdAt: Date;

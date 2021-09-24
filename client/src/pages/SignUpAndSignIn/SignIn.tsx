@@ -16,13 +16,14 @@ import {
   Placeholder,
   Ask,
   Logo,
-} from "./styled";
+} from "./styles";
 import gsap from "gsap";
 import { useSelector, useDispatch } from "react-redux";
 import { showSignUp, showNothing } from "actions/SignUpAndSignIn";
+import { RootState } from "reducers";
 
-const SignIn = ({ setLoginDisplay, setSignUpDisplay }: any) => {
-  const state = useSelector((state) => state.SignUpAndSignInReducer);
+const SignIn = () => {
+  const state = useSelector((state: RootState) => state.SignUpAndSignInReducer);
   const { loginDisplay } = state;
   const dispatch = useDispatch();
   const LoginRef = useRef<HTMLDivElement>(null);
@@ -36,7 +37,9 @@ const SignIn = ({ setLoginDisplay, setSignUpDisplay }: any) => {
   useEffect((): any => {
     if (loginDisplay) {
       gsap.to(LoginRef.current, { display: "" });
-      gsap.to(LoginRef.current, { top: "10%" });
+      window.innerWidth > 480
+        ? gsap.to(LoginRef.current, { top: "15%" })
+        : gsap.to(LoginRef.current, { top: "0%" });
     } else {
       gsap.to(LoginRef.current, { top: "100%" });
       gsap.to(LoginRef.current, { display: "none" });
@@ -55,24 +58,37 @@ const SignIn = ({ setLoginDisplay, setSignUpDisplay }: any) => {
 
   const handleEmailPlaceholderActive = () => {
     emailPlaceholderRef.current.style.fontSize = "15px";
-    emailPlaceholderRef.current.style.transform = "translate(0.1em,1.3em)";
     emailPlaceholderRef.current.style.backgroundColor = "transparent";
+    window.innerWidth > 480
+      ? (emailPlaceholderRef.current.style.transform = "translate(0.1em,1em)")
+      : (emailPlaceholderRef.current.style.transform =
+          "translate(1.5em,1.4em)");
   };
 
   const handleEmailPlaceholderNotActive = () => {
     emailPlaceholderRef.current.style.fontSize = "8px";
-    emailPlaceholderRef.current.style.transform = "translate(2.3em,0.8em)";
+    window.innerWidth > 480
+      ? (emailPlaceholderRef.current.style.transform = "translate(2.5em,0.8em)")
+      : (emailPlaceholderRef.current.style.transform = "translate(4em,0.8em)");
   };
 
   const handlePasswordPlaceholderActive = () => {
     passwordlPlaceholderRef.current.style.fontSize = "15px";
-    passwordlPlaceholderRef.current.style.transform = "translate(0.1em,1.3em)";
+    window.innerWidth > 480
+      ? (passwordlPlaceholderRef.current.style.transform =
+          "translate(0.1em,1em)")
+      : (passwordlPlaceholderRef.current.style.transform =
+          "translate(1.5em,1.4em)");
     passwordlPlaceholderRef.current.style.backgroundColor = "transparent";
   };
 
   const handlePasswordPlaceholderNotActive = () => {
     passwordlPlaceholderRef.current.style.fontSize = "8px";
-    passwordlPlaceholderRef.current.style.transform = "translate(2.5em,0.8em)";
+    window.innerWidth > 480
+      ? (passwordlPlaceholderRef.current.style.transform =
+          "translate(2.5em,0.8em)")
+      : (passwordlPlaceholderRef.current.style.transform =
+          "translate(4em,0.8em)");
   };
 
   useEffect(() => {
@@ -92,8 +108,8 @@ const SignIn = ({ setLoginDisplay, setSignUpDisplay }: any) => {
   }, [password]);
 
   return (
-    <WholeContainer ref={LoginRef}>
-      <Container>
+    <WholeContainer>
+      <Container ref={LoginRef}>
         <InputContainer>
           {/* <Title>로그인</Title> */}
           <Logo src="/img/BobpagoRow.png" width="200" />

@@ -1,11 +1,19 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { CheckAuthDto } from './dto/check-auth.dto';
-import { Request, Response } from 'express';
+import { Response } from 'express';
+import { ResType } from 'src/common/response-type';
+import axios from 'axios';
 
 @Injectable()
 export class AuthService {
@@ -15,27 +23,34 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signIn(
-    checkAuthDto: CheckAuthDto,
-    res: Response,
-  ): Promise<{ accessToken: string }> {
+  async signIn(checkAuthDto: CheckAuthDto): Promise<ResType> {
     const { email, password } = checkAuthDto;
     const user = await this.usersRepository.findOne({ email });
 
     if (user) {
       const payload = { email };
-      // refresh 토큰은 생성해서 쿠키에 저장
+      // refresh 토큰은 생성해서 db에 저장
       const refreshToken = await this.jwtService.sign(payload, {
         secret: process.env.REFRESH_TOKEN_SECRET,
         expiresIn: process.env.REFRESH_TOKEN_EXPIRATION_TIME,
       });
-      res.cookie('refreshToken', refreshToken);
-
+      await this.usersRepository.update(user.id, { refreshToken });
+      const newUser = await this.usersRepository.findOne({ email });
+      delete newUser.refreshToken;
       // access 토큰은 생성해서 반환
       const accessToken = await this.jwtService.sign(payload);
-      return { accessToken };
+      delete newUser.password;
+      return {
+        data: {
+          tokenType: 'jwt',
+          accessToken,
+          ...newUser,
+        },
+        statusCode: 200,
+        message: '로그인에 성공하였습니다.',
+      };
     } else {
-      throw new UnauthorizedException('login failed');
+      throw new NotFoundException('로그인에 실패하였습니다.');
     }
     // if (user && (await bcrypt.compare(password, user.password))) {
     //   const payload = { email };
@@ -45,31 +60,347 @@ export class AuthService {
     //   throw new UnauthorizedException('login failed');
     // }
   }
-  async signOut(res: Response): Promise<string> {
-    await res.clearCookie('refreshToken');
-    return 'logout success';
-  }
-  // async signOut(accessToken: string): Promise<any> {
-  //   console.log(accessToken);
-  //   const token = accessToken.split(' ')[1];
-  //   console.log(token);
-  //   const payload = await this.jwtService.verify(token);
-  //   console.log(payload);
-  //   const user = await this.usersRepository.findOne({
-  //     email: payload.email,
-  //   });
+  async signOut(
+    user: User,
+    tokenType: string,
+    accessToken: string,
+  ): Promise<ResType> {
+    // 1. jwt 로그아웃의 경우
+    if (tokenType === 'jwt') {
+      await this.usersRepository.update(user.id, { refreshToken: null });
+      return {
+        data: null,
+        statusCode: 200,
+        message: '로그아웃에 성공하였습니다.',
+      };
+    }
 
-  //   if (user) {
-  //     return 'success';
-  //   } else {
-  //     throw new UnauthorizedException('logout failed');
-  //   }
-  // }
-  async newGenerateToken(req: Request): Promise<{ accessToken: string }> {
-    if (req.user) {
-      console.log(req.user);
-      const accessToken = await this.jwtService.sign(req.user);
-      return { accessToken };
+    // 2. kakao 로그아웃의 경우
+    else if (tokenType === 'kakao') {
+      await axios.post(
+        'https://kapi.kakao.com/v1/user/logout',
+        {},
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Authorization: accessToken,
+          },
+          withCredentials: true,
+        },
+      );
+      await this.usersRepository.update(user.id, { refreshToken: null });
+      return {
+        data: null,
+        statusCode: 200,
+        message: '로그아웃에 성공하였습니다.',
+      };
+    }
+
+    // 3. naver 로그아웃의 경우
+    else if (tokenType === 'naver') {
+      await this.usersRepository.update(user.id, { refreshToken: null });
+      return {
+        data: null,
+        statusCode: 200,
+        message: '로그아웃에 성공하였습니다.',
+      };
+    }
+
+    // 4. google 로그아웃의 경우
+    else if (tokenType === 'google') {
+      return;
+    }
+
+    // 5. 토큰타입 명시 오류
+    else {
+      throw new BadRequestException();
+    }
+  }
+
+  async newGenerateToken(userId: string, tokenType: string): Promise<ResType> {
+    // 1. jwt 새로운 토큰 발급
+    if (tokenType === 'jwt') {
+      const user = await this.usersRepository.findOne({
+        id: +userId,
+      });
+      try {
+        const result = await this.jwtService.verify(user.refreshToken, {
+          secret: process.env.REFRESH_TOKEN_SECRET,
+        });
+        const accessToken = this.jwtService.sign({ email: result.email });
+        return {
+          data: {
+            tokenType: 'jwt',
+            accessToken,
+          },
+          statusCode: 200,
+          message: '새로운 토큰이 발급되었습니다.',
+        };
+      } catch (err) {
+        throw new UnauthorizedException(
+          '토큰의 유효기간이 만료되었습니다. 다시 로그인해주세요',
+        );
+      }
+    }
+
+    // 2. kakao 새로운 토큰 발급
+    else if (tokenType === 'kakao') {
+      const user = await this.usersRepository.findOne({
+        id: +userId,
+      });
+
+      const formUrlEncoded = (data) => {
+        return Object.keys(data).reduce((acc, curr) => {
+          return acc + `&${curr}=${encodeURIComponent(data[curr])}`;
+        }, '');
+      };
+
+      try {
+        const result = await axios.post(
+          'https://kauth.kakao.com/oauth/token',
+          formUrlEncoded({
+            grant_type: 'refresh_token',
+            client_id: process.env.KAKAO_CLIENT_ID,
+            client_secret: process.env.KAKAO_CLIENT_SECRET,
+            refresh_token: user.refreshToken,
+          }),
+          {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            withCredentials: true,
+          },
+        );
+        return {
+          data: {
+            tokenType: 'kakao',
+            accessToken: result.data.access_token,
+          },
+          statusCode: 200,
+          message: '새로운 토큰이 발급되었습니다.',
+        };
+      } catch (err) {
+        throw new UnauthorizedException(
+          '토큰의 유효기간이 만료되었습니다. 다시 로그인해주세요',
+        );
+      }
+    }
+
+    // 3. naver 새로운 토큰 발급
+    else if (tokenType === 'naver') {
+      const user = await this.usersRepository.findOne({
+        id: +userId,
+      });
+
+      const formUrlEncoded = (data) => {
+        return Object.keys(data).reduce((acc, curr) => {
+          return acc + `&${curr}=${encodeURIComponent(data[curr])}`;
+        }, '');
+      };
+
+      try {
+        const result = await axios.post(
+          'https://nid.naver.com/oauth2.0/token',
+          formUrlEncoded({
+            grant_type: 'refresh_token',
+            client_id: process.env.NAVER_CLIENT_ID,
+            client_secret: process.env.NAVER_CLIENT_SECRET,
+            refresh_token: user.refreshToken,
+          }),
+          {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            withCredentials: true,
+          },
+        );
+
+        return {
+          data: {
+            tokenType: 'naver',
+            accessToken: result.data.access_token,
+          },
+          statusCode: 200,
+          message: '새로운 토큰이 발급되었습니다.',
+        };
+      } catch (err) {
+        throw new UnauthorizedException(
+          '토큰의 유효기간이 만료되었습니다. 다시 로그인해주세요',
+        );
+      }
+    }
+
+    // 4. google 새로운 토큰 발급
+    else if (tokenType === 'google') {
+      throw new UnauthorizedException();
+    }
+
+    // 5. 토큰 타입에 제대로된 정보를 담지 않은 경우
+    else {
+      throw new BadRequestException();
+    }
+  }
+
+  async kakaoAuthRedirect(res: Response): Promise<any> {
+    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}/auth/kakao/redirect`;
+    return res.redirect(kakaoAuthUrl);
+  }
+
+  async kakaoSignIn(code: string): Promise<ResType> {
+    // 0. form-urlencoded 인코딩 함수
+    const formUrlEncoded = (data) => {
+      return Object.keys(data).reduce((acc, curr) => {
+        return acc + `&${curr}=${encodeURIComponent(data[curr])}`;
+      }, '');
+    };
+
+    // 1. 토큰 받기
+    const tokenData = await axios.post(
+      'https://kauth.kakao.com/oauth/token',
+      formUrlEncoded({
+        grant_type: 'authorization_code',
+        client_id: process.env.KAKAO_CLIENT_ID,
+        client_secret: process.env.KAKAO_CLIENT_SECRET,
+        redirect_uri: `${process.env.REDIRECT_URI}/auth/kakao/redirect`,
+        code,
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        withCredentials: true,
+      },
+    );
+    const accessToken = tokenData.data.access_token;
+    const refreshToken = tokenData.data.refresh_token;
+
+    // 2. 사용자 정보 받기
+    const userData = await axios.get('https://kapi.kakao.com/v2/user/me', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      withCredentials: true,
+    });
+    const email = userData.data.kakao_account.email;
+    const nickname = userData.data.properties.nickname;
+
+    // 3. 리프레쉬 토큰 db 저장, 4. 회원가입 여부 판단 및 데이터 반환
+    const user = await this.usersRepository.findOne({ email });
+    if (!user) {
+      const userInfo = await this.usersRepository.create({
+        email,
+        nickname,
+        refreshToken,
+      });
+      await this.usersRepository.save(userInfo);
+      const newUser = await this.usersRepository.findOne({ email });
+      delete newUser.password;
+      delete newUser.refreshToken;
+      return {
+        data: {
+          tokenType: 'kakao',
+          accessToken,
+          ...newUser,
+        },
+        statusCode: 200,
+        message: '카카오 소셜 회원가입 및 로그인이 완료되었습니다.',
+      };
+    } else {
+      await this.usersRepository.update(user.id, { refreshToken });
+      const newUser = await this.usersRepository.findOne({ email });
+      delete newUser.password;
+      delete newUser.refreshToken;
+
+      return {
+        data: {
+          tokenType: 'kakao',
+          accessToken,
+          ...newUser,
+        },
+        statusCode: 200,
+        message: '카카오 소셜 로그인이 완료되었습니다.',
+      };
+    }
+  }
+
+  async naverAuthRedirect(res: Response): Promise<any> {
+    const naverAuthUrl = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.NAVER_CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}/auth/naver/redirect&state=${process.env.NAVER_STATE}`;
+    return res.redirect(naverAuthUrl);
+  }
+
+  async naverSignIn(code: string, state: string): Promise<ResType> {
+    // 0. form-urlencoded 인코딩 함수
+    const formUrlEncoded = (data) => {
+      return Object.keys(data).reduce((acc, curr) => {
+        return acc + `&${curr}=${encodeURIComponent(data[curr])}`;
+      }, '');
+    };
+
+    // 1. 토큰 받기
+    const tokenData = await axios.post(
+      'https://nid.naver.com/oauth2.0/token',
+      formUrlEncoded({
+        grant_type: 'authorization_code',
+        client_id: process.env.NAVER_CLIENT_ID,
+        client_secret: process.env.NAVER_CLIENT_SECRET,
+        code,
+        state,
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        withCredentials: true,
+      },
+    );
+    const accessToken = tokenData.data.access_token;
+    const refreshToken = tokenData.data.refresh_token;
+
+    // 2. 사용자 정보 받기
+    const userData = await axios.get('https://openapi.naver.com/v1/nid/me', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      withCredentials: true,
+    });
+    const email = userData.data.response.email;
+    const nickname = userData.data.response.nickname;
+
+    // 3. 리프레쉬 토큰 db 저장, 4. 회원가입 여부 판단 및 데이터 반환
+    const user = await this.usersRepository.findOne({ email });
+    if (!user) {
+      const userInfo = await this.usersRepository.create({
+        email,
+        nickname,
+        refreshToken,
+      });
+      await this.usersRepository.save(userInfo);
+      const newUser = await this.usersRepository.findOne({ email });
+      delete newUser.password;
+      delete newUser.refreshToken;
+      return {
+        data: {
+          tokenType: 'naver',
+          accessToken,
+          ...newUser,
+        },
+        statusCode: 200,
+        message: '네이버 소셜 회원가입 및 로그인이 완료되었습니다.',
+      };
+    } else {
+      await this.usersRepository.update(user.id, { refreshToken });
+      const newUser = await this.usersRepository.findOne({ email });
+      delete newUser.password;
+      delete newUser.refreshToken;
+      return {
+        data: {
+          tokenType: 'naver',
+          accessToken,
+          ...newUser,
+        },
+        statusCode: 200,
+        message: '네이버 소셜 로그인이 완료되었습니다.',
+      };
     }
   }
 }
