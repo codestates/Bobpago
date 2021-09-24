@@ -7,6 +7,7 @@ import {
   Get,
   Delete,
   Query,
+  HttpCode,
 } from '@nestjs/common';
 import { MeService } from './me.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -30,11 +31,17 @@ export class MeController {
   }
 
   @Delete('me')
-  async deleteMyInfo(
+  async deleteMyAccount(
     @GetUser() user: User,
     @Headers('Authorization') accessToken: string,
     @Query('tokenType') tokenType: string,
   ): Promise<ResType> {
-    return this.meService.deleteMyInfo(user, accessToken, tokenType);
+    return this.meService.deleteMyAccount(user, accessToken, tokenType);
+  }
+
+  @Post('restore')
+  @HttpCode(200)
+  async restoreMyAccount(@Body('email') email: string): Promise<ResType> {
+    return this.meService.restoreMyAccount(email);
   }
 }

@@ -1,5 +1,6 @@
 import {
   BaseEntity,
+  Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
@@ -13,6 +14,12 @@ import { Recipe } from './recipe.entity';
 export class RecipeIngredient extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  recipeId: number;
+
+  @Column()
+  ingredientId: number;
 
   @CreateDateColumn()
   createdAt: Date;
