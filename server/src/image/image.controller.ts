@@ -6,6 +6,7 @@ import {
   Post,
   UploadedFile,
   Param,
+  Query,
 } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { ImageService } from './image.service';
@@ -18,13 +19,14 @@ import { ResType } from '../common/response-type';
 export class ImageController {
   constructor(private readonly imageService: ImageService) {}
 
-  @Post(':recipeId/upload')
+  @Post(':id/upload')
   @UseInterceptors(FilesInterceptor('files'))
   async upload(
-    @Param('recipeId') recipeId,
+    @Param('id') id,
+    @Query('path') path,
     @UploadedFiles() files,
     @GetUser() user: User,
   ): Promise<ResType> {
-    return await this.imageService.upload(files, user, recipeId);
+    return await this.imageService.upload(files, user, id, path);
   }
 }
