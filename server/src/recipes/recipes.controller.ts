@@ -1,42 +1,28 @@
 import {
   Controller,
-  Get,
   Post,
   Body,
-  Patch,
-  Param,
-  Delete,
+  UseInterceptors,
+  UploadedFiles,
 } from '@nestjs/common';
 import { RecipesService } from './recipes.service';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
-import { UpdateRecipeDto } from './dto/update-recipe.dto';
+import { Recipe } from '../entities/recipe.entity';
+import { ResType } from '../common/response-type';
+import { GetUser } from 'src/common/decorator';
+import { User } from 'src/entities/user.entity';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import axios from 'axios';
 
 @Controller('recipe')
 export class RecipesController {
   constructor(private readonly recipesService: RecipesService) {}
 
   @Post()
-  create(@Body() createRecipeDto: CreateRecipeDto) {
-    return this.recipesService.create(createRecipeDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.recipesService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.recipesService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRecipeDto: UpdateRecipeDto) {
-    return this.recipesService.update(+id, updateRecipeDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.recipesService.remove(+id);
+  async create(
+    @Body() createRecipeDto: CreateRecipeDto,
+    @GetUser() user: User,
+  ): Promise<ResType> {
+    return this.recipesService.createRecipe(createRecipeDto, user);
   }
 }
