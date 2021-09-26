@@ -8,9 +8,10 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { RecipeIngredient } from './recipe-ingredient.entity';
+import { RecipeSubIngredient } from './recipe-sub-ingredient.entity';
 
 @Entity()
-export class Ingredient extends BaseEntity {
+export class SubIngredient extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -18,7 +19,7 @@ export class Ingredient extends BaseEntity {
   name: string;
 
   @Column()
-  type: string;
+  category: string;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -27,8 +28,8 @@ export class Ingredient extends BaseEntity {
   updatedAt: Date;
 
   @OneToMany(
-    () => RecipeIngredient,
-    (recipeIngredient) => recipeIngredient.ingredient,
+    () => RecipeSubIngredient,
+    (recipeSubIngredient) => recipeSubIngredient.subIngredient,
   )
-  recipeIngredients: RecipeIngredient[];
+  recipeSubIngredients: RecipeSubIngredient[];
 }
