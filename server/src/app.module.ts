@@ -54,7 +54,7 @@ export class AppModule implements NestModule {
       { path: 'user/:userId/followee', method: RequestMethod.GET },
       { path: 'user/:userId/follow', method: RequestMethod.POST },
       { path: 'user/:userId/follow', method: RequestMethod.DELETE },
-      { path: 'recipe', method: RequestMethod.DELETE },
+      { path: 'recipe', method: RequestMethod.POST },
       { path: 'recipe/:recipeId', method: RequestMethod.PATCH },
       { path: 'recipe/:recipeId', method: RequestMethod.DELETE },
       { path: 'recipe/:recipeId', method: RequestMethod.POST },
