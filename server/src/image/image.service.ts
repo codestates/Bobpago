@@ -21,7 +21,7 @@ export class ImageService {
     private recipeImageRepository: Repository<RecipeImage>,
   ) {}
 
-  async upload(files, user, recipeId): Promise<ResType> {
+  async upload(files, user, id, path): Promise<ResType> {
     console.log(files);
     const urls = [];
     await Promise.all(
@@ -31,11 +31,12 @@ export class ImageService {
           process.env.AWS_S3_BUCKET_NAME,
           Date.now(),
           urls,
-          recipeId,
+          id,
+          path,
         );
       }),
     );
-    await this.uploadImageUrl(recipeId, urls);
+    await this.uploadImageUrl(id, urls, path);
 
     return {
       data: { imageUrl: urls },
@@ -44,10 +45,10 @@ export class ImageService {
     };
   }
 
-  async uploadS3(file, bucket, filename, urls, recipeId) {
+  async uploadS3(file, bucket, filename, urls, id, path) {
     const params = {
       Bucket: bucket,
-      Key: `images/${recipeId}/${filename}`,
+      Key: `${path}/${id}/${filename}`,
       Body: file,
     };
     urls.push(params.Key);
@@ -62,13 +63,17 @@ export class ImageService {
     });
   }
 
-  async uploadImageUrl(recipeId, urls) {
-    const recipeImage = await this.recipeImageRepository.find({
-      recipeId,
-    });
-    for (let i = 0; i < recipeImage.length; i++) {
-      recipeImage[i].imageUrl = urls[i];
+  async uploadImageUrl(id, urls, path) {
+    if (path === 'recipe') {
+      const recipeImage = await this.recipeImageRepository.find({
+        id,
+      });
+      for (let i = 0; i < recipeImage.length; i++) {
+        recipeImage[i].imageUrl = urls[i];
+      }
+      await this.recipeImageRepository.save(recipeImage);
+    } else if (path === 'comment') {
+    } else if (path === 'user') {
     }
-    await this.recipeImageRepository.save(recipeImage);
   }
 }

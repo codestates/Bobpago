@@ -13,7 +13,6 @@ import { Comment } from './comment.entity';
 import { RecipeImage } from './recipe-image.entity';
 import { RecipeIngredient } from './recipe-ingredient.entity';
 import { RecipeReaction } from './recipe-reaction.entity';
-import { RecipeSubIngredient } from './recipe-sub-ingredient.entity';
 import { User } from './user.entity';
 
 @Entity()
@@ -56,12 +55,6 @@ export class Recipe extends BaseEntity {
     (recipeIngredient) => recipeIngredient.recipe,
   )
   recipeIngredients: RecipeIngredient[];
-
-  @OneToMany(
-    () => RecipeSubIngredient,
-    (recipeSubIngredient) => recipeSubIngredient.recipe,
-  )
-  recipeSubIngredients: RecipeSubIngredient[];
 
   @OneToMany(() => RecipeImage, (recipeImage) => recipeImage.recipe)
   recipeImages: RecipeImage[];
