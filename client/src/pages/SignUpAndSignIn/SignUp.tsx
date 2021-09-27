@@ -24,7 +24,7 @@ const SignUp = () => {
   const state = useSelector((state: RootState) => state.SignUpAndSignInReducer);
   const { signUpDisplay } = state;
   const dispatch = useDispatch();
-  const signUpRef = useRef<HTMLDivElement>(null);
+  const signUpRef = useRef<any>(null);
   const passwordRef = useRef<any>(null);
   const passwordConfirmRef = useRef<any>(null);
   const emailError = useRef<any>(null);

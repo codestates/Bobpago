@@ -53,7 +53,7 @@ export const RecipeTitle = styled.div`
 export const StarContainer = styled.div`
   position: relative;
   justify-content: center;
-  align-item: center;
+  align-items: center;
   padding: 1em auto;
   display: table;
   margin-left: auto;

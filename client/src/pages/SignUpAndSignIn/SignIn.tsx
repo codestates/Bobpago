@@ -26,7 +26,7 @@ const SignIn = () => {
   const state = useSelector((state: RootState) => state.SignUpAndSignInReducer);
   const { loginDisplay } = state;
   const dispatch = useDispatch();
-  const LoginRef = useRef<HTMLDivElement>(null);
+  const LoginRef = useRef<any>(null);
   const emailError = useRef<any>(null);
   const passwordError = useRef<any>(null);
   const emailPlaceholderRef = useRef<any>(null);

@@ -66,7 +66,7 @@ const Ingredient = ({
 
   useEffect(() => {
     const alreadySelected = options.filter(
-      (el) => contents.ingredient.indexOf(el.id) !== -1
+      (el: any) => contents.ingredient.indexOf(el.id) !== -1
     );
     setSelected(alreadySelected);
   }, [options]);
@@ -86,7 +86,7 @@ const Ingredient = ({
   }, [circle1IsHover]);
 
   const handleStoreIngredient = () => {
-    const filteredSelected = selected.map((el) => el.id);
+    const filteredSelected = selected.map((el: any) => el.id);
     dispatch(setDifficulty(difficulty));
     dispatch(setIngredient(filteredSelected));
     dispatch(goToNextPageEdit());

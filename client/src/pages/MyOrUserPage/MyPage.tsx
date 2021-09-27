@@ -49,7 +49,7 @@ const MyPage = () => {
 
   return (
     <>
-      <Nav />
+      <Nav opac={false} />
       <PageContainer>
         <UserProfileContainer>
           <ProfileImgContainer>
