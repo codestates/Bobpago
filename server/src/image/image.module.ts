@@ -13,7 +13,7 @@ import { Comment } from '../entities/comment.entity';
 import { CommentReaction } from '../entities/comment-reaction.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([RecipeImage])],
+  imports: [TypeOrmModule.forFeature([RecipeImage, Recipe])],
   controllers: [ImageController],
   providers: [ImageService],
 })

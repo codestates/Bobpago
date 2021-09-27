@@ -38,6 +38,9 @@ export class Recipe extends BaseEntity {
   @Column()
   estTime: number;
 
+  @Column()
+  views: number;
+
   @CreateDateColumn()
   createdAt: Date;
 
