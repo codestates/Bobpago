@@ -52,7 +52,7 @@ const Ingredient = ({
   }, [circle1IsHover]);
 
   const handleStoreIngredient = () => {
-    const filteredSelected = selected.map((el) => el.id);
+    const filteredSelected = selected.map((el: Option) => el.id);
     dispatch(setDifficulty(difficulty));
     dispatch(setIngredient(filteredSelected));
     dispatch(goToNextPage());

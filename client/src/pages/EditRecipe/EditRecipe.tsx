@@ -48,7 +48,7 @@ const EditRecipe = () => {
 
   return (
     <>
-      <Nav />
+      <Nav opac={false} />
       <ContainerWrapper>
         <Title
           setCircle1IsHover={setCircle1IsHover}
