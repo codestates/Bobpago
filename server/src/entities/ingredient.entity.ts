@@ -18,7 +18,7 @@ export class Ingredient extends BaseEntity {
   name: string;
 
   @Column()
-  category: string;
+  type: string;
 
   @CreateDateColumn()
   createdAt: Date;

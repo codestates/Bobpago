@@ -30,6 +30,12 @@ export class Recipe extends BaseEntity {
   level: number;
 
   @Column()
+  amount: number;
+
+  @Column()
+  thumbnail: string;
+
+  @Column()
   estTime: number;
 
   @CreateDateColumn()
