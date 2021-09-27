@@ -9,6 +9,11 @@ import WriteRecipe from "pages/WriteRecipe/WriteRecipe";
 import { useDispatch } from "react-redux";
 import { showSignIn } from "actions/SignUpAndSignIn";
 import DetailRecipe from "pages/DetailRecipe/DetailRecipe";
+import NofiticationCenter from "components/Notification/NotificationCenter";
+import MyPage from "pages/MyOrUserPage/MyPage";
+import UserPage from "pages/MyOrUserPage/UserPage";
+import EditRecipe from "pages/EditRecipe/EditRecipe";
+import FollowModal from "components/FollowModal/FollowModal";
 
 function App() {
   const dispatch = useDispatch();
@@ -16,15 +21,19 @@ function App() {
     <div>
       {/* <Survay /> */}
       {/* <Survay /> */}
-      <DetailRecipe />
+      {/* <DetailRecipe /> */}
       {/* <Box /> */}
       {/* <button className="test" onClick={() => dispatch(showSignIn())}>
         click
       </button>
       <SignIn />
       <SignUp /> */}
-      <WriteRecipe />
       {/* <WriteRecipe /> */}
+      {/* <EditRecipe /> */}
+      {/* <MyPage /> */}
+      {/* <UserPage /> */}
+      {/* <FollowModal /> */}
+      <NofiticationCenter />
     </div>
   );
 }

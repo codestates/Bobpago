@@ -8,11 +8,18 @@ export interface WriteRecipePage {
 }
 
 type NumOrNull = number | null;
+type StringOrUndifined = string | undefined;
 
 export interface WriteRecipeContent {
   title: string;
   ingredient: NumOrNull[];
-  time: number | null;
+  time: number;
   description: string[];
   image: string[];
+  difficulty: number;
+  serving: number;
+}
+
+export interface Notification {
+  notifications: StringOrUndifined[];
 }

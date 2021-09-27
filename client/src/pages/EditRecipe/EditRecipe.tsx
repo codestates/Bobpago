@@ -2,43 +2,49 @@ import React, { useState, useEffect, useRef } from "react";
 import SearchBar from "components/SearchBar/SearchBar";
 import Book from "components/Book/Book";
 import Nav from "components/Nav/Nav";
-import Title from "./Title";
-import Time from "./Time";
-import Ingredient from "./Ingredient";
-import Description from "./Description";
+import Title from "./TitleEdit";
+import Time from "./TimeEdit";
+import Ingredient from "./IngredientEdit";
+import Description from "./DescriptionEdit";
 import Circle1 from "components/MovingCircle/WriteRecipe/WriteRecipeCircle1";
 import Circle2 from "components/MovingCircle/WriteRecipe/WriteRecipeCircle2";
 import { ContainerWrapper } from "./styles";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "reducers";
+import { goToNextPageEdit, goToPrevPageEdit } from "actions/EditRecipePage";
 import {
-  goToNextPage,
-  goToPrevPage,
-  resetWritePage,
-} from "actions/WriteRecipePage";
-import { resetAllContents } from "actions/WriteRecipeContents";
+  editTitle,
+  editTime,
+  editDescription,
+  editDifficulty,
+  editIngredient,
+  editServing,
+  editImage,
+} from "actions/EditRecipeContents";
 
-const WriteRecipe = () => {
+const EditRecipe = () => {
   const [circle1IsHover, setCircle1IsHover] = useState<boolean>(false);
   const [circle2IsHover, setCircle2IsHover] = useState<boolean>(false);
   const dispatch = useDispatch();
   const page = useSelector(
-    (state: RootState) => state.WriteRecipePageReducer.currentPage
+    (state: RootState) => state.EditRecipePageReducer.currentPage
   );
   const [scale, setScale] = useState<number>(0);
 
   useEffect(() => {
-    return () => {
-      dispatch(resetAllContents());
-      dispatch(resetWritePage());
-    };
-  }, []);
-
-  useEffect(() => {
-    page < 0 && dispatch(goToNextPage());
-    page > 3 && dispatch(goToPrevPage());
+    page < 0 && dispatch(goToNextPageEdit());
+    page > 3 && dispatch(goToPrevPageEdit());
     setTimeout(() => setScale(page), 700);
   }, [page]);
+
+  useEffect(() => {
+    dispatch(editTitle(String(Math.random())));
+    dispatch(editDifficulty(2));
+    dispatch(editIngredient([2, 4, 5]));
+    dispatch(editServing(2));
+    dispatch(editTime(10));
+    dispatch(editDescription(["adsf", "bbbb", "cccc", "dddd"]));
+  }, []);
 
   return (
     <>
@@ -75,4 +81,4 @@ const WriteRecipe = () => {
   );
 };
 
-export default WriteRecipe;
+export default EditRecipe;

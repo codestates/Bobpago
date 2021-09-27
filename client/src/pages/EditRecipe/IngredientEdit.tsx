@@ -4,7 +4,7 @@ import Tag from "components/Tag/Tag";
 import WriteRecipeStarRating from "components/StarRating/WriteRecipe/WriteRecipeStarRating";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "reducers";
-import { goToNextPage, goToPrevPage } from "actions/WriteRecipePage";
+import { goToNextPageEdit, goToPrevPageEdit } from "actions/EditRecipePage";
 import { setDifficulty, setIngredient } from "actions/WriteRecipeContents";
 import {
   IngredientSlide,
@@ -40,23 +40,9 @@ const Ingredient = ({
   const [selected, setSelected] = useState<any>([]);
   const wrapperRef = useRef<any>(null);
   const autoRef = useRef<any>(null);
-
-  useEffect(() => {
-    if (circle2IsHover) setCircle2IsHover(true);
-    else setCircle2IsHover(false);
-  }, [circle2IsHover]);
-
-  useEffect(() => {
-    if (circle1IsHover) setCircle1IsHover(true);
-    else setCircle1IsHover(false);
-  }, [circle1IsHover]);
-
-  const handleStoreIngredient = () => {
-    const filteredSelected = selected.map((el) => el.id);
-    dispatch(setDifficulty(difficulty));
-    dispatch(setIngredient(filteredSelected));
-    dispatch(goToNextPage());
-  };
+  const contents = useSelector(
+    (state: RootState) => state.EditRecipeContentsReducer
+  );
 
   useEffect(() => {
     const arr = [
@@ -77,6 +63,34 @@ const Ingredient = ({
     ];
     setOptions(arr);
   }, []);
+
+  useEffect(() => {
+    const alreadySelected = options.filter(
+      (el) => contents.ingredient.indexOf(el.id) !== -1
+    );
+    setSelected(alreadySelected);
+  }, [options]);
+
+  useEffect(() => {
+    setDifficulty2(contents.difficulty);
+  }, []);
+
+  useEffect(() => {
+    if (circle2IsHover) setCircle2IsHover(true);
+    else setCircle2IsHover(false);
+  }, [circle2IsHover]);
+
+  useEffect(() => {
+    if (circle1IsHover) setCircle1IsHover(true);
+    else setCircle1IsHover(false);
+  }, [circle1IsHover]);
+
+  const handleStoreIngredient = () => {
+    const filteredSelected = selected.map((el) => el.id);
+    dispatch(setDifficulty(difficulty));
+    dispatch(setIngredient(filteredSelected));
+    dispatch(goToNextPageEdit());
+  };
 
   useEffect(() => {
     window.addEventListener("mousedown", handleClickOutside);
@@ -222,7 +236,7 @@ const Ingredient = ({
         ref={circle1}
         page={page}
         self={2}
-        onClick={() => dispatch(goToPrevPage())}
+        onClick={() => dispatch(goToPrevPageEdit())}
       >
         Prev
       </PrevButton>
