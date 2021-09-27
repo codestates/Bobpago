@@ -38,11 +38,11 @@ const SignIn = () => {
     if (loginDisplay) {
       gsap.to(LoginRef.current, { display: "" });
       window.innerWidth > 480
-        ? gsap.to(LoginRef.current, { top: "15%" })
+        ? gsap.to(LoginRef.current, { top: "25%" })
         : gsap.to(LoginRef.current, { top: "0%" });
     } else {
-      gsap.to(LoginRef.current, { top: "100%" });
-      gsap.to(LoginRef.current, { display: "none" });
+      LoginRef.current.style.display = "none";
+      gsap.to(LoginRef.current, { top: "130%" });
     }
   }, [loginDisplay]);
 
@@ -60,7 +60,7 @@ const SignIn = () => {
     emailPlaceholderRef.current.style.fontSize = "15px";
     emailPlaceholderRef.current.style.backgroundColor = "transparent";
     window.innerWidth > 480
-      ? (emailPlaceholderRef.current.style.transform = "translate(0.1em,1em)")
+      ? (emailPlaceholderRef.current.style.transform = "translate(0.1em,1.3em)")
       : (emailPlaceholderRef.current.style.transform =
           "translate(1.5em,1.4em)");
   };
@@ -68,15 +68,16 @@ const SignIn = () => {
   const handleEmailPlaceholderNotActive = () => {
     emailPlaceholderRef.current.style.fontSize = "8px";
     window.innerWidth > 480
-      ? (emailPlaceholderRef.current.style.transform = "translate(2.5em,0.8em)")
-      : (emailPlaceholderRef.current.style.transform = "translate(4em,0.8em)");
+      ? (emailPlaceholderRef.current.style.transform = "translate(2.8em,0.8em)")
+      : (emailPlaceholderRef.current.style.transform =
+          "translate(3.5em,0.8em)");
   };
 
   const handlePasswordPlaceholderActive = () => {
     passwordlPlaceholderRef.current.style.fontSize = "15px";
     window.innerWidth > 480
       ? (passwordlPlaceholderRef.current.style.transform =
-          "translate(0.1em,1em)")
+          "translate(0.1em,1.3em)")
       : (passwordlPlaceholderRef.current.style.transform =
           "translate(1.5em,1.4em)");
     passwordlPlaceholderRef.current.style.backgroundColor = "transparent";
@@ -86,7 +87,7 @@ const SignIn = () => {
     passwordlPlaceholderRef.current.style.fontSize = "8px";
     window.innerWidth > 480
       ? (passwordlPlaceholderRef.current.style.transform =
-          "translate(2.5em,0.8em)")
+          "translate(2.8em,0.8em)")
       : (passwordlPlaceholderRef.current.style.transform =
           "translate(4em,0.8em)");
   };

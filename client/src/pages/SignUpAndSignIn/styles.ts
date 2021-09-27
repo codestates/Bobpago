@@ -2,13 +2,14 @@ import styled, { keyframes } from "styled-components";
 import { Email } from "@styled-icons/material-rounded/Email";
 
 export const WholeContainer = styled.div`
-  width: 17em;
+  width: 22em;
   position: fixed;
-  height: 25em;
+  height: 33em;
   text-align: center;
   margin: 0 auto;
   left: 0;
   right: 0;
+  z-index: 100;
   @media only screen and (max-width: 480px) {
     width: 100%;
     height: 100%;
@@ -59,7 +60,7 @@ export const InputContainer = styled.form`
 `;
 
 export const Logo = styled.img`
-  width: 7em;
+  width: 9em;
   display: block;
   margin: 0 auto;
   margin-top: -0.5em;
@@ -75,7 +76,7 @@ export const Placeholder = styled.label`
   left: 2.7em;
   z-index: 1;
   color: #7a7a76;
-  font-size: 15px;
+  font-size: 20px;
   transition: all 0.25s;
   border-radius: 10px;
 `;
@@ -100,14 +101,13 @@ export const InputWrapper = styled.input`
   position: relative;
   border-radius: 3em;
   border: 1.5px solid #c2c2c2;
-  height: 2.3em;
+  height: 3em;
   width: 100%;
-  font-size: 14px;
+  font-size: 15px;
   margin-top: 0.4em;
   margin-bottom: 0.4em;
   padding-left: 1em;
   padding-right: 1em;
-  padding-top: 0.5em;
   background-color: #fafafa;
   &:focus {
     outline: none;
@@ -218,9 +218,10 @@ export const KakaoOAuthContainer = styled(GoogleOAuthContainer)`
 export const EyeIcon = styled.div`
   position: absolute;
   right: 1.9em;
-  transform: translateY(-2.5em);
+  transform: translate(-0.6em, -2.9em);
   margin-top: 0.55em;
   margin-bottom: 0.55em;
+  cursor: pointer;
   @media only screen and (max-width: 480px) {
     right: 3em;
     transform: translateY(-2.7em);
@@ -233,12 +234,12 @@ export const ButtonWrapper = styled.button`
   width: 100%;
   height: 2.5em;
   line-height: 2.3em;
-  font-size: 14px;
+  font-size: 16px;
   font-family: sans-serif;
   text-decoration: none;
   color: #000;
   border: 1.4px solid #c2c2c2;
-  border-radius: 20px;
+  border-radius: 25px;
   letter-spacing: 0.5px;
   text-align: center;
   position: relative;

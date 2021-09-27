@@ -1,8 +1,8 @@
 import {
-  GO_TO_NEXT_PAGE,
-  GO_TO_PREV_PAGE,
-  RESET_WRITE_PAGE,
-} from "actions/WriteRecipePage";
+  GO_TO_NEXT_PAGE_EDIT,
+  GO_TO_PREV_PAGE_EDIT,
+  RESET_EDIT_PAGE,
+} from "actions/EditRecipePage";
 import { WriteRecipePage } from "../types";
 
 const initialState: WriteRecipePage = {
@@ -13,20 +13,20 @@ interface Action {
   type: string;
 }
 
-const WriteRecipePageReducer = (
+const EditRecipePageReducer = (
   state: WriteRecipePage = initialState,
   action: Action
 ) => {
   switch (action.type) {
-    case GO_TO_NEXT_PAGE:
+    case GO_TO_NEXT_PAGE_EDIT:
       return {
         currentPage: state.currentPage + 1,
       };
-    case GO_TO_PREV_PAGE:
+    case GO_TO_PREV_PAGE_EDIT:
       return {
         currentPage: state.currentPage - 1,
       };
-    case RESET_WRITE_PAGE:
+    case RESET_EDIT_PAGE:
       return {
         currentPage: 0,
       };
@@ -35,4 +35,4 @@ const WriteRecipePageReducer = (
   }
 };
 
-export default WriteRecipePageReducer;
+export default EditRecipePageReducer;

@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import useHover from "utils/useHover";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "reducers";
-import { goToNextPage, goToPrevPage } from "actions/WriteRecipePage";
+import { goToNextPageEdit, goToPrevPageEdit } from "actions/EditRecipePage";
 import { notify } from "actions/Notification";
-import { setTitle } from "actions/WriteRecipeContents";
+import { editTitle } from "actions/EditRecipeContents";
 import {
   TitleSlide,
   RecipeTitle,
@@ -18,13 +18,21 @@ const Title = ({ page, scale, setCircle1IsHover, setCircle2IsHover }: any) => {
   const [recipeTitle, setRecipeTitle] = useState<string>("");
   const [circle1, circle1IsHover] = useHover();
   const [circle2, circle2IsHover] = useHover();
+  const title = useSelector(
+    (state: RootState) => state.EditRecipeContentsReducer.title
+  );
+
+  useEffect(() => {
+    setRecipeTitle(title);
+  }, []);
+
   const handleStoreTitle = () => {
     if (!recipeTitle) {
       dispatch(notify("제목을 입력해주세요"));
       return;
     }
-    dispatch(setTitle(recipeTitle));
-    dispatch(goToNextPage());
+    dispatch(editTitle(recipeTitle));
+    dispatch(goToNextPageEdit());
   };
 
   useEffect(() => {
@@ -53,7 +61,7 @@ const Title = ({ page, scale, setCircle1IsHover, setCircle2IsHover }: any) => {
       <PrevButton
         ref={circle1}
         page={page}
-        onClick={() => dispatch(goToPrevPage())}
+        onClick={() => dispatch(goToPrevPageEdit())}
       >
         Prev
       </PrevButton>

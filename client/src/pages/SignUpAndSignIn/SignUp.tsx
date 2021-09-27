@@ -42,11 +42,11 @@ const SignUp = () => {
     if (signUpDisplay) {
       gsap.to(signUpRef.current, { display: "" });
       window.innerWidth > 480
-        ? gsap.to(signUpRef.current, { top: "15%" })
+        ? gsap.to(signUpRef.current, { top: "20%" })
         : gsap.to(signUpRef.current, { top: "0%" });
     } else {
-      gsap.to(signUpRef.current, { top: "100%" });
-      gsap.to(signUpRef.current, { display: "none" });
+      signUpRef.current.style.top = "100%";
+      signUpRef.current.style.display = "none";
     }
   }, [signUpDisplay]);
 

@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import useHover from "utils/useHover";
-import { useDispatch } from "react-redux";
-import { goToNextPage, goToPrevPage } from "actions/WriteRecipePage";
-import { setTime, setServing } from "actions/WriteRecipeContents";
+import { useDispatch, useSelector } from "react-redux";
+import { goToNextPageEdit, goToPrevPageEdit } from "actions/EditRecipePage";
+import { editTime, editServing } from "actions/EditRecipeContents";
 import { notify } from "actions/Notification";
 import {
   RecipeTimeSlide,
@@ -23,6 +23,7 @@ import {
   PeopleNumInput,
   ExpectedPeopleContainer,
 } from "./styles";
+import { RootState } from "reducers";
 
 const Time = ({ page, scale, setCircle1IsHover, setCircle2IsHover }: any) => {
   const dispatch = useDispatch();
@@ -32,6 +33,19 @@ const Time = ({ page, scale, setCircle1IsHover, setCircle2IsHover }: any) => {
   const theOtherTimeRef = useRef<any>(null);
   const [circle1, circle1IsHover] = useHover();
   const [circle2, circle2IsHover] = useHover();
+  const contents = useSelector(
+    (state: RootState) => state.EditRecipeContentsReducer
+  );
+
+  useEffect(() => {
+    if (contents.time === 10) setTimeRadio("10min");
+    else if (contents.time === 20) setTimeRadio("20min");
+    else if (contents.time === 30) setTimeRadio("30min");
+    else if (contents.time === 40) setTimeRadio("40min");
+    else if (contents.time === 50) setTimeRadio("50min");
+    else setOtherTime(contents.time);
+    setPeople(contents.serving);
+  }, []);
 
   useEffect(() => {
     if (circle2IsHover) setCircle2IsHover(true);
@@ -50,13 +64,13 @@ const Time = ({ page, scale, setCircle1IsHover, setCircle2IsHover }: any) => {
     setTimeRadio(value);
   };
 
-  const changeToNum = (time: string | number) => {
-    if (typeof time === "string") return Number(time.slice(0, 2));
+  const changeToTime = (time: string | number) => {
+    if (typeof time === "string") return Number(time.slice(0, 3));
     else return Number(time);
   };
 
-  const changeToTime = (time: string | number) => {
-    if (typeof time === "string") return Number(time.slice(0, 3));
+  const changeToNum = (time: string | number) => {
+    if (typeof time === "string") return Number(time.slice(0, 2));
     else return Number(time);
   };
 
@@ -65,7 +79,7 @@ const Time = ({ page, scale, setCircle1IsHover, setCircle2IsHover }: any) => {
     otherTime
       ? (storedTime = changeToTime(otherTime))
       : (storedTime = changeToNum(time));
-    if (isNaN(storedTime)) {
+    if (otherTime && isNaN(storedTime)) {
       dispatch(notify("시간을 숫자로 입력해주세요"));
       return;
     }
@@ -73,9 +87,9 @@ const Time = ({ page, scale, setCircle1IsHover, setCircle2IsHover }: any) => {
       dispatch(notify("인분을 숫자로 입력해주세요"));
       return;
     }
-    dispatch(setTime(storedTime));
-    dispatch(setServing(Number(people)));
-    dispatch(goToNextPage());
+    dispatch(editTime(storedTime));
+    dispatch(editServing(Number(people)));
+    dispatch(goToNextPageEdit());
   };
 
   useEffect(() => {
@@ -192,7 +206,7 @@ const Time = ({ page, scale, setCircle1IsHover, setCircle2IsHover }: any) => {
       <PrevButton
         ref={circle1}
         page={page}
-        onClick={() => dispatch(goToPrevPage())}
+        onClick={() => dispatch(goToPrevPageEdit())}
       >
         Prev
       </PrevButton>
