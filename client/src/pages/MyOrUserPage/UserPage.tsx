@@ -42,7 +42,7 @@ const UserPage = () => {
 
   return (
     <>
-      <Nav />
+      <Nav opac={false} />
       <PageContainer>
         <UserProfileContainer>
           <ProfileImgContainer>
