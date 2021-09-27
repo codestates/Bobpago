@@ -24,6 +24,8 @@ import {
   SubIngredient,
   MainIngredientContainer,
   MainIngredientContent,
+  SubIngredientContainer,
+  SudoContainer,
 } from "./styles";
 import { koreaRed, koreaBlue, koreaYellow } from "koreaTheme";
 import { gsap } from "gsap/dist/gsap";
@@ -32,8 +34,6 @@ import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import DRModal from "components/DRModal/DRModal";
 
 const DetailRecipe = () => {
-  let dummyMainIngredient: string[] = ["양파", "계란", "파"];
-
   const rightScrollRef = useRef<any>(null);
   const topBoxRef = useRef<any>(null);
   const leftBoxRef = useRef<any>(null);
@@ -112,38 +112,7 @@ const DetailRecipe = () => {
     return () => {};
   }, []);
 
-  useEffect(() => {
-    if (dummy.length !== 0) {
-      const divide: number = dummyMainIngredient.length / dummy.length;
-      const newArr: Array<string[]> = [];
-      while (dummyMainIngredient.length > 0) {
-        if (divide >= 1 && divide % 1 === 0) {
-          const arr = dummyMainIngredient.splice(0, divide);
-          newArr.push(arr);
-        } else if (divide >= 1 && divide < 2) {
-          if (dummyMainIngredient.length < divide * 2) {
-            const arr = dummyMainIngredient.splice(0, 1);
-            newArr.push(arr);
-          } else {
-            const arr = dummyMainIngredient.splice(0, Math.ceil(divide));
-            newArr.push(arr);
-          }
-        } else if (divide >= 1 && divide % 1 !== 0) {
-          if (dummyMainIngredient.length < Math.floor(divide) * 2) {
-            const arr = dummyMainIngredient.splice(0);
-            newArr.push(arr);
-          } else {
-            const arr = dummyMainIngredient.splice(0, Math.floor(divide));
-            newArr.push(arr);
-          }
-        } else if (divide < 1) {
-          const arr = dummyMainIngredient.splice(0, 1);
-          newArr.push(arr);
-        }
-      }
-      setMainIng(newArr);
-    }
-  }, [dummy]);
+  useEffect(() => {}, [dummy]);
 
   useEffect(() => {
     console.log(mainIng);
@@ -209,14 +178,15 @@ const DetailRecipe = () => {
       </RightBoxScroll>
       <MainIngredientContainer>
         <MainIngredient ref={mainRef}>
-          {mainIng.map((item) => {
-            console.log(item);
-
-            return <MainIngredientContent>{item}</MainIngredientContent>;
+          {dummy.map((item) => {
+            return <MainIngredientContent>주재료</MainIngredientContent>;
           })}
         </MainIngredient>
       </MainIngredientContainer>
-      <SubIngredient></SubIngredient>
+      <SubIngredientContainer>
+        <SubIngredient></SubIngredient>
+      </SubIngredientContainer>
+      <SudoContainer />
     </DRTotalContainer>
   );
 };

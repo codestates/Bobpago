@@ -9,17 +9,20 @@ export const RightContent = styled.div`
   display: flex;
   flex-direction: column;
   border-radius: 10px;
+  z-index: 1000;
 `;
 
 export const RightContentBasic = styled.div`
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
-  width: 25%;
+  width: 50%;
   height: 20%;
   background-color: #ececec;
   justify-content: space-around;
   position: relative;
-  transform: translateX(220.2%);
+  transform: translateX(100.1%);
 `;
 
 export const RightContentWriter = styled.div`
@@ -32,6 +35,8 @@ export const RightContentWriter = styled.div`
   transform: translate(20%, 5%);
   background-color: #ececec;
   border: 1px solid #2d325b;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
 `;
 
 export const RightContentTitle = styled.div`
@@ -44,14 +49,15 @@ export const RightContentTitle = styled.div`
   align-items: center;
   background-color: #ececec;
   border: 1px solid #2d325b;
-  border-bottom: none;
   font-size: 32px;
   font-weight: 900;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
 `;
 
 export const RightContentTime = styled.div`
   border: 1px solid #2d325b;
-  border-left: none;
+  border-top: none;
   flex: 1;
   width: 100%;
   height: 100%;
@@ -62,7 +68,6 @@ export const RightContentTime = styled.div`
 
 export const RightContentDifficulty = styled.div`
   border: 1px solid black;
-  border-left: none;
   border-top: none;
   border-bottom: none;
   flex: 1;
@@ -75,7 +80,6 @@ export const RightContentDifficulty = styled.div`
 
 export const RightMainContent = styled.div`
   background-color: #ececec;
-  box-shadow: 0 0px 3px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -90,7 +94,6 @@ export const RightMainFooter = styled.footer`
   width: 100%;
   height: 20%;
   background-color: #ececec;
-  box-shadow: 0 0px 3px rgba(0, 0, 0, 0.5);
   bottom: -15.5em;
   right: 2em;
   border-radius: 10px;
@@ -103,7 +106,6 @@ export const CommentButton = styled.button`
   width: 5em;
   height: 2.5em;
   background-color: #d43838;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   transition: 0.5s;
   color: #ffffff;
   outline: none;
