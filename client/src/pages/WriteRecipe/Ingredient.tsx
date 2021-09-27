@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import SearchBar from "components/SearchBar/SearchBar";
+import useHover from "utils/useHover";
 import Tag from "components/Tag/Tag";
+import WriteRecipeStarRating from "components/StarRating/WriteRecipe/WriteRecipeStarRating";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "reducers";
+import { goToNextPage, goToPrevPage } from "actions/WriteRecipePage";
+import { setDifficulty, setIngredient } from "actions/WriteRecipeContents";
 import {
   IngredientSlide,
   IngredientTitle,
@@ -9,6 +14,9 @@ import {
   AutoContainer,
   TagContainer,
   NextButton,
+  PrevButton,
+  DifficultyTitle,
+  StarContainer,
 } from "./styles";
 
 interface Option {
@@ -16,13 +24,39 @@ interface Option {
   name?: string;
 }
 
-const Ingredient = ({ page, scale }: any) => {
+const Ingredient = ({
+  page,
+  scale,
+  setCircle1IsHover,
+  setCircle2IsHover,
+}: any) => {
+  const dispatch = useDispatch();
+  const [circle1, circle1IsHover] = useHover();
+  const [circle2, circle2IsHover] = useHover();
   const [display, setDisplay] = useState<boolean>(false);
+  const [difficulty, setDifficulty2] = useState<number>(1);
   const [options, setOptions] = useState<any>([]);
   const [search, setSearch] = useState<any>("");
   const [selected, setSelected] = useState<any>([]);
   const wrapperRef = useRef<any>(null);
   const autoRef = useRef<any>(null);
+
+  useEffect(() => {
+    if (circle2IsHover) setCircle2IsHover(true);
+    else setCircle2IsHover(false);
+  }, [circle2IsHover]);
+
+  useEffect(() => {
+    if (circle1IsHover) setCircle1IsHover(true);
+    else setCircle1IsHover(false);
+  }, [circle1IsHover]);
+
+  const handleStoreIngredient = () => {
+    const filteredSelected = selected.map((el) => el.id);
+    dispatch(setDifficulty(difficulty));
+    dispatch(setIngredient(filteredSelected));
+    dispatch(goToNextPage());
+  };
 
   useEffect(() => {
     const arr = [
@@ -117,6 +151,14 @@ const Ingredient = ({ page, scale }: any) => {
   return (
     <>
       <IngredientSlide page={page} scale={scale}>
+        <DifficultyTitle>요리 난이도를 입력해주세요</DifficultyTitle>
+        <StarContainer>
+          <WriteRecipeStarRating
+            size={3}
+            rate={difficulty}
+            setDifficulty2={setDifficulty2}
+          />
+        </StarContainer>
         <IngredientTitle>요리에 들어갈 재료를 담아주세요</IngredientTitle>
         <TagContainer ref={wrapperRef}>
           <Container>
@@ -167,11 +209,23 @@ const Ingredient = ({ page, scale }: any) => {
             </AutoContainer>
           )}
         </TagContainer>
-        {/* <TagContainer> */}
-        {/* </TagContainer> */}
-        {/* <SearchBar /> */}
       </IngredientSlide>
-      <NextButton>Next</NextButton>
+      <NextButton
+        ref={circle2}
+        page={page}
+        self={2}
+        onClick={() => handleStoreIngredient()}
+      >
+        Next
+      </NextButton>
+      <PrevButton
+        ref={circle1}
+        page={page}
+        self={2}
+        onClick={() => dispatch(goToPrevPage())}
+      >
+        Prev
+      </PrevButton>
     </>
   );
 };

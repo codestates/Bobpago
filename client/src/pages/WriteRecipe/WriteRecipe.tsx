@@ -5,47 +5,71 @@ import Nav from "components/Nav/Nav";
 import Title from "./Title";
 import Time from "./Time";
 import Ingredient from "./Ingredient";
-import Circle1 from "components/MovingCircle/Circle1";
-import Circle2 from "components/MovingCircle/Circle2";
+import Description from "./Description";
+import Circle1 from "components/MovingCircle/WriteRecipe/WriteRecipeCircle1";
+import Circle2 from "components/MovingCircle/WriteRecipe/WriteRecipeCircle2";
+import { ContainerWrapper } from "./styles";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "reducers";
 import {
-  ContainerWrapper,
-  DescriptionSlide,
-  NextButton,
-  PrevButton,
-  CompleteButton,
-} from "./styles";
+  goToNextPage,
+  goToPrevPage,
+  resetWritePage,
+} from "actions/WriteRecipePage";
+import { resetAllContents } from "actions/WriteRecipeContents";
 
 const WriteRecipe = () => {
-  const [page, setPage] = useState<number>(0);
+  const [circle1IsHover, setCircle1IsHover] = useState<boolean>(false);
+  const [circle2IsHover, setCircle2IsHover] = useState<boolean>(false);
+  const dispatch = useDispatch();
+  const page = useSelector(
+    (state: RootState) => state.WriteRecipePageReducer.currentPage
+  );
   const [scale, setScale] = useState<number>(0);
-  const [time, setTime] = useState<number>(0);
-  const theOtherTimeRef = useRef<any>(null);
 
   useEffect(() => {
-    page < 0 && setPage(0);
-    page > 3 && setPage(3);
+    return () => {
+      dispatch(resetAllContents());
+      dispatch(resetWritePage());
+    };
+  }, []);
+
+  useEffect(() => {
+    page < 0 && dispatch(goToNextPage());
+    page > 3 && dispatch(goToPrevPage());
     setTimeout(() => setScale(page), 700);
   }, [page]);
 
   return (
     <>
-      <Nav />
+      {/* <Nav /> */}
       <ContainerWrapper>
-        <Title page={page} scale={scale} />
-        <Time page={page - 1} scale={scale - 1} />
-        <Ingredient page={page - 2} scale={scale - 2} />
-        <DescriptionSlide page={page - 3} scale={scale - 3}>
-          <Book />
-        </DescriptionSlide>
-        <NextButton page={page} onClick={() => setPage(page + 1)}>
-          Next
-        </NextButton>
-        <PrevButton page={page} onClick={() => setPage(page - 1)}>
-          Prev
-        </PrevButton>
-        <CompleteButton page={page}>Complete</CompleteButton>
-        <Circle1 />
-        <Circle2 />
+        <Title
+          setCircle1IsHover={setCircle1IsHover}
+          setCircle2IsHover={setCircle2IsHover}
+          page={page}
+          scale={scale}
+        />
+        <Time
+          setCircle1IsHover={setCircle1IsHover}
+          setCircle2IsHover={setCircle2IsHover}
+          page={page - 1}
+          scale={scale - 1}
+        />
+        <Ingredient
+          setCircle1IsHover={setCircle1IsHover}
+          setCircle2IsHover={setCircle2IsHover}
+          page={page - 2}
+          scale={scale - 2}
+        />
+        <Description
+          setCircle1IsHover={setCircle1IsHover}
+          setCircle2IsHover={setCircle2IsHover}
+          page={page - 3}
+          scale={scale - 3}
+        />
+        <Circle1 circle1IsHover={circle1IsHover} />
+        <Circle2 circle2IsHover={circle2IsHover} />
       </ContainerWrapper>
     </>
   );
