@@ -11,6 +11,7 @@ import { Ingredient } from '../entities/ingredient.entity';
 import { Bookmark } from '../entities/bookmark.entity';
 import { Comment } from '../entities/comment.entity';
 import { CommentReaction } from '../entities/comment-reaction.entity';
+import { ImageService } from '../image/image.service';
 
 @Module({
   imports: [
@@ -27,6 +28,6 @@ import { CommentReaction } from '../entities/comment-reaction.entity';
     ]),
   ],
   controllers: [RecipesController],
-  providers: [RecipesService],
+  providers: [RecipesService, ImageService],
 })
 export class RecipesModule {}
