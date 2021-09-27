@@ -8,10 +8,6 @@ import SignUp from "pages/SignUpAndSignIn/SignUp";
 import WriteRecipe from "pages/WriteRecipe/WriteRecipe";
 import { useDispatch } from "react-redux";
 import { showSignIn } from "actions/SignUpAndSignIn";
-<<<<<<< HEAD
-// import { LogoRow } from "components/SignUpAndSignIn/LogoRow";
-  
-=======
 import DetailRecipe from "pages/DetailRecipe/DetailRecipe";
 import NofiticationCenter from "components/Notification/NotificationCenter";
 import MyPage from "pages/MyOrUserPage/MyPage";
@@ -20,7 +16,6 @@ import EditRecipe from "pages/EditRecipe/EditRecipe";
 import FollowModal from "components/FollowModal/FollowModal";
 import MatchingRecipe from "pages/MatchingRecipe/MatchingRecipe";
 
->>>>>>> f34fd49b475bb1ecbd478603c5a3f1104dc6a1f2
 function App() {
   const dispatch = useDispatch();
   return (
