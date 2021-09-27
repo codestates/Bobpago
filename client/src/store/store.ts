@@ -8,9 +8,9 @@ import storage from "redux-persist/lib/storage";
 
 const persistConfig = {
   key: "root",
+  blacklist: ["WriteRecipeContentsReducer", "title"],
   storage,
   // whitelist
-  // blacklist
 };
 
 const middleware = [logger, thunk];

@@ -42,14 +42,21 @@ export const DescriptionSlide = styled(TitleSlide)<SlideProps>`
 `;
 
 export const RecipeTitle = styled.div`
-  margin-bottom: 1em;
   display: block;
   margin: 4em auto;
   margin-bottom: 0.5em;
-  font-size: 40px;
+  font-size: 60px;
   font-weight: 500;
 `;
-
+export const StarContainer = styled.div`
+  position: relative;
+  justify-content: center;
+  align-item: center;
+  padding: 1em auto;
+  display: table;
+  margin-left: auto;
+  margin-right: auto;
+`;
 export const TitleInput = styled.input`
   margin-top: 0.5em;
   width: 16em;
@@ -68,6 +75,7 @@ export const TitleInput = styled.input`
 
 export const ExpectedTime = styled(RecipeTitle)`
   display: inline;
+  font-size: 40px;
 `;
 
 const animShadow = keyframes`
@@ -82,9 +90,9 @@ export const RadioContainer = styled.div`
   align-items: center;
   text-align: center;
   #other {
-    transform: translate(-3.9em, 1.3em);
+    transform: translate(-4.1em, 1.4em);
     &:hover {
-      transform: translate(-3.9em, 1.3em) scale(1.1);
+      transform: translate(-4.1em, 1.4em) scale(1.1);
     }
   }
 `;
@@ -94,13 +102,13 @@ export const TimeRadioButton = styled.input.attrs({
   -webkit-appearance: none;
   -moz-appearance: none;
   margin: 0.3em;
-  width: 5em;
-  height: 3em;
+  width: 7em;
+  height: 4em;
   font-size: 17px;
   color: #858585;
   background-color: #e0e0e0;
   border: 0px solid rgba(32, 72, 250, 0);
-  border-radius: 30px;
+  border-radius: 35px;
   outline: none;
   cursor: pointer;
   transition: 0.3s;
@@ -112,17 +120,18 @@ export const TimeRadioButton = styled.input.attrs({
     animation: ${animShadow} 0.6s forwards;
   }
   & + span {
+    font-size: 20px;
     transition: 0.3s;
     cursor: pointer;
     color: #858585;
     position: absolute;
-    transform: translate(-5em, 1.3em);
+    transform: translate(-5.19em, 1.4em);
   }
   &:focus + span {
     color: #fff;
   }
   &:hover + span {
-    transform: translate(-5em, 1.3em) scale(1.1);
+    transform: translate(-5.19em, 1.4em) scale(1.1);
   }
   &:checked {
     color: #fff;
@@ -137,14 +146,18 @@ export const TimeRadioButton = styled.input.attrs({
 `;
 export const LabelText = styled.span`
   &:hover {
-    transform: translate(-5em, 1.3em) scale(1.1);
+    transform: translate(-5.19em, 1.4em) scale(1.1);
   }
 `;
 
 export const TheOtherTimeInput = styled(TitleInput)`
   margin-top: 1em;
   width: 12em;
-  font-size: 17px;
+  font-size: 24px;
+`;
+
+export const PeopleNumInput = styled(TheOtherTimeInput)`
+  width: 16em;
 `;
 
 export const TheOtherTimeContainer = styled(RadioContainer)``;
@@ -174,14 +187,14 @@ export const TheOtherTimeTooltipText = styled.span`
   line-height: 0.4em;
   transition: all 0.3s;
   z-index: 2;
-  font-size: 13px;
+  font-size: 15px;
   color: #fff;
   justify-content: center;
   text-align: center;
   border-radius: 5px;
-  transform: translate(15em, 3.5em);
+  transform: translate(16em, 3.5em);
   &:after {
-    transform: translate(-14.2em, -2.5em);
+    transform: translate(-13.5em, -2.5em);
     content: " ";
     position: absolute;
     border-style: solid;
@@ -192,9 +205,12 @@ export const TheOtherTimeTooltipText = styled.span`
 `;
 export const ExpectedTimeContainer = styled.div`
   margin-bottom: 1em;
-  margin-top: 10em;
+  margin-top: 7em;
 `;
 
+export const ExpectedPeopleContainer = styled(ExpectedTimeContainer)`
+  margin-top: 5em;
+`;
 export const ExpectedTimeTooltip = styled(QuestionMarkCircle)`
   display: inline;
   width: 2em;
@@ -215,15 +231,25 @@ export const ExpectedTimeTooltipText = styled(TheOtherTimeTooltipText)`
   }
 `;
 
-export const IngredientTitle = styled(RecipeTitle)``;
+export const IngredientTitle = styled(RecipeTitle)`
+  margin-top: 1.5em;
+
+  font-size: 40px;
+`;
+
+export const DifficultyTitle = styled(IngredientTitle)`
+  margin-top: 3.5em;
+`;
 
 export const SearchBarTooltip = styled(ExpectedTimeTooltip)``;
 
 interface PageProps {
   page?: number;
+  self?: number;
 }
 
 export const NextButton = styled.button<PageProps>`
+  font-size: 18px;
   position: fixed;
   bottom: 2em;
   z-index: 1;
@@ -238,8 +264,9 @@ export const NextButton = styled.button<PageProps>`
   outline: none;
   border: none;
   cursor: pointer;
-  border-radius: 20px;
-  display: ${(props) => (props.page === 3 ? "none" : "block")};
+  border-radius: 26px;
+  display: ${(props) => (props.page === 0 ? "block" : "none")};
+  z-index: ${(props) => (props.page === props.self ? "99" : "1")};
   &:hover {
     background-color: #1638ce;
     transform: scale(1.1);
@@ -250,7 +277,8 @@ export const PrevButton = styled(NextButton)<PageProps>`
   position: fixed;
   left: 2%;
   bottom: 2em;
-  display: ${(props) => (props.page === 0 ? "none" : "block")};
+  display: ${(props) => (props.page === 0 ? "block" : "none")};
+  z-index: ${(props) => (props.page === props.self ? "99" : "1")};
 `;
 
 export const CompleteButton = styled(NextButton)<PageProps>`
@@ -266,10 +294,10 @@ export const Container = styled.div`
 
 export const SearchBarWrapper = styled.input`
   padding: 0.1em;
-  height: 1.3em;
+  height: 1.8em;
   border: none;
   margin: 0.3em;
-  font-size: 18px;
+  font-size: 23px;
   outline: none;
   width: 5.5em;
   text-transform: capitalize;
@@ -282,9 +310,9 @@ export const SearchBarWrapper = styled.input`
 export const AutoContainer = styled.div`
   transform: translateY(0.3em);
   position: absolute;
-  background-color: #fff;
+  background-color: transparent;
   width: 100%;
-  max-height: 10em;
+  max-height: 13em;
   overflow-y: auto;
   border: 0.5px solid #c9c9c9;
   border-radius: 15px;
@@ -297,7 +325,7 @@ export const AutoContainer = styled.div`
     text-align: left;
     padding-left: 0.5em;
     padding-top: 0.2em;
-    font-size: 16px;
+    font-size: 20px;
     z-index: 99;
   }
   .option:hover {
@@ -316,9 +344,9 @@ export const TagContainer = styled.div`
   z-index: 3;
   position: relative;
   margin: 0 auto;
-  width: 25em;
+  width: 30em;
   border: 1px solid #c9c9c9;
-  border-radius: 15px;
+  border-radius: 24px;
   &:focus {
     box-shadow: 0px 0px 0px 1px rgba(78, 171, 217, 1);
   }
@@ -330,3 +358,64 @@ export const DescriptionTitle = styled(IngredientTitle)`
   margin-top: 0;
   font-size: 25px;
 `;
+
+const showModal = keyframes`
+  from {
+    top: 85%;
+    right: -90%;
+    transform: scale(0) ;
+  }
+  to {
+    top: 35%
+    transform: scale(1);
+  }
+`;
+
+export const ModalContainer = styled.div`
+  position: fixed;
+  top: 35%;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  float: center;
+  width: 25em;
+  height: 13em;
+  animation: ${showModal} 0.5s;
+  z-index: 10000;
+  background: #f5f5f5;
+  border-radius: 15px;
+  text-align: center;
+`;
+
+export const ModalBackground = styled.div`
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: grey;
+  opacity: 0.5;
+  z-index: 9999;
+`;
+
+export const ModalTitle = styled.p`
+  font-size: 22px;
+  margin: 3em auto;
+  margin-bottom: 2em;
+`;
+
+export const ModalBtn = styled.button`
+  outline: none;
+  border-radius: 10px;
+  border: none;
+  height: 1.5em;
+  font-size: 18px;
+  min-width: 3em;
+  background: #42a5c9;
+  color: #fff;
+  cursor: pointer;
+`;
+
+export const ModalBtnNo = styled(ModalBtn)`
+  background: #42a5c9;
+`;
+
+// export const name = styled.div``;
