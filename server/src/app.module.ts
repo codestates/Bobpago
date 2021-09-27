@@ -42,39 +42,46 @@ import { User } from './entities/user.entity';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggerMiddleware).forRoutes('*');
-    consumer.apply(AuthCheckerMiddleware).forRoutes(
-      { path: 'auth/signout', method: RequestMethod.POST },
-      { path: 'me', method: RequestMethod.GET },
-      { path: 'me', method: RequestMethod.PATCH },
-      { path: 'me', method: RequestMethod.DELETE },
-      { path: ':recipeId/bookmarks', method: RequestMethod.POST },
-      { path: ':recipeId/bookmarks', method: RequestMethod.DELETE },
-      { path: 'checkMyInfo', method: RequestMethod.POST },
-      { path: 'user/:userId/follower', method: RequestMethod.GET },
-      { path: 'user/:userId/followee', method: RequestMethod.GET },
-      { path: 'user/:userId/follow', method: RequestMethod.POST },
-      { path: 'user/:userId/follow', method: RequestMethod.DELETE },
-      { path: 'recipe', method: RequestMethod.POST },
-      { path: 'recipe/:recipeId', method: RequestMethod.PATCH },
-      { path: 'recipe/:recipeId', method: RequestMethod.DELETE },
-      { path: 'recipe/:recipeId', method: RequestMethod.POST },
-      { path: 'recipe/:recipeId/comment', method: RequestMethod.POST },
-      {
-        path: 'recipe/:recipeId/comment/:commentId',
-        method: RequestMethod.PATCH,
-      },
-      {
-        path: 'recipe/:recipeId/comment/:commentId',
-        method: RequestMethod.DELETE,
-      },
-      {
-        path: 'recipe/:recipeId/comment/:commentId',
-        method: RequestMethod.POST,
-      },
-      {
-        path: 'image/upload',
-        method: RequestMethod.POST,
-      },
-    );
+    consumer
+      .apply(AuthCheckerMiddleware)
+      .exclude({ path: 'recipe/match', method: RequestMethod.POST })
+      .forRoutes(
+        { path: 'auth/signout', method: RequestMethod.POST },
+        { path: 'me', method: RequestMethod.GET },
+        { path: 'me', method: RequestMethod.PATCH },
+        { path: 'me', method: RequestMethod.DELETE },
+        { path: ':recipeId/bookmarks', method: RequestMethod.POST },
+        { path: ':recipeId/bookmarks', method: RequestMethod.DELETE },
+        { path: 'checkMyInfo', method: RequestMethod.POST },
+        { path: 'user/:userId/follower', method: RequestMethod.GET },
+        { path: 'user/:userId/followee', method: RequestMethod.GET },
+        { path: 'user/:userId/follow', method: RequestMethod.POST },
+        { path: 'user/:userId/follow', method: RequestMethod.DELETE },
+        { path: 'recipe', method: RequestMethod.POST },
+        { path: 'recipe/:recipeId', method: RequestMethod.PATCH },
+        { path: 'recipe/:recipeId', method: RequestMethod.DELETE },
+        { path: 'recipe/:recipeId', method: RequestMethod.POST },
+        { path: 'recipe/:recipeId/comment', method: RequestMethod.POST },
+        {
+          path: 'recipe/:recipeId/comment/:commentId',
+          method: RequestMethod.PATCH,
+        },
+        {
+          path: 'recipe/:recipeId/comment/:commentId',
+          method: RequestMethod.DELETE,
+        },
+        {
+          path: 'recipe/:recipeId/comment/:commentId',
+          method: RequestMethod.POST,
+        },
+        {
+          path: 'image',
+          method: RequestMethod.POST,
+        },
+        {
+          path: 'image',
+          method: RequestMethod.PATCH,
+        },
+      );
   }
 }

@@ -5,15 +5,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../entities/user.entity';
 import { Recipe } from '../entities/recipe.entity';
 import { RecipeImage } from '../entities/recipe-image.entity';
-import { RecipeIngredient } from '../entities/recipe-ingredient.entity';
-import { RecipeReaction } from '../entities/recipe-reaction.entity';
-import { Ingredient } from '../entities/ingredient.entity';
-import { Bookmark } from '../entities/bookmark.entity';
 import { Comment } from '../entities/comment.entity';
-import { CommentReaction } from '../entities/comment-reaction.entity';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([RecipeImage])],
+  imports: [
+    ConfigModule.forRoot(),
+    TypeOrmModule.forFeature([RecipeImage, Recipe, User, Comment]),
+  ],
   controllers: [ImageController],
   providers: [ImageService],
 })
