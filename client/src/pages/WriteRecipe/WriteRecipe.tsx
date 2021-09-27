@@ -42,7 +42,7 @@ const WriteRecipe = () => {
 
   return (
     <>
-      <Nav />
+      {/* <Nav /> */}
       <ContainerWrapper>
         <Title
           setCircle1IsHover={setCircle1IsHover}

@@ -23,3 +23,8 @@ export interface WriteRecipeContent {
 export interface Notification {
   notifications: StringOrUndifined[];
 }
+
+export interface IngredientGoodAndBadData {
+  badData: Array<{ name: string; image: string }>;
+  goodData: Array<{ name: string; image: string }>;
+}
