@@ -47,7 +47,7 @@ export class Recipe extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => User, (user) => user.recipes)
+  @ManyToOne(() => User, (user) => user.recipes, { onDelete: 'CASCADE' })
   user: User;
 
   @OneToMany(() => Comment, (comment) => comment.recipe)

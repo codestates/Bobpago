@@ -18,7 +18,6 @@ import { AuthCheckerMiddleware } from './middleware/auth-checker.middleware';
 import { LoggerMiddleware } from './middleware/logger.middleware';
 import { JwtModule } from '@nestjs/jwt';
 import { User } from './entities/user.entity';
-import { RecipesController } from './recipes/recipes.controller';
 
 @Module({
   imports: [
@@ -76,8 +75,12 @@ export class AppModule implements NestModule {
           method: RequestMethod.POST,
         },
         {
-          path: 'image/upload',
+          path: 'image',
           method: RequestMethod.POST,
+        },
+        {
+          path: 'image',
+          method: RequestMethod.PATCH,
         },
       );
   }

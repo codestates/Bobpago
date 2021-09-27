@@ -1,9 +1,19 @@
-import { Controller, Post, Body, Get, Param, Query } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+  Get,
+} from '@nestjs/common';
 import { RecipesService } from './recipes.service';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { ResType } from '../common/response-type';
 import { GetUser } from 'src/common/decorator';
 import { User } from 'src/entities/user.entity';
+import { UpdateRecipeDto } from './dto/update-recipe.dto';
 
 @Controller('recipe')
 export class RecipesController {
@@ -20,6 +30,20 @@ export class RecipesController {
   @Get(':recipeId')
   async findOneRecipe(@Param('recipeId') recipeId: string): Promise<ResType> {
     return this.recipesService.seeRecipe(recipeId);
+  }
+
+  @Patch(':recipeId')
+  async update(
+    @Body() updateRecipeDto: UpdateRecipeDto,
+    @Param('recipeId') recipeId,
+    @GetUser() user: User,
+  ): Promise<ResType> {
+    return this.recipesService.updateRecipe(updateRecipeDto, user, recipeId);
+  }
+
+  @Delete(':recipeId')
+  async delete(@Param('recipeId') recipeId): Promise<ResType> {
+    return this.recipesService.deleteRecipe(recipeId);
   }
 
   @Post('match')

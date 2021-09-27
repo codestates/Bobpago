@@ -29,6 +29,8 @@ export class RecipeImage extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => Recipe, (recipe) => recipe.recipeImages)
+  @ManyToOne(() => Recipe, (recipe) => recipe.recipeImages, {
+    onDelete: 'CASCADE',
+  })
   recipe: Recipe;
 }
