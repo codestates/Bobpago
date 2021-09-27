@@ -7,10 +7,12 @@ import {
   SignUpSignInSlide,
   WriteRecipePage,
   WriteRecipeContent,
+  IngredientGoodAndBadData,
 } from "../types";
 
 export interface RootState {
   SignUpAndSignInReducer: SignUpSignInSlide;
+  IngredientReducer: IngredientGoodAndBadData;
   WriteRecipePageReducer: WriteRecipePage;
   WriteRecipeContentsReducer: WriteRecipeContent;
 }

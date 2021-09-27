@@ -29,7 +29,7 @@ const WriteRecipe = () => {
 
   return (
     <>
-      <Nav />
+      {/* <Nav /> */}
       <ContainerWrapper>
         <Title page={page} scale={scale} />
         <Time page={page - 1} scale={scale - 1} />

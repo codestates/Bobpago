@@ -1,4 +1,35 @@
-import styled from "styled-components";
+import styled, { css, keyframes } from "styled-components";
+
+export const pageLeftMoveAnimate = keyframes`
+    0% {
+      transform: translateX(0%) scale(3);
+    }
+
+    20% {
+      border-radius: 87% 13% 70% 30% / 75% 30% 70% 25% ;
+    }
+
+    /* 40% {
+      border-radius: 18% 82% 27% 73% / 75% 30% 70% 25% ;
+    }
+
+    60% {
+      border-radius: 100% 0% 0% 100% / 100% 0% 100% 0% ;
+    } */
+
+    80% {
+      border-radius: 43% 57% 0% 100% / 100% 0% 100% 0% ;
+    }
+
+    100% {
+      transform: translate(100%) scale(1);
+      border-radius: 0% 100% 0% 100% / 100% 0% 100% 0% ;
+    }
+`;
+
+interface HiddenProps {
+  start: string;
+}
 
 interface BoxProps {
   color?: string;
@@ -7,15 +38,21 @@ interface BoxProps {
 
 export const DRTotalContainer = styled.div`
   height: 100%;
+  overflow: hidden;
+  position: relative;
 `;
 
 export const RightScroll = styled.div`
   position: fixed;
-  width: 40%;
+  width: 25.2%;
   height: 300px;
-  right: 5%;
+  right: 18.8%;
   top: 33%;
+  background-color: #ececec;
   overflow: hidden;
+  padding: 0 1em;
+  border: 1px solid #2d325b;
+  z-index: 100;
 `;
 
 export const RightScrollContainer = styled.div`
@@ -151,3 +188,55 @@ export const ImageContent = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
+export const HiddenPage = styled.div<HiddenProps>`
+  width: 180%;
+  height: 150%;
+  background-color: #000000;
+  transition: 1s;
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  z-index: 1000;
+  position: fixed;
+  left: -18em;
+  top: -5em;
+  transform: translateX(100%);
+  /* animation: ${({ start }) => {
+    if (start === "true") {
+      return css`
+        ${pageLeftMoveAnimate} 2.5s forwards
+      `;
+    } else if (start === "false") {
+      return "none";
+    }
+  }}; ; */
+`;
+
+export const MainIngredientContainer = styled.div`
+  max-width: 15%;
+  min-width: 15%;
+  height: 20%;
+  background-color: #ececec;
+  position: fixed;
+  top: 50%;
+  left: 80%;
+  overflow: hidden;
+  border: 1px solid #2d325b;
+`;
+
+export const MainIngredient = styled.div`
+  width: 100%;
+  transition: 1s;
+  height: 100%;
+  position: relative;
+  transform: translateY(-100%);
+`;
+
+export const MainIngredientContent = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const SubIngredient = styled.div``;
