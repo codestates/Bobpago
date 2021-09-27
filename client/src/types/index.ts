@@ -16,3 +16,8 @@ export interface WriteRecipeContent {
   description: string[];
   image: string[];
 }
+
+export interface IngredientGoodAndBadData {
+  badData: Array<{ name: string; image: string }>;
+  goodData: Array<{ name: string; image: string }>;
+}

@@ -1,16 +1,12 @@
 import { GET_FILTER_DATA } from "actions/IngredientAction";
-
-interface dataType {
-  badData: Array<{ name: string; image: string }>;
-  goodData: Array<{ name: string; image: string }>;
-}
+import { IngredientGoodAndBadData } from "types";
 
 interface Action {
   type: string;
   payload: string;
 }
 
-const initialState: dataType = {
+const initialState: IngredientGoodAndBadData = {
   badData: [
     {
       name: "대파",
@@ -245,7 +241,10 @@ const initialState: dataType = {
   ],
 };
 
-const IngredientReducer = (state = initialState, action: Action) => {
+const IngredientReducer = (
+  state: IngredientGoodAndBadData = initialState,
+  action: Action
+) => {
   switch (action.type) {
     case GET_FILTER_DATA:
       state.goodData = initialState.goodData.filter((item) =>

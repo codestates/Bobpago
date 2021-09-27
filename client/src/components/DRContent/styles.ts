@@ -4,34 +4,76 @@ export const RightContent = styled.div`
   width: 45%;
   height: 70%;
   position: fixed;
-  right: 2.4%;
-  top: 12%;
+  right: -1%;
+  top: 15%;
   display: flex;
   flex-direction: column;
   border-radius: 10px;
 `;
 
 export const RightContentBasic = styled.div`
-  flex: 1;
-  background-color: #ececec;
-  box-shadow: 0 0px 3px rgba(0, 0, 0, 0.5);
-  z-index: 10;
   display: flex;
+  flex-direction: column;
+  width: 25%;
+  height: 20%;
+  background-color: #ececec;
   justify-content: space-around;
-  align-items: center;
-  border-radius: 10px;
+  position: relative;
+  transform: translateX(220.2%);
 `;
 
-export const RightContentWriter = styled.div``;
+export const RightContentWriter = styled.div`
+  width: 30%;
+  height: 10%;
+  padding: 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translate(20%, 5%);
+  background-color: #ececec;
+  border: 1px solid #2d325b;
+`;
 
-export const RightContentTitle = styled.div``;
+export const RightContentTitle = styled.div`
+  width: 80%;
+  height: 20%;
+  padding: 1em;
+  display: flex;
+  z-index: 100;
+  justify-content: center;
+  align-items: center;
+  background-color: #ececec;
+  border: 1px solid #2d325b;
+  border-bottom: none;
+  font-size: 32px;
+  font-weight: 900;
+`;
 
-export const RightContentTime = styled.div``;
+export const RightContentTime = styled.div`
+  border: 1px solid #2d325b;
+  border-left: none;
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
-export const RightContentDifficulty = styled.div``;
+export const RightContentDifficulty = styled.div`
+  border: 1px solid black;
+  border-left: none;
+  border-top: none;
+  border-bottom: none;
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 export const RightMainContent = styled.div`
-  flex: 6;
   background-color: #ececec;
   box-shadow: 0 0px 3px rgba(0, 0, 0, 0.5);
   display: flex;
@@ -49,7 +91,8 @@ export const RightMainFooter = styled.footer`
   height: 20%;
   background-color: #ececec;
   box-shadow: 0 0px 3px rgba(0, 0, 0, 0.5);
-  bottom: -6.5em;
+  bottom: -15.5em;
+  right: 2em;
   border-radius: 10px;
 `;
 

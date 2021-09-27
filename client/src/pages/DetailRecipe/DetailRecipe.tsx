@@ -19,50 +19,37 @@ import {
   ImageContainer,
   ImageScroll,
   ImageContent,
+  HiddenPage,
+  MainIngredient,
+  SubIngredient,
+  MainIngredientContainer,
+  MainIngredientContent,
 } from "./styles";
+import { koreaRed, koreaBlue, koreaYellow } from "koreaTheme";
 import { gsap } from "gsap/dist/gsap";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import DRModal from "components/DRModal/DRModal";
 
 const DetailRecipe = () => {
-  gsap.registerPlugin(ScrollToPlugin, ScrollTrigger);
+  let dummyMainIngredient: string[] = ["양파", "계란", "파"];
 
   const rightScrollRef = useRef<any>(null);
   const topBoxRef = useRef<any>(null);
   const leftBoxRef = useRef<any>(null);
   const rightBoxRef = useRef<any>(null);
   const imageRef = useRef<any>(null);
+  const mainRef = useRef<any>(null);
 
+  const [start, setStart] = useState<boolean>(false);
   const [dummy, setDummy] = useState<number[]>([]);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [mainIng, setMainIng] = useState<Array<string[]>>([]);
 
-  const colorMaker = () => {
-    const color: string[] = [
-      "1",
-      "2",
-      "3",
-      "4",
-      "5",
-      "6",
-      "7",
-      "8",
-      "9",
-      "a",
-      "b",
-      "c",
-      "d",
-      "e",
-      "f",
-    ];
-    const colorPicker: string[] = [];
-    const colorLength: number = color.length;
-
-    for (let i = 0; i < 6; i++) {
-      const eachColor = color[Math.floor(Math.random() * (colorLength - 1))];
-      colorPicker.push(eachColor);
-    }
-    return "#" + colorPicker.join("");
+  const colorMaker = (koreaColor: string[]) => {
+    const L = koreaColor.length; // 총 길이
+    const Random = Math.floor(Math.random() * (L - 1));
+    return "#" + koreaColor[Random];
   };
 
   const handleModalOpen = () => {
@@ -72,6 +59,13 @@ const DetailRecipe = () => {
   const handleModalClose = () => {
     setModalOpen(!modalOpen);
   };
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollToPlugin, ScrollTrigger);
+    setTimeout(() => {
+      setStart(true);
+    }, 500);
+  }, []);
 
   useEffect(() => {
     const totalLength = document.querySelectorAll(".lol").length;
@@ -95,6 +89,7 @@ const DetailRecipe = () => {
         moveRatio - 100 - moveRatio * -i
       }%)`;
       imageRef.current.style.transform = `translateY(${i * -100}%)`;
+      mainRef.current.style.transform = `translateY(${i * -100}%)`;
 
       if (anim) {
         anim.restart();
@@ -117,10 +112,46 @@ const DetailRecipe = () => {
     return () => {};
   }, []);
 
-  useEffect(() => {}, [dummy]);
+  useEffect(() => {
+    if (dummy.length !== 0) {
+      const divide: number = dummyMainIngredient.length / dummy.length;
+      const newArr: Array<string[]> = [];
+      while (dummyMainIngredient.length > 0) {
+        if (divide >= 1 && divide % 1 === 0) {
+          const arr = dummyMainIngredient.splice(0, divide);
+          newArr.push(arr);
+        } else if (divide >= 1 && divide < 2) {
+          if (dummyMainIngredient.length < divide * 2) {
+            const arr = dummyMainIngredient.splice(0, 1);
+            newArr.push(arr);
+          } else {
+            const arr = dummyMainIngredient.splice(0, Math.ceil(divide));
+            newArr.push(arr);
+          }
+        } else if (divide >= 1 && divide % 1 !== 0) {
+          if (dummyMainIngredient.length < Math.floor(divide) * 2) {
+            const arr = dummyMainIngredient.splice(0);
+            newArr.push(arr);
+          } else {
+            const arr = dummyMainIngredient.splice(0, Math.floor(divide));
+            newArr.push(arr);
+          }
+        } else if (divide < 1) {
+          const arr = dummyMainIngredient.splice(0, 1);
+          newArr.push(arr);
+        }
+      }
+      setMainIng(newArr);
+    }
+  }, [dummy]);
+
+  useEffect(() => {
+    console.log(mainIng);
+  }, [mainIng]);
 
   return (
     <DRTotalContainer>
+      <HiddenPage start={`${start}`} />
       <Nav opac={true} />
       <DRContainer />
       <DRContainer />
@@ -152,24 +183,40 @@ const DetailRecipe = () => {
       <TopBoxScroll>
         <TopBoxContainer ref={topBoxRef}>
           {dummy.map((item, i) => {
-            return <TopBoxContent color={colorMaker()}>{i}</TopBoxContent>;
+            return <TopBoxContent color={colorMaker(koreaRed)}></TopBoxContent>;
           })}
         </TopBoxContainer>
       </TopBoxScroll>
       <LeftBoxScroll>
         <LeftBoxContainer ref={leftBoxRef} length={dummy.length}>
           {dummy.map((item, i) => {
-            return <LeftBoxContent color={colorMaker()}>{i}</LeftBoxContent>;
+            return (
+              <LeftBoxContent color={colorMaker(koreaBlue)}></LeftBoxContent>
+            );
           })}
         </LeftBoxContainer>
       </LeftBoxScroll>
       <RightBoxScroll>
         <RightBoxContainer ref={rightBoxRef} length={dummy.length}>
           {dummy.map((item, i) => {
-            return <RightBoxContent color={colorMaker()}>{i}</RightBoxContent>;
+            return (
+              <RightBoxContent
+                color={colorMaker(koreaYellow)}
+              ></RightBoxContent>
+            );
           })}
         </RightBoxContainer>
       </RightBoxScroll>
+      <MainIngredientContainer>
+        <MainIngredient ref={mainRef}>
+          {mainIng.map((item) => {
+            console.log(item);
+
+            return <MainIngredientContent>{item}</MainIngredientContent>;
+          })}
+        </MainIngredient>
+      </MainIngredientContainer>
+      <SubIngredient></SubIngredient>
     </DRTotalContainer>
   );
 };

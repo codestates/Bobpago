@@ -12,14 +12,15 @@ export const NavContainer = styled.div<NavProps>`
   justify-content: space-between;
   position: fixed;
   width: 100%;
+  transition: 1s;
   background-color: ${({ opac }): any => {
-    return opac ? "#ececec09" : "#ececec";
+    return opac ? "#ececec09" : "#fffff3";
   }};
   color: black;
   align-items: center;
   z-index: 10;
   font-size: 18px;
-  box-shadow: 0 0px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0px 15px rgba(0, 0, 0, 0.2);
 `;
 
 export const NavLogoContainer = styled.div`
