@@ -14,6 +14,7 @@ import MyPage from "pages/MyOrUserPage/MyPage";
 import UserPage from "pages/MyOrUserPage/UserPage";
 import EditRecipe from "pages/EditRecipe/EditRecipe";
 import FollowModal from "components/FollowModal/FollowModal";
+import MatchingRecipe from "pages/MatchingRecipe/MatchingRecipe";
 
 function App() {
   const dispatch = useDispatch();
@@ -34,6 +35,8 @@ function App() {
       {/* <UserPage /> */}
       {/* <FollowModal /> */}
       <NofiticationCenter />
+      {/* <DetailRecipe /> */}
+      {/* <MatchingRecipe /> */}
     </div>
   );
 }

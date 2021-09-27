@@ -29,12 +29,13 @@ import { useEffect } from "react";
 import Ingredient from "components/Ingredient/Ingredient";
 import { useDispatch, useSelector } from "react-redux";
 import { GET_FILTER_DATA } from "actions/IngredientAction";
+import { RootState } from "reducers";
 
 const Survay = () => {
   const [move, setmove] = useState<number>(window.innerWidth);
   const [left, setLeft] = useState<boolean>(false);
   const [right, setRight] = useState<boolean>(false);
-  const state = useSelector((state) => state.IngredientReducer);
+  const state = useSelector((state: RootState) => state.IngredientReducer);
   const dispatch = useDispatch();
 
   // 최초에 무브 컨테이너를 가운데로 두기위해서 사용한 useState이며, type은 number로 선언한다.

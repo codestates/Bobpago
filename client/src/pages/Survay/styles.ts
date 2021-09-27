@@ -105,7 +105,7 @@ export const BadCookerContainer = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  transform: translateY(4.5em);
+  transform: translateY(6em);
 `;
 
 export const BadCookerTitleContainer = styled.div`

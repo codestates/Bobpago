@@ -4,36 +4,82 @@ export const RightContent = styled.div`
   width: 45%;
   height: 70%;
   position: fixed;
-  right: 2.4%;
-  top: 12%;
+  right: -1%;
+  top: 15%;
   display: flex;
   flex-direction: column;
   border-radius: 10px;
+  z-index: 1000;
 `;
 
 export const RightContentBasic = styled.div`
-  flex: 1;
-  background-color: #ececec;
-  box-shadow: 0 0px 3px rgba(0, 0, 0, 0.5);
-  z-index: 10;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
-  border-radius: 10px;
+  flex-direction: column;
+  width: 50%;
+  height: 20%;
+  background-color: #ececec;
+  justify-content: space-around;
+  position: relative;
+  transform: translateX(100.1%);
 `;
 
-export const RightContentWriter = styled.div``;
+export const RightContentWriter = styled.div`
+  width: 30%;
+  height: 10%;
+  padding: 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translate(20%, 5%);
+  background-color: #ececec;
+  border: 1px solid #2d325b;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+`;
 
-export const RightContentTitle = styled.div``;
+export const RightContentTitle = styled.div`
+  width: 80%;
+  height: 20%;
+  padding: 1em;
+  display: flex;
+  z-index: 100;
+  justify-content: center;
+  align-items: center;
+  background-color: #ececec;
+  border: 1px solid #2d325b;
+  font-size: 32px;
+  font-weight: 900;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+`;
 
-export const RightContentTime = styled.div``;
+export const RightContentTime = styled.div`
+  border: 1px solid #2d325b;
+  border-top: none;
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
-export const RightContentDifficulty = styled.div``;
+export const RightContentDifficulty = styled.div`
+  border: 1px solid black;
+  border-top: none;
+  border-bottom: none;
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 export const RightMainContent = styled.div`
-  flex: 6;
   background-color: #ececec;
-  box-shadow: 0 0px 3px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -48,8 +94,8 @@ export const RightMainFooter = styled.footer`
   width: 100%;
   height: 20%;
   background-color: #ececec;
-  box-shadow: 0 0px 3px rgba(0, 0, 0, 0.5);
-  bottom: -6.5em;
+  bottom: -15.5em;
+  right: 2em;
   border-radius: 10px;
 `;
 
@@ -60,7 +106,6 @@ export const CommentButton = styled.button`
   width: 5em;
   height: 2.5em;
   background-color: #d43838;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   transition: 0.5s;
   color: #ffffff;
   outline: none;

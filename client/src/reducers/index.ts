@@ -10,11 +10,16 @@ import {
   SignUpSignInSlide,
   WriteRecipePage,
   WriteRecipeContent,
+<<<<<<< HEAD
   Notification,
+=======
+  IngredientGoodAndBadData,
+>>>>>>> b7d2ae8ef2bc07d12939976d56decb5f64b5ca43
 } from "../types";
 
 export interface RootState {
   SignUpAndSignInReducer: SignUpSignInSlide;
+  IngredientReducer: IngredientGoodAndBadData;
   WriteRecipePageReducer: WriteRecipePage;
   WriteRecipeContentsReducer: WriteRecipeContent;
   NotificationReducer: Notification;
