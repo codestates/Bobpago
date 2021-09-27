@@ -44,15 +44,15 @@ export const DRTotalContainer = styled.div`
 
 export const RightScroll = styled.div`
   position: fixed;
-  width: 25.2%;
-  height: 300px;
-  right: 18.8%;
-  top: 33%;
+  width: 24.9%;
+  height: 262px;
+  right: 19.1%;
+  top: 35.9%;
   background-color: #ececec;
   overflow: hidden;
   padding: 0 1em;
   border: 1px solid #2d325b;
-  z-index: 100;
+  z-index: 1000;
 `;
 
 export const RightScrollContainer = styled.div`
@@ -168,7 +168,6 @@ export const ImageScroll = styled.div`
   left: 5%;
   z-index: 10;
   border-radius: 10px;
-  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.5);
   overflow: hidden;
 `;
 
@@ -212,15 +211,19 @@ export const HiddenPage = styled.div<HiddenProps>`
 `;
 
 export const MainIngredientContainer = styled.div`
-  max-width: 15%;
-  min-width: 15%;
+  max-width: 14.85%;
+  min-width: 14.85%;
   height: 20%;
   background-color: #ececec;
   position: fixed;
   top: 50%;
-  left: 80%;
+  left: 80.85%;
   overflow: hidden;
   border: 1px solid #2d325b;
+  border-bottom: none;
+  border-left: none;
+  border-top-right-radius: 15px;
+  z-index: 900;
 `;
 
 export const MainIngredient = styled.div`
@@ -237,6 +240,40 @@ export const MainIngredientContent = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 32px;
+  font-weight: 700;
+  transition: 0.5s;
+  cursor: pointer;
+  &:hover {
+    color: red;
+    transform: scale(1.2);
+  }
+`;
+
+export const SubIngredientContainer = styled.div`
+  /* max-width: 15%; */
+  min-width: 39.7%;
+  height: 20%;
+  background-color: #ececec;
+  position: fixed;
+  top: 70%;
+  left: 56%;
+  overflow: hidden;
+  border: 1px solid #2d325b;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  z-index: 500;
 `;
 
 export const SubIngredient = styled.div``;
+
+export const SudoContainer = styled.div`
+  position: fixed;
+  width: 36%;
+  height: 68%;
+  top: 22%;
+  left: 56%;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  z-index: 1;
+`;
