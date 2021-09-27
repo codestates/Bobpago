@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { RecipeImage } from '../entities/recipe-image.entity';
 import { ResType } from '../common/response-type';
+import { Recipe } from 'src/entities/recipe.entity';
 
 AWS.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -19,6 +20,8 @@ export class ImageService {
   constructor(
     @InjectRepository(RecipeImage)
     private recipeImageRepository: Repository<RecipeImage>,
+    @InjectRepository(Recipe)
+    private recipeRepository: Repository<Recipe>,
   ) {}
 
   async upload(files, user, id, path): Promise<ResType> {
@@ -41,7 +44,7 @@ export class ImageService {
     return {
       data: { imageUrl: urls },
       statusCode: 201,
-      message: '레시피 작성 완료',
+      message: '레시피 이미지 작성이 완료되었습니다.',
     };
   }
 
@@ -66,12 +69,16 @@ export class ImageService {
   async uploadImageUrl(id, urls, path) {
     if (path === 'recipe') {
       const recipeImage = await this.recipeImageRepository.find({
-        id,
+        recipeId: id,
       });
+      console.log(recipeImage);
       for (let i = 0; i < recipeImage.length; i++) {
         recipeImage[i].imageUrl = urls[i];
       }
       await this.recipeImageRepository.save(recipeImage);
+      await this.recipeRepository.update(id, {
+        thumbnail: urls[urls.length - 1],
+      });
     } else if (path === 'comment') {
     } else if (path === 'user') {
     }
