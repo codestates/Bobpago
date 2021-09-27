@@ -5,7 +5,7 @@ export const RESET_NOTIFICATION = "RESET_NOTIFICATION";
 
 export const notify =
   (message: string, dismissTime = 4200) =>
-  (dispatch) => {
+  (dispatch: any) => {
     const uuid = Math.random();
     dispatch(enqueueNotification(message, dismissTime, uuid));
     setTimeout(() => {

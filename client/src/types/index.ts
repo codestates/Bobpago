@@ -10,6 +10,12 @@ export interface WriteRecipePage {
 type NumOrNull = number | null;
 type StringOrUndifined = string | undefined;
 
+interface Payload {
+  message: string;
+  dismissTime?: number;
+  uuid?: number;
+}
+
 export interface WriteRecipeContent {
   title: string;
   ingredient: NumOrNull[];
@@ -21,7 +27,7 @@ export interface WriteRecipeContent {
 }
 
 export interface Notification {
-  notifications: StringOrUndifined[];
+  notifications: Payload[];
 }
 
 export interface IngredientGoodAndBadData {

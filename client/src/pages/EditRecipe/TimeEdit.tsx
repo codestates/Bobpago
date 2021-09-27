@@ -19,7 +19,6 @@ import {
   ExpectedTimeTooltipText,
   NextButton,
   PrevButton,
-  SecondNextButton,
   PeopleNumInput,
   ExpectedPeopleContainer,
 } from "./styles";
@@ -29,7 +28,7 @@ const Time = ({ page, scale, setCircle1IsHover, setCircle2IsHover }: any) => {
   const dispatch = useDispatch();
   const [time, setTimeRadio] = useState<any>(null);
   const [otherTime, setOtherTime] = useState<any>(null);
-  const [people, setPeople] = useState<number | null | string>(null);
+  const [people, setPeople] = useState<any>(null);
   const theOtherTimeRef = useRef<any>(null);
   const [circle1, circle1IsHover] = useHover();
   const [circle2, circle2IsHover] = useHover();
