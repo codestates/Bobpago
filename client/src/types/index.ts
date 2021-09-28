@@ -38,3 +38,7 @@ export interface IngredientGoodAndBadData {
 export interface IngredientClickData {
   clickData: number[];
 }
+
+export interface Accesstoken {
+  accesstoken: string;
+}

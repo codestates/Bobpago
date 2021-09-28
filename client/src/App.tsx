@@ -11,7 +11,6 @@ import NofiticationCenter from "components/Notification/NotificationCenter";
 import MyPage from "pages/MyOrUserPage/MyPage";
 import UserPage from "pages/MyOrUserPage/UserPage";
 import EditRecipe from "pages/EditRecipe/EditRecipe";
-import FollowModal from "components/FollowModal/FollowModal";
 import MatchingRecipe from "pages/MatchingRecipe/MatchingRecipe";
 import { Route, Switch, useHistory, withRouter } from "react-router-dom";
 import LandingPage from "pages/LandingPage/LandingPage";
