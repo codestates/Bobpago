@@ -6,12 +6,14 @@ import WriteRecipeContentsReducer from "./WriteRecipeContentsReducer";
 import EditRecipePageReducer from "./EditRecipePageReducer";
 import EditRecipeContentsReducer from "./EditRecipeContentsReducer";
 import NotificationReducer from "./NotificationReducer";
+import AccesstokenReducer from "./AccesstokenReducer";
 import {
   SignUpSignInSlide,
   WriteRecipePage,
   WriteRecipeContent,
   Notification,
   IngredientGoodAndBadData,
+  Accesstoken,
 } from "../types";
 
 export interface RootState {
@@ -22,6 +24,7 @@ export interface RootState {
   NotificationReducer: Notification;
   EditRecipePageReducer: WriteRecipePage;
   EditRecipeContentsReducer: WriteRecipeContent;
+  AccesstokenReducer: Accesstoken;
 }
 
 const rootReducer = combineReducers({
@@ -32,6 +35,7 @@ const rootReducer = combineReducers({
   NotificationReducer,
   EditRecipePageReducer,
   EditRecipeContentsReducer,
+  AccesstokenReducer,
 });
 
 export default rootReducer;

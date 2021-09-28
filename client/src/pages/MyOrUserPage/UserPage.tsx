@@ -88,13 +88,13 @@ const UserPage = () => {
             ))}
           </GridContainer>
           <IconContainer>
-            {dummy.length > myPostNum && (
-              <PlusIcon onClick={() => setMyPostNum(myPostNum + standardNum)} />
-            )}
             {myPostNum > standardNum && dummy.length > standardNum && (
               <MinusIcon
                 onClick={() => setMyPostNum(myPostNum - standardNum)}
               />
+            )}
+            {dummy.length > myPostNum && (
+              <PlusIcon onClick={() => setMyPostNum(myPostNum + standardNum)} />
             )}
           </IconContainer>
         </MyPostContainer>

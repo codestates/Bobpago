@@ -34,3 +34,7 @@ export interface IngredientGoodAndBadData {
   badData: Array<{ name: string; image: string }>;
   goodData: Array<{ name: string; image: string }>;
 }
+
+export interface Accesstoken {
+  accesstoken: string;
+}
