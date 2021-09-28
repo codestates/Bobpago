@@ -20,6 +20,9 @@ export class Ingredient extends BaseEntity {
   @Column()
   type: string;
 
+  @Column({ default: false })
+  basic: boolean;
+
   @CreateDateColumn()
   createdAt: Date;
 

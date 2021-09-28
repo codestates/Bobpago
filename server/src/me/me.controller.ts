@@ -8,6 +8,7 @@ import {
   Delete,
   Query,
   HttpCode,
+  Param,
 } from '@nestjs/common';
 import { MeService } from './me.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -43,5 +44,18 @@ export class MeController {
   @HttpCode(200)
   async restoreMyAccount(@Body('email') email: string): Promise<ResType> {
     return this.meService.restoreMyAccount(email);
+  }
+
+  @Post(':recipeId/bookmarks')
+  async addBookmark(
+    @Param('recipeId') recipeId,
+    @GetUser() user: User,
+  ): Promise<ResType> {
+    return this.meService.addBookmark(recipeId, user);
+  }
+
+  @Delete(':recipeId/bookmarks')
+  async deleteBookmark(@Param('recipeId') recipeId: string): Promise<ResType> {
+    return this.meService.deleteBookamark(recipeId);
   }
 }

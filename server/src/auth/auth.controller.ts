@@ -1,12 +1,9 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import {
   Controller,
   Get,
   Post,
   Body,
-  Patch,
   Param,
-  Delete,
   ValidationPipe,
   Query,
   Res,
@@ -49,7 +46,7 @@ export class AuthController {
   }
 
   @Get('kakao')
-  kakaoAuth(@Res({ passthrough: true }) res: Response): Promise<any> {
+  kakaoAuth(@Res({ passthrough: true }) res: Response): Promise<void> {
     return this.authService.kakaoAuthRedirect(res);
   }
 
@@ -59,7 +56,7 @@ export class AuthController {
   }
 
   @Get('naver')
-  naverAuth(@Res({ passthrough: true }) res: Response): Promise<any> {
+  naverAuth(@Res({ passthrough: true }) res: Response): Promise<void> {
     return this.authService.naverAuthRedirect(res);
   }
 
@@ -69,5 +66,18 @@ export class AuthController {
     @Query('state') state: string,
   ): Promise<ResType> {
     return this.authService.naverSignIn(code, state);
+  }
+
+  @Get('google')
+  googleAuth(@Res({ passthrough: true }) res: Response): Promise<void> {
+    return this.authService.googleAuthRedirect(res);
+  }
+
+  @Get('google/redirect')
+  googleSignIn(
+    @Query('code') code: string,
+    @Query('scope') scope: string,
+  ): Promise<ResType> {
+    return this.authService.googleSignIn(code, scope);
   }
 }
