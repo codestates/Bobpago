@@ -11,6 +11,15 @@ export class IngredientsService {
     private ingredientRepository: Repository<Ingredient>,
   ) {}
 
+  async getAllIngredient(): Promise<ResType> {
+    const ingredients = await this.ingredientRepository.find({ type: 'main' });
+    return {
+      data: ingredients,
+      statusCode: 200,
+      message: '모든 재료 조회가 완료되었습니다.',
+    };
+  }
+
   async getBasicIngredient(): Promise<ResType> {
     const ingredients = await this.ingredientRepository.find({ basic: true });
     return {
