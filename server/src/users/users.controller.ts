@@ -8,8 +8,6 @@ import {
   Delete,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from '../me/dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { ResType } from 'src/common/response-type';
 import { GetUser } from 'src/common/decorator';
 import { User } from 'src/entities/user.entity';

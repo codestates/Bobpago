@@ -20,12 +20,18 @@ export class UsersService {
 
   async getUserInfo(userId: string): Promise<ResType> {
     const user = await this.usersRepository.findOne({ id: +userId });
+    const followees = user.followees.length;
+    const followers = user.followers.length;
     delete user.password;
     delete user.refreshToken;
+    delete user.followees;
+    delete user.followers;
     if (user) {
       return {
         data: {
           ...user,
+          followees,
+          followers,
         },
         statusCode: 200,
         message: '유저 정보 조회가 완료되었습니다.',
@@ -45,6 +51,10 @@ export class UsersService {
     const resultData = followers.map((el) => {
       delete el.follower.password;
       delete el.follower.refreshToken;
+      delete el.follower.recipes;
+      delete el.follower.followees;
+      delete el.follower.followers;
+      delete el.follower.bookmarks;
       return el.follower;
     });
 
@@ -69,6 +79,10 @@ export class UsersService {
     const resultData = followees.map((el) => {
       delete el.followee.password;
       delete el.followee.refreshToken;
+      delete el.followee.recipes;
+      delete el.followee.followees;
+      delete el.followee.followers;
+      delete el.followee.bookmarks;
       return el.followee;
     });
 

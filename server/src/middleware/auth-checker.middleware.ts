@@ -23,76 +23,82 @@ export class AuthCheckerMiddleware implements NestMiddleware {
     const { tokenType } = req.query;
     const accessToken = req.headers.authorization.split(' ')[1];
 
-    // 1. jwt 토큰인 경우
-    if (tokenType === 'jwt') {
-      try {
-        const result = await this.jwtService.verify(accessToken, {
-          secret: process.env.ACCESS_TOKEN_SECRET,
-        });
-        const user = await this.usersRepository.findOne({
-          email: result.email,
-        });
+    switch (tokenType) {
+      // 1. jwt 토큰인 경우
+      case 'jwt':
+        try {
+          const result = await this.jwtService.verify(accessToken, {
+            secret: process.env.ACCESS_TOKEN_SECRET,
+          });
+          const user = await this.usersRepository.findOne({
+            email: result.email,
+          });
+          delete user.password;
+          delete user.refreshToken;
+          req.user = user;
+          next();
+        } catch (err) {
+          throw new UnauthorizedException();
+        }
+        break;
+      // 2. kakao 토큰인 경우
+      case 'kakao':
+        try {
+          const result = await axios.get('https://kapi.kakao.com/v2/user/me', {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+            withCredentials: true,
+          });
+          const user = await this.usersRepository.findOne({
+            email: result.data.kakao_account.email,
+          });
+          delete user.password;
+          delete user.refreshToken;
+          req.user = user;
+          next();
+        } catch (err) {
+          throw new UnauthorizedException();
+        }
+        break;
+      // 3. naver 토큰인 경우
+      case 'naver':
+        try {
+          const result = await axios.get(
+            'https://openapi.naver.com/v1/nid/me',
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+              withCredentials: true,
+            },
+          );
+          const user = await this.usersRepository.findOne({
+            email: result.data.response.email,
+          });
+          delete user.password;
+          delete user.refreshToken;
+          req.user = user;
+          next();
+        } catch (err) {
+          throw new UnauthorizedException();
+        }
+        break;
+      // 4. google 토큰인 경우
+      case 'google':
+        const data = await axios.get(
+          `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${accessToken}`,
+        );
+        console.log(data);
+        const { email } = data.data;
+        const user = await this.usersRepository.findOne({ email });
         delete user.password;
         delete user.refreshToken;
         req.user = user;
         next();
-      } catch (err) {
-        throw new UnauthorizedException();
-      }
-    }
-
-    // 2. kakao 토큰인 경우
-    else if (tokenType === 'kakao') {
-      try {
-        const result = await axios.get('https://kapi.kakao.com/v2/user/me', {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-          withCredentials: true,
-        });
-        const user = await this.usersRepository.findOne({
-          email: result.data.kakao_account.email,
-        });
-        delete user.password;
-        delete user.refreshToken;
-        req.user = user;
-        next();
-      } catch (err) {
-        throw new UnauthorizedException();
-      }
-    }
-
-    // 3. naver 토큰인 경우
-    else if (tokenType === 'naver') {
-      try {
-        const result = await axios.get('https://openapi.naver.com/v1/nid/me', {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-          withCredentials: true,
-        });
-        const user = await this.usersRepository.findOne({
-          email: result.data.response.email,
-        });
-        delete user.password;
-        delete user.refreshToken;
-        req.user = user;
-        next();
-      } catch (err) {
-        throw new UnauthorizedException();
-      }
-    }
-
-    // 4. google 토큰인 경우
-    else if (tokenType === 'google') {
-      throw new UnauthorizedException();
-
-      next();
-    }
-
-    // 5. 잘못된 타입인 경우
-    else {
-      throw new BadRequestException();
+        break;
+      default:
+        throw new BadRequestException();
     }
   }
 }
