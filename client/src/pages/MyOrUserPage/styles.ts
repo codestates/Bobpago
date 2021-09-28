@@ -2,6 +2,7 @@ import styled, { keyframes } from "styled-components";
 import { PlusLg } from "@styled-icons/bootstrap/PlusLg/PlusLg";
 import { ThreeDotsVertical } from "@styled-icons/bootstrap/ThreeDotsVertical/ThreeDotsVertical";
 import { Check } from "@styled-icons/bootstrap/Check/Check";
+import { DashLg } from "@styled-icons/bootstrap/DashLg/DashLg";
 
 export const PageContainer = styled.div`
   position: relative;
@@ -128,8 +129,8 @@ export const GridContainer = styled.div`
 `;
 
 export const PlusIcon = styled(PlusLg)`
-  width: 2.5em;
-  height: 3em;
+  width: 7em;
+  height: 2.8em;
   position: relative;
   margin: 0.7em auto;
   cursor: pointer;
@@ -330,7 +331,14 @@ export const CheckIcon = styled(Check)`
   display: inline-block;
   transform: translate(-0.2em, -0.05em);
 `;
-// export const name = styled.div``;
+
+export const MinusIcon = styled(DashLg)`
+  width: 7em;
+  height: 3em;
+  position: relative;
+  margin: 0.7em auto;
+  cursor: pointer;
+`;
 
 // export const name = styled.div``;
 
@@ -339,4 +347,20 @@ export const CheckIcon = styled(Check)`
 // export const name = styled.div``;
 
 // export const name = styled.div``;
-export const dummy = ["a", "b", "c", "d", "e", "f", "g", "g", "g", "g"];
+export const dummy = [
+  "a",
+  "b",
+  "c",
+  "d",
+  "e",
+  "f",
+  "g",
+  "g",
+  "g",
+  "g",
+  "g",
+  "g",
+  "g",
+  "g",
+  "g",
+];
