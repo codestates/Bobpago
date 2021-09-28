@@ -1,5 +1,5 @@
 import React from "react";
-import { ProfileContainer, ProfileIcon, PenIcon, ProfileImg } from "../styles";
+import { ProfileContainer, ProfileIcon, PenIcon, ProfileImg } from "./styles";
 
 interface Props {
   size?: number;
