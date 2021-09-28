@@ -97,9 +97,7 @@ export class ImageService {
         break;
 
       case 'user':
-        const user = await this.userRepository.findOne({ id });
-        user.profile = urls[0];
-        await this.userRepository.save(user);
+        await this.userRepository.update(id, { imageUrl: urls[0] });
         break;
 
       default:
@@ -123,6 +121,7 @@ export class ImageService {
       case 'comment':
         break;
       case 'user':
+        await this.userRepository.update(id, { imageUrl: null });
         break;
       default:
         throw new BadRequestException();

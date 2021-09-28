@@ -20,7 +20,7 @@ export class Comment extends BaseEntity {
   @Column()
   imageUrl: string;
 
-  @Column()
+  @Column({ length: 1234 })
   content: string;
 
   @Column()
