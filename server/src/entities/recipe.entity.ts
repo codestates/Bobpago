@@ -38,13 +38,16 @@ export class Recipe extends BaseEntity {
   @Column()
   estTime: number;
 
+  @Column()
+  views: number;
+
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => User, (user) => user.recipes)
+  @ManyToOne(() => User, (user) => user.recipes, { onDelete: 'CASCADE' })
   user: User;
 
   @OneToMany(() => Comment, (comment) => comment.recipe)

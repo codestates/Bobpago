@@ -1,4 +1,5 @@
 import styled, { css, keyframes } from "styled-components";
+import { BookmarkFill } from "@styled-icons/bootstrap/BookmarkFill";
 
 export const pageLeftMoveAnimate = keyframes`
     0% {
@@ -64,6 +65,10 @@ interface pagoProps {
   rotate: number;
   position: number;
   end: number;
+}
+
+interface BookmarkProps {
+  bookmark: boolean;
 }
 
 export const EggHeadPago = styled.img<pagoProps>`
@@ -373,5 +378,20 @@ export const CommentButton = styled.button`
   &:hover {
     background-color: red;
     transform: scale(1.1);
+  }
+`;
+
+export const BookMarkIcon = styled(BookmarkFill)<BookmarkProps>`
+  position: fixed;
+  width: 25px;
+  top: 23.5%;
+  right: 5.5%;
+  z-index: 1000;
+  transition: 0.5s;
+  color: ${({ bookmark }) => {
+    return bookmark ? "orangered" : "orange";
+  }};
+  &:hover {
+    color: orangered;
   }
 `;

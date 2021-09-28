@@ -22,10 +22,18 @@ function App() {
   const dispatch = useDispatch();
 
   const AllIngredient = async () => {
-    const data = await axios.get("https://api.bobpago.com/ingredient");
+    const data = await axios.get("http://localhost:3000/ingredient", {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log(data);
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    AllIngredient();
+  }, []);
 
   return (
     <Switch>
