@@ -9,12 +9,15 @@ import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
 import { ResType } from 'src/common/response-type';
 import axios from 'axios';
+import { Bookmark } from '../entities/bookmark.entity';
 
 @Injectable()
 export class MeService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    @InjectRepository(Bookmark)
+    private bookmarkRepository: Repository<Bookmark>,
   ) {}
   async signUp(createUserDto: CreateUserDto): Promise<any> {
     console.log(createUserDto);
@@ -144,6 +147,32 @@ export class MeService {
       data: null,
       statusCode: 200,
       message: '계정복구가 완료되었습니다.',
+    };
+  }
+
+  async addBookmark(recipeId: string, user: User): Promise<ResType> {
+    const bookmark = await this.bookmarkRepository.create({
+      userId: user.id,
+      recipeId: +recipeId,
+    });
+    try {
+      await this.bookmarkRepository.save(bookmark);
+    } catch (e) {
+      throw e;
+    }
+    return {
+      data: {},
+      statusCode: 201,
+      message: '북마크가 추가되었습니다.',
+    };
+  }
+
+  async deleteBookamark(recipeId): Promise<ResType> {
+    await this.bookmarkRepository.delete({ recipeId: +recipeId });
+    return {
+      data: {},
+      statusCode: 201,
+      message: '북마크가 삭제 되었습니다.',
     };
   }
 }

@@ -3,9 +3,10 @@ import { MeService } from './me.service';
 import { MeController } from './me.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../entities/user.entity';
+import { Bookmark } from 'src/entities/bookmark.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [TypeOrmModule.forFeature([User, Bookmark])],
   controllers: [MeController],
   providers: [MeService],
 })
