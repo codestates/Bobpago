@@ -30,12 +30,16 @@ import Ingredient from "components/Ingredient/Ingredient";
 import { useDispatch, useSelector } from "react-redux";
 import { GET_FILTER_DATA } from "actions/IngredientAction";
 import { RootState } from "reducers";
+import { Link } from "react-router-dom";
 
 const Survay = () => {
   const [move, setmove] = useState<number>(window.innerWidth);
   const [left, setLeft] = useState<boolean>(false);
   const [right, setRight] = useState<boolean>(false);
   const state = useSelector((state: RootState) => state.IngredientReducer);
+  const clickState = useSelector(
+    (state: RootState) => state.IngredientClickReducer
+  );
   const dispatch = useDispatch();
 
   // 최초에 무브 컨테이너를 가운데로 두기위해서 사용한 useState이며, type은 number로 선언한다.
@@ -131,7 +135,9 @@ const Survay = () => {
                 </GoodCookerSearchForm>
               </GoodCookerForm>
               <Ingredient check="Good" />
-              <PostButton>레시피 찾기</PostButton>
+              <Link to="/matching">
+                <PostButton>레시피 찾기</PostButton>
+              </Link>
             </GoodCookerContainer>
           </GoodCookerPage>
           <AreYouGoodPage>
