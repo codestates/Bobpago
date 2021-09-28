@@ -27,6 +27,7 @@ const SignIn = () => {
   const { loginDisplay } = state;
   const dispatch = useDispatch();
   const LoginRef = useRef<any>(null);
+  const ContainerRef = useRef<any>(null);
   const emailError = useRef<any>(null);
   const passwordError = useRef<any>(null);
   const emailPlaceholderRef = useRef<any>(null);
@@ -37,12 +38,14 @@ const SignIn = () => {
   useEffect((): any => {
     if (loginDisplay) {
       gsap.to(LoginRef.current, { display: "" });
+      ContainerRef.current.style.display = "block";
       window.innerWidth > 480
         ? gsap.to(LoginRef.current, { top: "25%" })
         : gsap.to(LoginRef.current, { top: "0%" });
     } else {
       LoginRef.current.style.display = "none";
       gsap.to(LoginRef.current, { top: "130%" });
+      ContainerRef.current.style.display = "none";
     }
   }, [loginDisplay]);
 
@@ -109,7 +112,7 @@ const SignIn = () => {
   }, [password]);
 
   return (
-    <WholeContainer>
+    <WholeContainer ref={ContainerRef}>
       <Container ref={LoginRef}>
         <InputContainer>
           {/* <Title>로그인</Title> */}

@@ -14,26 +14,26 @@ import MyPage from "pages/MyOrUserPage/MyPage";
 import UserPage from "pages/MyOrUserPage/UserPage";
 import EditRecipe from "pages/EditRecipe/EditRecipe";
 import MatchingRecipe from "pages/MatchingRecipe/MatchingRecipe";
+import { Redirect, Route, Switch } from "react-router";
 
 function App() {
   const dispatch = useDispatch();
   return (
-    <div>
-      {/* <Survay /> */}
-      {/* <Survay /> */}
-      {/* <DetailRecipe /> */}
+    <Switch>
+      {/* <Route path="/survey" component={Survay} /> */}
+      {/* <Route path="/detail/:id" component={DetailRecipe} /> */}
       {/* <Box /> */}
-      <button onClick={() => dispatch(showSignIn())}>click</button>
-      <SignIn />
-      <SignUp />
+      {/* <button onClick={() => dispatch(showSignIn())}>click</button> */}
+      {/* <SignIn /> */}
+      {/* <SignUp /> */}
       {/* <WriteRecipe /> */}
       {/* <EditRecipe /> */}
-      {/* <MyPage /> */}
+      <MyPage />
       {/* <UserPage /> */}
-      <NofiticationCenter />
+      {/* <NofiticationCenter /> */}
       {/* <DetailRecipe /> */}
       {/* <MatchingRecipe /> */}
-    </div>
+    </Switch>
   );
 }
 

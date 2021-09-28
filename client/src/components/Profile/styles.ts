@@ -61,7 +61,7 @@ export const ProfileImg = styled.img<SizeProps>`
 
 export const EditContainer = styled.div<FixProps>`
   position: absolute;
-  transform: translate(125%, -85%);
+  transform: translate(425%, -85%);
   display: ${(props) => (props.fix ? "block" : "none")};
   width: ${(props) => (props.size ? (props.size * 3) / 10 + "em" : "1em")};
   height: ${(props) => (props.size ? (props.size * 3) / 10 + "em" : "1em")};
