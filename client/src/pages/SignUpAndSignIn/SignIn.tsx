@@ -27,7 +27,7 @@ const SignIn = () => {
   const { loginDisplay } = state;
   const dispatch = useDispatch();
   const LoginRef = useRef<any>(null);
-  const containerRef = useRef<any>(null);
+  const ContainerRef = useRef<any>(null);
   const emailError = useRef<any>(null);
   const passwordError = useRef<any>(null);
   const emailPlaceholderRef = useRef<any>(null);
@@ -38,14 +38,14 @@ const SignIn = () => {
   useEffect((): any => {
     if (loginDisplay) {
       gsap.to(LoginRef.current, { display: "" });
-      containerRef.current.style.display = "block";
+      ContainerRef.current.style.display = "block";
       window.innerWidth > 480
         ? gsap.to(LoginRef.current, { top: "70%" })
         : gsap.to(LoginRef.current, { top: "0%" });
     } else {
       LoginRef.current.style.display = "none";
       gsap.to(LoginRef.current, { top: "130%" });
-      containerRef.current.style.display = "none";
+      ContainerRef.current.style.display = "none";
     }
   }, [loginDisplay]);
 
@@ -112,7 +112,7 @@ const SignIn = () => {
   }, [password]);
 
   return (
-    <WholeContainer ref={containerRef}>
+    <WholeContainer ref={ContainerRef}>
       <Container ref={LoginRef}>
         <InputContainer>
           {/* <Title>로그인</Title> */}
@@ -159,6 +159,8 @@ const SignIn = () => {
               <img src="/img/google.png" width="37" />
               &nbsp;&nbsp;&nbsp;
               <img src="/img/kakao.png" width="36" />
+              &nbsp;&nbsp;&nbsp;
+              <img src="/img/naver.png" width="36" />
             </OAuthIconContainer>
           </OAuthContainer>
         </InputContainer>
