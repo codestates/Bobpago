@@ -156,6 +156,8 @@ const SignIn = () => {
               <img src="/img/google.png" width="37" />
               &nbsp;&nbsp;&nbsp;
               <img src="/img/kakao.png" width="36" />
+              &nbsp;&nbsp;&nbsp;
+              <img src="/img/naver.png" width="36" />
             </OAuthIconContainer>
           </OAuthContainer>
         </InputContainer>

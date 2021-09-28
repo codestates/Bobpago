@@ -13,7 +13,6 @@ import NofiticationCenter from "components/Notification/NotificationCenter";
 import MyPage from "pages/MyOrUserPage/MyPage";
 import UserPage from "pages/MyOrUserPage/UserPage";
 import EditRecipe from "pages/EditRecipe/EditRecipe";
-import FollowModal from "components/FollowModal/FollowingModal";
 import MatchingRecipe from "pages/MatchingRecipe/MatchingRecipe";
 
 function App() {
@@ -24,16 +23,13 @@ function App() {
       {/* <Survay /> */}
       {/* <DetailRecipe /> */}
       {/* <Box /> */}
-      {/* <button className="test" onClick={() => dispatch(showSignIn())}>
-        click
-      </button>
+      <button onClick={() => dispatch(showSignIn())}>click</button>
       <SignIn />
-      <SignUp /> */}
+      <SignUp />
       {/* <WriteRecipe /> */}
       {/* <EditRecipe /> */}
       {/* <MyPage /> */}
-      <UserPage />
-      {/* <FollowModal /> */}
+      {/* <UserPage /> */}
       <NofiticationCenter />
       {/* <DetailRecipe /> */}
       {/* <MatchingRecipe /> */}
