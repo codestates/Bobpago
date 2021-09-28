@@ -8,26 +8,24 @@ import {
   RightContentDifficulty,
   RightMainContent,
   RightMainFooter,
-  CommentButton,
+  TimeIcon,
 } from "./styles";
 
-interface DRContentProps {
-  handleModalOpen: VoidFunction;
-}
+interface DRContentProps {}
 
-const DRContent: React.FC<DRContentProps> = ({ handleModalOpen }) => {
+const DRContent: React.FC<DRContentProps> = () => {
   return (
     <RightContent>
       <RightContentWriter>김우석</RightContentWriter>
       <RightContentTitle>달걀볶음밥</RightContentTitle>
       <RightContentBasic>
-        <RightContentTime>요리시간: 10분</RightContentTime>
+        <RightContentTime>
+          <TimeIcon /> 10분
+        </RightContentTime>
         <RightContentDifficulty>난이도: 2단계</RightContentDifficulty>
       </RightContentBasic>
       <RightMainContent>
-        <RightMainFooter>
-          <CommentButton onClick={handleModalOpen}>댓글 달기</CommentButton>
-        </RightMainFooter>
+        <RightMainFooter></RightMainFooter>
       </RightMainContent>
     </RightContent>
   );

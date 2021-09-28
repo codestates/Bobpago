@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Time } from "@styled-icons/boxicons-regular/Time";
 
 export const RightContent = styled.div`
   width: 45%;
@@ -9,7 +10,8 @@ export const RightContent = styled.div`
   display: flex;
   flex-direction: column;
   border-radius: 10px;
-  z-index: 1000;
+  z-index: 10;
+  /* z-index: 1000; */
 `;
 
 export const RightContentBasic = styled.div`
@@ -17,12 +19,15 @@ export const RightContentBasic = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  width: 50%;
+  position: absolute;
+  width: 33.2%;
   height: 20%;
   background-color: #ececec;
   justify-content: space-around;
   position: relative;
   transform: translateX(100.1%);
+  z-index: 10;
+  left: 21.78%;
 `;
 
 export const RightContentWriter = styled.div`
@@ -34,29 +39,30 @@ export const RightContentWriter = styled.div`
   align-items: center;
   transform: translate(20%, 5%);
   background-color: #ececec;
-  border: 1px solid #2d325b;
+  z-index: 10;
+  border: 3px solid #2d325b;
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
 `;
 
 export const RightContentTitle = styled.div`
-  width: 80%;
+  width: 88.2%;
   height: 20%;
   padding: 1em;
   display: flex;
   z-index: 100;
   justify-content: center;
   align-items: center;
-  background-color: #ececec;
-  border: 1px solid #2d325b;
-  font-size: 32px;
-  font-weight: 900;
+  background-color: #faff61;
+  border: 3px solid #2d325b;
+  font-size: 48px;
+  font-weight: 500;
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
 `;
 
 export const RightContentTime = styled.div`
-  border: 1px solid #2d325b;
+  border: 3px solid #2d325b;
   border-top: none;
   flex: 1;
   width: 100%;
@@ -67,7 +73,7 @@ export const RightContentTime = styled.div`
 `;
 
 export const RightContentDifficulty = styled.div`
-  border: 1px solid black;
+  border: 3px solid black;
   border-top: none;
   border-bottom: none;
   flex: 1;
@@ -99,22 +105,6 @@ export const RightMainFooter = styled.footer`
   border-radius: 10px;
 `;
 
-export const CommentButton = styled.button`
-  position: absolute;
-  right: 5%;
-  top: 30%;
-  width: 5em;
-  height: 2.5em;
-  background-color: #d43838;
-  transition: 0.5s;
-  color: #ffffff;
-  outline: none;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-
-  &:hover {
-    background-color: red;
-    transform: scale(1.1);
-  }
+export const TimeIcon = styled(Time)`
+  width: 20px;
 `;

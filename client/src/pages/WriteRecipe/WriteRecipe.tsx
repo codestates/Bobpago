@@ -42,7 +42,7 @@ const WriteRecipe = () => {
 
   return (
     <>
-      {/* <Nav /> */}
+      <Nav opac={true} />
       <ContainerWrapper>
         <Title
           setCircle1IsHover={setCircle1IsHover}

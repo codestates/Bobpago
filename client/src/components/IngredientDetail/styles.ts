@@ -7,6 +7,7 @@ interface IngredientProps {
 export const BadCookerRecipe = styled.div<IngredientProps>`
   width: 23%;
   height: 20%;
+  z-index: 100;
   background-color: #382f22;
   margin: 0.5em;
   display: flex;

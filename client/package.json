@@ -10,6 +10,7 @@
     "@types/gsap": "^3.0.0",
     "@types/jest": "^26.0.15",
     "@types/react-redux": "^7.1.18",
+    "@types/react-router-dom": "^5.3.0",
     "@types/redux": "^3.6.0",
     "@types/redux-devtools-extension": "^2.13.2",
     "@types/redux-logger": "^3.0.9",
