@@ -37,7 +37,7 @@ export class AuthCheckerMiddleware implements NestMiddleware {
         req.user = user;
         next();
       } catch (err) {
-        throw new UnauthorizedException();
+        throw new UnauthorizedException('서비스 사용 권한이 없습니다.');
       }
     }
 
@@ -58,7 +58,7 @@ export class AuthCheckerMiddleware implements NestMiddleware {
         req.user = user;
         next();
       } catch (err) {
-        throw new UnauthorizedException();
+        throw new UnauthorizedException('서비스 사용 권한이 없습니다.');
       }
     }
 
@@ -79,20 +79,20 @@ export class AuthCheckerMiddleware implements NestMiddleware {
         req.user = user;
         next();
       } catch (err) {
-        throw new UnauthorizedException();
+        throw new UnauthorizedException('서비스 사용 권한이 없습니다.');
       }
     }
 
     // 4. google 토큰인 경우
     else if (tokenType === 'google') {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('서비스 사용 권한이 없습니다.');
 
       next();
     }
 
     // 5. 잘못된 타입인 경우
     else {
-      throw new BadRequestException();
+      throw new BadRequestException('잘못된 정보를 입력하였습니다.');
     }
   }
 }

@@ -32,8 +32,11 @@ export class User extends BaseEntity {
   @Column()
   nickname: string;
 
-  @Column({ nullable: true })
+  @Column({ length: 1234, nullable: true })
   profile: string;
+
+  @Column({ nullable: true })
+  imageUrl: string;
 
   @Column({ length: 1234, nullable: true })
   refreshToken: string;
@@ -47,7 +50,7 @@ export class User extends BaseEntity {
   @DeleteDateColumn()
   deletedAt: Date;
 
-  @OneToMany(() => Recipe, (recipe) => recipe.user)
+  @OneToMany(() => Recipe, (recipe) => recipe.user, { eager: true })
   recipes: Recipe[];
 
   @OneToMany(() => Comment, (comment) => comment.user)
@@ -59,12 +62,12 @@ export class User extends BaseEntity {
   @OneToOne(() => CommentReaction)
   commentReaction: CommentReaction;
 
-  @OneToMany(() => Bookmark, (bookmark) => bookmark.user)
+  @OneToMany(() => Bookmark, (bookmark) => bookmark.user, { eager: true })
   bookmarks: Bookmark[];
 
-  @OneToMany(() => Follow, (follow) => follow.follower)
-  followers: Follow[];
-
-  @OneToMany(() => Follow, (follow) => follow.followee)
+  @OneToMany(() => Follow, (follow) => follow.follower, { eager: true })
   followees: Follow[];
+
+  @OneToMany(() => Follow, (follow) => follow.followee, { eager: true })
+  followers: Follow[];
 }

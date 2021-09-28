@@ -8,7 +8,7 @@ export class CreateUserDto {
   @IsString()
   @Length(4, 20)
   @Matches(/^[a-zA-Z0-9]*$/, {
-    message: 'password only accepts English and number',
+    message: '비밀번호는 영문과 숫자만 가능합니다.',
   })
   readonly password: string;
 
