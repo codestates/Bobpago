@@ -14,13 +14,10 @@ export const ProfileContainer = styled.div<SizeProps>`
   height: ${(props) => (props.size ? (props.size * 2) / 3 + "em" : "1em")};
   border: ${(props) =>
     props.size ? (props.size * 4) / 9 + "px solid transparent" : "1em"};
-  background-image: linear-gradient(#444444, #444444),
-    linear-gradient(to right, #c9fdd7, #79d1c3, #6892d5);
   border-radius: 50%;
-  background-origin: border-box;
-  background-clip: content-box, border-box;
   overflow: hidden;
   background: ${(props) => (props.src ? "???" : "#969696")};
+  box-shadow: 1px 1px 25px #e6e6e6;
 `;
 
 export const ProfileIcon = styled(Man)<SizeProps>`
@@ -48,11 +45,7 @@ export const PenIcon = styled(Pencil)<FixProps>`
 export const ProfileImg = styled.img<SizeProps>`
   border: ${(props) =>
     props.size ? (props.size * 4) / 9 + "px solid transparent" : "1em"};
-  background-image: linear-gradient(#444444, #444444),
-    linear-gradient(to right, #c9fdd7, #79d1c3, #6892d5);
-  border-radius: 50%;
-  background-origin: border-box;
-  background-clip: content-box, border-box;
+  box-shadow: 1px 1px 25px #e6e6e6;
   width: ${(props) => (props.size ? (props.size * 2) / 3 + "em" : "1em")};
   height: ${(props) => (props.size ? (props.size * 2) / 3 + "em" : "1em")};
   object-fit: cover;
@@ -61,7 +54,7 @@ export const ProfileImg = styled.img<SizeProps>`
 
 export const EditContainer = styled.div<FixProps>`
   position: absolute;
-  transform: translate(425%, -85%);
+  transform: translate(125%, -85%);
   display: ${(props) => (props.fix ? "block" : "none")};
   width: ${(props) => (props.size ? (props.size * 3) / 10 + "em" : "1em")};
   height: ${(props) => (props.size ? (props.size * 3) / 10 + "em" : "1em")};

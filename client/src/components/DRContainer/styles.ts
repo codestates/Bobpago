@@ -40,6 +40,6 @@ export const LeftBottomRightDiv = styled.div`
 `;
 
 export const RightContainer = styled.section`
-  background-color: #dde7e7;
+  background-color: #eeeeee;
   flex: 1;
 `;

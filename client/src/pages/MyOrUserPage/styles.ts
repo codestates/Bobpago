@@ -2,6 +2,7 @@ import styled, { keyframes } from "styled-components";
 import { PlusLg } from "@styled-icons/bootstrap/PlusLg/PlusLg";
 import { ThreeDotsVertical } from "@styled-icons/bootstrap/ThreeDotsVertical/ThreeDotsVertical";
 import { Check } from "@styled-icons/bootstrap/Check/Check";
+import { DashLg } from "@styled-icons/bootstrap/DashLg/DashLg";
 
 export const PageContainer = styled.div`
   position: relative;
@@ -128,8 +129,8 @@ export const GridContainer = styled.div`
 `;
 
 export const PlusIcon = styled(PlusLg)`
-  width: 2.5em;
-  height: 3em;
+  width: 7em;
+  height: 2.8em;
   position: relative;
   margin: 0.7em auto;
   cursor: pointer;
@@ -283,16 +284,12 @@ const showModal = keyframes`
 
 export const ModalContainer = styled.div`
   position: fixed;
-  top: 35%;
+  top: 20%;
   margin: 0 auto;
   left: 0;
   right: 0;
   float: center;
-  width: 25em;
-  animation: ${showModal} 0.5s;
   z-index: 10000;
-  background: #f5f5f5;
-  border-radius: 15px;
 `;
 
 export const ModalBackground = styled.div`
@@ -334,13 +331,121 @@ export const CheckIcon = styled(Check)`
   display: inline-block;
   transform: translate(-0.2em, -0.05em);
 `;
-// export const name = styled.div``;
+
+export const MinusIcon = styled(DashLg)`
+  width: 7em;
+  height: 3em;
+  position: relative;
+  margin: 0.7em auto;
+  cursor: pointer;
+`;
+
+export const CheckPassword = styled.div`
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 30%;
+  width: 20em;
+  margin: 0 auto;
+  height: 13em;
+  background: #ebebeb;
+  z-index: 100;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  z-index: 11;
+`;
+
+export const CheckPasswordInput = styled.input`
+  margin: 0 auto;
+  width: 80%;
+  outline: none;
+  height: 3em;
+`;
+
+export const ChangeUseInfoContainer = styled(CheckPassword)`
+  width: 20em;
+  height: 20em;
+`;
+
+export const CheckPasswordBtn = styled(EditCompleteBtn)`
+  position: relative;
+  text-algin: right;
+  transform: translateX(12em);
+`;
+
+export const CheckPasswordText = styled.p`
+  font-size: 20px;
+  margin: 1em auto;
+`;
+
+export const CheckWithDrawContainer = styled(CheckPassword)``;
+
+export const BtnContainer = styled.div`
+  padding: 0 3em;
+  display: flex;
+  flex-direction: row;
+  margin-top: 3em;
+`;
+
+export const WithDrawBtn = styled.button`
+  outline: none;
+  width: 3em;
+  height: 2em;
+  font-size: 18px;
+  background-color: #167ece;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  color: #ffffff;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 26px;
+  margin-right: 1.5em;
+  margin-left: 1.5em;
+`;
+
+export const EditInfoContainer = styled(CheckWithDrawContainer)`
+  top: 10%;
+  width: 30em;
+  height: 30em;
+`;
+
+export const EditInfoImgContainer = styled.div`
+  width: 100%;
+`;
+
+export const InputContainer = styled.div`
+  margin-left: 3em;
+  text-align: left;
+`;
+
+export const InputTitle = styled.p``;
+
+export const EditInput = styled(CheckPasswordInput)``;
+
+export const ModalBackground2 = styled(ModalBackground)`
+  opacity: 0;
+  z-index: 10;
+`;
 
 // export const name = styled.div``;
 
 // export const name = styled.div``;
-
-// export const name = styled.div``;
-
-// export const name = styled.div``;
-export const dummy = ["a", "b", "c", "d", "e", "f", "g", "g", "g", "g"];
+export const dummy = [
+  "a",
+  "b",
+  "c",
+  "d",
+  "e",
+  "f",
+  "g",
+  "g",
+  "g",
+  "g",
+  "g",
+  "g",
+  "g",
+  "g",
+  "g",
+];

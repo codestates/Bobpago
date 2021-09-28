@@ -18,12 +18,22 @@ const Ingredient = ({ check }: { check: string }) => {
         {check === "Good"
           ? goodDataArr.map((item: any, i: number) => {
               return (
-                <IngredientDetail key={i} name={item.name} image={item.image} />
+                <IngredientDetail
+                  key={i}
+                  id={item.id}
+                  name={item.name}
+                  image={item.image}
+                />
               );
             })
           : badDataArr.map((item: any, i: number) => {
               return (
-                <IngredientDetail key={i} name={item.name} image={item.image} />
+                <IngredientDetail
+                  key={i}
+                  id={item.id}
+                  name={item.name}
+                  image={item.image}
+                />
               );
             })}
       </CookerRecipeContainer>

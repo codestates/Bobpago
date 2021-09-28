@@ -42,8 +42,16 @@ const Description = ({
   const [circle2, circle2IsHover] = useHover();
   const [description, setDescriptionPage] = useState<any>([""]);
   const [currentPage, setCurrentPage] = useState<number>(0);
+  const [imgFiles, setImgFiles] = useState<any>([]);
   const [modalOn, setModalOn] = useState<boolean>(false);
   const frontCoverRef = useRef<any>(null);
+
+  useEffect(() => {
+    setImgFiles([
+      "https://bobpago-depoloy-images.s3.ap-northeast-2.amazonaws.com/recipe/29/1632665672739",
+      "https://bobpago-depoloy-images.s3.ap-northeast-2.amazonaws.com/recipe/29/1632665672761",
+    ]);
+  }, []);
 
   useEffect(() => {
     currentPage < 0 && setCurrentPage(0);
@@ -94,22 +102,17 @@ const Description = ({
   };
 
   const handleSubmitRecipe = () => {};
-  // const [img, setImg] = useState<any>({
-  //   detailImageFile: null,
-  //   detailImageUrl: null,
-  // });
 
-  // const setImageFromFile = (event: any) => {
-  //   const {
-  //     target: { files },
-  //   } = event;
-  //   let reader = new FileReader();
-  //   reader.onload = function () {
-  //     setImg({ result: reader.result });
-  //   };
-  //   reader.readAsDataURL(file);
-  // };
-
+  const handleImgChange = (e: any, i: number) => {
+    let copiedDescription = description.slice();
+    let copiedImgFiles = imgFiles.slice();
+    for (let i = 0; i < e.target.files.length; i++) {
+      copiedDescription.push("");
+      copiedImgFiles[i] = URL.createObjectURL(e.target.files[i]);
+    }
+    setDescription(copiedDescription);
+    setImgFiles(copiedImgFiles);
+  };
   return (
     <>
       <DescriptionSlide page={page} scale={scale}>
@@ -118,19 +121,12 @@ const Description = ({
           <FlipBook>
             <FrontCover ref={frontCoverRef}>
               <FrontCoverBack className="back">
-                {/* <input
-              type="file"
-              id="detail_image"
-              accept="image/*"
-              onChange={({ target: { files } }) => {
-                if (files.length) {
-                  setImageFromFile({
-                    file: files[0],
-                    setImageUrl: ({ result }) => setState({detailImageFile: files[0], detailImageUrl: result});
-                }
-          }}
-            ></input> */}
-                {/* <UploadedImg src={fileUrl} alt="없는 이미지" /> */}
+                <input
+                  type="file"
+                  multiple
+                  onChange={(e) => handleImgChange(e, 0)}
+                />
+                <img src={imgFiles[0] && imgFiles[0]} alt="이미지 없음" />
               </FrontCoverBack>
               <FrontCoverFront className="front">
                 <FrontCoverImg src="/img/ingredient.png" />
@@ -143,6 +139,7 @@ const Description = ({
             {description.map((el: any, i: number) => {
               return (
                 <Page
+                  imgFile={imgFiles[i + 1]}
                   currentPage={currentPage}
                   text={el}
                   key={i}
