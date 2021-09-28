@@ -30,6 +30,7 @@ import {
   SubIngredientContent,
   PinkHeadPago,
   EggHeadPago,
+  BookMarkIcon,
 } from "./styles";
 import { koreaRed, koreaBlue, koreaYellow } from "koreaTheme";
 import { gsap } from "gsap/dist/gsap";
@@ -50,11 +51,10 @@ const DetailRecipe = () => {
   const [dummy, setDummy] = useState<number[]>([]);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [mainIng, setMainIng] = useState<Array<string[]>>([]);
+  const [bookmark, setBookmark] = useState<boolean>(false);
 
-  const colorMaker = (koreaColor: string[]) => {
-    const L = koreaColor.length; // 총 길이
-    const Random = Math.floor(Math.random() * (L - 1));
-    return "#" + koreaColor[Random];
+  const handleBookmark = () => {
+    setBookmark(!bookmark);
   };
 
   const handleModalOpen = () => {
@@ -63,6 +63,12 @@ const DetailRecipe = () => {
 
   const handleModalClose = () => {
     setModalOpen(!modalOpen);
+  };
+
+  const colorMaker = (koreaColor: string[]) => {
+    const L = koreaColor.length; // 총 길이
+    const Random = Math.floor(Math.random() * (L - 1));
+    return "#" + koreaColor[Random];
   };
 
   const rotateMaker = () => {
@@ -144,7 +150,7 @@ const DetailRecipe = () => {
     return () => {};
   }, []);
 
-  // useEffect(() => {}, [dummy]);
+  useEffect(() => {}, [bookmark]);
 
   // useEffect(() => {
   //   console.log(mainIng);
@@ -250,6 +256,7 @@ const DetailRecipe = () => {
         end={endPositionMaker()}
         src="/img/eggpago.png"
       />
+      <BookMarkIcon bookmark={bookmark} onClick={handleBookmark} />
     </DRTotalContainer>
   );
 };
