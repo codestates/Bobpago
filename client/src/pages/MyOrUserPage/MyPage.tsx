@@ -31,6 +31,7 @@ import {
   IntroduceFixInput,
   EditCompleteBtn,
   ModalBackground,
+  MinusIcon,
 } from "./styles";
 
 const MyPage = () => {
@@ -127,7 +128,14 @@ const MyPage = () => {
             ))}
           </GridContainer>
           <IconContainer>
-            <PlusIcon onClick={() => setMyPostNum(myPostNum + standardNum)} />
+            {dummy.length > myPostNum && (
+              <PlusIcon onClick={() => setMyPostNum(myPostNum + standardNum)} />
+            )}
+            {myPostNum > standardNum && dummy.length > standardNum && (
+              <MinusIcon
+                onClick={() => setMyPostNum(myPostNum - standardNum)}
+              />
+            )}
           </IconContainer>
         </MyPostContainer>
         <MyPostContainer>
@@ -146,9 +154,16 @@ const MyPage = () => {
             ))}
           </GridContainer>
           <IconContainer>
-            <PlusIcon
-              onClick={() => setBookmarkNum(bookmarkNum + standardNum)}
-            />
+            {dummy.length >= bookmarkNum && (
+              <PlusIcon
+                onClick={() => setBookmarkNum(bookmarkNum + standardNum)}
+              />
+            )}
+            {myPostNum > standardNum && dummy.length > standardNum && (
+              <MinusIcon
+                onClick={() => setBookmarkNum(bookmarkNum - standardNum)}
+              />
+            )}
           </IconContainer>
         </MyPostContainer>
       </PageContainer>

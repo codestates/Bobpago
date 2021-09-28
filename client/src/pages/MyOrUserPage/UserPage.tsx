@@ -25,6 +25,7 @@ import {
   FollowedBtn,
   CheckIcon,
   ModalBackground,
+  MinusIcon,
 } from "./styles";
 
 const UserPage = () => {
@@ -87,13 +88,20 @@ const UserPage = () => {
             ))}
           </GridContainer>
           <IconContainer>
-            <PlusIcon onClick={() => setMyPostNum(myPostNum + standardNum)} />
+            {dummy.length > myPostNum && (
+              <PlusIcon onClick={() => setMyPostNum(myPostNum + standardNum)} />
+            )}
+            {myPostNum > standardNum && dummy.length > standardNum && (
+              <MinusIcon
+                onClick={() => setMyPostNum(myPostNum - standardNum)}
+              />
+            )}
           </IconContainer>
         </MyPostContainer>
       </PageContainer>
-      {followingModal || followerModal ? (
+      {(followingModal || followerModal) && (
         <ModalBackground onClick={() => ModalOff()} />
-      ) : null}
+      )}
       {followingModal && (
         <FollowingModal setFollowingModal={setFollowingModal} />
       )}
