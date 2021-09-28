@@ -8,7 +8,7 @@ export class IngredientsController {
 
   @Get()
   async findAll(): Promise<ResType> {
-    return this.ingredientsService.findAll();
+    return this.ingredientsService.getAllIngredient();
   }
 
   @Get('summary')
