@@ -65,55 +65,48 @@ export class AuthService {
     tokenType: string,
     accessToken: string,
   ): Promise<ResType> {
-    // 1. jwt 로그아웃의 경우
-    if (tokenType === 'jwt') {
-      await this.usersRepository.update(user.id, { refreshToken: null });
-      return {
-        data: null,
-        statusCode: 200,
-        message: '로그아웃에 성공하였습니다.',
-      };
-    }
-
-    // 2. kakao 로그아웃의 경우
-    else if (tokenType === 'kakao') {
-      await axios.post(
-        'https://kapi.kakao.com/v1/user/logout',
-        {},
-        {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: accessToken,
+    switch (tokenType) {
+      // 1. jwt 로그아웃의 경우
+      case 'jwt':
+        await this.usersRepository.update(user.id, { refreshToken: null });
+        return {
+          data: null,
+          statusCode: 200,
+          message: '로그아웃에 성공하였습니다.',
+        };
+      // 2. kakao 로그아웃의 경우
+      case 'kakao':
+        await axios.post(
+          'https://kapi.kakao.com/v1/user/logout',
+          {},
+          {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              Authorization: accessToken,
+            },
+            withCredentials: true,
           },
-          withCredentials: true,
-        },
-      );
-      await this.usersRepository.update(user.id, { refreshToken: null });
-      return {
-        data: null,
-        statusCode: 200,
-        message: '로그아웃에 성공하였습니다.',
-      };
-    }
-
-    // 3. naver 로그아웃의 경우
-    else if (tokenType === 'naver') {
-      await this.usersRepository.update(user.id, { refreshToken: null });
-      return {
-        data: null,
-        statusCode: 200,
-        message: '로그아웃에 성공하였습니다.',
-      };
-    }
-
-    // 4. google 로그아웃의 경우
-    else if (tokenType === 'google') {
-      return;
-    }
-
-    // 5. 토큰타입 명시 오류
-    else {
-      throw new BadRequestException();
+        );
+        await this.usersRepository.update(user.id, { refreshToken: null });
+        return {
+          data: null,
+          statusCode: 200,
+          message: '로그아웃에 성공하였습니다.',
+        };
+      // 3. naver 로그아웃의 경우
+      case 'naver':
+        await this.usersRepository.update(user.id, { refreshToken: null });
+        return {
+          data: null,
+          statusCode: 200,
+          message: '로그아웃에 성공하였습니다.',
+        };
+      // 4. google 로그아웃의 경우
+      case 'google':
+        break;
+      // 5. 토큰타입 명시 오류
+      default:
+        throw new BadRequestException();
     }
   }
 
@@ -241,7 +234,7 @@ export class AuthService {
     }
   }
 
-  async kakaoAuthRedirect(res: Response): Promise<any> {
+  async kakaoAuthRedirect(res: Response): Promise<void> {
     const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}/auth/kakao/redirect`;
     return res.redirect(kakaoAuthUrl);
   }
@@ -293,6 +286,7 @@ export class AuthService {
         refreshToken,
       });
       await this.usersRepository.save(userInfo);
+
       const newUser = await this.usersRepository.findOne({ email });
       delete newUser.password;
       delete newUser.refreshToken;
@@ -307,15 +301,13 @@ export class AuthService {
       };
     } else {
       await this.usersRepository.update(user.id, { refreshToken });
-      const newUser = await this.usersRepository.findOne({ email });
-      delete newUser.password;
-      delete newUser.refreshToken;
+      delete user.password;
 
       return {
         data: {
           tokenType: 'kakao',
           accessToken,
-          ...newUser,
+          ...user,
         },
         statusCode: 200,
         message: '카카오 소셜 로그인이 완료되었습니다.',
@@ -323,7 +315,7 @@ export class AuthService {
     }
   }
 
-  async naverAuthRedirect(res: Response): Promise<any> {
+  async naverAuthRedirect(res: Response): Promise<void> {
     const naverAuthUrl = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.NAVER_CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}/auth/naver/redirect&state=${process.env.NAVER_STATE}`;
     return res.redirect(naverAuthUrl);
   }
@@ -400,6 +392,89 @@ export class AuthService {
         },
         statusCode: 200,
         message: '네이버 소셜 로그인이 완료되었습니다.',
+      };
+    }
+  }
+  async googleAuthRedirect(res: Response): Promise<void> {
+    const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&response_type=code&redirect_uri=http://localhost:3000/auth/google/redirect&scope=https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile+openid&access_type=offline`;
+    return res.redirect(googleAuthUrl);
+  }
+
+  async googleSignIn(code: string, scope: string): Promise<any> {
+    // 0. form-urlencoded 인코딩 함수
+
+    // {
+    //   code: '4/0AX4XfWj1Ummhuq76_XLW6fbV2tNDubaV_ShNMUdNks1M3HkQP20logd5hHWhelFvgJOsgw',
+    //       scope: 'email profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile openid',
+    //     authuser: '0',
+    //     prompt: 'consent'
+    // }
+    const formUrlEncoded = (data) => {
+      return Object.keys(data).reduce((acc, curr) => {
+        return acc + `&${curr}=${encodeURIComponent(data[curr])}`;
+      }, '');
+    };
+
+    //https://oauth2.googleapis.com/token
+    const tokenData = await axios.post(
+      'https://oauth2.googleapis.com/token',
+      formUrlEncoded({
+        grant_type: 'authorization_code',
+        client_id: process.env.GOOGLE_CLIENT_ID,
+        client_secret: process.env.GOOGLE_CLIENT_SECRET,
+        redirect_uri: `http://localhost:3000/auth/google/redirect`,
+        code,
+        scope,
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        withCredentials: true,
+      },
+    );
+    const { access_token, refresh_token, id_token } = tokenData.data;
+
+    const data = await axios.get(
+      `https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=${id_token}`,
+    );
+    console.log(data);
+    const { name, email } = data.data;
+
+    const user = await this.usersRepository.findOne({ email });
+    if (!user) {
+      const userData = await this.usersRepository.create({
+        email,
+        nickname: name,
+        refreshToken: refresh_token,
+      });
+      await this.usersRepository.save(userData);
+
+      const newUser = await this.usersRepository.findOne({ email });
+      delete newUser.password;
+      delete newUser.refreshToken;
+
+      return {
+        data: {
+          tokenType: 'google',
+          accessToken: access_token,
+          ...newUser,
+        },
+        statusCode: 200,
+        message: '구글 회원가입 및 소셜 로그인이 완료되었습니다.',
+      };
+    } else {
+      await this.usersRepository.update(user.id, {
+        refreshToken: refresh_token,
+      });
+      return {
+        data: {
+          tokenType: 'google',
+          accessToken: access_token,
+          ...user,
+        },
+        statusCode: 200,
+        message: '구글 소셜 로그인이 완료되었습니다.',
       };
     }
   }
