@@ -31,6 +31,14 @@ export interface Notification {
 }
 
 export interface IngredientGoodAndBadData {
-  badData: Array<{ name: string; image: string }>;
-  goodData: Array<{ name: string; image: string }>;
+  badData: Array<{ id?: number; name: string; image: string }>;
+  goodData: Array<{ id?: number; name: string; image: string }>;
+}
+
+export interface IngredientClickData {
+  clickData: number[];
+}
+
+export interface Accesstoken {
+  accesstoken: string;
 }

@@ -26,6 +26,11 @@ import {
   MainIngredientContent,
   SubIngredientContainer,
   SudoContainer,
+  CommentButton,
+  SubIngredientContent,
+  PinkHeadPago,
+  EggHeadPago,
+  BookMarkIcon,
 } from "./styles";
 import { koreaRed, koreaBlue, koreaYellow } from "koreaTheme";
 import { gsap } from "gsap/dist/gsap";
@@ -40,16 +45,16 @@ const DetailRecipe = () => {
   const rightBoxRef = useRef<any>(null);
   const imageRef = useRef<any>(null);
   const mainRef = useRef<any>(null);
+  const subRef = useRef<any>(null);
 
   const [start, setStart] = useState<boolean>(false);
   const [dummy, setDummy] = useState<number[]>([]);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [mainIng, setMainIng] = useState<Array<string[]>>([]);
+  const [bookmark, setBookmark] = useState<boolean>(false);
 
-  const colorMaker = (koreaColor: string[]) => {
-    const L = koreaColor.length; // 총 길이
-    const Random = Math.floor(Math.random() * (L - 1));
-    return "#" + koreaColor[Random];
+  const handleBookmark = () => {
+    setBookmark(!bookmark);
   };
 
   const handleModalOpen = () => {
@@ -60,14 +65,46 @@ const DetailRecipe = () => {
     setModalOpen(!modalOpen);
   };
 
+  const colorMaker = (koreaColor: string[]) => {
+    const L = koreaColor.length; // 총 길이
+    const Random = Math.floor(Math.random() * (L - 1));
+    return "#" + koreaColor[Random];
+  };
+
+  const rotateMaker = () => {
+    // 파고 기울기 조절
+    const numberArr: number[] = [
+      -90, -80, -70, -60, -50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50, 60,
+      70, 80, 90,
+    ];
+    const randomPick: number = Math.floor(Math.random() * numberArr.length - 1);
+    return numberArr[randomPick];
+  };
+
+  const positionMaker = () => {
+    // 파고 시작 위치 조절
+    const positionArr: number[] = [];
+    for (let i = 50; i <= 100; i++) {
+      positionArr.push(i);
+    }
+    const randomPick: number = Math.floor(
+      Math.random() * positionArr.length - 1
+    );
+    console.log(randomPick);
+
+    return positionArr[randomPick];
+  };
+
+  const endPositionMaker = () => {
+    // 파고 마지막 위치 조절
+    return Math.floor(Math.random() * 10);
+  };
+
   useEffect(() => {
     gsap.registerPlugin(ScrollToPlugin, ScrollTrigger);
     setTimeout(() => {
       setStart(true);
     }, 500);
-  }, []);
-
-  useEffect(() => {
     const totalLength = document.querySelectorAll(".lol").length;
     const moveRatio = 100 / totalLength;
     const dummyArr: number[] = [];
@@ -82,7 +119,7 @@ const DetailRecipe = () => {
         duration: 0.5,
       });
 
-      rightScrollRef.current.style.transform = `translateY(${i * -300}px)`;
+      rightScrollRef.current.style.transform = `translateY(${i * -262}px)`;
       topBoxRef.current.style.transform = `translateY(${i * -100}%)`;
       leftBoxRef.current.style.transform = `translateX(${i * -moveRatio}%)`;
       rightBoxRef.current.style.transform = `translateX(${
@@ -90,6 +127,7 @@ const DetailRecipe = () => {
       }%)`;
       imageRef.current.style.transform = `translateY(${i * -100}%)`;
       mainRef.current.style.transform = `translateY(${i * -100}%)`;
+      subRef.current.style.transform = `translateY(${i * -100}%)`;
 
       if (anim) {
         anim.restart();
@@ -112,11 +150,11 @@ const DetailRecipe = () => {
     return () => {};
   }, []);
 
-  useEffect(() => {}, [dummy]);
+  useEffect(() => {}, [bookmark]);
 
-  useEffect(() => {
-    console.log(mainIng);
-  }, [mainIng]);
+  // useEffect(() => {
+  //   console.log(mainIng);
+  // }, [mainIng]);
 
   return (
     <DRTotalContainer>
@@ -126,7 +164,7 @@ const DetailRecipe = () => {
       <DRContainer />
       <DRContainer />
       <DRContainer />
-      <DRContent handleModalOpen={handleModalOpen} />
+      <DRContent />
       {modalOpen ? <DRModal handleModalClose={handleModalClose} /> : null}
       <ImageScroll>
         <ImageContainer ref={imageRef}>
@@ -152,7 +190,9 @@ const DetailRecipe = () => {
       <TopBoxScroll>
         <TopBoxContainer ref={topBoxRef}>
           {dummy.map((item, i) => {
-            return <TopBoxContent color={colorMaker(koreaRed)}></TopBoxContent>;
+            return (
+              <TopBoxContent color={colorMaker(koreaBlue)}></TopBoxContent>
+            );
           })}
         </TopBoxContainer>
       </TopBoxScroll>
@@ -160,7 +200,7 @@ const DetailRecipe = () => {
         <LeftBoxContainer ref={leftBoxRef} length={dummy.length}>
           {dummy.map((item, i) => {
             return (
-              <LeftBoxContent color={colorMaker(koreaBlue)}></LeftBoxContent>
+              <LeftBoxContent color={colorMaker(koreaRed)}></LeftBoxContent>
             );
           })}
         </LeftBoxContainer>
@@ -184,9 +224,39 @@ const DetailRecipe = () => {
         </MainIngredient>
       </MainIngredientContainer>
       <SubIngredientContainer>
-        <SubIngredient></SubIngredient>
+        <SubIngredient ref={subRef}>
+          {dummy.map((item) => {
+            return <SubIngredientContent>부재료</SubIngredientContent>;
+          })}
+        </SubIngredient>
       </SubIngredientContainer>
       <SudoContainer />
+      <CommentButton onClick={handleModalOpen}>댓글 달기</CommentButton>
+      <PinkHeadPago
+        rotate={rotateMaker()}
+        position={positionMaker()}
+        end={endPositionMaker()}
+        src="/img/PinkHeadPago.png"
+      />
+      <EggHeadPago
+        rotate={rotateMaker()}
+        position={positionMaker()}
+        end={endPositionMaker()}
+        src="/img/eggpago.png"
+      />
+      <PinkHeadPago
+        rotate={rotateMaker()}
+        position={positionMaker()}
+        end={endPositionMaker()}
+        src="/img/PinkHeadPago.png"
+      />
+      <EggHeadPago
+        rotate={rotateMaker()}
+        position={positionMaker()}
+        end={endPositionMaker()}
+        src="/img/eggpago.png"
+      />
+      <BookMarkIcon bookmark={bookmark} onClick={handleBookmark} />
     </DRTotalContainer>
   );
 };

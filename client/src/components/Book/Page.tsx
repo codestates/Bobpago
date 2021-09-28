@@ -14,6 +14,7 @@ const Page = ({
   currentPage,
   selfPage,
   handleChangeDescription,
+  imgFile,
 }: any) => {
   const pageRef = useRef<any>(null);
 
@@ -35,6 +36,7 @@ const Page = ({
   return (
     <Flip ref={pageRef}>
       <Back>
+        <img width={100} src={imgFile && imgFile} alt="없는이미지" />
         <Text>{selfPage}</Text>
       </Back>
       <Front>

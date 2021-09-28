@@ -12,3 +12,4 @@
 
 - 스타일드 컴포넌트 타입스크립트 버전 추가 필요 npm install @types/styled-components
 - 아이콘 스타일드 컴포넌트 타입스크립트 버전 추가
+- @types/react-router-dom 설치 필요!
