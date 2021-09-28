@@ -13,7 +13,7 @@ import NofiticationCenter from "components/Notification/NotificationCenter";
 import MyPage from "pages/MyOrUserPage/MyPage";
 import UserPage from "pages/MyOrUserPage/UserPage";
 import EditRecipe from "pages/EditRecipe/EditRecipe";
-import FollowModal from "components/FollowModal/FollowModal";
+import FollowModal from "components/FollowModal/FollowingModal";
 import MatchingRecipe from "pages/MatchingRecipe/MatchingRecipe";
 
 function App() {
@@ -32,7 +32,7 @@ function App() {
       {/* <WriteRecipe /> */}
       {/* <EditRecipe /> */}
       {/* <MyPage /> */}
-      {/* <UserPage /> */}
+      <UserPage />
       {/* <FollowModal /> */}
       <NofiticationCenter />
       {/* <DetailRecipe /> */}

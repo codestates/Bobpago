@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Nav from "components/Nav/Nav";
 import MyPageProfileImg from "components/Profile/MyPage/MyPageProfileImg";
 import Card from "components/Card/MyPage/Card";
+import FollowingModal from "components/FollowModal/FollowingModal";
+import FollowerModal from "components/FollowModal/FollowerModal";
 import {
   PageContainer,
   UserProfileContainer,
@@ -28,6 +30,7 @@ import {
   NameFixInput,
   IntroduceFixInput,
   EditCompleteBtn,
+  ModalBackground,
 } from "./styles";
 
 const MyPage = () => {
@@ -38,6 +41,8 @@ const MyPage = () => {
   const [bookmarkNum, setBookmarkNum] = useState<number>(6);
   const [standardNum, setStandardNum] = useState<number>(6);
   const [nickname, setNickname] = useState<string>("Lorem");
+  const [followingModal, setFollowingModal] = useState<boolean>(false);
+  const [followerModal, setFollowerModal] = useState<boolean>(false);
   const [introduce, setIntroduce] = useState<string>(
     "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Inprovident aperiam incidunt adipisci quas maxime harum recusandae inventore. Facilis impedit nemo distinctio quod eveniet voluptas alias atque sed nam. Qui."
   );
@@ -46,6 +51,11 @@ const MyPage = () => {
   // useEffect(() => {
   //   window.innerWidth
   // }, [window.innerWidth])
+
+  const ModalOff = () => {
+    setFollowingModal(false);
+    setFollowerModal(false);
+  };
 
   return (
     <>
@@ -94,9 +104,11 @@ const MyPage = () => {
           </ProfileContentsContainer>
         </UserProfileContainer>
         <FollowContainer>
-          <FollowBtn>Following</FollowBtn>
+          <FollowBtn onClick={() => setFollowingModal(true)}>
+            Following
+          </FollowBtn>
           <FollowNum>123</FollowNum>
-          <FollowBtn>Follower</FollowBtn>
+          <FollowBtn onClick={() => setFollowerModal(true)}>Follower</FollowBtn>
           <FollowNum>234</FollowNum>
         </FollowContainer>
         <MyPostContainer>
@@ -140,6 +152,13 @@ const MyPage = () => {
           </IconContainer>
         </MyPostContainer>
       </PageContainer>
+      {followingModal || followerModal ? (
+        <ModalBackground onClick={() => ModalOff()} />
+      ) : null}
+      {followingModal && (
+        <FollowingModal setFollowingModal={setFollowingModal} />
+      )}
+      {followerModal && <FollowerModal setFollowerModal={setFollowerModal} />}
     </>
   );
 };

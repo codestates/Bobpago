@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import Nav from "components/Nav/Nav";
 import MyPageProfileImg from "components/Profile/MyPage/MyPageProfileImg";
 import Card from "components/Card/MyPage/Card";
+import FollowingModal from "components/FollowModal/FollowingModal";
+import FollowerModal from "components/FollowModal/FollowerModal";
 import {
   PageContainer,
-  ModalContainer,
   UserProfileContainer,
   ProfileImgContainer,
   ProfileContentsContainer,
@@ -15,19 +16,11 @@ import {
   FollowNum,
   MyPostContainer,
   MyPostTitle,
-  EditBtn,
   DivisionLine,
   GridContainer,
   PlusIcon,
   IconContainer,
-  DotsIcon,
-  MenuContainer,
-  DropDownContainer,
-  Menu,
-  Menu1,
-  Menu2,
   dummy,
-  NameFixInput,
   FollowBtn2,
   FollowedBtn,
   CheckIcon,
@@ -39,6 +32,14 @@ const UserPage = () => {
   const [standardNum, setStandardNum] = useState<number>(6);
   const [showFollowing, setShowFollowing] = useState<boolean>(false);
   const [showFollower, setShowFollower] = useState<boolean>(false);
+  const [followingModal, setFollowingModal] = useState<boolean>(false);
+  const [followerModal, setFollowerModal] = useState<boolean>(false);
+  const [follow, setFollow] = useState<boolean>(false);
+
+  const ModalOff = () => {
+    setFollowingModal(false);
+    setFollowerModal(false);
+  };
 
   return (
     <>
@@ -53,11 +54,14 @@ const UserPage = () => {
           </ProfileImgContainer>
           <ProfileContentsContainer>
             <ProfileName>안치원</ProfileName>
-            {/* <FollowBtn2>Follow</FollowBtn2> */}
-            <FollowedBtn>
-              <CheckIcon />
-              Following
-            </FollowedBtn>
+            {!follow ? (
+              <FollowBtn2 onClick={() => setFollow(true)}>Follow</FollowBtn2>
+            ) : (
+              <FollowedBtn onClick={() => setFollow(false)}>
+                <CheckIcon />
+                Following
+              </FollowedBtn>
+            )}
             <ProfileIntroduce>
               Lorem ipsum dolor sit, amet consectetur adipisicing elit. In
               provident aperiam incidunt adipisci quas maxime harum recusandae
@@ -67,9 +71,11 @@ const UserPage = () => {
           </ProfileContentsContainer>
         </UserProfileContainer>
         <FollowContainer>
-          <FollowBtn>Following</FollowBtn>
+          <FollowBtn onClick={() => setFollowingModal(true)}>
+            Following
+          </FollowBtn>
           <FollowNum>123</FollowNum>
-          <FollowBtn>Follower</FollowBtn>
+          <FollowBtn onClick={() => setFollowerModal(true)}>Follower</FollowBtn>
           <FollowNum>234</FollowNum>
         </FollowContainer>
         <MyPostContainer>
@@ -85,8 +91,13 @@ const UserPage = () => {
           </IconContainer>
         </MyPostContainer>
       </PageContainer>
-      <ModalBackground />
-      <ModalContainer>follower</ModalContainer>
+      {followingModal || followerModal ? (
+        <ModalBackground onClick={() => ModalOff()} />
+      ) : null}
+      {followingModal && (
+        <FollowingModal setFollowingModal={setFollowingModal} />
+      )}
+      {followerModal && <FollowerModal setFollowerModal={setFollowerModal} />}
     </>
   );
 };

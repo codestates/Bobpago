@@ -283,16 +283,12 @@ const showModal = keyframes`
 
 export const ModalContainer = styled.div`
   position: fixed;
-  top: 35%;
+  top: 20%;
   margin: 0 auto;
   left: 0;
   right: 0;
   float: center;
-  width: 25em;
-  animation: ${showModal} 0.5s;
   z-index: 10000;
-  background: #f5f5f5;
-  border-radius: 15px;
 `;
 
 export const ModalBackground = styled.div`
