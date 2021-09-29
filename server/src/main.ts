@@ -6,7 +6,7 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin: 'https://bobpago.com',
+    origin: 'http://localhost:3001',
     credentials: true,
   });
   app.use(cookieParser());
@@ -17,6 +17,6 @@ async function bootstrap() {
       transform: true, // 클라이언트에서 값을 받자마자 타임을 정의한대로 자동 형변환을 한다.
     }),
   );
-  await app.listen(80);
+  await app.listen(3000);
 }
 bootstrap();
