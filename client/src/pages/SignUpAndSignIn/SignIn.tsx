@@ -68,7 +68,7 @@ const SignIn = () => {
     }, 2000);
 
     const signIn = await axios.post(
-      "http://localhost:3000/auth/signin",
+      `${process.env.REACT_APP_SERVER_URL}/auth/signin`,
       {
         email: email,
         password: password,
