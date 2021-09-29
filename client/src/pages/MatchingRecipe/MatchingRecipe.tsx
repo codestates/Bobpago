@@ -49,7 +49,7 @@ const MatchingRecipe = () => {
 
   const handleData = async () => {
     const data = await axios.post(
-      "http://localhost:3000/recipe/match",
+      `${process.env.REACT_APP_SERVER_URL}/recipe/match`,
       {
         ingredientId: locationId,
       },

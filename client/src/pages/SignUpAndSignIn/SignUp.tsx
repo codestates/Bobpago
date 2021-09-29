@@ -42,7 +42,7 @@ const SignUp = () => {
   const handleSignUp = async () => {
     console.log(email, password, nickName);
     const signUp = await axios.post(
-      "http://localhost:3000/signup",
+      `${process.env.REACT_APP_SERVER_URL}/signup`,
       {
         email: email,
         password: password,
