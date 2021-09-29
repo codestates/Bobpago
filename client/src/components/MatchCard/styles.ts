@@ -55,7 +55,13 @@ export const MatchCardBox = styled.div<MatchCardProps>`
   transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
   animation: ${({ rotate, wind }) => windLeft(rotate, wind)} 4s ease infinite;
-  margin-right: 5em;
+  margin-right: 4em;
+  margin-left: 3em;
+  z-index: 150;
+  @media only screen and (max-width: 768px) {
+    min-width: 8em;
+    height: 12em;
+  }
   &:hover {
     animation: none;
     transform: rotateZ(0deg) scale(1.05);
@@ -71,6 +77,11 @@ export const CardTitle = styled.div`
   color: white;
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
     1px 1px 0 #000;
+
+  @media only screen and (max-width: 768px) {
+    font-size: 12px;
+    margin-top: 1.5em;
+  }
 `;
 
 export const CardDifficulty = styled.div`
@@ -79,6 +90,9 @@ export const CardDifficulty = styled.div`
   z-index: 10;
   color: #e0e035;
   text-shadow: 0 0 2px rgba(0, 0, 0, 1);
+  @media only screen and (max-width: 768px) {
+    font-size: 16px;
+  }
 `;
 
 export const CardImageContainer = styled.div`
@@ -129,10 +143,16 @@ export const CardLikesContainer = styled.div`
 export const CardLikesIcon = styled(Like)`
   width: 20px;
   margin-right: 0.2em;
+  @media only screen and (max-width: 768px) {
+    width: 15px;
+  }
 `;
 
 export const CardLikesText = styled.div`
   font-size: 15px;
+  @media only screen and (max-width: 768px) {
+    font-size: 14px;
+  }
 `;
 
 export const CardTimesContainer = styled.div`
@@ -144,14 +164,19 @@ export const CardTimesContainer = styled.div`
 export const CardTimesIcon = styled(Time)`
   width: 20px;
   margin-right: 0.2em;
+  @media only screen and (max-width: 768px) {
+    width: 15px;
+  }
 `;
 
 export const CardTimesText = styled.div`
-  font-size: 15px;
+  @media only screen and (max-width: 768px) {
+    font-size: 14px;
+  }
 `;
 
 export const HiddenContainer = styled.div`
-  width: 0%;
+  width: 80%;
   height: 0%;
   position: fixed;
   left: 10%;
@@ -177,6 +202,7 @@ export const HiddenLeftImage = styled.img`
   top: 15%;
   object-fit: cover;
   border-radius: 15px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
 `;
 
 export const HiddenRightContainer = styled.div`

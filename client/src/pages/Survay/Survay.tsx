@@ -114,27 +114,27 @@ const Survay = () => {
 
   return (
     <>
-      <Nav opac={false} />
+      <Nav opac={true} />
       <MainContainer>
         <TotalContainer move={move}>
           <Ball
             width={"1000"}
             height={"1000"}
-            fill={"#e6cf4f"}
+            fill={"#a0c065"}
             top={30}
             left={50}
           />
           <Ball
             width={"1000"}
             height={"1000"}
-            fill={"#df7700"}
+            fill={"#5990a5"}
             top={30}
             left={175}
           />
           <Ball
             width={"200"}
             height={"200"}
-            fill={"#7bb361"}
+            fill={"#fa5827"}
             top={10}
             left={140}
           />

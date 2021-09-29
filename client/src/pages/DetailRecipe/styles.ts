@@ -98,12 +98,15 @@ export const DRTotalContainer = styled.div`
   height: 100%;
   overflow: hidden;
   position: relative;
+  .active {
+    color: orangered;
+  }
 `;
 
 export const RightScroll = styled.div`
   position: fixed;
   width: 24.9%;
-  height: 262px;
+  height: 34.2%;
   right: 19.1%;
   top: 35.9%;
   background-color: #ececec;
@@ -112,7 +115,7 @@ export const RightScroll = styled.div`
   border: 3px solid #2d325b;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
-  z-index: 1000;
+  /* position: relative; */
 `;
 
 export const RightScrollContainer = styled.div`
@@ -123,7 +126,7 @@ export const RightScrollContent = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 262px;
+  min-height: 262px;
 `;
 
 export const TopBoxScroll = styled.section`
@@ -226,7 +229,7 @@ export const ImageScroll = styled.div`
   background-color: #ececec;
   top: 6.5em;
   left: 5%;
-  z-index: 10;
+  z-index: 1;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
@@ -238,6 +241,7 @@ export const ImageContainer = styled.div`
   height: 100%;
   position: relative;
   transform: translateY(0%);
+  z-index: -1;
 `;
 
 export const ImageContent = styled.div`
@@ -247,6 +251,7 @@ export const ImageContent = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: -1;
 `;
 
 export const HiddenPage = styled.div<HiddenProps>`
@@ -283,7 +288,7 @@ export const MainIngredientContainer = styled.div`
   overflow: hidden;
   border: 3px solid #2d325b;
   border-bottom: none;
-  border-left: none;
+  border-left: 2px solid #2d325b;
   /* border-top-right-radius: 15px; */
   z-index: 900;
 `;
@@ -324,7 +329,7 @@ export const SubIngredientContainer = styled.div`
   border: 3px solid #2d325b;
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
-  z-index: 500;
+  z-index: 5;
 `;
 
 export const SubIngredient = styled.div`
@@ -388,11 +393,15 @@ export const BookMarkIcon = styled(BookmarkFill)<BookmarkProps>`
   top: 23.5%;
   right: 5.5%;
   z-index: 1000;
-  transition: 0.5s;
+  transition: 0.1s;
   color: ${({ bookmark }) => {
     return bookmark ? "orangered" : "orange";
   }};
+  cursor: pointer;
   &:hover {
     color: orangered;
+  }
+  &:active {
+    color: red;
   }
 `;
