@@ -163,7 +163,7 @@ const SignUp = () => {
             <span ref={passwordConfirmError}>비밀번호가 일치하지 않습니다</span>
           </ErrMsg>
           <ButtonWrapper>
-            <ButtonText>회원가입</ButtonText>
+            <ButtonText onClick={() => handleSignUp()}>회원가입</ButtonText>
           </ButtonWrapper>
           <Ask2>
             계정이 이미 있으신가요?{" "}

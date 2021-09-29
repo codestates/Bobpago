@@ -23,6 +23,21 @@ export const ProfileContainer = styled.div<SizeProps>`
   background: ${(props) => (props.src ? "???" : "#969696")};
 `;
 
+export const ProfileEditContainer = styled.div<SizeProps>`
+  transform: translate(130%, 0%);
+  width: ${(props) => (props.size ? (props.size * 2) / 3 + "em" : "1em")};
+  height: ${(props) => (props.size ? (props.size * 2) / 3 + "em" : "1em")};
+  border: ${(props) =>
+    props.size ? (props.size * 4) / 9 + "px solid transparent" : "1em"};
+  background-image: linear-gradient(#444444, #444444),
+    linear-gradient(to right, #c9fdd7, #79d1c3, #6892d5);
+  border-radius: 50%;
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  overflow: hidden;
+  background: ${(props) => (props.src ? "???" : "#969696")};
+`;
+
 export const ProfileIcon = styled(Man)<SizeProps>`
   transform: translate(-18.9%, 18%);
   fill: #f2f2f2;
