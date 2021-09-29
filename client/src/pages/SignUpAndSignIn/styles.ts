@@ -21,7 +21,8 @@ export const EmailIcon = styled(Email)`
 `;
 
 export const Container = styled.div`
-  border-radius: 10px;
+  border: 3px solid #e3e3e3;
+  border-radius: 10%;
   position: absolute;
   background-color: #f7f5eb;
   color: #000;
@@ -310,11 +311,11 @@ export const ButtonText = styled.span`
 export const IconClose = styled.svg`
   z-index: 3;
   position: absolute;
-  top: 0.6em;
-  right: 0.6em;
+  top: 1.5em;
+  right: 1.5em;
   fill: #302d2c;
   height: 1em;
   path {
-    fill: #544f4f;
+    fill: #bababa;
   }
 `;
