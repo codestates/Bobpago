@@ -154,6 +154,26 @@ export class MeService {
     }
 
     // 4. google 회원탈퇴 경우
+    else if (tokenType === 'google') {
+      await axios.post(
+        `https://accounts.google.com/o/oauth2/revoke?token=${accessToken}`,
+        {},
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Authorization: accessToken,
+          },
+          withCredentials: true,
+        },
+      );
+      await this.usersRepository.update(user.id, { refreshToken: null });
+      await this.usersRepository.softDelete({ id: user.id });
+      return {
+        data: null,
+        statusCode: 200,
+        message: '회원탈퇴가 완료되었습니다.',
+      };
+    }
   }
 
   async restoreMyAccount(email: string): Promise<ResType> {
