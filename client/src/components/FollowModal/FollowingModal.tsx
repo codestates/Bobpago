@@ -12,14 +12,24 @@ import {
   XIcon,
 } from "./styles";
 
-const FollowList = () => {
+interface ListProps {
+  follow?: any;
+}
+
+const FollowList = ({ follow }) => {
   return (
     <ProfileContainer>
       <ProfileImgContainer>
-        <Profile size={5.7} />
+        <Profile
+          size={5.7}
+          src={
+            follow.imageUrl &&
+            `${process.env.REACT_APP_S3_IMG_URL}/${follow.imageUrl}`
+          }
+        />
       </ProfileImgContainer>
       <ProfileTextContainer>
-        <NameContainer>안치원</NameContainer>
+        <NameContainer>{follow.nickname}</NameContainer>
       </ProfileTextContainer>
     </ProfileContainer>
   );
@@ -27,19 +37,20 @@ const FollowList = () => {
 
 interface Props {
   setFollowingModal: Dispatch<SetStateAction<boolean>>;
+  follow?: any;
 }
 
-const FollowingModal = ({ setFollowingModal }: Props) => {
+const FollowingModal = ({ setFollowingModal, follow }: Props) => {
   const [view, setView] = useState<number>(4);
   return (
     <FollowContainer>
       <Title>Following</Title>
       <XIcon onClick={() => setFollowingModal(false)} />
-      {dummy.slice(0, view).map((el: any, i: number) => {
-        return <FollowList key={i} />;
+      {follow.slice(0, view).map((el: any, i: number) => {
+        return <FollowList key={i} follow={follow[i]} />;
       })}
-      {dummy.length <= 3 || view === dummy.length ? null : (
-        <ViewAllContainer onClick={() => setView(dummy.length)}>
+      {follow.length <= 3 || view === follow.length ? null : (
+        <ViewAllContainer onClick={() => setView(follow.length)}>
           VIEW ALL
         </ViewAllContainer>
       )}

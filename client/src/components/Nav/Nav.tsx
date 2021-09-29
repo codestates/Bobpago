@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import {
   NavContainer,
@@ -14,12 +14,31 @@ import {
 import { Link } from "react-router-dom";
 import SignIn from "pages/SignUpAndSignIn/SignIn";
 import SignUp from "pages/SignUpAndSignIn/SignUp";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { showSignIn } from "actions/SignUpAndSignIn";
+import { RootState } from "reducers";
+import { REMOVE_ACCESSTOKEN } from "actions/Accesstoken";
+import { CLEAR_CLICK_DATA } from "actions/IngredientAction";
 
 const Nav = ({ opac }: { opac: boolean }) => {
   const [authorization, setAuthorization] = useState(false);
   const dispatch = useDispatch();
+  const AccessState = useSelector(
+    (state: RootState) => state.AccesstokenReducer
+  );
+
+  const handleLogout = () => {
+    dispatch({
+      type: REMOVE_ACCESSTOKEN,
+    });
+    setAuthorization(false);
+  };
+
+  useEffect(() => {
+    if (AccessState.accessToken !== "") {
+      setAuthorization(true);
+    }
+  }, []);
 
   return (
     <NavContainer opac={opac}>
@@ -44,13 +63,20 @@ const Nav = ({ opac }: { opac: boolean }) => {
               </Link>
             </NavEtcList>
             <NavEtcList>
-              <LoginLogout>Logout</LoginLogout>
+              <LoginLogout onClick={handleLogout}>Logout</LoginLogout>
             </NavEtcList>
           </NavEtcUl>
         ) : (
           <NavEtcUl>
             <NavEtcList>
-              <LoginLogout onClick={() => dispatch(showSignIn())}>
+              <LoginLogout
+                onClick={() => {
+                  dispatch(showSignIn());
+                  // if (!!AccessState.accessToken) {
+                  //   setAuthorization(true);
+                  // }
+                }}
+              >
                 Login
               </LoginLogout>
             </NavEtcList>
