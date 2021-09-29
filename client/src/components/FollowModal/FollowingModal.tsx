@@ -16,7 +16,7 @@ interface ListProps {
   follow?: any;
 }
 
-const FollowList = ({ follow }) => {
+const FollowList: React.FC<ListProps> = ({ follow }) => {
   return (
     <ProfileContainer>
       <ProfileImgContainer>
