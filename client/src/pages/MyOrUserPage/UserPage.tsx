@@ -35,7 +35,7 @@ import {
 
 const UserPage = () => {
   const accessToken = useSelector(
-    (state: RootState) => state.AccesstokenReducer.accesstoken
+    (state: RootState) => state.AccesstokenReducer.accessToken
   );
   const [myPostNum, setMyPostNum] = useState<number>(6);
   const [bookmarkNum, setBookmarkNum] = useState<number>(6);
@@ -50,7 +50,7 @@ const UserPage = () => {
   const [userInfo, setUserInfo] = useState<any>([]);
   const profileS3Url = process.env.REACT_APP_S3_IMG_URL;
   const serverUrl = process.env.REACT_APP_SERVER_URL;
-  let { userId } = useParams();
+  let { userId } = useParams<{ userId: string | undefined }>();
   console.log(profileS3Url + userInfo.imageUrl);
 
   async function getData() {
