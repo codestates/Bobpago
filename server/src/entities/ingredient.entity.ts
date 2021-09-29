@@ -20,6 +20,9 @@ export class Ingredient extends BaseEntity {
   @Column()
   type: string;
 
+  @Column()
+  imageUrl: string;
+
   @Column({ default: false })
   basic: boolean;
 

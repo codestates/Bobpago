@@ -65,6 +65,7 @@ interface pagoProps {
   rotate: number;
   position: number;
   end: number;
+  time: number;
 }
 
 interface BookmarkProps {

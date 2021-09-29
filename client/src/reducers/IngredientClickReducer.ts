@@ -1,9 +1,9 @@
-import { CLICK_DATA } from "actions/IngredientAction";
+import { CLEAR_CLICK_DATA, CLICK_DATA } from "actions/IngredientAction";
 import { IngredientClickData } from "types";
 
 interface Action {
   type: string;
-  payload: number;
+  payload: any;
 }
 
 const initailState: IngredientClickData = {
@@ -16,13 +16,24 @@ const IngredientClickReducer = (
 ) => {
   switch (action.type) {
     case CLICK_DATA:
-      if (state.clickData.includes(action.payload)) {
+      if (
+        state.clickData.filter((item) => item.id === action.payload.id)
+          .length >= 1
+      ) {
         state.clickData = state.clickData.filter(
-          (item) => item !== action.payload
+          (item) => item.id !== action.payload.id
         );
-      } else if (!state.clickData.includes(action.payload)) {
+      } else if (
+        state.clickData.filter((item) => item.id === action.payload.id)
+          .length === 0
+      ) {
         state.clickData.push(action.payload);
       }
+      return {
+        ...state,
+      };
+    case CLEAR_CLICK_DATA:
+      state.clickData = [];
       return {
         ...state,
       };
