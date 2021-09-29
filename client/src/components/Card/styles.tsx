@@ -130,7 +130,7 @@ interface FixProps {
   fix?: boolean;
 }
 
-export const RemoveIcon = styled(RemoveCircle)<FixProps>`
+export const RemoveIcon = styled.img<FixProps>`
   width: 2em;
   height: 2em;
   fill: #fff;

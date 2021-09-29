@@ -20,20 +20,6 @@ import axios from "axios";
 function App() {
   const dispatch = useDispatch();
 
-  const AllIngredient = async () => {
-    const data = await axios.get("http://localhost:3000/ingredient", {
-      withCredentials: true,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    console.log(data);
-  };
-
-  useEffect(() => {
-    AllIngredient();
-  }, []);
-
   return (
     <Switch>
       {/* <Route exact path="/">
@@ -64,7 +50,7 @@ function App() {
       <Route path="/mypage">
         <MyPage />
       </Route>
-      <Route path="/userpage">
+      <Route path="/userpage/:userId">
         <UserPage />
       </Route>
       <Route></Route>
