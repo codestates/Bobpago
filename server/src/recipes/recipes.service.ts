@@ -282,7 +282,10 @@ export class RecipesService {
       // 7. 4번에서 완성해둔 recipeData를 map으로 가공하여 ingredient 배열 삽입(메인, 서브 재료 나누기도 진행)
       // 6번을 통해 이미 ingredientInfo에 각 recipe 아이디에 맞는 ingredient 배열이 완성되어 있음. 이를 활용한 것
       const result = recipeData.map((el) => {
-        const temp = { id: el.user.id, nickname: el.user.nickname };
+        const temp = {
+          id: el.user ? el.user.id : 0,
+          nickname: el.user ? el.user.nickname : '탈퇴한 회원',
+        };
         const reactions = el.recipeReactions;
         delete el.userId;
         delete el.user;
