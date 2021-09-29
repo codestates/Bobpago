@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import useHover from "utils/useHover";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { goToNextPage, goToPrevPage } from "actions/WriteRecipePage";
 import { setDescription } from "actions/WriteRecipeContents";
+import { RootState } from "reducers";
+import axios from "axios";
 import {
   DescriptionSlide,
   NextButton,
@@ -45,13 +47,12 @@ const Description = ({
   const [imgFiles, setImgFiles] = useState<any>([]);
   const [modalOn, setModalOn] = useState<boolean>(false);
   const frontCoverRef = useRef<any>(null);
-
-  useEffect(() => {
-    setImgFiles([
-      "https://bobpago-depoloy-images.s3.ap-northeast-2.amazonaws.com/recipe/29/1632665672739",
-      "https://bobpago-depoloy-images.s3.ap-northeast-2.amazonaws.com/recipe/29/1632665672761",
-    ]);
-  }, []);
+  const accessToken = useSelector(
+    (state: RootState) => state.AccesstokenReducer.accesstoken
+  );
+  const contents = useSelector(
+    (state: RootState) => state.WriteRecipeContentsReducer
+  );
 
   useEffect(() => {
     currentPage < 0 && setCurrentPage(0);
@@ -101,14 +102,49 @@ const Description = ({
     setDescriptionPage(copiedDescription);
   };
 
-  const handleSubmitRecipe = () => {};
+  const handleSubmitRecipe = async () => {
+    const data = await axios.post(
+      `${process.env.REACT_APP_SERVER_URL}/recipe?tokenType=jwt`,
+      {
+        title: contents.title,
+        amount: contents.serving,
+        level: contents.difficulty,
+        estTime: contents.time,
+        ingredientId: contents.ingredient,
+        description: contents.description,
+      },
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    const recipeId = data.data.data.recipe.id;
+    const formData = new FormData();
+    for (let i = 0; i < imgFiles.length; i++) {
+      formData.append("files", imgFiles[i]);
+    }
+    const uploadImg = await axios.post(
+      `${process.env.REACT_APP_SERVER_URL}/image/${recipeId}?tokenType=jwt&path=recipe`,
+      formData,
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+  };
 
   const handleImgChange = (e: any, i: number) => {
     let copiedDescription = description.slice();
     let copiedImgFiles = imgFiles.slice();
     for (let i = 0; i < e.target.files.length; i++) {
       copiedDescription.push("");
-      copiedImgFiles[i] = URL.createObjectURL(e.target.files[i]);
+      copiedImgFiles[i] = e.target.files[i];
     }
     setDescription(copiedDescription);
     setImgFiles(copiedImgFiles);
@@ -124,9 +160,10 @@ const Description = ({
                 <input
                   type="file"
                   multiple
+                  // hidden
                   onChange={(e) => handleImgChange(e, 0)}
                 />
-                <img src={imgFiles[0] && imgFiles[0]} alt="이미지 없음" />
+                {/* <img src={imgFiles[0] && imgFiles[0]} alt="이미지 없음" /> */}
               </FrontCoverBack>
               <FrontCoverFront className="front">
                 <FrontCoverImg src="/img/ingredient.png" />
@@ -139,7 +176,7 @@ const Description = ({
             {description.map((el: any, i: number) => {
               return (
                 <Page
-                  imgFile={imgFiles[i + 1]}
+                  // imgFile={imgFiles[i + 1]}
                   currentPage={currentPage}
                   text={el}
                   key={i}

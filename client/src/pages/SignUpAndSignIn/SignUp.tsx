@@ -19,6 +19,7 @@ import Eye from "../../components/Eye/Eye";
 import { useSelector, useDispatch } from "react-redux";
 import { showSignIn, showNothing } from "actions/SignUpAndSignIn";
 import { RootState } from "reducers";
+import axios from "axios";
 
 const SignUp = () => {
   const state = useSelector((state: RootState) => state.SignUpAndSignInReducer);
@@ -37,6 +38,25 @@ const SignUp = () => {
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
+
+  const handleSignUp = async () => {
+    console.log(email, password, nickName);
+    const signUp = await axios.post(
+      "http://localhost:3000/signup",
+      {
+        email: email,
+        password: password,
+        nickname: nickName,
+      },
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log(signUp);
+  };
 
   useEffect((): any => {
     if (signUpDisplay) {
@@ -162,7 +182,12 @@ const SignUp = () => {
           <ErrMsg>
             <span ref={passwordConfirmError}>비밀번호가 일치하지 않습니다</span>
           </ErrMsg>
-          <ButtonWrapper>
+          <ButtonWrapper
+            onClick={(e: any) => {
+              e.preventDefault();
+              handleSignUp();
+            }}
+          >
             <ButtonText>회원가입</ButtonText>
           </ButtonWrapper>
           <Ask2>

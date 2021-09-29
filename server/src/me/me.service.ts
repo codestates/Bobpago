@@ -49,7 +49,7 @@ export class MeService {
       }
     }
   }
-
+  //
   async getMyInfo(user: User): Promise<ResType> {
     const followees = user.followees.length;
     const followers = user.followers.length;
@@ -172,16 +172,23 @@ export class MeService {
 
   async checkMyInfo(user: User, password: string): Promise<ResType> {
     try {
-      await this.usersRepository.findOne({ id: user.id, password });
-      return {
-        data: null,
-        statusCode: 200,
-        message: '회원정보 수정 권한이 확인되었습니다.',
-      };
+      const userInfo = await this.usersRepository.findOne({
+        id: user.id,
+        password,
+      });
+      if (userInfo) {
+        return {
+          data: null,
+          statusCode: 200,
+          message: '회원정보 수정 권한이 확인되었습니다.',
+        };
+      } else {
+        throw new BadRequestException(
+          '회원정보 수정 권한 확인에 실패하였습니다.',
+        );
+      }
     } catch (err) {
-      throw new BadRequestException(
-        '회원정보 수정 권한 확인에 실패하였습니다.',
-      );
+      throw new BadRequestException();
     }
   }
 

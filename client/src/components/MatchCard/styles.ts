@@ -65,7 +65,7 @@ export const MatchCardBox = styled.div<MatchCardProps>`
 export const CardTitle = styled.div`
   margin-top: 2em;
   flex: 5;
-  font-size: 24px;
+  font-size: 18px;
   z-index: 10;
   font-weight: 700;
   color: white;
@@ -166,11 +166,17 @@ export const HiddenLeftContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 `;
 
 export const HiddenLeftImage = styled.img`
-  width: 50%;
-  height: 50%;
+  width: 60%;
+  height: 60%;
+  position: absolute;
+  left: 25%;
+  top: 15%;
+  object-fit: cover;
+  border-radius: 15px;
 `;
 
 export const HiddenRightContainer = styled.div`
@@ -191,7 +197,7 @@ export const HiddenTopContainer = styled.div`
 `;
 
 export const HiddenTitle = styled.div`
-  font-size: 60px;
+  font-size: 42px;
   font-weight: 700;
   margin-right: 0.2em;
 `;
@@ -213,7 +219,7 @@ export const MainIngredientContainer = styled.ul`
 `;
 
 export const MainIngredientText = styled.div`
-  font-size: 36px;
+  font-size: 24px;
 `;
 
 export const MainIngredient = styled.li`
@@ -234,7 +240,7 @@ export const SubIngredientContainer = styled.ul`
 `;
 
 export const SubIngredientText = styled.div`
-  font-size: 36px;
+  font-size: 24px;
 `;
 
 export const SubIngredient = styled.li`
@@ -249,12 +255,12 @@ export const HiddenCookingTimeContainer = styled.div`
 `;
 
 export const HiddenCookingTimeText = styled.div`
-  font-size: 36px;
+  font-size: 24px;
   margin-right: 0.3em;
 `;
 
 export const HiddenCookingTime = styled.div`
-  font-size: 32px;
+  font-size: 24px;
 `;
 
 export const HiddenDifficultyContainer = styled.div`
@@ -264,12 +270,13 @@ export const HiddenDifficultyContainer = styled.div`
 `;
 
 export const HiddenDifficultyText = styled.div`
-  font-size: 36px;
+  font-size: 24px;
   margin-right: 0.3em;
 `;
 
 export const HiddenDifficulty = styled.div`
-  font-size: 32px;
+  font-size: 24px;
+  color: orange;
 `;
 
 export const HiddenBackButton = styled(ArrowLeft)`

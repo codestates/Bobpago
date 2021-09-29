@@ -1,6 +1,21 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { main } from "theme";
 import { Search } from "@styled-icons/boxicons-regular/Search";
+import { QuestionCircle } from "@styled-icons/bootstrap/QuestionCircle";
+
+export const QuestionMove = keyframes`
+  0% {
+    transform: rotateZ(0deg);
+  }
+
+  50% {
+    transform: rotateZ(40deg);
+  }
+
+  100% {
+    transform: rotateZ(0deg);
+  }
+`;
 
 interface MyProps {
   move?: number;
@@ -191,4 +206,118 @@ export const SearchIcon = styled(Search)`
   width: 15px;
   position: absolute;
   left: 7px;
+`;
+
+export const TooltipContainer = styled.div`
+  position: relative;
+  transform: translate(48%, 190%);
+  width: 100%;
+`;
+
+export const LeftSurvayTooltip = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 1em;
+  width: 25%;
+  height: 250%;
+  text-align: center;
+  background-color: #ffffff;
+  border: 1px solid black;
+  position: absolute;
+  border-radius: 10px;
+  opacity: 0;
+  transition: 0.3s;
+  top: -70%;
+  left: 3.5%;
+  z-index: 100;
+  span {
+    font-size: 12px;
+    font-weight: 700;
+    margin-top: 1em;
+    color: #aa0000;
+  }
+  ::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+    position: absolute;
+    top: 40%;
+    left: -2.15%;
+    background-color: #ffffff;
+    transform: rotateZ(45deg);
+  }
+`;
+
+export const LeftQuestionIcons = styled(QuestionCircle)`
+  width: 25px;
+  top: 21%;
+  left: 75%;
+  color: black;
+  animation: ${QuestionMove} 2s infinite;
+
+  &:hover {
+    animation: normal;
+  }
+`;
+
+export const RightTooltipContainer = styled.div`
+  position: absolute;
+  top: 1%;
+  left: 47%;
+  width: 100%;
+  z-index: 100;
+`;
+
+export const RightSurvayTooltip = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 1em;
+  width: 25%;
+  height: 200%;
+  text-align: center;
+  background-color: #ffffff;
+  border: 1px solid black;
+  position: absolute;
+  border-radius: 10px;
+  opacity: 0;
+  transition: 0.3s;
+  top: -70%;
+  left: 3.5%;
+  z-index: 100;
+  span {
+    font-size: 12px;
+    font-weight: 700;
+    margin-top: 1em;
+    color: #aa0000;
+  }
+  ::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+    position: absolute;
+    top: 40%;
+    left: -2.15%;
+    background-color: #ffffff;
+    transform: rotateZ(45deg);
+  }
+`;
+
+export const RightQuestionIcons = styled(QuestionCircle)`
+  width: 25px;
+  top: 21%;
+  left: 75%;
+  color: black;
+  animation: ${QuestionMove} 2s infinite;
+
+  &:hover {
+    animation: normal;
+  }
 `;
