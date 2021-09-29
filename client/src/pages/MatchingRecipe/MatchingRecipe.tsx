@@ -23,6 +23,7 @@ import {
   MatchTooltip,
   MatchTopContainer,
   MyIngredient,
+  Linear,
 } from "./styles";
 
 const MatchingRecipe = () => {
@@ -44,8 +45,6 @@ const MatchingRecipe = () => {
   let isDown = false;
   let startX: number;
   let scrollLeft: number;
-
-  console.log(locationProps[0].id);
 
   const handleData = async () => {
     const data = await axios.post(
@@ -161,9 +160,12 @@ const MatchingRecipe = () => {
         >
           {!turnOn
             ? data.map((item: any, i) => {
+                console.log(item);
+
                 return (
                   <MatchCard
                     key={item.recipe.id}
+                    recipeId={item.recipe.id}
                     title={item.recipe.title}
                     level={item.recipe.level}
                     amount={item.recipe.amount}
@@ -180,7 +182,7 @@ const MatchingRecipe = () => {
               })
             : null}
         </MatchCardContainer>
-        <Lineear />
+        <Linear />
       </MatchCardScroll>
       {/* 페이지 스크롤 이벤트 */}
     </TotalMatchContainer>

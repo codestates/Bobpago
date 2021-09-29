@@ -139,17 +139,17 @@ export const PostButton = styled.button`
   right: 0;
   width: 10em;
   height: 2.5em;
-  background-color: #ce1616;
+  background-color: ${main.buttonColor};
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   transition: 0.5s;
-  color: #ffffff;
+  color: #000000;
   border-radius: 2px;
   outline: none;
   border: none;
   cursor: pointer;
 
   &:hover {
-    background-color: red;
+    background-color: #a8e7ff;
     transform: scale(1.1);
   }
 `;

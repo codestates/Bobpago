@@ -36,10 +36,28 @@ import { koreaRed, koreaBlue, koreaYellow } from "koreaTheme";
 import { gsap } from "gsap/dist/gsap";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+import { useLocation } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "reducers";
 import DRModal from "components/DRModal/DRModal";
+import { showSignIn } from "actions/SignUpAndSignIn";
+import axios from "axios";
 
 const DetailRecipe = () => {
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const locationProps = location.state;
+  const loginState = useSelector(
+    (state: RootState) => state.AccesstokenReducer
+  );
+
+  const [start, setStart] = useState<boolean>(false);
+  const [dummy, setDummy] = useState<number[]>([]);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [bookmark, setBookmark] = useState<boolean>(false);
+
   const rightScrollRef = useRef<any>(null);
+  const bookmarkRef = useRef<any>(null);
   const topBoxRef = useRef<any>(null);
   const leftBoxRef = useRef<any>(null);
   const rightBoxRef = useRef<any>(null);
@@ -47,14 +65,28 @@ const DetailRecipe = () => {
   const mainRef = useRef<any>(null);
   const subRef = useRef<any>(null);
 
-  const [start, setStart] = useState<boolean>(false);
-  const [dummy, setDummy] = useState<number[]>([]);
-  const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [mainIng, setMainIng] = useState<Array<string[]>>([]);
-  const [bookmark, setBookmark] = useState<boolean>(false);
+  const handlePageData = async () => {
+    const data = await axios.get(
+      `http://localhost:3000/recipe/${locationProps}`,
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log(data);
+  };
 
   const handleBookmark = () => {
-    setBookmark(!bookmark);
+    const bookmarkState = [...bookmarkRef.current.classList].includes("active");
+    if (loginState.accessToken === "") {
+      dispatch(showSignIn());
+    } else if (bookmarkState) {
+      bookmarkRef.current.classList.remove("active");
+    } else {
+      bookmarkRef.current.classList.add("active");
+    }
   };
 
   const handleModalOpen = () => {
@@ -102,6 +134,10 @@ const DetailRecipe = () => {
   const pagoTimeMaker = () => {
     return Math.floor(Math.random() * 5 + 3);
   };
+
+  useEffect(() => {
+    handlePageData();
+  }, []);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollToPlugin, ScrollTrigger);
@@ -295,7 +331,12 @@ const DetailRecipe = () => {
         time={pagoTimeMaker()}
         src="/img/eggpago.png"
       />
-      <BookMarkIcon bookmark={bookmark} onClick={handleBookmark} />
+      <BookMarkIcon
+        className="default"
+        bookmark={bookmark}
+        ref={bookmarkRef}
+        onClick={handleBookmark}
+      />
     </DRTotalContainer>
   );
 };
