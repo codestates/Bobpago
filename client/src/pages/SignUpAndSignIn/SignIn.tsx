@@ -59,18 +59,18 @@ const SignIn = () => {
   }, [loginDisplay]);
 
   const handleLogin = async (e: any) => {
-    e.preventDefault();
-    try {
-      const signIn = await axios.post(
-        "http://localhost:3000/auth/signin",
-        {
-          email: email,
-          password: password,
-        },
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
+    e.preventDefault();    
+  try {
+    const signIn = await axios.post(
+      `${process.env.REACT_APP_SERVER_URL}/auth/signin`,
+      {
+        email: email,
+        password: password,
+      },
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
           },
         }
       );

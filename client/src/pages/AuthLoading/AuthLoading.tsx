@@ -14,7 +14,7 @@ const AuthLoading = () => {
   let kakao = new URL(window.location.href).searchParams.get("code");
   const handleKakao = async () => {
     const kakaoAuth = await axios.get(
-      `http://localhost:3000/auth/kakao?code=${kakao}`
+      `${process.env.REACT_APP_SERVER_URL}/auth/kakao?code=${kakao}`
     );
 
     dispatch({
