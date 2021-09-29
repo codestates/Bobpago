@@ -60,33 +60,35 @@ const SignIn = () => {
 
   const handleLogin = async (e: any) => {
     e.preventDefault();
-    emailError.current.style.display = "inline-block";
-    passwordError.current.style.display = "inline-block";
-    setTimeout(() => {
-      emailError.current.style.display = "none";
-      passwordError.current.style.display = "none";
-    }, 2000);
-
-    const signIn = await axios.post(
-      "http://localhost:3000/auth/signin",
-      {
-        email: email,
-        password: password,
-      },
-      {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
+    try {
+      const signIn = await axios.post(
+        "http://localhost:3000/auth/signin",
+        {
+          email: email,
+          password: password,
         },
-      }
-    );
-    dispatch({
-      type: SET_ACCESSTOKEN,
-      payload: {
-        accessToken: signIn.data.data.accessToken,
-        tokenType: signIn.data.data.tokenType,
-      },
-    });
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      dispatch({
+        type: SET_ACCESSTOKEN,
+        payload: {
+          accessToken: signIn.data.data.accessToken,
+          tokenType: signIn.data.data.tokenType,
+        },
+      });
+    } catch (err) {
+      emailError.current.style.display = "inline-block";
+      passwordError.current.style.display = "inline-block";
+      setTimeout(() => {
+        emailError.current.style.display = "none";
+        passwordError.current.style.display = "none";
+      }, 2000);
+    }
   };
 
   const handleEmailPlaceholderActive = () => {

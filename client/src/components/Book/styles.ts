@@ -1,5 +1,34 @@
 import styled from "styled-components";
 import { NavigateNext } from "@styled-icons/material-rounded/NavigateNext/NavigateNext";
+import { Upload } from "@styled-icons/bootstrap/Upload/Upload";
+
+export const UploadImg = styled.img`
+  cursor: pointer;
+  width: 4.5em;
+  height: 4.5em;
+  position: absolute;
+  top: 40%;
+  transition: all 0.3s ease;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  &:hover {
+    transform: translate(-50%, 0%) scale(1.1);
+  }
+`;
+
+export const UploadImgText = styled.div`
+  margin: 0 auto;
+  width: 100%;
+  width: 6em;
+  font-size: 20px;
+  display: block;
+  position: relative;
+  transform: translateY(200%);
+  align-text: center;
+  color: #8f8f8f;
+  font-weight: 500;
+`;
+
 export const BookContainer = styled.div`
   position: absolute;
   top: 4.5em;
@@ -11,6 +40,17 @@ export const BookContainer = styled.div`
   justify-content: center;
   align-items: center;
   background: transparent;
+`;
+
+export const UploadIcon = styled(Upload)`
+  width: 5em;
+  height: 5em;
+  position: absolute;
+  z-index: 1;
+  fill: #fff;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
 `;
 
 export const Cover = styled.div`
@@ -28,6 +68,15 @@ export const FlipBook = styled.div`
 `;
 
 export const Back = styled.div`
+  .uploaded {
+    top: 80%;
+    opacity: 0.7;
+  }
+  .food {
+    width: auto;
+    object-fit: center;
+    max-height: 100%;
+  }
   color: #000;
   transform-style: preserve-3d;
   position: absolute;
@@ -40,9 +89,13 @@ export const Back = styled.div`
   box-shadow: inset 20px 0 50px rgba(0, 0, 0, 0.5) 0 2px 5px rgba(0, 0, 0, 0.5);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  background-color: #d5d6ce;
+  background-color: #f3f3f3;
   border-bottom-left-radius: 0.5em;
   border-top-left-radius: 0.5em;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-text: center;
 `;
 
 export const Front = styled.div`
