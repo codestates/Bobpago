@@ -171,6 +171,27 @@ export const OAuthContainer = styled.div`
 `;
 export const OAuthIconContainer = styled.div`
   margin-top: 0.5em;
+  .kakao {
+    cursor: pointer;
+    transition: 0.5s;
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+  .google {
+    cursor: pointer;
+    transition: 0.5s;
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+  .naver {
+    cursor: pointer;
+    transition: 0.5s;
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
 `;
 export const GoogleOAuthContainer = styled.div`
   margin-top: 0.5em;

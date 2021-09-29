@@ -21,25 +21,30 @@ interface FixProps {
   fix?: boolean;
   index?: number;
   postData?: any;
-  removeMyPost?: any;
+  removeBookmarkCheck?: any;
 }
 
-const Card = ({ index, fix, postData, removeMyPost }: FixProps) => {
+const BookmarkCard = ({
+  index,
+  fix,
+  postData,
+  removeBookmarkCheck,
+}: FixProps) => {
   let history = useHistory();
-
   return (
-    <CardContainer onClick={() => history.push(`/detailrecipe/${postData.id}`)}>
+    <CardContainer
+      onClick={() => history.push(`/detailrecipe/${postData.recipeId}`)}
+    >
       <RemoveIcon
         src="/img/minus.png"
-        onClick={() => removeMyPost(index, postData.id)}
+        onClick={() => removeBookmarkCheck(index, postData.recipeId)}
         fix={fix}
       />
       <CardImage
         className="card__image"
         src={
-          postData
-            ? process.env.REACT_APP_S3_IMG_URL + postData.thumbnail
-            : undefined
+          postData &&
+          `${process.env.REACT_APP_S3_IMG_URL}/${postData.thumbnail}`
         }
         alt=""
       />
@@ -70,4 +75,4 @@ const Card = ({ index, fix, postData, removeMyPost }: FixProps) => {
   );
 };
 
-export default Card;
+export default BookmarkCard;

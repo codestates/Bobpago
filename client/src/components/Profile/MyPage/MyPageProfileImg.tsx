@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useRef } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "reducers";
+import axios from "axios";
 import {
   ProfileContainer,
   ProfileIcon,
@@ -12,9 +15,10 @@ interface Props {
   size?: number;
   fix?: boolean;
   src?: string;
+  setProfileImg?: any;
 }
 
-const MyPageProfileImg = ({ size, fix, src }: Props) => {
+const MyPageProfileImg = ({ size, fix, src, setProfileImg }: Props) => {
   return (
     <>
       {!src ? (
@@ -27,7 +31,6 @@ const MyPageProfileImg = ({ size, fix, src }: Props) => {
       <EditContainer src={src} size={size} fix={fix}>
         <EditIcon src={src} size={size} fix={fix} />
       </EditContainer>
-      {/* <PenIcon src={src} size={size} fix={fix} /> */}
     </>
   );
 };

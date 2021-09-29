@@ -234,11 +234,6 @@ export class AuthService {
     }
   }
 
-  async kakaoAuthRedirect(res: Response): Promise<void> {
-    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}/auth/kakao/redirect`;
-    return res.redirect(kakaoAuthUrl);
-  }
-
   async kakaoSignIn(code: string): Promise<ResType> {
     // 0. form-urlencoded 인코딩 함수
     const formUrlEncoded = (data) => {
@@ -254,7 +249,7 @@ export class AuthService {
         grant_type: 'authorization_code',
         client_id: process.env.KAKAO_CLIENT_ID,
         client_secret: process.env.KAKAO_CLIENT_SECRET,
-        redirect_uri: `${process.env.REDIRECT_URI}/auth/kakao/redirect`,
+        redirect_uri: `${process.env.REDIRECT_URI}/kakao`,
         code,
       }),
       {
@@ -278,8 +273,25 @@ export class AuthService {
     const nickname = userData.data.properties.nickname;
 
     // 3. 리프레쉬 토큰 db 저장, 4. 회원가입 여부 판단 및 데이터 반환
-    const user = await this.usersRepository.findOne({ email });
-    if (!user) {
+    try {
+      const user = await this.usersRepository.findOne({ email });
+      await this.usersRepository.update(user.id, { refreshToken });
+      delete user.password;
+      delete user.refreshToken;
+      delete user.recipes;
+      delete user.bookmarks;
+      delete user.followees;
+      delete user.followers;
+      return {
+        data: {
+          tokenType: 'kakao',
+          accessToken,
+          ...user,
+        },
+        statusCode: 200,
+        message: '카카오 소셜 로그인이 완료되었습니다.',
+      };
+    } catch (err) {
       const userInfo = await this.usersRepository.create({
         email,
         nickname,
@@ -290,6 +302,10 @@ export class AuthService {
       const newUser = await this.usersRepository.findOne({ email });
       delete newUser.password;
       delete newUser.refreshToken;
+      delete newUser.recipes;
+      delete newUser.bookmarks;
+      delete newUser.followees;
+      delete newUser.followers;
       return {
         data: {
           tokenType: 'kakao',
@@ -299,25 +315,7 @@ export class AuthService {
         statusCode: 200,
         message: '카카오 소셜 회원가입 및 로그인이 완료되었습니다.',
       };
-    } else {
-      await this.usersRepository.update(user.id, { refreshToken });
-      delete user.password;
-
-      return {
-        data: {
-          tokenType: 'kakao',
-          accessToken,
-          ...user,
-        },
-        statusCode: 200,
-        message: '카카오 소셜 로그인이 완료되었습니다.',
-      };
     }
-  }
-
-  async naverAuthRedirect(res: Response): Promise<void> {
-    const naverAuthUrl = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.NAVER_CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}/auth/naver/redirect&state=${process.env.NAVER_STATE}`;
-    return res.redirect(naverAuthUrl);
   }
 
   async naverSignIn(code: string, state: string): Promise<ResType> {
@@ -359,8 +357,25 @@ export class AuthService {
     const nickname = userData.data.response.nickname;
 
     // 3. 리프레쉬 토큰 db 저장, 4. 회원가입 여부 판단 및 데이터 반환
-    const user = await this.usersRepository.findOne({ email });
-    if (!user) {
+    try {
+      const user = await this.usersRepository.findOne({ email });
+      await this.usersRepository.update(user.id, { refreshToken });
+      delete user.password;
+      delete user.refreshToken;
+      delete user.recipes;
+      delete user.bookmarks;
+      delete user.followees;
+      delete user.followers;
+      return {
+        data: {
+          tokenType: 'naver',
+          accessToken,
+          ...user,
+        },
+        statusCode: 200,
+        message: '네이버 소셜 로그인이 완료되었습니다.',
+      };
+    } catch (err) {
       const userInfo = await this.usersRepository.create({
         email,
         nickname,
@@ -370,6 +385,10 @@ export class AuthService {
       const newUser = await this.usersRepository.findOne({ email });
       delete newUser.password;
       delete newUser.refreshToken;
+      delete newUser.recipes;
+      delete newUser.bookmarks;
+      delete newUser.followees;
+      delete newUser.followers;
       return {
         data: {
           tokenType: 'naver',
@@ -379,25 +398,7 @@ export class AuthService {
         statusCode: 200,
         message: '네이버 소셜 회원가입 및 로그인이 완료되었습니다.',
       };
-    } else {
-      await this.usersRepository.update(user.id, { refreshToken });
-      const newUser = await this.usersRepository.findOne({ email });
-      delete newUser.password;
-      delete newUser.refreshToken;
-      return {
-        data: {
-          tokenType: 'naver',
-          accessToken,
-          ...newUser,
-        },
-        statusCode: 200,
-        message: '네이버 소셜 로그인이 완료되었습니다.',
-      };
     }
-  }
-  async googleAuthRedirect(res: Response): Promise<void> {
-    const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&response_type=code&redirect_uri=http://localhost:3000/auth/google/redirect&scope=https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile+openid&access_type=offline`;
-    return res.redirect(googleAuthUrl);
   }
 
   async googleSignIn(code: string, scope: string): Promise<any> {
@@ -422,7 +423,7 @@ export class AuthService {
         grant_type: 'authorization_code',
         client_id: process.env.GOOGLE_CLIENT_ID,
         client_secret: process.env.GOOGLE_CLIENT_SECRET,
-        redirect_uri: `http://localhost:3000/auth/google/redirect`,
+        redirect_uri: `http://localhost:3001/auth/google`,
         code,
         scope,
       }),
@@ -441,32 +442,17 @@ export class AuthService {
     console.log(data);
     const { name, email } = data.data;
 
-    const user = await this.usersRepository.findOne({ email });
-    if (!user) {
-      const userData = await this.usersRepository.create({
-        email,
-        nickname: name,
-        refreshToken: refresh_token,
-      });
-      await this.usersRepository.save(userData);
-
-      const newUser = await this.usersRepository.findOne({ email });
-      delete newUser.password;
-      delete newUser.refreshToken;
-
-      return {
-        data: {
-          tokenType: 'google',
-          accessToken: access_token,
-          ...newUser,
-        },
-        statusCode: 200,
-        message: '구글 회원가입 및 소셜 로그인이 완료되었습니다.',
-      };
-    } else {
+    try {
+      const user = await this.usersRepository.findOne({ email });
       await this.usersRepository.update(user.id, {
         refreshToken: refresh_token,
       });
+      delete user.password;
+      delete user.refreshToken;
+      delete user.recipes;
+      delete user.bookmarks;
+      delete user.followees;
+      delete user.followers;
       return {
         data: {
           tokenType: 'google',
@@ -475,6 +461,29 @@ export class AuthService {
         },
         statusCode: 200,
         message: '구글 소셜 로그인이 완료되었습니다.',
+      };
+    } catch (err) {
+      const userData = await this.usersRepository.create({
+        email,
+        nickname: name,
+        refreshToken: refresh_token,
+      });
+      await this.usersRepository.save(userData);
+      const newUser = await this.usersRepository.findOne({ email });
+      delete newUser.password;
+      delete newUser.refreshToken;
+      delete newUser.recipes;
+      delete newUser.bookmarks;
+      delete newUser.followees;
+      delete newUser.followers;
+      return {
+        data: {
+          tokenType: 'google',
+          accessToken: access_token,
+          ...newUser,
+        },
+        statusCode: 200,
+        message: '구글 회원가입 및 소셜 로그인이 완료되었습니다.',
       };
     }
   }

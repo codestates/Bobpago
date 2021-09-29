@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useRef } from "react";
+import { useHistory } from "react-router";
 import {
   MatchCardBox,
   CardTitle,
@@ -41,11 +42,23 @@ import {
 } from "./styles";
 
 interface DifficultyType {
-  veryeasy: string;
   easy: string;
-  soso: string;
+  normal: string;
   hard: string;
-  veryhard: string;
+}
+
+interface EachIngredient {
+  id: number;
+  name: string;
+  type: string;
+  basic: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface Ingredient {
+  main: EachIngredient[];
+  sub: EachIngredient[];
 }
 
 interface MatchCardProps {
@@ -53,14 +66,19 @@ interface MatchCardProps {
   handleSwitch: VoidFunction;
   wind: number;
   id: number;
+  title: string;
+  level: number;
+  amount: number;
+  thumbnail: string;
+  time: number;
+  views: number;
+  ingredients: Ingredient;
 }
 
 const difficulty: DifficultyType = {
-  veryeasy: "★",
-  easy: "★★",
-  soso: "★★★",
-  hard: "★★★★",
-  veryhard: "★★★★★",
+  easy: "★",
+  normal: "★★",
+  hard: "★★★",
 };
 
 const MatchCard: React.FC<MatchCardProps> = ({
@@ -68,9 +86,28 @@ const MatchCard: React.FC<MatchCardProps> = ({
   handleSwitch,
   wind,
   id,
+  title,
+  level,
+  amount,
+  thumbnail,
+  time,
+  views,
+  ingredients,
 }) => {
   const [active, setActive] = useState(false);
   const activeCardRef = useRef<any>(null);
+  const history = useHistory();
+  const thumbnailSrc = process.env.REACT_APP_S3_IMG_URL;
+
+  const handleLevel = (l: number) => {
+    if (l === 1) {
+      return difficulty.easy;
+    } else if (l === 2) {
+      return difficulty.normal;
+    } else {
+      return difficulty.hard;
+    }
+  };
 
   const handleActive = () => {
     if (!active) {
@@ -94,6 +131,11 @@ const MatchCard: React.FC<MatchCardProps> = ({
 
   const handlePageMove = () => {
     handleSwitch();
+    setTimeout(() => {
+      history.push({
+        pathname: "/detailrecipe",
+      });
+    }, 2000);
   };
 
   return (
@@ -104,10 +146,10 @@ const MatchCard: React.FC<MatchCardProps> = ({
         ref={activeCardRef}
         className="cardBox"
       >
-        <CardTitle>달걀 볶음밥</CardTitle>
-        <CardDifficulty>{difficulty.soso}</CardDifficulty>
+        <CardTitle>{title}</CardTitle>
+        <CardDifficulty>{handleLevel(level)}</CardDifficulty>
         <CardImageContainer>
-          <CardImage src="https://en.pimg.jp/034/556/734/1/34556734.jpg" />
+          <CardImage src={thumbnailSrc + thumbnail} />
         </CardImageContainer>
         <SudoContainer
           onClick={(e) => {
@@ -118,49 +160,51 @@ const MatchCard: React.FC<MatchCardProps> = ({
         <CardTimesLikesContainer>
           <CardLikesContainer>
             <CardLikesIcon />
-            <CardLikesText>1,203</CardLikesText>
+            <CardLikesText>{views}</CardLikesText>
           </CardLikesContainer>
           <CardTimesContainer>
             <CardTimesIcon />
-            <CardTimesText>10:00</CardTimesText>
+            <CardTimesText>{`${time}:00`}</CardTimesText>
           </CardTimesContainer>
         </CardTimesLikesContainer>
       </MatchCardBox>
       <HiddenContainer className={"a" + String(id)}>
         <HiddenLeftContainer>
-          <HiddenLeftImage src="https://en.pimg.jp/034/556/734/1/34556734.jpg" />
+          <HiddenLeftImage src={thumbnailSrc + thumbnail} />
         </HiddenLeftContainer>
         <HiddenRightContainer>
           <HiddenTextContainer>
             <HiddenTopContainer>
-              <HiddenTitle>달걀 볶음밥</HiddenTitle>
+              <HiddenTitle>{title}</HiddenTitle>
               <HiddenAmount>{`(${`2인분`})`}</HiddenAmount>
             </HiddenTopContainer>
             <HiddenMainIngredient>
               <MainIngredientText>필수 재료</MainIngredientText>
               <MainIngredientContainer>
-                <MainIngredient>양파</MainIngredient>
-                <MainIngredient>계란</MainIngredient>
-                <MainIngredient>파</MainIngredient>
-                <MainIngredient>밥</MainIngredient>
+                {ingredients.main.map((item) => {
+                  return (
+                    <MainIngredient key={item.id}>{item.name}</MainIngredient>
+                  );
+                })}
               </MainIngredientContainer>
             </HiddenMainIngredient>
             <HiddenSubIngredient>
               <SubIngredientText>부 재료</SubIngredientText>
               <SubIngredientContainer>
-                <SubIngredient>간장</SubIngredient>
-                <SubIngredient>식용유</SubIngredient>
-                <SubIngredient>참기름</SubIngredient>
-                <SubIngredient>참깨</SubIngredient>
+                {ingredients.sub.map((item) => {
+                  return (
+                    <MainIngredient key={item.id}>{item.name}</MainIngredient>
+                  );
+                })}
               </SubIngredientContainer>
             </HiddenSubIngredient>
             <HiddenCookingTimeContainer>
               <HiddenCookingTimeText>요리 시간 :</HiddenCookingTimeText>
-              <HiddenCookingTime>10:00</HiddenCookingTime>
+              <HiddenCookingTime>{`${time}:00`}</HiddenCookingTime>
             </HiddenCookingTimeContainer>
             <HiddenDifficultyContainer>
               <HiddenDifficultyText>요리 난이도 :</HiddenDifficultyText>
-              <HiddenDifficulty>{difficulty.soso}</HiddenDifficulty>
+              <HiddenDifficulty>{handleLevel(level)}</HiddenDifficulty>
             </HiddenDifficultyContainer>
           </HiddenTextContainer>
         </HiddenRightContainer>

@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Nav from "components/Nav/Nav";
 import MyPageProfileImg from "components/Profile/MyPage/MyPageProfileImg";
+import MyPageEditProfileImg from "components/Profile/MyPage/MyPageEditProfileImg";
 import Card from "components/Card/MyPage/Card";
+import BookmarkCard from "components/Card/MyPage/BookmarkCard";
 import FollowingModal from "components/FollowModal/FollowingModal";
 import FollowerModal from "components/FollowModal/FollowerModal";
+import { useSelector } from "react-redux";
+import axios from "axios";
+import { RootState } from "reducers";
 import {
   PageContainer,
   UserProfileContainer,
@@ -47,6 +52,25 @@ import {
   ModalBackground2,
 } from "./styles";
 
+interface Post {
+  amount: number;
+  createdAt: string;
+  estTime: number;
+  id: number;
+  level: number;
+  thumbnail: string;
+  title: string;
+  updatedAt: string;
+  userId: number;
+  views: number;
+}
+
+interface EditInfo {
+  password?: string | undefined;
+  nickname?: string | undefined;
+  profile?: string | undefined;
+}
+
 const MyPage = () => {
   const [passwordModalEdit, setPasswordModalEdit] = useState<boolean>(false);
   const [passwordModalWithDraw, setPasswordModalWithDraw] =
@@ -56,7 +80,9 @@ const MyPage = () => {
   const [myPostNum, setMyPostNum] = useState<number>(6);
   const [bookmarkNum, setBookmarkNum] = useState<number>(6);
   const [standardNum, setStandardNum] = useState<number>(6);
-  const [nickname, setNickname] = useState<string>("Lorem");
+  const [nickname, setNickname] = useState<string>("");
+  const [followingNum, setFollowingNum] = useState<number>(0);
+  const [followerNum, setFollowerNum] = useState<number>(0);
   const [followingModal, setFollowingModal] = useState<boolean>(false);
   const [followerModal, setFollowerModal] = useState<boolean>(false);
   const [editInfoModal, setEditInfoModal] = useState<boolean>(false);
@@ -66,9 +92,43 @@ const MyPage = () => {
   const [editNickName, setEditNickName] = useState<string>("");
   const [editPassword, setEditPassword] = useState<string>("");
   const [editIntroduce, setEditIntroduce] = useState<string>("");
-  const [introduce, setIntroduce] = useState<string>(
-    "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Inprovident aperiam incidunt adipisci quas maxime harum recusandae inventore. Facilis impedit nemo distinctio quod eveniet voluptas alias atque sed nam. Qui."
+  const [profileImg, setProfileImg] = useState<string | null>("");
+  const [myPostData, setMyPostData] = useState<any>([]);
+  const [bookmarkData, setBookmarkData] = useState<any>([]);
+  const [introduce, setIntroduce] = useState<string>("");
+  const [id, setId] = useState<number | null>(null);
+  const [followeeInfo, setFolloweeInfo] = useState<any>([]);
+  const [followerInfo, setFollowerInfo] = useState<any>([]);
+  const [temporaryImg, setTemporaryImg] = useState<string>("");
+  const accessToken = useSelector(
+    (state: RootState) => state.AccesstokenReducer.accesstoken
   );
+
+  async function getData() {
+    const response = await axios.get(
+      `${process.env.REACT_APP_SERVER_URL}/me?tokenType=jwt`,
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    const data = response.data.data;
+    setNickname(data.nickname);
+    setIntroduce(data.profile);
+    setProfileImg(`${process.env.REACT_APP_S3_IMG_URL}${data.imageUrl}`);
+    setMyPostData(data.recipes);
+    setBookmarkData(data.bookmarks);
+    setFollowingNum(data.followees);
+    setFollowerNum(data.followers);
+    setId(data.id);
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   // 반응형 웹 : 너비가 줄어들면 줄어든 만큼 조금 보여주기
   // useEffect(() => {
@@ -80,14 +140,178 @@ const MyPage = () => {
     setFollowerModal(false);
   };
 
-  const passwordCheckEdit = () => {
-    setPasswordModalEdit(false);
-    setEditInfoModal(true);
+  const passwordCheckEdit = async () => {
+    try {
+      const data = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/checkMyInfo?tokenType=jwt`,
+        {
+          password: password,
+        },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      setPasswordModalEdit(false);
+      setEditInfoModal(true);
+      setEditNickName(nickname);
+      setEditIntroduce(introduce);
+      setEditPassword(password);
+    } catch (err) {
+      alert("비밀번호가 틀렸습니다");
+    }
   };
 
-  const passwordCheckWithDraw = () => {
-    setPasswordModalWithDraw(false);
-    setCheckWithDrawModal(true);
+  const passwordCheckWithDraw = async () => {
+    const data = await axios.post(
+      `${process.env.REACT_APP_SERVER_URL}/checkMyInfo?tokenType=jwt`,
+      {
+        password: password,
+      },
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    if (data) {
+      setPasswordModalWithDraw(false);
+      setCheckWithDrawModal(true);
+    } else {
+      alert("비밀번호가 틀렸습니다");
+    }
+  };
+
+  const handleChangeMyInfo = async () => {
+    if (temporaryImg) {
+      const formData = new FormData();
+      formData.append("files", temporaryImg);
+      const uploadImg = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/image/${id}/?tokenType=jwt&path=user`,
+        formData,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "multipart/form-data",
+            authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      const url = uploadImg.data.data.imageUrl;
+      setProfileImg(`${process.env.REACT_APP_S3_IMG_URL}${url}`);
+    }
+    const editedInfo: EditInfo = {};
+    if (editPassword !== password) editedInfo.password = editPassword;
+    if (editNickName !== nickname) editedInfo.nickname = editNickName;
+    if (editIntroduce !== introduce) editedInfo.profile = editIntroduce;
+    console.log(editedInfo);
+    if (Object.keys(editedInfo).length !== 0) {
+      await axios.patch(
+        `${process.env.REACT_APP_SERVER_URL}/me?tokenType=jwt`,
+        editedInfo,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      getData();
+      setEditInfoModal(false);
+    } else if (temporaryImg) {
+      setEditInfoModal(false);
+    } else {
+      setEditInfoModal(false);
+      alert("바뀐 정보가 없습니다");
+    }
+  };
+
+  const handleWithDraw = async () => {
+    try {
+      await axios.delete(
+        `${process.env.REACT_APP_SERVER_URL}/me?tokenType=jwt`,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleFollowingModalOn = async () => {
+    const data = await axios.get(
+      `${process.env.REACT_APP_SERVER_URL}/user/${id}/followee?tokenType=jwt`,
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    setFolloweeInfo(data.data.data);
+    setFollowingModal(true);
+  };
+
+  const handleFollowerModalOn = async () => {
+    const data = await axios.get(
+      `${process.env.REACT_APP_SERVER_URL}/user/${id}/follower?tokenType=jwt`,
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    setFollowerInfo(data.data.data);
+    setFollowerModal(true);
+  };
+
+  const removeMyPost = async (i: number, id: number) => {
+    const copiedData = myPostData.slice();
+    copiedData.splice(i, 1);
+    setMyPostData(copiedData);
+    const data = await axios.delete(
+      `${process.env.REACT_APP_SERVER_URL}/recipe/${id}?tokenType=jwt`,
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+  };
+
+  const removeBookmarkCheck = async (i: number, id: number) => {
+    const copiedData = bookmarkData.slice();
+    copiedData.splice(i, 1);
+    setBookmarkData(copiedData);
+    console.log(
+      `${process.env.REACT_APP_SERVER_URL}/${id}/bookmarks?tokenType=jwt`
+    );
+    const data = await axios.delete(
+      `${process.env.REACT_APP_SERVER_URL}/${id}/bookmarks?tokenType=jwt`,
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
   };
 
   return (
@@ -97,7 +321,7 @@ const MyPage = () => {
         <UserProfileContainer>
           <ProfileImgContainer>
             <MyPageProfileImg
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLHvzyqlpe7Aw_qH5ZR5fvjErwjzNuqIlc6A&usqp=CAU"
+              src={profileImg ? profileImg : undefined}
               size={15}
             />
           </ProfileImgContainer>
@@ -118,12 +342,14 @@ const MyPage = () => {
           </ProfileContentsContainer>
         </UserProfileContainer>
         <FollowContainer>
-          <FollowBtn onClick={() => setFollowingModal(true)}>
+          <FollowBtn onClick={() => handleFollowingModalOn()}>
             Following
           </FollowBtn>
-          <FollowNum>123</FollowNum>
-          <FollowBtn onClick={() => setFollowerModal(true)}>Follower</FollowBtn>
-          <FollowNum>234</FollowNum>
+          <FollowNum>{followingNum}</FollowNum>
+          <FollowBtn onClick={() => handleFollowerModalOn()}>
+            Follower
+          </FollowBtn>
+          <FollowNum>{followerNum}</FollowNum>
         </FollowContainer>
         <MyPostContainer>
           <MyPostTitle>내 글 목록</MyPostTitle>
@@ -136,17 +362,23 @@ const MyPage = () => {
           </EditBtn>
           <DivisionLine />
           <GridContainer>
-            {dummy.slice(0, myPostNum).map((el, i) => (
-              <Card key={i} fix={myPostFix} />
+            {myPostData.slice(0, myPostNum).map((el: any, i: number) => (
+              <Card
+                removeMyPost={removeMyPost}
+                index={i}
+                key={i}
+                postData={el}
+                fix={myPostFix}
+              />
             ))}
           </GridContainer>
           <IconContainer>
-            {myPostNum > standardNum && dummy.length > standardNum && (
+            {myPostNum > standardNum && myPostData.length > standardNum && (
               <MinusIcon
                 onClick={() => setMyPostNum(myPostNum - standardNum)}
               />
             )}
-            {dummy.length > myPostNum && (
+            {myPostData.length > myPostNum && (
               <PlusIcon onClick={() => setMyPostNum(myPostNum + standardNum)} />
             )}
           </IconContainer>
@@ -162,17 +394,23 @@ const MyPage = () => {
           </EditBtn>
           <DivisionLine />
           <GridContainer>
-            {dummy.slice(0, bookmarkNum).map((el, i) => (
-              <Card key={i} fix={bookmarkFix} />
+            {bookmarkData.slice(0, bookmarkNum).map((el: any, i: number) => (
+              <BookmarkCard
+                removeBookmarkCheck={removeBookmarkCheck}
+                index={i}
+                key={i}
+                postData={el}
+                fix={bookmarkFix}
+              />
             ))}
           </GridContainer>
           <IconContainer>
-            {myPostNum > standardNum && dummy.length > standardNum && (
+            {bookmarkNum > standardNum && bookmarkData.length > standardNum && (
               <MinusIcon
                 onClick={() => setBookmarkNum(bookmarkNum - standardNum)}
               />
             )}
-            {dummy.length >= bookmarkNum && (
+            {bookmarkData.length >= bookmarkNum && (
               <PlusIcon
                 onClick={() => setBookmarkNum(bookmarkNum + standardNum)}
               />
@@ -184,9 +422,17 @@ const MyPage = () => {
         <ModalBackground onClick={() => ModalOff()} />
       ) : null}
       {followingModal && (
-        <FollowingModal setFollowingModal={setFollowingModal} />
+        <FollowingModal
+          follow={followeeInfo}
+          setFollowingModal={setFollowingModal}
+        />
       )}
-      {followerModal && <FollowerModal setFollowerModal={setFollowerModal} />}
+      {followerModal && (
+        <FollowerModal
+          follow={followerInfo}
+          setFollowerModal={setFollowerModal}
+        />
+      )}
       {passwordModalEdit && (
         <>
           <ModalBackground2 onClick={() => setPasswordModalEdit(false)} />
@@ -223,7 +469,7 @@ const MyPage = () => {
           <CheckWithDrawContainer>
             <CheckPasswordText>탈퇴하시겠습니까?</CheckPasswordText>
             <BtnContainer>
-              <WithDrawBtn>네</WithDrawBtn>
+              <WithDrawBtn onClick={() => handleWithDraw()}>네</WithDrawBtn>
               <WithDrawBtn onClick={() => setCheckWithDrawModal(false)}>
                 아니요
               </WithDrawBtn>
@@ -237,8 +483,11 @@ const MyPage = () => {
           <EditInfoContainer>
             <CheckPasswordText>개인정보 수정</CheckPasswordText>
             <EditInfoImgContainer>
-              <MyPageProfileImg
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLHvzyqlpe7Aw_qH5ZR5fvjErwjzNuqIlc6A&usqp=CAU"
+              <MyPageEditProfileImg
+                userId={id}
+                setTemporaryImg={setTemporaryImg}
+                setProfileImg={setProfileImg}
+                src={profileImg ? profileImg : undefined}
                 size={12}
                 fix={true}
               />
@@ -264,7 +513,9 @@ const MyPage = () => {
                 onChange={(e) => setEditIntroduce(e.target.value)}
               />
             </InputContainer>
-            <CheckPasswordBtn>확인</CheckPasswordBtn>
+            <CheckPasswordBtn onClick={() => handleChangeMyInfo()}>
+              확인
+            </CheckPasswordBtn>
           </EditInfoContainer>
         </>
       )}

@@ -1,5 +1,7 @@
 import axios, { Method } from "axios";
 import getLoginInfo from "./getLogininfo";
+import { useSelector } from "react-redux";
+import { RootState } from "reducers";
 
 const serverURL = process.env.REACT_APP_SERVER_URL;
 
@@ -8,7 +10,9 @@ export const axiosRequest = async <D>(
   endPoint: string,
   data?: D
 ): Promise<D | void> => {
-  const { accessToken, loginType } = getLoginInfo();
+  const accesstoken = useSelector(
+    (state: RootState) => state.AccesstokenReducer.accesstoken
+  );
 
   try {
     const response = await axios({
@@ -17,7 +21,7 @@ export const axiosRequest = async <D>(
       data,
       headers: {
         authorization: `Bearer ${accessToken}`,
-        loginType: loginType,
+        // loginType: loginType,
       },
     });
 
@@ -27,6 +31,6 @@ export const axiosRequest = async <D>(
   }
 };
 
-axiosRequest.defaulProps = {
+axiosRequest.defaultProps = {
   data: {},
 };
