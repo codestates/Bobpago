@@ -262,6 +262,7 @@ export class AuthService {
     const accessToken = tokenData.data.access_token;
     const refreshToken = tokenData.data.refresh_token;
 
+    console.log(tokenData);
     // 2. 사용자 정보 받기
     const userData = await axios.get('https://kapi.kakao.com/v2/user/me', {
       headers: {
@@ -423,7 +424,7 @@ export class AuthService {
         grant_type: 'authorization_code',
         client_id: process.env.GOOGLE_CLIENT_ID,
         client_secret: process.env.GOOGLE_CLIENT_SECRET,
-        redirect_uri: `http://localhost:3001/auth/google`,
+        redirect_uri: `${process.env.REDIRECT_URI}/google`,
         code,
         scope,
       }),

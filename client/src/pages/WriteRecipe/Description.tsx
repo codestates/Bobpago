@@ -48,7 +48,7 @@ const Description = ({
   const [modalOn, setModalOn] = useState<boolean>(false);
   const frontCoverRef = useRef<any>(null);
   const accessToken = useSelector(
-    (state: RootState) => state.AccesstokenReducer.accesstoken
+    (state: RootState) => state.AccesstokenReducer.accessToken
   );
   const contents = useSelector(
     (state: RootState) => state.WriteRecipeContentsReducer
