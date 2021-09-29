@@ -1,6 +1,9 @@
 import DRModalContent from "components/DRModalContent/DRModalContent";
+import axios from "axios";
 import { TotalSudoContainer } from "components/DRModalContent/styles";
-import React from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "reducers";
+import React, { useState, useEffect } from "react";
 import {
   CommentModal,
   CommentContainer,
@@ -18,6 +21,26 @@ interface DRModalProps {
 }
 
 const DRModal: React.FC<DRModalProps> = ({ handleModalClose }) => {
+  const accessToken = useSelector(
+    (state: RootState) => state.AccesstokenReducer.accessToken
+  );
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
+  const id = 70;
+
+  async function getData() {
+    const data = await axios.get(`${serverUrl}/recipe/${id}/comment`, {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log(data);
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <CommentModal>
       <TotalSudoContainer onClick={handleModalClose} />

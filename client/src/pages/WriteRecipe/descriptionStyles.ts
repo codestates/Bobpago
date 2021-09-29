@@ -1,5 +1,44 @@
 import styled from "styled-components";
 import { NavigateNext } from "@styled-icons/material-rounded/NavigateNext/NavigateNext";
+import { Upload } from "@styled-icons/bootstrap/Upload/Upload";
+
+export const UploadImg = styled.img`
+  cursor: pointer;
+  width: 4.5em;
+  height: 4.5em;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  transition: all 0.3s ease;
+  &:hover {
+    transform: translate(-50%, 0%) scale(1.1);
+  }
+`;
+
+export const UploadImgText = styled.p`
+  margin: 0 auto;
+  width: 100%;
+  width: 6em;
+  font-size: 20px;
+  display: block;
+  position: relative;
+  transform: translateY(200%);
+  align-text: center;
+  color: #8f8f8f;
+  font-weight: 500;
+`;
+
+export const UploadIcon = styled(Upload)`
+  width: 5em;
+  height: 5em;
+  position: absolute;
+  z-index: 1;
+  fill: #fff;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+`;
 
 export const BookContainer = styled.div`
   position: absolute;
@@ -29,6 +68,8 @@ export const FlipBook = styled.div`
 `;
 
 export const Back = styled.div`
+  text-align: center;
+  justify-contents: center;
   color: #000;
   transform-style: preserve-3d;
   position: absolute;
@@ -104,6 +145,15 @@ export const FrontCoverBack = styled(Back)`
   flex-direction: column;
   background-color: #f3f3f3;
   box-shadow: -6px 0px 8px 1px rgba(0, 0, 0, 0.1);
+  .uploaded {
+    top: 80%;
+    opacity: 0.7;
+  }
+  .food {
+    width: auto;
+    object-fit: center;
+    max-height: 100%;
+  }
 `;
 
 export const FrontCoverFront = styled(Front)`

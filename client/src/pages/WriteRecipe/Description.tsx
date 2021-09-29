@@ -19,6 +19,7 @@ import {
 import Page from "components/Book/Page";
 import {
   BookContainer,
+  UploadImgText,
   Cover,
   FlipBook,
   FrontCoverImg,
@@ -31,6 +32,7 @@ import {
   BackCoverFront,
   PrevPageBtn,
   NextPageBtn,
+  UploadImg,
 } from "./descriptionStyles";
 
 const Description = ({
@@ -44,9 +46,10 @@ const Description = ({
   const [circle2, circle2IsHover] = useHover();
   const [description, setDescriptionPage] = useState<any>([""]);
   const [currentPage, setCurrentPage] = useState<number>(0);
-  const [imgFiles, setImgFiles] = useState<any>([]);
   const [modalOn, setModalOn] = useState<boolean>(false);
+  const [imgFiles, setImgFiles] = useState<any>([]);
   const frontCoverRef = useRef<any>(null);
+  const inputFileRef = useRef<any>(null);
   const accessToken = useSelector(
     (state: RootState) => state.AccesstokenReducer.accessToken
   );
@@ -122,6 +125,7 @@ const Description = ({
       }
     );
     const recipeId = data.data.data.recipe.id;
+    console.log(recipeId);
     const formData = new FormData();
     for (let i = 0; i < imgFiles.length; i++) {
       formData.append("files", imgFiles[i]);
@@ -139,16 +143,23 @@ const Description = ({
     );
   };
 
-  const handleImgChange = (e: any, i: number) => {
+  const handleImgChange = (e: any, j: number) => {
     let copiedDescription = description.slice();
     let copiedImgFiles = imgFiles.slice();
     for (let i = 0; i < e.target.files.length; i++) {
-      copiedDescription.push("");
-      copiedImgFiles[i] = e.target.files[i];
+      if (copiedDescription.length < i + j) copiedDescription.push("");
+      copiedImgFiles[i + j] = e.target.files[i];
     }
     setDescription(copiedDescription);
     setImgFiles(copiedImgFiles);
   };
+
+  const handleClickInput = () => {
+    if (inputFileRef.current) {
+      inputFileRef.current.click();
+    }
+  };
+
   return (
     <>
       <DescriptionSlide page={page} scale={scale}>
@@ -160,10 +171,25 @@ const Description = ({
                 <input
                   type="file"
                   multiple
-                  // hidden
+                  ref={inputFileRef}
+                  hidden
                   onChange={(e) => handleImgChange(e, 0)}
                 />
-                {/* <img src={imgFiles[0] && imgFiles[0]} alt="이미지 없음" /> */}
+                {imgFiles[0] && (
+                  <img
+                    className="food"
+                    src={
+                      imgFiles[0] ? URL.createObjectURL(imgFiles[0]) : undefined
+                    }
+                    alt="이미지 없음"
+                  />
+                )}
+                <UploadImg
+                  className={imgFiles[0] ? "uploaded" : "not_yet"}
+                  onClick={() => handleClickInput()}
+                  src="/img/uploadicon.png"
+                />
+                {!imgFiles[0] && <UploadImgText>이미지 업로드</UploadImgText>}
               </FrontCoverBack>
               <FrontCoverFront className="front">
                 <FrontCoverImg src="/img/ingredient.png" />
@@ -176,12 +202,13 @@ const Description = ({
             {description.map((el: any, i: number) => {
               return (
                 <Page
-                  // imgFile={imgFiles[i + 1]}
+                  imgFile={imgFiles[i + 1] && imgFiles[i + 1]}
                   currentPage={currentPage}
                   text={el}
                   key={i}
                   selfPage={i + 1}
                   handleChangeDescription={handleChangeDescription}
+                  handleImgChange={handleImgChange}
                 />
               );
             })}

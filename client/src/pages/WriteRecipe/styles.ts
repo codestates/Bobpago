@@ -43,7 +43,7 @@ export const DescriptionSlide = styled(TitleSlide)<SlideProps>`
 
 export const RecipeTitle = styled.div`
   display: block;
-  margin: 4em auto;
+  margin: 20% auto;
   margin-bottom: 0.5em;
   font-size: 60px;
   font-weight: 500;
@@ -205,7 +205,7 @@ export const TheOtherTimeTooltipText = styled.span`
 `;
 export const ExpectedTimeContainer = styled.div`
   margin-bottom: 1em;
-  margin-top: 7em;
+  margin-top: 11%;
 `;
 
 export const ExpectedPeopleContainer = styled(ExpectedTimeContainer)`
@@ -238,7 +238,7 @@ export const IngredientTitle = styled(RecipeTitle)`
 `;
 
 export const DifficultyTitle = styled(IngredientTitle)`
-  margin-top: 3.5em;
+  margin-top: 13%;
 `;
 
 export const SearchBarTooltip = styled(ExpectedTimeTooltip)``;
@@ -249,12 +249,12 @@ interface PageProps {
 }
 
 export const NextButton = styled.button<PageProps>`
-  font-size: 18px;
+  font-size: 20px;
   position: fixed;
-  bottom: 2em;
+  bottom: 4%;
   z-index: 1;
   position: absolute;
-  right: 2%;
+  right: 3%;
   width: 8em;
   height: 2.5em;
   background-color: #167ece;
@@ -275,8 +275,7 @@ export const NextButton = styled.button<PageProps>`
 
 export const PrevButton = styled(NextButton)<PageProps>`
   position: fixed;
-  left: 2%;
-  bottom: 2em;
+  left: 3%;
   display: ${(props) => (props.page === 0 ? "block" : "none")};
   z-index: ${(props) => (props.page === props.self ? "99" : "1")};
 `;
