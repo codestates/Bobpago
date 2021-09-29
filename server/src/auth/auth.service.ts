@@ -94,6 +94,8 @@ export class AuthService {
           message: '로그아웃에 성공하였습니다.',
         };
       // 3. naver 로그아웃의 경우
+      case 'google':
+      // 4. google 로그아웃의 경우
       case 'naver':
         await this.usersRepository.update(user.id, { refreshToken: null });
         return {
@@ -101,9 +103,6 @@ export class AuthService {
           statusCode: 200,
           message: '로그아웃에 성공하였습니다.',
         };
-      // 4. google 로그아웃의 경우
-      case 'google':
-        break;
       // 5. 토큰타입 명시 오류
       default:
         throw new BadRequestException();
@@ -225,7 +224,46 @@ export class AuthService {
 
     // 4. google 새로운 토큰 발급
     else if (tokenType === 'google') {
-      throw new UnauthorizedException();
+      const user = await this.usersRepository.findOne({
+        id: +userId,
+      });
+
+      const formUrlEncoded = (data) => {
+        return Object.keys(data).reduce((acc, curr) => {
+          return acc + `&${curr}=${encodeURIComponent(data[curr])}`;
+        }, '');
+      };
+
+      try {
+        const result = await axios.post(
+          'https://accounts.google.com/o/oauth2/token',
+          formUrlEncoded({
+            grant_type: 'refresh_token',
+            client_id: process.env.GOOGLE_CLIENT_ID,
+            client_secret: process.env.GOOGLE_CLIENT_SECRET,
+            refresh_token: user.refreshToken,
+          }),
+          {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            withCredentials: true,
+          },
+        );
+        console.log(result);
+        return {
+          data: {
+            tokenType: 'google',
+            accessToken: result.data.access_token,
+          },
+          statusCode: 200,
+          message: '새로운 토큰이 발급되었습니다.',
+        };
+      } catch (err) {
+        throw new UnauthorizedException(
+          '토큰의 유효기간이 만료되었습니다. 다시 로그인해주세요',
+        );
+      }
     }
 
     // 5. 토큰 타입에 제대로된 정보를 담지 않은 경우
@@ -403,21 +441,12 @@ export class AuthService {
   }
 
   async googleSignIn(code: string, scope: string): Promise<any> {
-    // 0. form-urlencoded 인코딩 함수
-
-    // {
-    //   code: '4/0AX4XfWj1Ummhuq76_XLW6fbV2tNDubaV_ShNMUdNks1M3HkQP20logd5hHWhelFvgJOsgw',
-    //       scope: 'email profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile openid',
-    //     authuser: '0',
-    //     prompt: 'consent'
-    // }
     const formUrlEncoded = (data) => {
       return Object.keys(data).reduce((acc, curr) => {
         return acc + `&${curr}=${encodeURIComponent(data[curr])}`;
       }, '');
     };
 
-    //https://oauth2.googleapis.com/token
     const tokenData = await axios.post(
       'https://oauth2.googleapis.com/token',
       formUrlEncoded({
