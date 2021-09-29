@@ -315,6 +315,7 @@ export const IconClose = styled.svg`
   right: 1.5em;
   fill: #302d2c;
   height: 1em;
+  cursor: pointer;
   path {
     fill: #bababa;
   }

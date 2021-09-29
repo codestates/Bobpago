@@ -1,5 +1,6 @@
 import styled, { keyframes } from "styled-components";
 import { QuestionCircle } from "@styled-icons/bootstrap/QuestionCircle";
+import { main } from "theme";
 
 export const animate = keyframes`
     0% {
@@ -21,7 +22,7 @@ export const animate = keyframes`
 
 export const pageLeftMoveAnimate = keyframes`
     0% {
-      transform: translateX(100%);
+      transform: translate(100%,-100%);
     }
 
     20% {
@@ -63,7 +64,7 @@ export const QuestionMove = keyframes`
 export const TotalMatchContainer = styled.div`
   width: 100%;
   height: 100vh;
-  background-color: #eeeeee;
+  background-color: ${main.bg};
   position: relative;
   overflow: hidden;
   .lineear {
@@ -90,15 +91,20 @@ export const EggPago = styled.img`
 
 export const MatchTextContainer = styled.div`
   position: absolute;
-  top: 20%;
-  left: 26%;
+  width: 100%;
+  height: 40%;
   display: flex;
+  justify-content: center;
   align-items: center;
   flex-direction: column;
+  /* transform: translateY(-25%); */
+  top: 5%;
+  z-index: 1;
 `;
 
 export const MatchTopContainer = styled.div`
   display: flex;
+  position: relative;
 `;
 
 export const MatchText = styled.div`
@@ -108,6 +114,10 @@ export const MatchText = styled.div`
   text-shadow: -1px -1px 2px #000, 1px -1px 2px #000, -1px 1px 2px #000,
     1px 1px 2px #000;
   margin-right: 0.3em;
+
+  @media only screen and (max-width: 768px) {
+    font-size: 24px;
+  }
 `;
 
 export const MatchTooltip = styled.div`
@@ -128,11 +138,20 @@ export const MatchTooltip = styled.div`
   top: -33%;
   left: 102%;
   z-index: 100;
+  @media only screen and (max-width: 768px) {
+    font-size: 10px;
+    top: -100%;
+    width: 14em;
+    left: 103%;
+  }
   span {
     font-size: 12px;
     font-weight: 700;
     margin-top: 1em;
     color: #aa0000;
+    @media only screen and (max-width: 768px) {
+      font-size: 10px;
+    }
   }
   ::before {
     content: "";
@@ -145,21 +164,34 @@ export const MatchTooltip = styled.div`
     left: -2.7%;
     background-color: #ffffff;
     transform: rotateZ(45deg);
+    @media only screen and (max-width: 768px) {
+      left: -4.5%;
+    }
   }
 `;
 
 export const MatchCardScroll = styled.div`
   position: absolute;
   width: 100%;
-  height: 70%;
+  height: 100%;
   bottom: 0%;
   background: transparent;
   display: flex;
   align-items: center;
   transform: translateY(100%);
   transition: 1.3s;
+  overflow: hidden;
+  overflow-x: scroll;
+  z-index: 1;
   transition-timing-function: cubic-bezier(1, -0.275, 0.44, 1.25);
   /* z-index: 100; */
+  ::-webkit-scrollbar {
+    background-color: #ee9999;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #ff4040;
+  }
 `;
 
 export const MatchCardContainer = styled.div`
@@ -167,14 +199,10 @@ export const MatchCardContainer = styled.div`
   height: 100%;
   display: flex;
   align-items: center;
-  overflow: auto;
   z-index: 90;
+  top: 15%;
   position: absolute;
   transition: 1.3s;
-
-  ::-webkit-scrollbar {
-    width: 0;
-  }
 
   .active {
     display: flex;
@@ -183,8 +211,8 @@ export const MatchCardContainer = styled.div`
     background-color: #ffffff;
     position: fixed;
     left: 10%;
-    top: -20%;
-    z-index: 100;
+    top: 15%;
+    z-index: 1000;
     transition: 0.5s;
     border-radius: 15px;
     /* transition-timing-function: cubic-bezier(1, 2, 0.44, 1.25); */
@@ -208,10 +236,13 @@ export const HiddenPage = styled.div`
   width: 120%;
   height: 120%;
   background-color: #000000;
-  transform: translateX(100%);
+  transform: translate(100%, -100%);
   transition: 1s;
   border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
   z-index: 1000;
+  position: absolute;
+  top: 0;
+  left: 0;
 `;
 
 export const QuestionIcons = styled(QuestionCircle)`
@@ -229,4 +260,16 @@ export const QuestionIcons = styled(QuestionCircle)`
 export const MyIngredient = styled.div`
   margin-top: 0.5em;
   font-size: 24px;
+  @media only screen and (max-width: 768px) {
+    font-size: 16px;
+  }
+`;
+
+export const Linear = styled.div`
+  position: absolute;
+  top: 55%;
+  width: 100%;
+  height: 5px;
+  background-color: #bd3737;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
 `;

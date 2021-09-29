@@ -20,7 +20,6 @@ import AuthLoading from "pages/AuthLoading/AuthLoading";
 import NaverLoading from "pages/AuthLoading/NaverLoading";
 import GoogleLoading from "pages/AuthLoading/GoogleLoading";
 import { GET_ALL_DATA, GET_SMALL_DATA } from "actions/IngredientAction";
-
 function App() {
   const dispatch = useDispatch();
 
@@ -65,7 +64,7 @@ function App() {
       <Route path="/matching">
         <MatchingRecipe />
       </Route>
-      <Route path="/detailrecipe">
+      <Route path="/detailrecipe/:recipeId">
         <DetailRecipe />
       </Route>
       <Route path="/writerecipe">
