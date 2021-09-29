@@ -31,7 +31,7 @@ const MyPageEditProfileImg = ({
   const InputImgRef = useRef<any>(null);
   const [img, setImg] = useState("");
   const accessToken = useSelector(
-    (state: RootState) => state.AccesstokenReducer.accesstoken
+    (state: RootState) => state.AccesstokenReducer.accessToken
   );
   console.log(userId);
   const handleInputClick = () => {

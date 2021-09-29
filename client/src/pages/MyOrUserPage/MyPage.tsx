@@ -101,7 +101,7 @@ const MyPage = () => {
   const [followerInfo, setFollowerInfo] = useState<any>([]);
   const [temporaryImg, setTemporaryImg] = useState<string>("");
   const accessToken = useSelector(
-    (state: RootState) => state.AccesstokenReducer.accesstoken
+    (state: RootState) => state.AccesstokenReducer.accessToken
   );
 
   async function getData() {

@@ -5,13 +5,13 @@ import { RootState } from "reducers";
 
 const serverURL = process.env.REACT_APP_SERVER_URL;
 
-export const axiosRequest = async <D>(
+export const AxiosRequest = async <D>(
   method: Method,
   endPoint: string,
   data?: D
 ): Promise<D | void> => {
-  const accesstoken = useSelector(
-    (state: RootState) => state.AccesstokenReducer.accesstoken
+  const accessToken = useSelector(
+    (state: RootState) => state.AccesstokenReducer.accessToken
   );
 
   try {
@@ -31,6 +31,6 @@ export const axiosRequest = async <D>(
   }
 };
 
-axiosRequest.defaultProps = {
+AxiosRequest.defaultProps = {
   data: {},
 };
