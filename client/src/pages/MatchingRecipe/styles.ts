@@ -94,6 +94,11 @@ export const MatchTextContainer = styled.div`
   left: 26%;
   display: flex;
   align-items: center;
+  flex-direction: column;
+`;
+
+export const MatchTopContainer = styled.div`
+  display: flex;
 `;
 
 export const MatchText = styled.div`
@@ -136,7 +141,7 @@ export const MatchTooltip = styled.div`
     border-left: 1px solid black;
     border-bottom: 1px solid black;
     position: absolute;
-    top: 40%;
+    top: 45%;
     left: -2.7%;
     background-color: #ffffff;
     transform: rotateZ(45deg);
@@ -154,7 +159,7 @@ export const MatchCardScroll = styled.div`
   transform: translateY(100%);
   transition: 1.3s;
   transition-timing-function: cubic-bezier(1, -0.275, 0.44, 1.25);
-  z-index: 100;
+  /* z-index: 100; */
 `;
 
 export const MatchCardContainer = styled.div`
@@ -219,4 +224,9 @@ export const QuestionIcons = styled(QuestionCircle)`
   &:hover {
     animation: normal;
   }
+`;
+
+export const MyIngredient = styled.div`
+  margin-top: 0.5em;
+  font-size: 24px;
 `;

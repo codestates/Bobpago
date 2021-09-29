@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Nav from "components/Nav/Nav";
-import React from "react";
+import React, { useRef } from "react";
 import {
   MainContainer,
   TotalContainer,
@@ -21,6 +21,12 @@ import {
   GoodCookerSearchForm,
   GoodCookerSearch,
   SearchIcon,
+  LeftSurvayTooltip,
+  LeftQuestionIcons,
+  TooltipContainer,
+  RightSurvayTooltip,
+  RightQuestionIcons,
+  RightTooltipContainer,
 } from "./styles";
 
 import Ball from "components/Svg/Ball/Ball";
@@ -28,9 +34,9 @@ import { useState } from "react";
 import { useEffect } from "react";
 import Ingredient from "components/Ingredient/Ingredient";
 import { useDispatch, useSelector } from "react-redux";
-import { GET_FILTER_DATA } from "actions/IngredientAction";
+import { CLEAR_CLICK_DATA, GET_FILTER_DATA } from "actions/IngredientAction";
 import { RootState } from "reducers";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 const Survay = () => {
   const [move, setmove] = useState<number>(window.innerWidth);
@@ -41,6 +47,9 @@ const Survay = () => {
     (state: RootState) => state.IngredientClickReducer
   );
   const dispatch = useDispatch();
+  const history = useHistory();
+  const tooltipRef = useRef<any>(null);
+  const tooltipRightRef = useRef<any>(null);
 
   // 최초에 무브 컨테이너를 가운데로 두기위해서 사용한 useState이며, type은 number로 선언한다.
 
@@ -73,6 +82,17 @@ const Survay = () => {
   const handleSearch = (payload: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({ type: GET_FILTER_DATA, payload: payload.target.value });
   };
+
+  const handlePageMove = () => {
+    history.push({
+      pathname: "/matching",
+      state: clickState.clickData,
+    });
+  };
+
+  useEffect(() => {
+    dispatch({ type: CLEAR_CLICK_DATA });
+  }, []);
 
   useEffect(() => {
     let resizeTimer: NodeJS.Timeout;
@@ -120,6 +140,20 @@ const Survay = () => {
           />
           <GoodCookerPage>
             <GoodCookerContainer>
+              <TooltipContainer>
+                <LeftQuestionIcons
+                  onMouseEnter={() => {
+                    console.log(tooltipRef);
+                    tooltipRef.current.style.opacity = "1";
+                  }}
+                  onMouseLeave={() => {
+                    tooltipRef.current.style.opacity = "0";
+                  }}
+                />
+                <LeftSurvayTooltip ref={tooltipRef}>
+                  최소한 3개의 재료를 선택해야 넘어갈 수 있습니다!
+                </LeftSurvayTooltip>
+              </TooltipContainer>
               <GoodCookerForm>
                 <GoodCookerTitle>
                   냉장고와 찬장에 있는 재료를 골라주세요!
@@ -135,9 +169,7 @@ const Survay = () => {
                 </GoodCookerSearchForm>
               </GoodCookerForm>
               <Ingredient check="Good" />
-              <Link to="/matching">
-                <PostButton>레시피 찾기</PostButton>
-              </Link>
+              <PostButton onClick={handlePageMove}>레시피 찾기</PostButton>
             </GoodCookerContainer>
           </GoodCookerPage>
           <AreYouGoodPage>
@@ -151,11 +183,24 @@ const Survay = () => {
           </AreYouGoodPage>
           <BadCookerPage>
             <BadCookerContainer>
+              <RightTooltipContainer>
+                <RightQuestionIcons
+                  onMouseEnter={() => {
+                    tooltipRightRef.current.style.opacity = "1";
+                  }}
+                  onMouseLeave={() => {
+                    tooltipRightRef.current.style.opacity = "0";
+                  }}
+                />
+                <RightSurvayTooltip ref={tooltipRightRef}>
+                  최소한 3개의 재료를 선택해야 넘어갈 수 있습니다!
+                </RightSurvayTooltip>
+              </RightTooltipContainer>
               <BadCookerTitleContainer>
                 냉장고와 찬장에 있는 재료를 골라주세요!
               </BadCookerTitleContainer>
               <Ingredient check="Bad" />
-              <PostButton>레시피 찾기</PostButton>
+              <PostButton onClick={handlePageMove}>레시피 찾기</PostButton>
             </BadCookerContainer>
           </BadCookerPage>
         </TotalContainer>

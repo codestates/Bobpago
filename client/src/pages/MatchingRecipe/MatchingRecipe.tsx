@@ -1,3 +1,5 @@
+import { SET_RECIPE } from "actions/Matching";
+import axios from "axios";
 import MatchCard from "components/MatchCard/MatchCard";
 import Circle1 from "components/MovingCircle/Circle1";
 import Circle2 from "components/MovingCircle/Circle2";
@@ -6,6 +8,9 @@ import Lineear from "components/Svg/Lineear/Lineear";
 import Weather from "components/Weather/Weather";
 import React from "react";
 import { useRef, useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router";
+import { RootState } from "reducers";
 import {
   TotalMatchContainer,
   EggPago,
@@ -16,20 +21,50 @@ import {
   QuestionIcons,
   MatchTextContainer,
   MatchTooltip,
+  MatchTopContainer,
+  MyIngredient,
 } from "./styles";
 
 const MatchingRecipe = () => {
-  const dummy: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const cardRef = useRef<any>(null);
   const hiddenRef1 = useRef<any>(null);
   const tooltipRef = useRef<any>(null);
   const sliderRef = useRef<any>(null);
   const [turnOn, setTurnOn] = useState(false);
   const [wind, setWind] = useState(0);
+  const [data, setData] = useState<object[]>([]);
+  const location = useLocation<any>();
+  const dispatch = useDispatch();
+  const matchState = useSelector((state: RootState) => state.MatchingReducer);
+
+  const locationProps = location.state;
+  const locationId = locationProps.map((item: any) => item.id);
+  const locationIngredient = locationProps.map((item: any) => item.name);
 
   let isDown = false;
   let startX: number;
   let scrollLeft: number;
+
+  console.log(locationProps[0].id);
+
+  const handleData = async () => {
+    const data = await axios.post(
+      "http://localhost:3000/recipe/match",
+      {
+        ingredientId: locationId,
+      },
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const MatchingData = data.data.data;
+
+    setData(MatchingData);
+    dispatch({ type: SET_RECIPE, payload: MatchingData });
+  };
 
   const handleSwitch = () => {
     cardRef.current.style.transform = "translateY(120%)";
@@ -51,6 +86,7 @@ const MatchingRecipe = () => {
   };
 
   useEffect(() => {
+    handleData();
     setWind(rotateMaker());
     cardRef.current.style.transform = "translate(0%)";
   }, []);
@@ -68,20 +104,28 @@ const MatchingRecipe = () => {
 
       {/* 타이틀 텍스트 */}
       <MatchTextContainer>
-        <MatchText>밥파고가 추천하는 요리 레시피</MatchText>
-        <QuestionIcons
-          onMouseEnter={() => {
-            tooltipRef.current.style.opacity = "1";
-          }}
-          onMouseLeave={() => {
-            tooltipRef.current.style.opacity = "0";
-          }}
-        />
-        <MatchTooltip ref={tooltipRef}>
-          밥파고의 추천 알고리즘으로 <br /> 생성된 레시피입니다! <br /> 한번
-          골라보세요! <br />
-          <span>마우스를 이용하여 오른쪽에서 왼쪽으로 드래그 해보세요!</span>
-        </MatchTooltip>
+        <MatchTopContainer>
+          <MatchText>밥파고가 추천하는 요리 레시피</MatchText>
+          <QuestionIcons
+            onMouseEnter={() => {
+              tooltipRef.current.style.opacity = "1";
+            }}
+            onMouseLeave={() => {
+              tooltipRef.current.style.opacity = "0";
+            }}
+          />
+          <MatchTooltip ref={tooltipRef}>
+            밥파고의 추천 알고리즘으로 <br /> 생성된 레시피입니다! <br /> 한번
+            골라보세요! <br />
+            <span>마우스를 이용하여 오른쪽에서 왼쪽으로 드래그 해보세요!</span>
+          </MatchTooltip>
+        </MatchTopContainer>
+        <MyIngredient>
+          내가 고른 재료:
+          {locationIngredient.map((item: string) => {
+            return <> {item} </>;
+          })}
+        </MyIngredient>
       </MatchTextContainer>
       {/* 타이틀 텍스트 */}
 
@@ -116,14 +160,21 @@ const MatchingRecipe = () => {
           }}
         >
           {!turnOn
-            ? dummy.map((item) => {
+            ? data.map((item: any, i) => {
                 return (
                   <MatchCard
-                    key={item}
+                    key={item.recipe.id}
+                    title={item.recipe.title}
+                    level={item.recipe.level}
+                    amount={item.recipe.amount}
+                    thumbnail={item.recipe.thumbnail}
+                    time={item.recipe.estTime}
+                    views={item.recipe.views}
                     id={idMaker()}
                     wind={wind}
                     rotate={rotateMaker()}
                     handleSwitch={handleSwitch}
+                    ingredients={item.ingredients}
                   />
                 );
               })

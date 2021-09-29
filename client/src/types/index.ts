@@ -33,12 +33,18 @@ export interface Notification {
 export interface IngredientGoodAndBadData {
   badData: Array<{ id?: number; name: string; image: string }>;
   goodData: Array<{ id?: number; name: string; image: string }>;
+  filterData?: Array<{ id?: number; name: string; image: string }> | undefined;
 }
 
 export interface IngredientClickData {
-  clickData: number[];
+  clickData: Array<{ id: number; name: string }>;
 }
 
 export interface Accesstoken {
-  accesstoken: string;
+  accessToken: string;
+  tokenType: string;
+}
+
+export interface MatchRecipe {
+  data: object[];
 }

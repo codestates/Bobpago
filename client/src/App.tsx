@@ -16,9 +16,38 @@ import { Route, Switch, useHistory, withRouter } from "react-router-dom";
 import LandingPage from "pages/LandingPage/LandingPage";
 import { useEffect } from "react";
 import axios from "axios";
+import AuthLoading from "pages/AuthLoading/AuthLoading";
+import NaverLoading from "pages/AuthLoading/NaverLoading";
+import GoogleLoading from "pages/AuthLoading/GoogleLoading";
+import { GET_ALL_DATA, GET_SMALL_DATA } from "actions/IngredientAction";
 
 function App() {
   const dispatch = useDispatch();
+
+  const AllIngredient = async () => {
+    const data = await axios.get("http://localhost:3000/ingredient", {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    dispatch({ type: GET_ALL_DATA, payload: data.data.data });
+  };
+
+  const SmallIngredient = async () => {
+    const data = await axios.get("http://localhost:3000/ingredient/summary", {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    dispatch({ type: GET_SMALL_DATA, payload: data.data.data });
+  };
+
+  useEffect(() => {
+    AllIngredient();
+    SmallIngredient();
+  }, []);
 
   return (
     <Switch>
@@ -53,7 +82,15 @@ function App() {
       <Route path="/userpage/:userId">
         <UserPage />
       </Route>
-      <Route></Route>
+      <Route path="/auth/kakao">
+        <AuthLoading />
+      </Route>
+      <Route path="/auth/naver">
+        <NaverLoading />
+      </Route>
+      <Route path="/auth/google">
+        <GoogleLoading />
+      </Route>
       {/* <FollowModal /> */}
     </Switch>
   );
