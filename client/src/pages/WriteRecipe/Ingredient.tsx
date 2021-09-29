@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
 import useHover from "utils/useHover";
 import Tag from "components/Tag/Tag";
 import WriteRecipeStarRating from "components/StarRating/WriteRecipe/WriteRecipeStarRating";
@@ -40,6 +41,23 @@ const Ingredient = ({
   const [selected, setSelected] = useState<any>([]);
   const wrapperRef = useRef<any>(null);
   const autoRef = useRef<any>(null);
+
+  async function getData() {
+    const data = await axios.get(
+      `${process.env.REACT_APP_SERVER_URL}/ingredient`,
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    await setOptions(data.data.data);
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   useEffect(() => {
     if (circle2IsHover) setCircle2IsHover(true);

@@ -234,11 +234,6 @@ export class AuthService {
     }
   }
 
-  async kakaoAuthRedirect(res: Response): Promise<void> {
-    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}/auth/kakao/redirect`;
-    return res.redirect(kakaoAuthUrl);
-  }
-
   async kakaoSignIn(code: string): Promise<ResType> {
     // 0. form-urlencoded 인코딩 함수
     const formUrlEncoded = (data) => {
@@ -254,7 +249,7 @@ export class AuthService {
         grant_type: 'authorization_code',
         client_id: process.env.KAKAO_CLIENT_ID,
         client_secret: process.env.KAKAO_CLIENT_SECRET,
-        redirect_uri: `${process.env.REDIRECT_URI}/auth/kakao/redirect`,
+        redirect_uri: `${process.env.REDIRECT_URI}/kakao`,
         code,
       }),
       {
@@ -321,11 +316,6 @@ export class AuthService {
         message: '카카오 소셜 회원가입 및 로그인이 완료되었습니다.',
       };
     }
-  }
-
-  async naverAuthRedirect(res: Response): Promise<void> {
-    const naverAuthUrl = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.NAVER_CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}/auth/naver/redirect&state=${process.env.NAVER_STATE}`;
-    return res.redirect(naverAuthUrl);
   }
 
   async naverSignIn(code: string, state: string): Promise<ResType> {
@@ -410,10 +400,6 @@ export class AuthService {
       };
     }
   }
-  async googleAuthRedirect(res: Response): Promise<void> {
-    const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&response_type=code&redirect_uri=http://localhost:3000/auth/google/redirect&scope=https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile+openid&access_type=offline`;
-    return res.redirect(googleAuthUrl);
-  }
 
   async googleSignIn(code: string, scope: string): Promise<any> {
     // 0. form-urlencoded 인코딩 함수
@@ -437,7 +423,7 @@ export class AuthService {
         grant_type: 'authorization_code',
         client_id: process.env.GOOGLE_CLIENT_ID,
         client_secret: process.env.GOOGLE_CLIENT_SECRET,
-        redirect_uri: `http://localhost:3000/auth/google/redirect`,
+        redirect_uri: `http://localhost:3001/auth/google`,
         code,
         scope,
       }),
