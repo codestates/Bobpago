@@ -21,9 +21,14 @@ import gsap from "gsap";
 import { useSelector, useDispatch } from "react-redux";
 import { showSignUp, showNothing } from "actions/SignUpAndSignIn";
 import { RootState } from "reducers";
+import { SET_ACCESSTOKEN } from "actions/Accesstoken";
+import axios from "axios";
 
 const SignIn = () => {
   const state = useSelector((state: RootState) => state.SignUpAndSignInReducer);
+  const signinState = useSelector(
+    (state: RootState) => state.AccesstokenReducer
+  );
   const { loginDisplay } = state;
   const dispatch = useDispatch();
   const LoginRef = useRef<any>(null);
@@ -34,6 +39,10 @@ const SignIn = () => {
   const passwordlPlaceholderRef = useRef<any>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const googleUri = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&response_type=code&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}/google&scope=https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile+openid&access_type=offline`;
+  const kakaoUri = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.REACT_APP_KAKAO_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}/kakao`;
+  const naverUri = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.REACT_APP_NAVER_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}/naver&state=${process.env.REACT_APP_NAVER_STATE}`;
 
   useEffect((): any => {
     if (loginDisplay) {
@@ -49,7 +58,7 @@ const SignIn = () => {
     }
   }, [loginDisplay]);
 
-  const handleLogin = (e: any) => {
+  const handleLogin = async (e: any) => {
     e.preventDefault();
     emailError.current.style.display = "inline-block";
     passwordError.current.style.display = "inline-block";
@@ -57,6 +66,27 @@ const SignIn = () => {
       emailError.current.style.display = "none";
       passwordError.current.style.display = "none";
     }, 2000);
+
+    const signIn = await axios.post(
+      "http://localhost:3000/auth/signin",
+      {
+        email: email,
+        password: password,
+      },
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    dispatch({
+      type: SET_ACCESSTOKEN,
+      payload: {
+        accessToken: signIn.data.data.accessToken,
+        tokenType: signIn.data.data.tokenType,
+      },
+    });
   };
 
   const handleEmailPlaceholderActive = () => {
@@ -156,11 +186,17 @@ const SignIn = () => {
           <OAuthContainer>
             <p>SNS 계정으로 간편 로그인</p>
             <OAuthIconContainer>
-              <img src="/img/google.png" width="37" />
+              <a href={googleUri}>
+                <img className="google" src="/img/google.png" width="37" />
+              </a>
               &nbsp;&nbsp;&nbsp;
-              <img src="/img/kakao.png" width="36" />
+              <a href={kakaoUri}>
+                <img className="kakao" src="/img/kakao.png" width="36" />
+              </a>
               &nbsp;&nbsp;&nbsp;
-              <img src="/img/naver.png" width="36" />
+              <a href={naverUri}>
+                <img className="naver" src="/img/naver.png" width="36" />
+              </a>
             </OAuthIconContainer>
           </OAuthContainer>
         </InputContainer>

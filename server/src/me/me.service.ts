@@ -28,41 +28,28 @@ export class MeService {
     const { email, password, nickname } = createUserDto;
     // const salt = await bcrypt.genSalt();
     // const hashedPassword = await bcrypt.hash(password, salt);
-    const user = await this.usersRepository.findOne({ email });
-    if (!user) {
-      const newUser = this.usersRepository.create({
-        email,
-        password,
-        nickname,
-      });
-      try {
-        await this.usersRepository.save(newUser); // 유니크 조건에 통과했을때
-        delete user.password;
-        delete user.refreshToken;
-        return {
-          data: { ...newUser },
-          statusCode: 201,
-          message: `회원가입이 완료되었습니다.`,
-        };
-      } catch (err) {
-        if (err.code === 'ER_DUP_ENTRY') {
-          // 유니크 조건 통과 안됬을때
-          throw new ConflictException('이미 회원가입이 되어있습니다.');
-        } else {
-          throw new InternalServerErrorException();
-        }
-      }
-    } else {
-      delete user.password;
-      delete user.refreshToken;
+    const newUser = this.usersRepository.create({
+      email,
+      password,
+      nickname,
+    });
+    try {
+      await this.usersRepository.save(newUser); // 유니크 조건에 통과했을때
       return {
-        data: { ...user },
+        data: null,
         statusCode: 201,
         message: `회원가입이 완료되었습니다.`,
       };
+    } catch (err) {
+      if (err.code === 'ER_DUP_ENTRY') {
+        // 유니크 조건 통과 안됬을때
+        throw new ConflictException('이미 회원가입이 되어있습니다.');
+      } else {
+        throw new InternalServerErrorException();
+      }
     }
   }
-
+  //
   async getMyInfo(user: User): Promise<ResType> {
     const followees = user.followees.length;
     const followers = user.followers.length;

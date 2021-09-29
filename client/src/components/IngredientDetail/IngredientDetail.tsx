@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BadCookerRecipe } from "./styles";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "reducers";
@@ -9,7 +9,7 @@ const IngredientDetail = ({
   name,
   image,
 }: {
-  id: number;
+  id?: number;
   name: string;
   image: string;
 }) => {
@@ -19,16 +19,27 @@ const IngredientDetail = ({
   );
   const dispatch = useDispatch();
 
+  const thumbnailSrc = process.env.REACT_APP_S3_IMG_URL;
+
   const handleClick = (): void => {
     setLight(!light);
-    dispatch({ type: CLICK_DATA, payload: id });
-    console.log(clickState);
+    dispatch({ type: CLICK_DATA, payload: { id, name } });
   };
+
+  useEffect(() => {
+    if (
+      clickState.clickData.filter((item) => {
+        return item.id === id;
+      }).length === 1
+    ) {
+      setLight(!light);
+    }
+  }, []);
 
   return (
     <BadCookerRecipe onClick={handleClick} light={light}>
       <h1>{name}</h1>
-      <img src={image} alt="" />
+      <img src={thumbnailSrc + image} alt="" />
     </BadCookerRecipe>
   );
 };

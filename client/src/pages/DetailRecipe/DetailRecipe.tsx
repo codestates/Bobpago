@@ -90,7 +90,6 @@ const DetailRecipe = () => {
     const randomPick: number = Math.floor(
       Math.random() * positionArr.length - 1
     );
-    console.log(randomPick);
 
     return positionArr[randomPick];
   };
@@ -98,6 +97,10 @@ const DetailRecipe = () => {
   const endPositionMaker = () => {
     // 파고 마지막 위치 조절
     return Math.floor(Math.random() * 10);
+  };
+
+  const pagoTimeMaker = () => {
+    return Math.floor(Math.random() * 5 + 3);
   };
 
   useEffect(() => {
@@ -119,15 +122,43 @@ const DetailRecipe = () => {
         duration: 0.5,
       });
 
-      rightScrollRef.current.style.transform = `translateY(${i * -262}px)`;
-      topBoxRef.current.style.transform = `translateY(${i * -100}%)`;
-      leftBoxRef.current.style.transform = `translateX(${i * -moveRatio}%)`;
-      rightBoxRef.current.style.transform = `translateX(${
+      const image = document.body.querySelector(
+        ".image"
+      ) as HTMLParagraphElement;
+      const rightScroll = document.body.querySelector(
+        ".rightScroll"
+      ) as HTMLParagraphElement;
+      const topBox = document.body.querySelector(
+        ".topbox"
+      ) as HTMLParagraphElement;
+      const leftBox = document.body.querySelector(
+        ".leftbox"
+      ) as HTMLParagraphElement;
+      const rightBox = document.body.querySelector(
+        ".rightbox"
+      ) as HTMLParagraphElement;
+      const main = document.body.querySelector(".main") as HTMLParagraphElement;
+      const sub = document.body.querySelector(".sub") as HTMLParagraphElement;
+
+      rightScroll.style.transform = `translateY(${i * -262}px)`;
+      topBox.style.transform = `translateY(${i * -100}%)`;
+      leftBox.style.transform = `translateX(${i * -moveRatio}%)`;
+      rightBox.style.transform = `translateX(${
         moveRatio - 100 - moveRatio * -i
       }%)`;
-      imageRef.current.style.transform = `translateY(${i * -100}%)`;
-      mainRef.current.style.transform = `translateY(${i * -100}%)`;
-      subRef.current.style.transform = `translateY(${i * -100}%)`;
+      image.style.transform = `translateY(${i * -100}%)`;
+      main.style.transform = `translateY(${i * -100}%)`;
+      sub.style.transform = `translateY(${i * -100}%)`;
+
+      // rightScrollRef.current.style.transform = `translateY(${i * -262}px)`;
+      // topBoxRef.current.style.transform = `translateY(${i * -100}%)`;
+      // leftBoxRef.current.style.transform = `translateX(${i * -moveRatio}%)`;
+      // rightBoxRef.current.style.transform = `translateX(${
+      //   moveRatio - 100 - moveRatio * -i
+      // }%)`;
+      // imageRef.current.style.transform = `translateY(${i * -100}%)`;
+      // mainRef.current.style.transform = `translateY(${i * -100}%)`;
+      // subRef.current.style.transform = `translateY(${i * -100}%)`;
 
       if (anim) {
         anim.restart();
@@ -152,10 +183,6 @@ const DetailRecipe = () => {
 
   useEffect(() => {}, [bookmark]);
 
-  // useEffect(() => {
-  //   console.log(mainIng);
-  // }, [mainIng]);
-
   return (
     <DRTotalContainer>
       <HiddenPage start={`${start}`} />
@@ -167,14 +194,14 @@ const DetailRecipe = () => {
       <DRContent />
       {modalOpen ? <DRModal handleModalClose={handleModalClose} /> : null}
       <ImageScroll>
-        <ImageContainer ref={imageRef}>
+        <ImageContainer ref={imageRef} className="image">
           {dummy.map((item, i) => {
             return <ImageContent>{i}</ImageContent>;
           })}
         </ImageContainer>
       </ImageScroll>
       <RightScroll>
-        <RightScrollContainer ref={rightScrollRef}>
+        <RightScrollContainer ref={rightScrollRef} className="rightScroll">
           {dummy.map((item) => {
             return (
               <RightScrollContent>
@@ -188,7 +215,7 @@ const DetailRecipe = () => {
         </RightScrollContainer>
       </RightScroll>
       <TopBoxScroll>
-        <TopBoxContainer ref={topBoxRef}>
+        <TopBoxContainer ref={topBoxRef} className="topbox">
           {dummy.map((item, i) => {
             return (
               <TopBoxContent color={colorMaker(koreaBlue)}></TopBoxContent>
@@ -197,7 +224,11 @@ const DetailRecipe = () => {
         </TopBoxContainer>
       </TopBoxScroll>
       <LeftBoxScroll>
-        <LeftBoxContainer ref={leftBoxRef} length={dummy.length}>
+        <LeftBoxContainer
+          ref={leftBoxRef}
+          className="leftbox"
+          length={dummy.length}
+        >
           {dummy.map((item, i) => {
             return (
               <LeftBoxContent color={colorMaker(koreaRed)}></LeftBoxContent>
@@ -206,7 +237,11 @@ const DetailRecipe = () => {
         </LeftBoxContainer>
       </LeftBoxScroll>
       <RightBoxScroll>
-        <RightBoxContainer ref={rightBoxRef} length={dummy.length}>
+        <RightBoxContainer
+          ref={rightBoxRef}
+          className="rightbox"
+          length={dummy.length}
+        >
           {dummy.map((item, i) => {
             return (
               <RightBoxContent
@@ -217,14 +252,14 @@ const DetailRecipe = () => {
         </RightBoxContainer>
       </RightBoxScroll>
       <MainIngredientContainer>
-        <MainIngredient ref={mainRef}>
+        <MainIngredient ref={mainRef} className="main">
           {dummy.map((item) => {
             return <MainIngredientContent>주재료</MainIngredientContent>;
           })}
         </MainIngredient>
       </MainIngredientContainer>
       <SubIngredientContainer>
-        <SubIngredient ref={subRef}>
+        <SubIngredient ref={subRef} className="sub">
           {dummy.map((item) => {
             return <SubIngredientContent>부재료</SubIngredientContent>;
           })}
@@ -236,24 +271,28 @@ const DetailRecipe = () => {
         rotate={rotateMaker()}
         position={positionMaker()}
         end={endPositionMaker()}
+        time={pagoTimeMaker()}
         src="/img/PinkHeadPago.png"
       />
       <EggHeadPago
         rotate={rotateMaker()}
         position={positionMaker()}
         end={endPositionMaker()}
+        time={pagoTimeMaker()}
         src="/img/eggpago.png"
       />
       <PinkHeadPago
         rotate={rotateMaker()}
         position={positionMaker()}
         end={endPositionMaker()}
+        time={pagoTimeMaker()}
         src="/img/PinkHeadPago.png"
       />
       <EggHeadPago
         rotate={rotateMaker()}
         position={positionMaker()}
         end={endPositionMaker()}
+        time={pagoTimeMaker()}
         src="/img/eggpago.png"
       />
       <BookMarkIcon bookmark={bookmark} onClick={handleBookmark} />
