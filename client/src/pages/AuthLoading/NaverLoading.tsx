@@ -14,7 +14,7 @@ const NaverLoading = () => {
   let naverState = new URL(window.location.href).searchParams.get("state");
   const handleNaver = async () => {
     const naverAuth = await axios.get(
-      `http://localhost:3000/auth/naver?code=${naverCode}&state=${naverState}`
+      `${process.env.REACT_APP_SERVER_URL}/auth/naver?code=${naverCode}&state=${naverState}`
     );
     dispatch({
       type: SET_ACCESSTOKEN,

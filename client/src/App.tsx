@@ -24,7 +24,7 @@ function App() {
   const dispatch = useDispatch();
 
   const AllIngredient = async () => {
-    const data = await axios.get("http://localhost:3000/ingredient", {
+    const data = await axios.get(`${process.env.REACT_APP_SERVER_URL}/ingredient`, {
       withCredentials: true,
       headers: {
         "Content-Type": "application/json",
@@ -34,7 +34,7 @@ function App() {
   };
 
   const SmallIngredient = async () => {
-    const data = await axios.get("http://localhost:3000/ingredient/summary", {
+    const data = await axios.get(`${process.env.REACT_APP_SERVER_URL}/ingredient/summary`, {
       withCredentials: true,
       headers: {
         "Content-Type": "application/json",

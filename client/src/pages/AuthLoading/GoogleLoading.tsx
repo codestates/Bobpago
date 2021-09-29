@@ -15,7 +15,7 @@ const GoogleLoading = () => {
 
   const handleGoogle = async () => {
     const googleAuth = await axios.get(
-      `http://localhost:3000/auth/google?code=${googleCode}&scope=${googleScope}`
+      `${process.env.REACT_APP_SERVER_URL}/auth/google?code=${googleCode}&scope=${googleScope}`
     );
 
     dispatch({
