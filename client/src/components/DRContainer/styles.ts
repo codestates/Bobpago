@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { main } from "theme";
 
 interface DRStylesProps {
   color?: string;
@@ -40,6 +41,6 @@ export const LeftBottomRightDiv = styled.div`
 `;
 
 export const RightContainer = styled.section`
-  background-color: #eeeeee;
+  background-color: ${main.bg};
   flex: 1;
 `;

@@ -14,9 +14,11 @@ export const NavContainer = styled.div<NavProps>`
   width: 100%;
   transition: 1s;
   background-color: ${({ opac }): any => {
-    return opac ? "#ececec09" : "#ececec";
+    return opac ? "#ececec09" : "#ff975c";
   }};
-  color: black;
+  color: ${({ opac }): any => {
+    return opac ? "black" : "#ffffff";
+  }};
   align-items: center;
   z-index: 10;
   font-size: 18px;
@@ -30,11 +32,14 @@ export const NavLogoContainer = styled.div`
   }
 `;
 
-export const NavLogo = styled.div`
+export const NavLogo = styled.div<NavProps>`
   text-decoration: none;
   cursor: pointer;
   transition: 0.2s;
-  color: black;
+  color: ${({ opac }): any => {
+    return opac ? "#ffffff" : "black";
+  }};
+
   &:hover {
     color: red;
   }
@@ -53,31 +58,37 @@ export const NavEtcList = styled.li`
   margin-left: 2em;
 `;
 
-export const HumanIcon = styled(ManageAccounts)`
+export const HumanIcon = styled(ManageAccounts)<NavProps>`
   width: 1.5em;
   cursor: pointer;
-  color: black;
+  color: ${({ opac }): any => {
+    return opac ? "#ffffff" : "black";
+  }};
   transition: 0.2s;
   &:hover {
     color: red;
   }
 `;
 
-export const BoardIcon = styled(PostAdd)`
+export const BoardIcon = styled(PostAdd)<NavProps>`
   width: 1.5em;
   cursor: pointer;
   transition: 0.2s;
   text-decoration: none;
-  color: black;
+  color: ${({ opac }): any => {
+    return opac ? "#ffffff" : "black";
+  }};
   &:hover {
     color: red;
   }
 `;
 
-export const LoginLogout = styled.div`
+export const LoginLogout = styled.div<NavProps>`
   cursor: pointer;
   transition: 0.2s;
-  color: black;
+  color: ${({ opac }): any => {
+    return opac ? "#ffffff" : "black";
+  }};
   &:hover {
     color: red;
   }

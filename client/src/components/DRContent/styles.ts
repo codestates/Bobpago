@@ -10,7 +10,7 @@ export const RightContent = styled.div`
   display: flex;
   flex-direction: column;
   border-radius: 10px;
-  z-index: 10;
+  z-index: 0;
   /* z-index: 1000; */
 `;
 
