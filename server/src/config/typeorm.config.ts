@@ -12,7 +12,7 @@ export const typeORMConfig: TypeOrmModuleOptions = {
   migrations: [__dirname + '/../migrations/*.ts'],
   cli: { migrationsDir: 'src/migrations' },
   charset: 'utf8mb4',
-  synchronize: false,
+  synchronize: true,
   logging: true,
   keepConnectionAlive: true,
 };
