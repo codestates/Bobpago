@@ -59,14 +59,8 @@ const SignIn = () => {
   }, [loginDisplay]);
 
   const handleLogin = async (e: any) => {
-    e.preventDefault();
-    emailError.current.style.display = "inline-block";
-    passwordError.current.style.display = "inline-block";
-    setTimeout(() => {
-      emailError.current.style.display = "none";
-      passwordError.current.style.display = "none";
-    }, 2000);
-
+    e.preventDefault();    
+  try {
     const signIn = await axios.post(
       `${process.env.REACT_APP_SERVER_URL}/auth/signin`,
       {
@@ -77,16 +71,24 @@ const SignIn = () => {
         withCredentials: true,
         headers: {
           "Content-Type": "application/json",
+          },
+        }
+      );
+      dispatch({
+        type: SET_ACCESSTOKEN,
+        payload: {
+          accessToken: signIn.data.data.accessToken,
+          tokenType: signIn.data.data.tokenType,
         },
-      }
-    );
-    dispatch({
-      type: SET_ACCESSTOKEN,
-      payload: {
-        accessToken: signIn.data.data.accessToken,
-        tokenType: signIn.data.data.tokenType,
-      },
-    });
+      });
+    } catch (err) {
+      emailError.current.style.display = "inline-block";
+      passwordError.current.style.display = "inline-block";
+      setTimeout(() => {
+        emailError.current.style.display = "none";
+        passwordError.current.style.display = "none";
+      }, 2000);
+    }
   };
 
   const handleEmailPlaceholderActive = () => {

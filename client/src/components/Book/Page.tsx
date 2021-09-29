@@ -7,16 +7,21 @@ import {
   Back,
   DescriptionText,
   orderArr,
+  UploadIcon,
+  UploadImg,
+  UploadImgText,
 } from "./styles";
 
 const Page = ({
+  imgFile,
   text,
   currentPage,
   selfPage,
   handleChangeDescription,
-}: // imgFile,
-any) => {
+  handleImgChange,
+}: any) => {
   const pageRef = useRef<any>(null);
+  const inputFileRef = useRef<any>(null);
 
   useEffect(() => {
     if (currentPage > selfPage) {
@@ -33,11 +38,35 @@ any) => {
     }
   }, [currentPage]);
 
+  const handleClickInput = () => {
+    if (inputFileRef.current) {
+      inputFileRef.current.click();
+    }
+  };
+
   return (
     <Flip ref={pageRef}>
       <Back>
-        {/* <img width={100} src={imgFile && imgFile} alt="없는이미지" /> */}
-        <Text>{selfPage}</Text>
+        <input
+          type="file"
+          multiple
+          hidden
+          ref={inputFileRef}
+          onChange={(e) => handleImgChange(e, selfPage)}
+        />
+        {imgFile && (
+          <img
+            className="food"
+            src={imgFile && URL.createObjectURL(imgFile)}
+            alt="없는이미지"
+          />
+        )}
+        <UploadImg
+          className={imgFile ? "uploaded" : "not_yet"}
+          onClick={() => handleClickInput()}
+          src="/img/uploadicon.png"
+        />
+        {!imgFile && <UploadImgText>이미지 업로드</UploadImgText>}
       </Back>
       <Front>
         <DescriptionText

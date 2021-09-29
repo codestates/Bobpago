@@ -118,7 +118,8 @@ const MyPage = () => {
     const data = response.data.data;
     setNickname(data.nickname);
     setIntroduce(data.profile);
-    setProfileImg(`${process.env.REACT_APP_S3_IMG_URL}${data.imageUrl}`);
+    data.imageUrl &&
+      setProfileImg(`${process.env.REACT_APP_S3_IMG_URL}${data.imageUrl}`);
     setMyPostData(data.recipes);
     setBookmarkData(data.bookmarks);
     setFollowingNum(data.followees);

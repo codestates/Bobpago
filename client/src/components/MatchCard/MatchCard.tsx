@@ -57,22 +57,23 @@ interface EachIngredient {
 }
 
 interface Ingredient {
-  main: EachIngredient[];
   sub: EachIngredient[];
+  main: EachIngredient[];
 }
 
 interface MatchCardProps {
-  rotate: number;
-  handleSwitch: VoidFunction;
-  wind: number;
   id: number;
+  wind: number;
+  time: number;
   title: string;
   level: number;
-  amount: number;
-  thumbnail: string;
-  time: number;
   views: number;
+  amount: number;
+  rotate: number;
+  recipeId: number;
+  thumbnail: string;
   ingredients: Ingredient;
+  handleSwitch: VoidFunction;
 }
 
 const difficulty: DifficultyType = {
@@ -82,17 +83,18 @@ const difficulty: DifficultyType = {
 };
 
 const MatchCard: React.FC<MatchCardProps> = ({
-  rotate,
-  handleSwitch,
-  wind,
   id,
+  wind,
+  time,
   title,
   level,
-  amount,
-  thumbnail,
-  time,
   views,
+  rotate,
+  amount,
+  recipeId,
+  thumbnail,
   ingredients,
+  handleSwitch,
 }) => {
   const [active, setActive] = useState(false);
   const activeCardRef = useRef<any>(null);
@@ -133,7 +135,8 @@ const MatchCard: React.FC<MatchCardProps> = ({
     handleSwitch();
     setTimeout(() => {
       history.push({
-        pathname: "/detailrecipe",
+        pathname: `/detailrecipe/:${recipeId}`,
+        state: recipeId,
       });
     }, 2000);
   };
@@ -176,7 +179,7 @@ const MatchCard: React.FC<MatchCardProps> = ({
           <HiddenTextContainer>
             <HiddenTopContainer>
               <HiddenTitle>{title}</HiddenTitle>
-              <HiddenAmount>{`(${`2인분`})`}</HiddenAmount>
+              <HiddenAmount>{`(${amount}인분)`}</HiddenAmount>
             </HiddenTopContainer>
             <HiddenMainIngredient>
               <MainIngredientText>필수 재료</MainIngredientText>
@@ -200,7 +203,7 @@ const MatchCard: React.FC<MatchCardProps> = ({
             </HiddenSubIngredient>
             <HiddenCookingTimeContainer>
               <HiddenCookingTimeText>요리 시간 :</HiddenCookingTimeText>
-              <HiddenCookingTime>{`${time}:00`}</HiddenCookingTime>
+              <HiddenCookingTime>{`${time}:00`}분</HiddenCookingTime>
             </HiddenCookingTimeContainer>
             <HiddenDifficultyContainer>
               <HiddenDifficultyText>요리 난이도 :</HiddenDifficultyText>

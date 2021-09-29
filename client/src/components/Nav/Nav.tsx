@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
+import axios from "axios";
 import {
   NavContainer,
   NavLogoContainer,
@@ -26,12 +27,28 @@ const Nav = ({ opac }: { opac: boolean }) => {
   const AccessState = useSelector(
     (state: RootState) => state.AccesstokenReducer
   );
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
 
-  const handleLogout = () => {
-    dispatch({
-      type: REMOVE_ACCESSTOKEN,
-    });
-    setAuthorization(false);
+  const handleLogout = async () => {
+    try {
+      await axios.post(
+        `${serverUrl}/auth/signout?tokenType=jwt`,
+        {},
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${AccessState.accessToken}`,
+          },
+        }
+      );
+      dispatch({
+        type: REMOVE_ACCESSTOKEN,
+      });
+      setAuthorization(false);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
@@ -39,7 +56,6 @@ const Nav = ({ opac }: { opac: boolean }) => {
       setAuthorization(true);
     }
   }, []);
-
   return (
     <NavContainer opac={opac}>
       <SignIn />
@@ -63,7 +79,7 @@ const Nav = ({ opac }: { opac: boolean }) => {
               </Link>
             </NavEtcList>
             <NavEtcList>
-              <LoginLogout onClick={handleLogout}>Logout</LoginLogout>
+              <LoginLogout onClick={() => handleLogout()}>Logout</LoginLogout>
             </NavEtcList>
           </NavEtcUl>
         ) : (
