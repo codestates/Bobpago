@@ -21,7 +21,7 @@ import gsap from "gsap";
 import { useSelector, useDispatch } from "react-redux";
 import { showSignUp, showNothing } from "actions/SignUpAndSignIn";
 import { RootState } from "reducers";
-import { SET_ACCESSTOKEN } from "actions/Accesstoken";
+import { setAccessToken } from "actions/Accesstoken";
 import axios from "axios";
 
 const SignIn = () => {
@@ -59,28 +59,24 @@ const SignIn = () => {
   }, [loginDisplay]);
 
   const handleLogin = async (e: any) => {
-    e.preventDefault();    
-  try {
-    const signIn = await axios.post(
-      `${process.env.REACT_APP_SERVER_URL}/auth/signin`,
-      {
-        email: email,
-        password: password,
-      },
-      {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
+    e.preventDefault();
+    try {
+      const signIn = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/auth/signin`,
+        {
+          email: email,
+          password: password,
+        },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
           },
         }
       );
-      dispatch({
-        type: SET_ACCESSTOKEN,
-        payload: {
-          accessToken: signIn.data.data.accessToken,
-          tokenType: signIn.data.data.tokenType,
-        },
-      });
+      const { accessToken, tokenType, id } = signIn.data.data;
+      dispatch(setAccessToken(accessToken, tokenType, id));
+      dispatch(showNothing());
     } catch (err) {
       emailError.current.style.display = "inline-block";
       passwordError.current.style.display = "inline-block";
@@ -164,6 +160,7 @@ const SignIn = () => {
           </ErrMsg>
           <Placeholder ref={passwordlPlaceholderRef}>비밀번호</Placeholder>
           <InputWrapper
+            type="password"
             onFocus={() => handlePasswordPlaceholderNotActive()}
             onBlur={() =>
               password === "" ? handlePasswordPlaceholderActive() : null

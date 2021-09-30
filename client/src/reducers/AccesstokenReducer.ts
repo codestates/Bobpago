@@ -4,6 +4,7 @@ import { Accesstoken } from "types";
 const initialState: Accesstoken = {
   accessToken: "",
   tokenType: "",
+  userId: null,
 };
 
 interface Action {
@@ -20,10 +21,13 @@ const AccesstokenReducer = (
       return Object.assign({}, state, {
         accessToken: action.payload.accessToken,
         tokenType: action.payload.tokenType,
+        userId: action.payload.userId,
       });
     case REMOVE_ACCESSTOKEN:
       return Object.assign({}, state, {
         accessToken: "",
+        tokenType: "",
+        userId: null,
       });
     default:
       return state;

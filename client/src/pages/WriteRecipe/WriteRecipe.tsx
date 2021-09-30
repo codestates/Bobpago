@@ -17,8 +17,6 @@ import {
   resetWritePage,
 } from "actions/WriteRecipePage";
 import { resetAllContents } from "actions/WriteRecipeContents";
-import { setAccessToken } from "actions/Accesstoken";
-
 const WriteRecipe = () => {
   const [circle1IsHover, setCircle1IsHover] = useState<boolean>(false);
   const [circle2IsHover, setCircle2IsHover] = useState<boolean>(false);
@@ -29,11 +27,6 @@ const WriteRecipe = () => {
   const [scale, setScale] = useState<number>(0);
 
   useEffect(() => {
-    dispatch(
-      setAccessToken(
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluNCIsImlhdCI6MTYzMjg3OTA3NiwiZXhwIjoxNjMzNzQzMDc2fQ.pC4FLe-IX3ZgP-VgckkqqzIAPeiuXZii6ML0La9792k"
-      )
-    );
     return () => {
       dispatch(resetWritePage());
       dispatch(resetAllContents());

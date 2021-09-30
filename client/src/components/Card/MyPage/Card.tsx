@@ -26,9 +26,10 @@ interface FixProps {
 
 const Card = ({ index, fix, postData, removeMyPost }: FixProps) => {
   let history = useHistory();
-
   return (
-    <CardContainer onClick={() => history.push(`/detailrecipe/${postData.id}`)}>
+    <CardContainer
+      onClick={() => !fix && history.push(`/detailrecipe/${postData.id}`)}
+    >
       <RemoveIcon
         src="/img/minus.png"
         onClick={() => removeMyPost(index, postData.id)}
@@ -37,7 +38,7 @@ const Card = ({ index, fix, postData, removeMyPost }: FixProps) => {
       <CardImage
         className="card__image"
         src={
-          postData
+          postData && postData.thumbnail
             ? process.env.REACT_APP_S3_IMG_URL + postData.thumbnail
             : undefined
         }
