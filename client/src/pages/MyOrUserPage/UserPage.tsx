@@ -25,23 +25,26 @@ import {
   GridContainer,
   PlusIcon,
   IconContainer,
-  dummy,
   FollowBtn2,
   FollowedBtn,
   CheckIcon,
   ModalBackground,
   MinusIcon,
+  Container,
+  Container2,
 } from "./styles";
 
 const UserPage = () => {
-  const accessToken = useSelector(
-    (state: RootState) => state.AccesstokenReducer.accessToken
-  );
+  const {
+    accessToken,
+    tokenType,
+    userId: myId,
+  } = useSelector((state: RootState) => state.AccesstokenReducer);
   const [myPostNum, setMyPostNum] = useState<number>(6);
   const [bookmarkNum, setBookmarkNum] = useState<number>(6);
   const [standardNum, setStandardNum] = useState<number>(6);
-  const [showFollowing, setShowFollowing] = useState<boolean>(false);
-  const [showFollower, setShowFollower] = useState<boolean>(false);
+  const [followeeInfo, setFolloweeInfo] = useState<any>([]);
+  const [followerInfo, setFollowerInfo] = useState<any>([]);
   const [followingModal, setFollowingModal] = useState<boolean>(false);
   const [followerModal, setFollowerModal] = useState<boolean>(false);
   const [userPosts, setUserPosts] = useState<any>([]);
@@ -51,11 +54,10 @@ const UserPage = () => {
   const profileS3Url = process.env.REACT_APP_S3_IMG_URL;
   const serverUrl = process.env.REACT_APP_SERVER_URL;
   let { userId } = useParams<{ userId: string | undefined }>();
-  console.log(profileS3Url + userInfo.imageUrl);
 
   async function getData() {
     const response = await axios.get(
-      `${process.env.REACT_APP_SERVER_URL}/user/${userId}?tokenType=jwt`,
+      `${process.env.REACT_APP_SERVER_URL}/user/${userId}?tokenType=${tokenType}`,
       {
         withCredentials: true,
         headers: {
@@ -64,30 +66,15 @@ const UserPage = () => {
         },
       }
     );
-
     const data = response.data.data;
     setUserInfo(data);
     setUserPosts(data.recipes);
-    setUserPosts(data.bookmarks);
-    console.log(data);
   }
 
-  useEffect(() => {
-    getData();
-  }, []);
-
-  const ModalOff = () => {
-    setFollowingModal(false);
-    setFollowerModal(false);
-  };
-
-  const handleFollow = async () => {
-    if (follow) {
-      setFollow(false);
-    } else {
-      const data = await axios.post(
-        `${serverUrl}/user/${userId}/follow?tokenType=jwt`,
-        {},
+  async function checkFollow() {
+    try {
+      const followerData = await axios.get(
+        `${process.env.REACT_APP_SERVER_URL}/user/${userId}/follower?tokenType=${tokenType}`,
         {
           withCredentials: true,
           headers: {
@@ -96,92 +83,171 @@ const UserPage = () => {
           },
         }
       );
-      setFollow(true);
+      const followers = followerData.data.data;
+      setFollowerInfo(followers);
+      followerData &&
+        followers.some((el: any) => el.id === myId) &&
+        setFollow(true);
+    } catch (err) {
+      console.log(err);
     }
+  }
+
+  useEffect(() => {
+    getData();
+    checkFollow();
+  }, []);
+
+  const ModalOff = () => {
+    setFollowingModal(false);
+    setFollowerModal(false);
+  };
+
+  const handleFollow = async () => {
+    try {
+      if (follow) {
+        const data = await axios.delete(
+          `${serverUrl}/user/${userId}/follow?tokenType=${tokenType}`,
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        setFollow(false);
+      } else {
+        const data = await axios.post(
+          `${serverUrl}/user/${userId}/follow?tokenType=${tokenType}`,
+          {},
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        setFollow(true);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleFolloweeModalOn = async () => {
+    const data = await axios.get(
+      `${process.env.REACT_APP_SERVER_URL}/user/${userId}/followee?tokenType=${tokenType}`,
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    setFolloweeInfo(data.data.data);
+    setFollowingModal(true);
+  };
+
+  const handleFollowerModalOn = async () => {
+    const data = await axios.get(
+      `${process.env.REACT_APP_SERVER_URL}/user/${userId}/follower?tokenType=${tokenType}`,
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    setFollowerInfo(data.data.data);
+    setFollowerModal(true);
   };
 
   return (
     <>
-      <Nav opac={false} />
-      <PageContainer>
-        <UserProfileContainer>
-          <ProfileImgContainer>
-            <MyPageProfileImg
-              src={
-                userInfo.imageUrl ? profileS3Url + userInfo.imageUrl : undefined
-              }
-              size={15}
-            />
-          </ProfileImgContainer>
-          <ProfileContentsContainer>
-            <ProfileName>{userInfo && userInfo.nickname}</ProfileName>
-            {!follow ? (
-              <FollowBtn2 onClick={() => handleFollow()}>Follow</FollowBtn2>
-            ) : (
-              <FollowedBtn onClick={() => handleFollow()}>
-                <CheckIcon />
-                Following
-              </FollowedBtn>
-            )}
-            <ProfileIntroduce>{userInfo && userInfo.profile}</ProfileIntroduce>
-          </ProfileContentsContainer>
-        </UserProfileContainer>
-        <FollowContainer>
-          <FollowBtn onClick={() => setFollowingModal(true)}>
-            Following
-          </FollowBtn>
-          <FollowNum>{userInfo && userInfo.followees}</FollowNum>
-          <FollowBtn onClick={() => setFollowerModal(true)}>Follower</FollowBtn>
-          <FollowNum>{userInfo && userInfo.followers}</FollowNum>
-        </FollowContainer>
-        <MyPostContainer>
-          <MyPostTitle>작성 글 목록</MyPostTitle>
-          <DivisionLine />
-          <GridContainer>
-            {userPosts.slice(0, myPostNum).map((el: any, i: number) => (
-              <Card index={i} key={i} postData={el} />
-            ))}
-          </GridContainer>
-          <IconContainer>
-            {myPostNum > standardNum && userPosts.length > standardNum && (
-              <MinusIcon
-                onClick={() => setMyPostNum(myPostNum - standardNum)}
+      <Nav opac={true} />
+      <Container>
+        <PageContainer>
+          <UserProfileContainer>
+            <ProfileImgContainer>
+              <MyPageProfileImg
+                src={
+                  userInfo.imageUrl
+                    ? profileS3Url + userInfo.imageUrl
+                    : undefined
+                }
+                size={15}
               />
-            )}
-            {userPosts.length > myPostNum && (
-              <PlusIcon onClick={() => setMyPostNum(myPostNum + standardNum)} />
-            )}
-          </IconContainer>
-        </MyPostContainer>
-        <MyPostContainer>
-          <MyPostTitle>북마크 목록</MyPostTitle>
-          <DivisionLine />
-          <GridContainer>
-            {bookmarks.slice(0, myPostNum).map(() => (
-              <BookmarkCard />
-            ))}
-          </GridContainer>
-          <IconContainer>
-            {bookmarkNum > standardNum && bookmarks.length > standardNum && (
-              <MinusIcon
-                onClick={() => setMyPostNum(bookmarkNum - standardNum)}
-              />
-            )}
-            {bookmarks.length > myPostNum && (
-              <PlusIcon
-                onClick={() => setMyPostNum(bookmarkNum + standardNum)}
-              />
-            )}
-          </IconContainer>
-        </MyPostContainer>
-      </PageContainer>
+            </ProfileImgContainer>
+            <ProfileContentsContainer>
+              <ProfileName>{userInfo && userInfo.nickname}</ProfileName>
+              {!follow ? (
+                <FollowBtn2 onClick={() => handleFollow()}>Follow</FollowBtn2>
+              ) : (
+                <FollowedBtn onClick={() => handleFollow()}>
+                  <CheckIcon />
+                  Following
+                </FollowedBtn>
+              )}
+              <ProfileIntroduce>
+                {userInfo && userInfo.profile}
+              </ProfileIntroduce>
+            </ProfileContentsContainer>
+          </UserProfileContainer>
+          <FollowContainer>
+            <FollowBtn onClick={() => handleFolloweeModalOn(true)}>
+              Followee
+            </FollowBtn>
+            <FollowNum>{userInfo && userInfo.followees}</FollowNum>
+            <FollowBtn onClick={() => handleFollowerModalOn(true)}>
+              Follower
+            </FollowBtn>
+            <FollowNum>{userInfo && userInfo.followers}</FollowNum>
+          </FollowContainer>
+          <MyPostContainer>
+            <MyPostTitle>작성 글 목록</MyPostTitle>
+            <DivisionLine />
+            <GridContainer>
+              {userPosts &&
+                userPosts
+                  .slice(0, myPostNum)
+                  .map((el: any, i: number) => (
+                    <Card index={i} key={i} postData={el} />
+                  ))}
+            </GridContainer>
+            <IconContainer>
+              {myPostNum > standardNum && userPosts.length > standardNum && (
+                <MinusIcon
+                  onClick={() => setMyPostNum(myPostNum - standardNum)}
+                />
+              )}
+              {userPosts.length > myPostNum && (
+                <PlusIcon
+                  onClick={() => setMyPostNum(myPostNum + standardNum)}
+                />
+              )}
+            </IconContainer>
+          </MyPostContainer>
+        </PageContainer>
+      </Container>
       {(followingModal || followerModal) && (
         <ModalBackground onClick={() => ModalOff()} />
       )}
       {followingModal && (
-        <FollowingModal setFollowingModal={setFollowingModal} />
+        <FollowingModal
+          follow={followeeInfo}
+          setFollowingModal={setFollowingModal}
+        />
       )}
-      {followerModal && <FollowerModal setFollowerModal={setFollowerModal} />}
+      {followerModal && (
+        <FollowerModal
+          follow={followerInfo}
+          setFollowerModal={setFollowerModal}
+        />
+      )}
     </>
   );
 };

@@ -46,12 +46,13 @@ const FollowingModal = ({ setFollowingModal, follow }: Props) => {
     <FollowContainer>
       <Title>Following</Title>
       <XIcon onClick={() => setFollowingModal(false)} />
-      {follow.slice(0, view).map((el: any, i: number) => {
-        return <FollowList key={i} follow={follow[i]} />;
-      })}
-      {follow.length <= 3 || view === follow.length ? null : (
+      {follow &&
+        follow.slice(0, view).map((el: any, i: number) => {
+          return <FollowList key={i} follow={follow[i]} />;
+        })}
+      {follow && (follow.length <= 3 || view === follow.length) ? null : (
         <ViewAllContainer onClick={() => setView(follow.length)}>
-          VIEW ALL
+          {follow && "VIEW ALL"}
         </ViewAllContainer>
       )}
     </FollowContainer>

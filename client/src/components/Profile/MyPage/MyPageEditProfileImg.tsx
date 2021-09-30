@@ -30,10 +30,7 @@ const MyPageEditProfileImg = ({
 }: Props) => {
   const InputImgRef = useRef<any>(null);
   const [img, setImg] = useState("");
-  const accessToken = useSelector(
-    (state: RootState) => state.AccesstokenReducer.accessToken
-  );
-  console.log(userId);
+
   const handleInputClick = () => {
     InputImgRef.current && InputImgRef.current.click();
   };
@@ -45,12 +42,12 @@ const MyPageEditProfileImg = ({
 
   return (
     <>
-      {!src ? (
+      {!img ? (
         <ProfileEditContainer src={src} size={size}>
           <ProfileIcon size={size} />
         </ProfileEditContainer>
       ) : (
-        <ProfileImg src={img ? img : src} size={size} />
+        <ProfileImg src={img ? img : undefined} size={size} />
       )}
       <EditContainer
         onClick={() => handleInputClick()}

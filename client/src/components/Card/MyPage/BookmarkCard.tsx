@@ -43,8 +43,9 @@ const BookmarkCard = ({
       <CardImage
         className="card__image"
         src={
-          postData &&
-          `${process.env.REACT_APP_S3_IMG_URL}/${postData.thumbnail}`
+          postData && postData.thumbnail
+            ? `${process.env.REACT_APP_S3_IMG_URL}/${postData.thumbnail}`
+            : undefined
         }
         alt=""
       />
