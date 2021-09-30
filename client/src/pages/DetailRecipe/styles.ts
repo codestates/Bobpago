@@ -103,6 +103,34 @@ export const DRTotalContainer = styled.div`
   }
 `;
 
+export const TotalPageMap = styled.div`
+  position: fixed;
+  width: 100%;
+  left: 2%;
+  top: 37%;
+  z-index: 100;
+`;
+
+export const TotalPageMapContainer = styled.div`
+  .mapActive {
+    transition: 1s;
+    background-color: #f78aaa;
+  }
+`;
+
+export const TotalPageMapContent = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 10px;
+  max-width: 10px;
+  background-color: #ffffff;
+  /* border: 1px solid black; */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.9);
+  margin-top: 20px;
+  border-radius: 50px;
+`;
+
 export const RightScroll = styled.div`
   position: fixed;
   width: 24.9%;
@@ -127,6 +155,9 @@ export const RightScrollContent = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 262px;
+  font-size: 24px;
+  font-family: sans-serif;
+  font-weight: 400;
 `;
 
 export const TopBoxScroll = styled.section`
@@ -225,9 +256,9 @@ export const RightBoxContent = styled.div<BoxProps>`
 export const ImageScroll = styled.div`
   position: fixed;
   width: 40%;
-  height: 80%;
+  height: 70%;
   background-color: #ececec;
-  top: 6.5em;
+  top: 10.5em;
   left: 5%;
   z-index: 1;
   border-radius: 10px;
@@ -244,10 +275,11 @@ export const ImageContainer = styled.div`
   z-index: -1;
 `;
 
-export const ImageContent = styled.div`
+export const ImageContent = styled.img`
   width: 100%;
   height: 100%;
-  background-color: #ececec;
+  background-color: #ffffff;
+  padding: 1em;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -264,7 +296,7 @@ export const HiddenPage = styled.div<HiddenProps>`
   position: fixed;
   left: -18em;
   top: -5em;
-  transform: translateX(0%);
+  transform: translateX(0%) scale(3);
   z-index: 10000;
   animation: ${({ start }) => {
     if (start === "true") {
@@ -404,4 +436,10 @@ export const BookMarkIcon = styled(BookmarkFill)<BookmarkProps>`
   &:active {
     color: red;
   }
+`;
+
+export const Loading = styled.div`
+  width: 100%;
+  height: 100vh;
+  background-color: black;
 `;

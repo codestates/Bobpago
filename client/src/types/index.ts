@@ -48,3 +48,9 @@ export interface Accesstoken {
 export interface MatchRecipe {
   data: object[];
 }
+
+export interface DetailRecipe {
+  user: { id: number; nickname: string };
+  recipe: any;
+  ingredients: any;
+}

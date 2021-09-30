@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { main } from "theme";
 
 interface IngredientProps {
   light: boolean;
@@ -39,7 +40,7 @@ export const BadCookerRecipe = styled.div<IngredientProps>`
     align-items: center;
     color: #ffffff;
     border-radius: 10px;
-    font-size: 18px;
+    font-size: 32px;
     transition: 0.5s;
     //#000000a6
     &:hover {
@@ -48,7 +49,7 @@ export const BadCookerRecipe = styled.div<IngredientProps>`
       text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
         1px 1px 0 #000;
       background: #00000020;
-      font-size: 32px;
+      font-size: 48px;
       text-decoration: whitesmoke;
     }
   }

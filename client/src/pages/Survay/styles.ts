@@ -71,12 +71,12 @@ export const TextContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 2em;
-  height: 15em;
+  height: 18em;
 `;
 
 export const HeadText = styled.h1`
   flex: 1;
-  font-size: 68px;
+  font-size: ${main.mostbigFont};
   z-index: 1;
   background-color: transparent;
 `;
@@ -84,7 +84,7 @@ export const HeadText = styled.h1`
 export const ChoiceContainer = styled.div`
   flex: 1;
   display: flex;
-  font-size: 32px;
+  font-size: ${main.middleFont};
   align-items: center;
   justify-content: space-around;
 `;
@@ -135,22 +135,24 @@ export const BadCookerTitleContainer = styled.div`
 
 export const PostButton = styled.button`
   position: absolute;
-  bottom: 15%;
+  bottom: 14%;
   right: 0;
-  width: 10em;
-  height: 2.5em;
+  width: 8em;
+  height: 2em;
   background-color: ${main.buttonColor};
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   transition: 0.5s;
-  color: #000000;
+  color: #ffffff;
   border-radius: 2px;
   outline: none;
   border: none;
   cursor: pointer;
+  font-size: 20px;
 
   &:hover {
     background-color: #a8e7ff;
     transform: scale(1.1);
+    color: black;
   }
 `;
 
@@ -170,9 +172,9 @@ export const GoodCookerForm = styled.div`
 `;
 
 export const GoodCookerTitle = styled.div`
-  font-size: 32px;
+  font-size: 48px;
   font-weight: 700;
-  margin-right: 2em;
+  margin-right: 0.5em;
 
   @media only screen and (max-width: 768px) {
     font-size: 16px;
@@ -181,19 +183,21 @@ export const GoodCookerTitle = styled.div`
 
 export const GoodCookerSearchForm = styled.div`
   height: 100%;
+  width: 20%;
   display: flex;
   align-items: center;
   position: relative;
 `;
 
 export const GoodCookerSearch = styled.input`
-  height: 90%;
+  height: 60%;
   width: 100%;
-  padding-left: 2em;
+  padding-left: 1.5em;
   border: none;
   border-radius: 2px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
   outline: none;
+  font-size: ${main.mostSmallFont};
   @media only screen and (max-width: 768px) {
     font-size: 14px;
     height: 100%;
@@ -210,8 +214,9 @@ export const SearchIcon = styled(Search)`
 
 export const TooltipContainer = styled.div`
   position: relative;
-  transform: translate(48%, 190%);
+  /* transform: translate(48%, 190%); */
   width: 100%;
+  display: flex;
 `;
 
 export const LeftSurvayTooltip = styled.div`
@@ -221,7 +226,7 @@ export const LeftSurvayTooltip = styled.div`
   flex-direction: column;
   padding: 1em;
   width: 25%;
-  height: 250%;
+  height: 100%;
   text-align: center;
   background-color: #ffffff;
   border: 1px solid black;
@@ -229,8 +234,8 @@ export const LeftSurvayTooltip = styled.div`
   border-radius: 10px;
   opacity: 0;
   transition: 0.3s;
-  top: -70%;
-  left: 3.5%;
+  /* top: -70%; */
+  right: 10%;
   z-index: 100;
   span {
     font-size: 12px;
@@ -246,7 +251,7 @@ export const LeftSurvayTooltip = styled.div`
     border-bottom: 1px solid black;
     position: absolute;
     top: 40%;
-    left: -2.15%;
+    left: -2.3%;
     background-color: #ffffff;
     transform: rotateZ(45deg);
   }

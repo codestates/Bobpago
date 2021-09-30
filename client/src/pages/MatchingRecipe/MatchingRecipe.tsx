@@ -4,7 +4,6 @@ import MatchCard from "components/MatchCard/MatchCard";
 import Circle1 from "components/MovingCircle/Circle1";
 import Circle2 from "components/MovingCircle/Circle2";
 import Nav from "components/Nav/Nav";
-import Lineear from "components/Svg/Lineear/Lineear";
 import Weather from "components/Weather/Weather";
 import React from "react";
 import { useRef, useState, useEffect } from "react";
@@ -31,12 +30,15 @@ const MatchingRecipe = () => {
   const hiddenRef1 = useRef<any>(null);
   const tooltipRef = useRef<any>(null);
   const sliderRef = useRef<any>(null);
+  const titleTextRef = useRef<any>(null);
+
   const [turnOn, setTurnOn] = useState(false);
   const [wind, setWind] = useState(0);
   const [data, setData] = useState<object[]>([]);
+
   const location = useLocation<any>();
   const dispatch = useDispatch();
-  const matchState = useSelector((state: RootState) => state.MatchingReducer);
+  // const matchState = useSelector((state: RootState) => state.MatchingReducer);
 
   const locationProps = location.state;
   const locationId = locationProps.map((item: any) => item.id);
@@ -73,6 +75,20 @@ const MatchingRecipe = () => {
     }, 1000);
   };
 
+  const handleOpacity = () => {
+    titleTextRef.current.style.opacity = 0;
+    titleTextRef.current.style.transform = "translateY(-100%)";
+    setTimeout(() => {
+      titleTextRef.current.style.display = "none";
+    }, 500);
+  };
+
+  const handleReturn = () => {
+    titleTextRef.current.style.display = "flex";
+    titleTextRef.current.style.transform = "translateY(0%)";
+    titleTextRef.current.style.opacity = 1;
+  };
+
   const rotateMaker = () => {
     const rotateArr: number[] = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5];
     let rotatePick: number =
@@ -102,7 +118,7 @@ const MatchingRecipe = () => {
       {/* 꾸미기 영역 */}
 
       {/* 타이틀 텍스트 */}
-      <MatchTextContainer>
+      <MatchTextContainer ref={titleTextRef}>
         <MatchTopContainer>
           <MatchText>밥파고가 추천하는 요리 레시피</MatchText>
           <QuestionIcons
@@ -121,8 +137,8 @@ const MatchingRecipe = () => {
         </MatchTopContainer>
         <MyIngredient>
           내가 고른 재료:
-          {locationIngredient.map((item: string) => {
-            return <> {item} </>;
+          {locationIngredient.map((item: string, i: number) => {
+            return <span key={i}> {item} </span>;
           })}
         </MyIngredient>
       </MatchTextContainer>
@@ -159,9 +175,7 @@ const MatchingRecipe = () => {
           }}
         >
           {!turnOn
-            ? data.map((item: any, i) => {
-                console.log(item);
-
+            ? data.map((item: any) => {
                 return (
                   <MatchCard
                     key={item.recipe.id}
@@ -177,6 +191,8 @@ const MatchingRecipe = () => {
                     rotate={rotateMaker()}
                     handleSwitch={handleSwitch}
                     ingredients={item.ingredients}
+                    handleReturn={handleReturn}
+                    handleOpacity={handleOpacity}
                   />
                 );
               })

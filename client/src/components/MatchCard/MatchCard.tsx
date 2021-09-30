@@ -74,6 +74,8 @@ interface MatchCardProps {
   thumbnail: string;
   ingredients: Ingredient;
   handleSwitch: VoidFunction;
+  handleReturn: VoidFunction;
+  handleOpacity: VoidFunction;
 }
 
 const difficulty: DifficultyType = {
@@ -95,6 +97,8 @@ const MatchCard: React.FC<MatchCardProps> = ({
   thumbnail,
   ingredients,
   handleSwitch,
+  handleReturn,
+  handleOpacity,
 }) => {
   const [active, setActive] = useState(false);
   const activeCardRef = useRef<any>(null);
@@ -148,6 +152,7 @@ const MatchCard: React.FC<MatchCardProps> = ({
         wind={wind}
         ref={activeCardRef}
         className="cardBox"
+        onClick={handleOpacity}
       >
         <CardTitle>{title}</CardTitle>
         <CardDifficulty>{handleLevel(level)}</CardDifficulty>
@@ -211,7 +216,12 @@ const MatchCard: React.FC<MatchCardProps> = ({
             </HiddenDifficultyContainer>
           </HiddenTextContainer>
         </HiddenRightContainer>
-        <HiddenBackButton onClick={handleInactive} />
+        <HiddenBackButton
+          onClick={() => {
+            handleInactive();
+            handleReturn();
+          }}
+        />
         <HiddenPageMoveButton onClick={handlePageMove}>
           레시피 보러가기!
         </HiddenPageMoveButton>
