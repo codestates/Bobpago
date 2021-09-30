@@ -26,20 +26,6 @@ export class UsersService {
     const followees = user.followees.length;
     const followers = user.followers.length;
 
-    const recipeIds = user.bookmarks.map((el) => {
-      return { id: el.recipeId };
-    });
-    const bookmarksOrigin = await this.recipeRepository.find({
-      relations: ['user'],
-      where: recipeIds,
-    });
-    const bookmarks = bookmarksOrigin.map((el) => {
-      const user = { id: el.user.id, nickname: el.user.nickname };
-      delete el.user;
-      delete el.userId;
-      return { ...el, user };
-    });
-
     delete user.bookmarks;
     delete user.password;
     delete user.refreshToken;
@@ -49,7 +35,6 @@ export class UsersService {
       return {
         data: {
           ...user,
-          bookmarks,
           followees,
           followers,
         },
