@@ -155,9 +155,7 @@ export const RightScrollContent = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 262px;
-  font-size: 24px;
-  font-family: sans-serif;
-  font-weight: 400;
+  font-size: 28px;
 `;
 
 export const TopBoxScroll = styled.section`
