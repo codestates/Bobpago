@@ -40,22 +40,26 @@ const SignUp = () => {
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
   const handleSignUp = async () => {
-    console.log(email, password, nickName);
-    const signUp = await axios.post(
-      `${process.env.REACT_APP_SERVER_URL}/signup`,
-      {
-        email: email,
-        password: password,
-        nickname: nickName,
-      },
-      {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
+    try {
+      const signUp = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/signup`,
+        {
+          email: email,
+          password: password,
+          nickname: nickName,
         },
-      }
-    );
-    console.log(signUp);
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      alert("로그인해주세요");
+      dispatch(showSignIn());
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect((): any => {

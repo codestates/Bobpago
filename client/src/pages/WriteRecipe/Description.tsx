@@ -50,8 +50,8 @@ const Description = ({
   const [imgFiles, setImgFiles] = useState<any>([]);
   const frontCoverRef = useRef<any>(null);
   const inputFileRef = useRef<any>(null);
-  const accessToken = useSelector(
-    (state: RootState) => state.AccesstokenReducer.accessToken
+  const { accessToken, tokenType } = useSelector(
+    (state: RootState) => state.AccesstokenReducer
   );
   const contents = useSelector(
     (state: RootState) => state.WriteRecipeContentsReducer
@@ -86,7 +86,7 @@ const Description = ({
     } else {
       frontCoverRef.current.style.transform = "rotateY(-1deg)";
       setTimeout(() => {
-        frontCoverRef.current.style.zIndex = 99;
+        if (frontCoverRef.current) frontCoverRef.current.style.zIndex = 99;
       }, 310);
     }
   }, [currentPage]);
@@ -107,7 +107,7 @@ const Description = ({
 
   const handleSubmitRecipe = async () => {
     const data = await axios.post(
-      `${process.env.REACT_APP_SERVER_URL}/recipe?tokenType=jwt`,
+      `${process.env.REACT_APP_SERVER_URL}/recipe?tokenType=${tokenType}`,
       {
         title: contents.title,
         amount: contents.serving,
@@ -125,13 +125,12 @@ const Description = ({
       }
     );
     const recipeId = data.data.data.recipe.id;
-    console.log(recipeId);
     const formData = new FormData();
     for (let i = 0; i < imgFiles.length; i++) {
       formData.append("files", imgFiles[i]);
     }
     const uploadImg = await axios.post(
-      `${process.env.REACT_APP_SERVER_URL}/image/${recipeId}?tokenType=jwt&path=recipe`,
+      `${process.env.REACT_APP_SERVER_URL}/image/${recipeId}?tokenType=${tokenType}&path=recipe`,
       formData,
       {
         withCredentials: true,
