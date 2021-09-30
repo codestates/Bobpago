@@ -67,7 +67,7 @@ export class MeController {
 
   @Post(':recipeId/bookmarks')
   async addBookmark(
-    @Param('recipeId') recipeId,
+    @Param('recipeId') recipeId: string,
     @GetUser() user: User,
   ): Promise<ResType> {
     return this.meService.addBookmark(recipeId, user);

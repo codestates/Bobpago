@@ -274,13 +274,11 @@ export class RecipesService {
       const ingredientInfo = {};
       recipeIngredientData.forEach((el) => {
         if (ingredientInfo[el.recipeId] === undefined) {
-          ingredientInfo[el.recipeId] = [];
+          ingredientInfo[el.recipeId] = [el.ingredient];
         } else {
           ingredientInfo[el.recipeId].push(el.ingredient);
         }
       });
-
-      console.log(recipeData.length);
 
       // 7. 4번에서 완성해둔 recipeData를 map으로 가공하여 ingredient 배열 삽입(메인, 서브 재료 나누기도 진행)
       // 6번을 통해 이미 ingredientInfo에 각 recipe 아이디에 맞는 ingredient 배열이 완성되어 있음. 이를 활용한 것
@@ -325,15 +323,15 @@ export class RecipesService {
   }
 
   async updateReaction(
-    user: User,
-    recipeId: string,
-    reaction: string,
+    userId: number,
+    recipeId: number,
+    reaction: number,
   ): Promise<ResType> {
-    if (reaction === '1') {
+    if (reaction === 1) {
       try {
         await this.recipeReactionRepository.save({
-          userId: user.id,
-          recipeId: +recipeId,
+          userId,
+          recipeId,
         });
         return {
           data: {
@@ -351,17 +349,25 @@ export class RecipesService {
           message: '레시피 좋아요가 이미 추가되었습니다.',
         };
       }
-    } else if (reaction === '0') {
-      await this.recipeReactionRepository.delete({
-        userId: user.id,
-        recipeId: +recipeId,
+    } else if (reaction === 0) {
+      const result = await this.recipeReactionRepository.delete({
+        userId,
+        recipeId,
       });
+
+      let message;
+      if (result.affected === 1) {
+        message = '레시피 좋아요가 삭제되었습니다.';
+      } else {
+        message = '레시피 좋아요가 이미 삭제되었습니다.';
+      }
+
       return {
         data: {
           reaction_state: 0,
         },
         statusCode: 200,
-        message: '레시피 좋아요가 삭제되었습니다.',
+        message,
       };
     } else {
       throw new BadRequestException('레시피 업데이트에 실패하였습니다.');
