@@ -55,10 +55,10 @@ export class RecipesController {
 
   @Post(':recipeId')
   async updateReaction(
-    @GetUser() user: User,
+    @GetUser('id') userId: number,
     @Param('recipeId') recipeId: string,
     @Query('reaction') reaction: string,
   ): Promise<ResType> {
-    return this.recipesService.updateReaction(user, recipeId, reaction);
+    return this.recipesService.updateReaction(userId, +recipeId, +reaction);
   }
 }

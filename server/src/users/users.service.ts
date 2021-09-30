@@ -6,6 +6,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { ResType } from 'src/common/response-type';
 import { Follow } from 'src/entities/follow.entity';
+import { Recipe } from 'src/entities/recipe.entity';
 import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
 
@@ -16,12 +17,30 @@ export class UsersService {
     private usersRepository: Repository<User>,
     @InjectRepository(Follow)
     private followRepository: Repository<Follow>,
+    @InjectRepository(Recipe)
+    private recipeRepository: Repository<Recipe>,
   ) {}
 
   async getUserInfo(userId: string): Promise<ResType> {
     const user = await this.usersRepository.findOne({ id: +userId });
     const followees = user.followees.length;
     const followers = user.followers.length;
+
+    const recipeIds = user.bookmarks.map((el) => {
+      return { id: el.recipeId };
+    });
+    const bookmarksOrigin = await this.recipeRepository.find({
+      relations: ['user'],
+      where: recipeIds,
+    });
+    const bookmarks = bookmarksOrigin.map((el) => {
+      const user = { id: el.user.id, nickname: el.user.nickname };
+      delete el.user;
+      delete el.userId;
+      return { ...el, user };
+    });
+
+    delete user.bookmarks;
     delete user.password;
     delete user.refreshToken;
     delete user.followees;
@@ -30,6 +49,7 @@ export class UsersService {
       return {
         data: {
           ...user,
+          bookmarks,
           followees,
           followers,
         },
