@@ -138,7 +138,7 @@ export class RecipesService {
   async deleteRecipe(recipeId) {
     try {
       // 1. AWS S3에서 이미지 객체 삭제
-      await this.imageService.deleteById(recipeId);
+      await this.imageService.deleteById(recipeId, 'recipe');
 
       // 2. 레시피_재료 테이블에서 레시피 아이디 기준으로 삭제
       await this.recipeIngredientRepository.delete({ recipeId });

@@ -31,7 +31,6 @@ import {
   ModalBackground,
   MinusIcon,
   Container,
-  Container2,
 } from "./styles";
 
 const UserPage = () => {
@@ -198,11 +197,11 @@ const UserPage = () => {
             </ProfileContentsContainer>
           </UserProfileContainer>
           <FollowContainer>
-            <FollowBtn onClick={() => handleFolloweeModalOn(true)}>
+            <FollowBtn onClick={() => handleFolloweeModalOn()}>
               Followee
             </FollowBtn>
             <FollowNum>{userInfo && userInfo.followees}</FollowNum>
-            <FollowBtn onClick={() => handleFollowerModalOn(true)}>
+            <FollowBtn onClick={() => handleFollowerModalOn()}>
               Follower
             </FollowBtn>
             <FollowNum>{userInfo && userInfo.followers}</FollowNum>
