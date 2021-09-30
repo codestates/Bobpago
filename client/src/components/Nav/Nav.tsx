@@ -18,7 +18,7 @@ import SignUp from "pages/SignUpAndSignIn/SignUp";
 import { useDispatch, useSelector } from "react-redux";
 import { showSignIn } from "actions/SignUpAndSignIn";
 import { RootState } from "reducers";
-import { REMOVE_ACCESSTOKEN } from "actions/Accesstoken";
+import { removeAccessToken } from "actions/Accesstoken";
 import { CLEAR_CLICK_DATA } from "actions/IngredientAction";
 
 const Nav = ({ opac }: { opac: boolean }) => {
@@ -32,7 +32,7 @@ const Nav = ({ opac }: { opac: boolean }) => {
   const handleLogout = async () => {
     try {
       await axios.post(
-        `${serverUrl}/auth/signout?tokenType=jwt`,
+        `${serverUrl}/auth/signout?tokenType=${AccessState.tokenType}`,
         {},
         {
           withCredentials: true,
@@ -42,9 +42,7 @@ const Nav = ({ opac }: { opac: boolean }) => {
           },
         }
       );
-      dispatch({
-        type: REMOVE_ACCESSTOKEN,
-      });
+      dispatch(removeAccessToken());
       setAuthorization(false);
     } catch (err) {
       console.log(err);
@@ -55,7 +53,7 @@ const Nav = ({ opac }: { opac: boolean }) => {
     if (AccessState.accessToken !== "") {
       setAuthorization(true);
     }
-  }, []);
+  }, [AccessState]);
   return (
     <NavContainer opac={opac}>
       <SignIn />

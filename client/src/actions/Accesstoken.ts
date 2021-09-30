@@ -1,10 +1,14 @@
 export const SET_ACCESSTOKEN = "SET_ACCESSTOKEN";
 export const REMOVE_ACCESSTOKEN = "REMOVE_ACCESSTOKEN";
 
-export const setAccessToken = (accesstoken: string) => {
+export const setAccessToken = (
+  accessToken: string,
+  tokenType: string,
+  userId: number
+) => {
   return {
     type: SET_ACCESSTOKEN,
-    payload: { accesstoken },
+    payload: { accessToken, tokenType, userId },
   };
 };
 

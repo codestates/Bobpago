@@ -43,6 +43,7 @@ export interface IngredientClickData {
 export interface Accesstoken {
   accessToken: string;
   tokenType: string;
+  userId: number | null;
 }
 
 export interface MatchRecipe {

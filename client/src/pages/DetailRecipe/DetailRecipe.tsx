@@ -180,7 +180,6 @@ const DetailRecipe = () => {
           scrollTo: { y: i * window.innerHeight, autoKill: false },
           duration: 0.5,
         });
-
         const image = document.body.querySelector(
           ".image"
         ) as HTMLParagraphElement;
@@ -210,16 +209,25 @@ const DetailRecipe = () => {
             item.classList.remove("mapActive");
           }
         });
-
-        rightScroll.style.transform = `translateY(${i * -262}px)`;
-        topBox.style.transform = `translateY(${i * -100}%)`;
-        leftBox.style.transform = `translateX(${i * -moveRatio}%)`;
-        rightBox.style.transform = `translateX(${
-          moveRatio - 100 - moveRatio * -i
-        }%)`;
-        image.style.transform = `translateY(${i * -100}%)`;
-        main.style.transform = `translateY(${i * -100}%)`;
-        sub.style.transform = `translateY(${i * -100}%)`;
+        if (
+          rightScroll &&
+          topBox &&
+          leftBox &&
+          rightBox &&
+          image &&
+          main &&
+          sub
+        ) {
+          rightScroll.style.transform = `translateY(${i * -262}px)`;
+          topBox.style.transform = `translateY(${i * -100}%)`;
+          leftBox.style.transform = `translateX(${i * -moveRatio}%)`;
+          rightBox.style.transform = `translateX(${
+            moveRatio - 100 - moveRatio * -i
+          }%)`;
+          image.style.transform = `translateY(${i * -100}%)`;
+          main.style.transform = `translateY(${i * -100}%)`;
+          sub.style.transform = `translateY(${i * -100}%)`;
+        }
 
         // rightScrollRef.current.style.transform = `translateY(${i * -262}px)`;
         // topBoxRef.current.style.transform = `translateY(${i * -100}%)`;
