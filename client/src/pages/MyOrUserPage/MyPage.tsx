@@ -126,7 +126,7 @@ const MyPage = () => {
     data.imageUrl &&
       setProfileImg(`${process.env.REACT_APP_S3_IMG_URL}${data.imageUrl}`);
     setMyPostData(data.recipes);
-    setBookmarkData(data.bookmarks);
+    // setBookmarkData(data.bookmarks);
     setFollowingNum(data.followees);
     setFollowerNum(data.followers);
     setId(data.id);
@@ -418,18 +418,22 @@ const MyPage = () => {
             </EditBtn>
             <DivisionLine />
             <GridContainer>
-              {bookmarkData.slice(0, bookmarkNum).map((el: any, i: number) => (
-                <BookmarkCard
-                  removeBookmarkCheck={removeBookmarkCheck}
-                  index={i}
-                  key={i}
-                  postData={el}
-                  fix={bookmarkFix}
-                />
-              ))}
+              {bookmarkData &&
+                bookmarkData
+                  .slice(0, bookmarkNum)
+                  .map((el: any, i: number) => (
+                    <BookmarkCard
+                      removeBookmarkCheck={removeBookmarkCheck}
+                      index={i}
+                      key={i}
+                      postData={el}
+                      fix={bookmarkFix}
+                    />
+                  ))}
             </GridContainer>
             <IconContainer>
-              {bookmarkNum > standardNum &&
+              {bookmarkData &&
+                bookmarkNum > standardNum &&
                 bookmarkData.length > standardNum && (
                   <MinusIcon
                     onClick={() => setBookmarkNum(bookmarkNum - standardNum)}
