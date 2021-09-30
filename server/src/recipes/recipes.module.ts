@@ -12,6 +12,7 @@ import { Bookmark } from '../entities/bookmark.entity';
 import { Comment } from '../entities/comment.entity';
 import { CommentReaction } from '../entities/comment-reaction.entity';
 import { ImageService } from '../image/image.service';
+import { CommentsService } from '../comments/comments.service';
 
 @Module({
   imports: [
@@ -28,6 +29,6 @@ import { ImageService } from '../image/image.service';
     ]),
   ],
   controllers: [RecipesController],
-  providers: [RecipesService, ImageService],
+  providers: [RecipesService, ImageService, CommentsService],
 })
 export class RecipesModule {}

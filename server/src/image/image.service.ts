@@ -138,7 +138,7 @@ export class ImageService {
     };
   }
 
-  async deleteById(id, path): Promise<void> {
+  async deleteById(id: number, path: string): Promise<void> {
     try {
       switch (path) {
         case 'recipe':
@@ -190,5 +190,18 @@ export class ImageService {
         message: '사진 업로드 실패',
       });
     }
+  }
+
+  // 특정 레시피 삭제시 안에 있던 댓글 S3 이미지 전체 삭제
+  async deleteComments(recipeId: number) {
+    const comments = await this.commentRepository.find({ recipeId });
+    console.log('⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️', comments);
+    await Promise.all(
+      comments.map(async (comment) => {
+        if (comment.imageUrl !== '') {
+          return await this.deleteById(comment.id, 'comment');
+        }
+      }),
+    );
   }
 }
