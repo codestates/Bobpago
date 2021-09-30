@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import { Comment } from '../entities/comment.entity';
 import { User } from 'src/entities/user.entity';
 import { CommentReaction } from '../entities/comment-reaction.entity';
+import { ImageService } from '../image/image.service';
 
 @Injectable()
 export class CommentsService {
@@ -14,6 +15,7 @@ export class CommentsService {
     @InjectRepository(Comment) private commentRepository: Repository<Comment>,
     @InjectRepository(CommentReaction)
     private commentReactionRepository: Repository<CommentReaction>,
+    private readonly imageService: ImageService,
   ) {}
 
   async create(
@@ -57,6 +59,10 @@ export class CommentsService {
   async delete(commentId: number): Promise<ResType> {
     let message;
     try {
+      // 1. S3 이미지 삭제
+      await this.imageService.deleteById(commentId, 'comment');
+
+      // 2. 댓글 레포지토리 삭제
       const result = await this.commentRepository.delete(commentId);
       if (result.affected) {
         message = '댓글을 삭제 하였습니다.';

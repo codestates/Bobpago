@@ -29,7 +29,9 @@ export class CommentReaction extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => Comment, (comment) => comment.commentReactions)
+  @ManyToOne(() => Comment, (comment) => comment.commentReactions, {
+    onDelete: 'CASCADE',
+  })
   comment: Comment;
 
   @OneToOne(() => User)
