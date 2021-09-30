@@ -53,7 +53,7 @@ const Ingredient = ({
       }
     );
     console.log(data);
-    await setOptions(data.data.data);
+    setOptions(data.data.data);
   }
 
   useEffect(() => {
@@ -76,26 +76,6 @@ const Ingredient = ({
     dispatch(setIngredient(filteredSelected));
     dispatch(goToNextPage());
   };
-
-  useEffect(() => {
-    const arr = [
-      { id: 1, name: "김치" },
-      { id: 2, name: "단무지" },
-      { id: 3, name: "깍두기" },
-      { id: 4, name: "참치" },
-      { id: 5, name: "햄" },
-      { id: 6, name: "소세지" },
-      { id: 7, name: "마늘" },
-      { id: 8, name: "양파" },
-      { id: 9, name: "카레가루" },
-      { id: 10, name: "3분짜장" },
-      { id: 11, name: "간장" },
-      { id: 12, name: "소금" },
-      { id: 13, name: "설탕" },
-      { id: 14, name: "식초" },
-    ];
-    setOptions(arr);
-  }, []);
 
   useEffect(() => {
     window.addEventListener("mousedown", handleClickOutside);

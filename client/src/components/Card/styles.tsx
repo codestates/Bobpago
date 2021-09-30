@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { SuitHeartFill } from "@styled-icons/bootstrap/SuitHeartFill/SuitHeartFill";
 import { RemoveCircle } from "@styled-icons/ionicons-sharp/RemoveCircle/RemoveCircle";
+import { main } from "theme";
+
 export const CardContainer = styled.div`
   margin: 0 auto;
   margin-top: 1em;
@@ -12,6 +14,7 @@ export const CardContainer = styled.div`
   overflow: hidden;
   text-decoration: none;
   border: 1px solid #c9c9c9;
+  background-color: #fff;
   &:hover .card__image {
     transform: scale(1.25);
   }

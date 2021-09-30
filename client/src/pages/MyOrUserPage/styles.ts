@@ -3,21 +3,29 @@ import { PlusLg } from "@styled-icons/bootstrap/PlusLg/PlusLg";
 import { ThreeDotsVertical } from "@styled-icons/bootstrap/ThreeDotsVertical/ThreeDotsVertical";
 import { Check } from "@styled-icons/bootstrap/Check/Check";
 import { DashLg } from "@styled-icons/bootstrap/DashLg/DashLg";
+import { main } from "theme";
+
+export const Container = styled.div`
+  position: relative;
+  // top: 4em;
+  padding-top: 4em;
+  width: 100%;
+  height: 150%;
+  background-color: ${main.bg};
+`;
 
 export const PageContainer = styled.div`
-  position: relative;
-  top: 5em;
-
+  background-color: ${main.bg};
   margin: 0 auto;
   width: 50em;
   min-height: 10em;
+  position: relative;
 `;
 
 export const UserProfileContainer = styled.div`
   display: flex;
   flex-direction: row;
   min-height: 5em;
-  background: #fff;
   width: 100%;
 `;
 
@@ -140,8 +148,6 @@ export const IconContainer = styled.div`
   width: 100%;
   min-height: 1em;
   text-align: center;
-  align-item: center;
-  justify-content: center;
   path {
     fill: #424242;
   }

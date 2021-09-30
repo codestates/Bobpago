@@ -1,5 +1,6 @@
 import styled, { keyframes } from "styled-components";
 import { QuestionMarkCircle } from "@styled-icons/evaicons-solid/QuestionMarkCircle/QuestionMarkCircle";
+import { main } from "theme";
 
 interface SlideProps {
   page: number;
@@ -10,7 +11,7 @@ export const ContainerWrapper = styled.div`
   width: 100%;
   height: 100%;
   position: absolute;
-  background-color: #ececec;
+  background-color: ${main.bg};
   display: flex;
   flex-direction: row;
   box-sizing: border-box;
@@ -22,7 +23,7 @@ export const TitleSlide = styled.div<SlideProps>`
   position: absolute;
   left: ${(props) => -props.page * 100 + "%" || "0"};
   width: 100%;
-  background-color: #ececec;
+  background-color: ${main.bg};
   height: 100%;
   transform: ${(props) => (props.scale === 0 ? "scale(1)" : "scale(0.93)")};
   transition: all 0.7s ease;

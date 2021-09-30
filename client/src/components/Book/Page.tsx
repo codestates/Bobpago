@@ -24,17 +24,19 @@ const Page = ({
   const inputFileRef = useRef<any>(null);
 
   useEffect(() => {
-    if (currentPage > selfPage) {
-      pageRef.current.style.transform = `rotateY(${selfPage * 0.5 - 179}deg)`;
-      setTimeout(() => {
-        pageRef.current.style.zIndex = selfPage + 1;
-      }, 350);
-    } else {
-      pageRef.current.style.boxShadow = "none";
-      pageRef.current.style.transform = "rotateY(-1deg)";
-      setTimeout(() => {
-        pageRef.current.style.zIndex = -selfPage + 99;
-      }, 310);
+    if (pageRef.current) {
+      if (currentPage > selfPage) {
+        pageRef.current.style.transform = `rotateY(${selfPage * 0.5 - 179}deg)`;
+        setTimeout(() => {
+          pageRef.current.style.zIndex = selfPage + 1;
+        }, 350);
+      } else {
+        pageRef.current.style.boxShadow = "none";
+        pageRef.current.style.transform = "rotateY(-1deg)";
+        setTimeout(() => {
+          if (pageRef.current) pageRef.current.style.zIndex = -selfPage + 99;
+        }, 310);
+      }
     }
   }, [currentPage]);
 
