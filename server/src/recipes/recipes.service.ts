@@ -15,6 +15,7 @@ import { RecipeImage } from '../entities/recipe-image.entity';
 import { RecipeReaction } from 'src/entities/recipe-reaction.entity';
 import { ImageService } from '../image/image.service';
 import { EALREADY } from 'constants';
+import { CommentsService } from '../comments/comments.service';
 
 @Injectable()
 export class RecipesService {
@@ -28,6 +29,7 @@ export class RecipesService {
     @InjectRepository(RecipeReaction)
     private recipeReactionRepository: Repository<RecipeReaction>,
     private readonly imageService: ImageService,
+    private readonly commentsService: CommentsService,
   ) {}
 
   async createRecipe(
@@ -135,21 +137,16 @@ export class RecipesService {
     console.log('🚀', descs);
   }
 
-  async deleteRecipe(recipeId) {
+  async deleteRecipe(recipeId: number) {
     try {
       // 1. AWS S3에서 이미지 객체 삭제
       await this.imageService.deleteById(recipeId, 'recipe');
 
-      // 2. 레시피_재료 테이블에서 레시피 아이디 기준으로 삭제
-      await this.recipeIngredientRepository.delete({ recipeId });
+      // 2. 댓글 S3 이미지 삭제
+      await this.imageService.deleteComments(recipeId);
 
-      // 3. 레시피_이미지 테이블에서 레시피 아이디 기준으로 삭제
-      await this.recipeImageRepository.delete({ recipeId });
-
-      // 4. 레시피 테이블에서 삭제
+      // 3. 레시피 테이블에서 삭제
       await this.recipeRepository.delete({ id: recipeId });
-
-      // 싱크 true 하면 onDelete: casecade 한거 적용되는데, 싱크 false하면 오류뜸 ㅠ
 
       return {
         data: null,

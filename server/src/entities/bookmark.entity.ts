@@ -27,9 +27,11 @@ export class Bookmark extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => User, (user) => user.bookmarks)
+  @ManyToOne(() => User, (user) => user.bookmarks, { onDelete: 'CASCADE' })
   user: User;
 
-  @ManyToOne(() => Recipe, (recipe) => recipe.bookmarks)
+  @ManyToOne(() => Recipe, (recipe) => recipe.bookmarks, {
+    onDelete: 'CASCADE',
+  })
   recipe: Recipe;
 }
