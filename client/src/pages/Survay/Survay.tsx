@@ -140,24 +140,24 @@ const Survay = () => {
           />
           <GoodCookerPage>
             <GoodCookerContainer>
-              <TooltipContainer>
-                <LeftQuestionIcons
-                  onMouseEnter={() => {
-                    console.log(tooltipRef);
-                    tooltipRef.current.style.opacity = "1";
-                  }}
-                  onMouseLeave={() => {
-                    tooltipRef.current.style.opacity = "0";
-                  }}
-                />
-                <LeftSurvayTooltip ref={tooltipRef}>
-                  최소한 3개의 재료를 선택해야 넘어갈 수 있습니다!
-                </LeftSurvayTooltip>
-              </TooltipContainer>
               <GoodCookerForm>
-                <GoodCookerTitle>
-                  냉장고와 찬장에 있는 재료를 골라주세요!
-                </GoodCookerTitle>
+                <TooltipContainer>
+                  <GoodCookerTitle>
+                    냉장고와 찬장에 있는 재료를 골라주세요!
+                  </GoodCookerTitle>
+                  <LeftQuestionIcons
+                    onMouseEnter={() => {
+                      console.log(tooltipRef);
+                      tooltipRef.current.style.opacity = "1";
+                    }}
+                    onMouseLeave={() => {
+                      tooltipRef.current.style.opacity = "0";
+                    }}
+                  />
+                  <LeftSurvayTooltip ref={tooltipRef}>
+                    최소한 3개의 재료를 선택해야 넘어갈 수 있습니다!
+                  </LeftSurvayTooltip>
+                </TooltipContainer>
                 <GoodCookerSearchForm>
                   <GoodCookerSearch
                     onChange={(e: any) => {
