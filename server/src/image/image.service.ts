@@ -109,9 +109,9 @@ export class ImageService {
     console.log(files);
     console.log('recipeId : ', id);
     // 1. S3 이미지 삭제
-    await this.deleteById(id);
+    await this.deleteById(id, path);
 
-    // db내 각 테이블에 저장되있는 url null로 변경
+    // 2. db내 각 테이블에 저장되있는 url null로 변경
     switch (path) {
       case 'recipe':
         const images = await this.recipeImageRepository.find({ recipeId: id });
@@ -119,6 +119,7 @@ export class ImageService {
         await this.recipeImageRepository.save(images);
         break;
       case 'comment':
+        await this.commentRepository.update(id, { imageUrl: null });
         break;
       case 'user':
         await this.userRepository.update(id, { imageUrl: null });
@@ -127,6 +128,7 @@ export class ImageService {
         throw new BadRequestException();
     }
 
+    // 3. S3 이미지 업로드
     await this.upload(files, id, path);
 
     return {
@@ -136,20 +138,51 @@ export class ImageService {
     };
   }
 
-  async deleteById(recipeId): Promise<void> {
+  async deleteById(id, path): Promise<void> {
     try {
-      const uploadedFiles = await this.recipeImageRepository.find({ recipeId });
-      await Promise.all(
-        uploadedFiles.map(async (file) => {
-          console.log(file);
+      switch (path) {
+        case 'recipe':
+          const recipeImages = await this.recipeImageRepository.find({
+            recipeId: id,
+          });
+          await Promise.all(
+            recipeImages.map(async (file) => {
+              console.log(file);
+              await s3
+                .deleteObject({
+                  Bucket: process.env.AWS_S3_BUCKET_NAME,
+                  Key: file.imageUrl,
+                })
+                .promise();
+            }),
+          );
+          break;
+        case 'comment':
+          const commentImage = await this.commentRepository.findOne({
+            id,
+          });
           await s3
             .deleteObject({
               Bucket: process.env.AWS_S3_BUCKET_NAME,
-              Key: file.imageUrl,
+              Key: commentImage.imageUrl,
             })
             .promise();
-        }),
-      );
+          break;
+        case 'user':
+          const userImage = await this.userRepository.findOne({
+            id,
+          });
+          await s3
+            .deleteObject({
+              Bucket: process.env.AWS_S3_BUCKET_NAME,
+              Key: userImage.imageUrl,
+            })
+            .promise();
+          break;
+        default:
+          throw new BadRequestException('path정보가 정확하지 않습니다.');
+      }
+
       console.log('🚀🚀🚀🚀🚀🚀🚀🚀');
     } catch (e) {
       throw new BadRequestException({
