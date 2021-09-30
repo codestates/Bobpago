@@ -2,6 +2,7 @@ import styled, { keyframes } from "styled-components";
 import { Time } from "@styled-icons/boxicons-regular/Time";
 import { Like } from "@styled-icons/boxicons-regular/Like";
 import { ArrowLeft } from "@styled-icons/bootstrap/ArrowLeft";
+import { main } from "theme";
 
 interface MatchCardProps {
   rotate: number;
@@ -59,8 +60,9 @@ export const MatchCardBox = styled.div<MatchCardProps>`
   margin-left: 3em;
   z-index: 150;
   @media only screen and (max-width: 768px) {
-    min-width: 8em;
-    height: 12em;
+    min-width: 12em;
+    height: 14em;
+    margin-right: 1em;
   }
   &:hover {
     animation: none;
@@ -79,7 +81,7 @@ export const CardTitle = styled.div`
     1px 1px 0 #000;
 
   @media only screen and (max-width: 768px) {
-    font-size: 12px;
+    font-size: ${main.mostSmallFont};
     margin-top: 1.5em;
   }
 `;

@@ -67,12 +67,6 @@ export const TotalMatchContainer = styled.div`
   background-color: ${main.bg};
   position: relative;
   overflow: hidden;
-  .lineear {
-    position: absolute;
-    z-index: 1;
-    left: -25%;
-    top: 30%;
-  }
   .leftmove1 {
     animation: ${pageLeftMoveAnimate} 3s;
     animation-fill-mode: forwards;
@@ -99,7 +93,8 @@ export const MatchTextContainer = styled.div`
   flex-direction: column;
   /* transform: translateY(-25%); */
   top: 5%;
-  z-index: 1;
+  z-index: 10;
+  transition: 0.5s;
 `;
 
 export const MatchTopContainer = styled.div`
@@ -110,13 +105,13 @@ export const MatchTopContainer = styled.div`
 export const MatchText = styled.div`
   font-weight: 700;
   color: #ffffff;
-  font-size: 56px;
+  font-size: ${main.bigFont};
   text-shadow: -1px -1px 2px #000, 1px -1px 2px #000, -1px 1px 2px #000,
     1px 1px 2px #000;
   margin-right: 0.3em;
 
   @media only screen and (max-width: 768px) {
-    font-size: 24px;
+    font-size: ${main.middleFont};
   }
 `;
 
@@ -181,10 +176,20 @@ export const MatchCardScroll = styled.div`
   transform: translateY(100%);
   transition: 1.3s;
   overflow: hidden;
-  overflow-x: scroll;
   z-index: 1;
   transition-timing-function: cubic-bezier(1, -0.275, 0.44, 1.25);
-  /* z-index: 100; */
+`;
+
+export const MatchCardContainer = styled.div`
+  width: 100%;
+  height: 70%;
+  display: flex;
+  align-items: center;
+  z-index: 900;
+  top: 30%;
+  position: absolute;
+  transition: 1.3s;
+  overflow-x: scroll;
   ::-webkit-scrollbar {
     background-color: #ee9999;
     height: 6px;
@@ -192,17 +197,6 @@ export const MatchCardScroll = styled.div`
   ::-webkit-scrollbar-thumb {
     background-color: #ff4040;
   }
-`;
-
-export const MatchCardContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  z-index: 90;
-  top: 15%;
-  position: absolute;
-  transition: 1.3s;
 
   .active {
     display: flex;
@@ -215,7 +209,6 @@ export const MatchCardContainer = styled.div`
     z-index: 1000;
     transition: 0.5s;
     border-radius: 15px;
-    /* transition-timing-function: cubic-bezier(1, 2, 0.44, 1.25); */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
 
     ::before {
@@ -255,13 +248,16 @@ export const QuestionIcons = styled(QuestionCircle)`
   &:hover {
     animation: normal;
   }
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
 `;
 
 export const MyIngredient = styled.div`
   margin-top: 0.5em;
   font-size: 24px;
   @media only screen and (max-width: 768px) {
-    font-size: 16px;
+    font-size: 28px;
   }
 `;
 

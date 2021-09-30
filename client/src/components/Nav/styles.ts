@@ -39,6 +39,7 @@ export const NavLogo = styled.div<NavProps>`
   color: ${({ opac }): any => {
     return opac ? "#ffffff" : "black";
   }};
+  font-size: 22px;
 
   &:hover {
     color: red;
@@ -52,6 +53,7 @@ export const NavEtcUl = styled.ul`
   list-style: none;
   margin-right: 2.5em;
   align-items: center;
+  font-size: 22px;
 `;
 
 export const NavEtcList = styled.li`
