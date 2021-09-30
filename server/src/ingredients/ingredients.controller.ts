@@ -11,8 +11,13 @@ export class IngredientsController {
     return this.ingredientsService.getAllIngredient();
   }
 
-  @Get('summary')
-  getSummary(): Promise<ResType> {
+  @Get('main')
+  async findMain(): Promise<ResType> {
+    return this.ingredientsService.getMainIngredient();
+  }
+
+  @Get('basic')
+  async findBasic(): Promise<ResType> {
     return this.ingredientsService.getBasicIngredient();
   }
 }

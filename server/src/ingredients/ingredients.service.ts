@@ -12,11 +12,20 @@ export class IngredientsService {
   ) {}
 
   async getAllIngredient(): Promise<ResType> {
-    const ingredients = await this.ingredientRepository.find({ type: 'main' });
+    const ingredients = await this.ingredientRepository.find();
     return {
       data: ingredients,
       statusCode: 200,
       message: '모든 재료 조회가 완료되었습니다.',
+    };
+  }
+
+  async getMainIngredient(): Promise<ResType> {
+    const ingredients = await this.ingredientRepository.find({ type: 'main' });
+    return {
+      data: ingredients,
+      statusCode: 200,
+      message: '모든 주재료 조회가 완료되었습니다.',
     };
   }
 
@@ -25,7 +34,7 @@ export class IngredientsService {
     return {
       data: ingredients,
       statusCode: 200,
-      message: '기본 재료 조회가 완료되었습니다.',
+      message: '모든 기본재료 조회가 완료되었습니다.',
     };
   }
 }

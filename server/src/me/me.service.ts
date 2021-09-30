@@ -13,6 +13,7 @@ import { ResType } from 'src/common/response-type';
 import axios from 'axios';
 import { UpdateUserDto } from './dto/update-me.dto';
 import { Bookmark } from '../entities/bookmark.entity';
+import { Recipe } from 'src/entities/recipe.entity';
 
 @Injectable()
 export class MeService {
@@ -21,6 +22,8 @@ export class MeService {
     private usersRepository: Repository<User>,
     @InjectRepository(Bookmark)
     private bookmarkRepository: Repository<Bookmark>,
+    @InjectRepository(Recipe)
+    private recipeRepository: Repository<Recipe>,
   ) {}
 
   async signUp(createUserDto: CreateUserDto): Promise<any> {
@@ -53,10 +56,19 @@ export class MeService {
   async getMyInfo(user: User): Promise<ResType> {
     const followees = user.followees.length;
     const followers = user.followers.length;
+
+    const recipeIds = user.bookmarks.map((el) => {
+      return { id: el.recipeId };
+    });
+
+    const boomarks = await this.recipeRepository.find({
+      where: recipeIds,
+    });
+    delete user.bookmarks;
     delete user.followees;
     delete user.followers;
     return {
-      data: { ...user, followees, followers },
+      data: { ...user, boomarks, followees, followers },
       statusCode: 200,
       message: `내 정보 조회에 성공하였습니다.`,
     };
@@ -178,7 +190,6 @@ export class MeService {
 
   async restoreMyAccount(email: string): Promise<ResType> {
     try {
-      await this.usersRepository.findOne({ email });
       await this.usersRepository.restore({ email });
       return {
         data: null,
@@ -219,14 +230,14 @@ export class MeService {
     });
     try {
       await this.bookmarkRepository.save(bookmark);
+      return {
+        data: {},
+        statusCode: 201,
+        message: '북마크가 추가되었습니다.',
+      };
     } catch (e) {
-      throw e;
+      throw new BadRequestException();
     }
-    return {
-      data: {},
-      statusCode: 201,
-      message: '북마크가 추가되었습니다.',
-    };
   }
 
   async deleteBookamark(recipeId): Promise<ResType> {
