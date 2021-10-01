@@ -1,13 +1,24 @@
 import styled from "styled-components";
+import { Trash } from "@styled-icons/boxicons-solid/Trash/Trash";
+import { Edit } from "@styled-icons/boxicons-solid/Edit/Edit";
 
 export const TotalSudoContainer = styled.div`
   width: 100%;
   height: 100%;
   position: relative;
+  ::before {
+    content: "";
+    position: absolute;
+    bottom: -0.7em;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: gray;
+  }
 `;
 
-export const UserProfile = styled.div`
-  display: flex;
+export const Container = styled.div`
+  width: 100%;
   margin-bottom: 2em;
   position: relative;
   ::before {
@@ -19,6 +30,12 @@ export const UserProfile = styled.div`
     height: 1px;
     background-color: gray;
   }
+`;
+
+export const UserProfile = styled.div`
+  display: flex;
+  margin-bottom: 0.5em;
+  position: relative;
 `;
 
 export const ProfileImage = styled.div`
@@ -47,12 +64,31 @@ export const CommentContent = styled.div`
   font-size: 14px;
 `;
 
-export const CommentImage = styled.div`
-  width: 50%;
-  height: 50%;
+export const CommentImage = styled.img`
+  width: 30%;
+  height: auto;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: salmon;
-  margin-bottom: 5em;
+  background-color: transparent;
+`;
+
+export const RemoveIcon = styled(Trash)`
+  position: absolute;
+  width: 1em;
+  height: 1em;
+  top: 0em;
+  right: 1em;
+  fill: grey;
+  cursor: pointer;
+`;
+
+export const EditIcon = styled(Edit)`
+  position: absolute;
+  width: 1em;
+  height: 1em;
+  top: 0em;
+  right: 3em;
+  fill: grey;
+  cursor: pointer;
 `;

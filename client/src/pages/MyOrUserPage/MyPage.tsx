@@ -126,7 +126,6 @@ const MyPage = () => {
     data.imageUrl &&
       setProfileImg(`${process.env.REACT_APP_S3_IMG_URL}${data.imageUrl}`);
     setMyPostData(data.recipes);
-    // setBookmarkData(data.bookmarks);
     setFollowingNum(data.followees);
     setFollowerNum(data.followers);
     setId(data.id);
@@ -142,11 +141,13 @@ const MyPage = () => {
   //   window.innerWidth
   // }, [window.innerWidth])
 
+  // 팔로우 팔로워 모달 끄기
   const ModalOff = () => {
     setFollowingModal(false);
     setFollowerModal(false);
   };
 
+  // 개인정보 수정 비밀번호 확인
   const passwordCheckEdit = async () => {
     try {
       const data = await axios.post(
@@ -172,6 +173,7 @@ const MyPage = () => {
     }
   };
 
+  // 회원탈퇴 비밀번호 확인
   const passwordCheckWithDraw = async () => {
     const data = await axios.post(
       `${process.env.REACT_APP_SERVER_URL}/checkMyInfo?tokenType=${tokenType}`,
@@ -194,6 +196,7 @@ const MyPage = () => {
     }
   };
 
+  // 회원정보 수정
   const handleChangeMyInfo = async () => {
     if (temporaryImg) {
       const formData = new FormData();
@@ -238,6 +241,7 @@ const MyPage = () => {
     }
   };
 
+  // 회원탈퇴
   const handleWithDraw = async () => {
     try {
       const data = await axios.delete(
@@ -257,6 +261,7 @@ const MyPage = () => {
     }
   };
 
+  //팔로잉 모달 켜기
   const handleFollowingModalOn = async () => {
     const data = await axios.get(
       `${process.env.REACT_APP_SERVER_URL}/user/${id}/followee?tokenType=${tokenType}`,
@@ -272,6 +277,7 @@ const MyPage = () => {
     setFollowingModal(true);
   };
 
+  //팔로워 모달 켜기
   const handleFollowerModalOn = async () => {
     const data = await axios.get(
       `${process.env.REACT_APP_SERVER_URL}/user/${id}/follower?tokenType=${tokenType}`,
@@ -287,6 +293,7 @@ const MyPage = () => {
     setFollowerModal(true);
   };
 
+  // 내 글 삭제
   const removeMyPost = async (i: number, id: number) => {
     const copiedData = myPostData.slice();
     copiedData.splice(i, 1);
@@ -303,6 +310,7 @@ const MyPage = () => {
     );
   };
 
+  // 북마크 삭제
   const removeBookmarkCheck = async (i: number, id: number) => {
     const copiedData = bookmarkData.slice();
     copiedData.splice(i, 1);
@@ -319,6 +327,7 @@ const MyPage = () => {
     );
   };
 
+  // 토큰타입이 jwt면 비밀번호 확인
   const handleOpenModalEdit = () => {
     if (tokenType === "jwt") setPasswordModalEdit(true);
     else {
@@ -328,6 +337,7 @@ const MyPage = () => {
     }
   };
 
+  // 토큰타입이 jwt면 비밀번호 확인
   const handleOpenModalWithDraw = () => {
     if (tokenType === "jwt") setPasswordModalWithDraw(true);
     else {
