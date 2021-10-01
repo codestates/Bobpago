@@ -29,7 +29,9 @@ export class RecipeReaction extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => Recipe, (recipe) => recipe.recipeReactions)
+  @ManyToOne(() => Recipe, (recipe) => recipe.recipeReactions, {
+    onDelete: 'CASCADE',
+  })
   recipe: Recipe;
 
   @OneToOne(() => User)
