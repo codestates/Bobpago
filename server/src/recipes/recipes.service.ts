@@ -16,6 +16,7 @@ import { RecipeReaction } from 'src/entities/recipe-reaction.entity';
 import { ImageService } from '../image/image.service';
 import { EALREADY } from 'constants';
 import { CommentsService } from '../comments/comments.service';
+import { Ingredient } from 'src/entities/ingredient.entity';
 
 @Injectable()
 export class RecipesService {
@@ -28,6 +29,8 @@ export class RecipesService {
     private recipeImageRepository: Repository<RecipeImage>,
     @InjectRepository(RecipeReaction)
     private recipeReactionRepository: Repository<RecipeReaction>,
+    @InjectRepository(Ingredient)
+    private ingredientRepository: Repository<Ingredient>,
     private readonly imageService: ImageService,
     private readonly commentsService: CommentsService,
   ) {}
@@ -158,15 +161,15 @@ export class RecipesService {
     }
   }
 
-  async seeRecipe(recipeId: string): Promise<ResType> {
+  async seeRecipe(recipeId: number): Promise<ResType> {
     try {
       const recipeData = await this.recipeRepository.findOne({
         relations: ['user', 'recipeImages', 'recipeReactions'],
-        where: { id: +recipeId },
+        where: { id: recipeId },
       });
       const { user, userId, recipeImages, recipeReactions, ...recipe } =
         recipeData;
-      await this.recipeRepository.update(+recipeId, {
+      await this.recipeRepository.update(recipeId, {
         views: recipe.views + 1,
       });
 
@@ -178,7 +181,7 @@ export class RecipesService {
 
       const recipeIngredients = await this.recipeIngredientRepository.find({
         relations: ['ingredient'],
-        where: { recipeId: +recipeId },
+        where: { recipeId },
       });
 
       const ingredients = recipeIngredients.map((el) => {
@@ -213,12 +216,21 @@ export class RecipesService {
 
   async matchRecipes(ingredients: number[]): Promise<ResType> {
     try {
+      // 0. 메인 재료만 뽑아내기 위해 재료정보 탐색하여 'main'만 필터 진행
+      const ingredientsInfo = await this.ingredientRepository.find({
+        where: ingredients.map((id) => {
+          return { id };
+        }),
+      });
+      const mainIngredients = ingredientsInfo.filter(
+        (el) => el.type === 'main',
+      );
+
       // 1. 재료에 해당되는 recipeIngredient 전부 조회
-      const mainIngredients = ingredients.filter((id) => id < 100);
       const recipeIngredients = await this.recipeIngredientRepository.find({
         relations: ['recipe'],
-        where: mainIngredients.map((id) => {
-          return { ingredientId: id };
+        where: mainIngredients.map((el) => {
+          return { ingredientId: el.id };
         }),
       });
 
@@ -310,7 +322,7 @@ export class RecipesService {
       });
 
       return {
-        data: resultSort,
+        data: resultSort.filter((el, idx) => idx < 20),
         statusCode: 200,
         message: '레시피 매칭이 완료되었습니다.',
       };

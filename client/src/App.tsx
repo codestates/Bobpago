@@ -57,16 +57,12 @@ function App() {
 
   return (
     <Switch>
-      {/* <Route exact path="/">
-        <LandingPage />
-        <button className="test" onClick={() => dispatch(showSignIn())}>
-          click
-        </button>
-        <SignIn />
-        <SignUp />
-      </Route> */}
       <Route exact path="/">
         <Survay />
+        <NofiticationCenter />
+      </Route>
+      <Route path="/landing">
+        <LandingPage />
       </Route>
       <Route path="/matching">
         <MatchingRecipe />
@@ -78,7 +74,7 @@ function App() {
         <WriteRecipe />
         <NofiticationCenter />
       </Route>
-      <Route path="/editrecipe">
+      <Route path="/editrecipe/:recipeId">
         <EditRecipe />
         <NofiticationCenter />
       </Route>

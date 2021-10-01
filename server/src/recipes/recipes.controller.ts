@@ -29,7 +29,7 @@ export class RecipesController {
 
   @Get(':recipeId')
   async findOneRecipe(@Param('recipeId') recipeId: string): Promise<ResType> {
-    return this.recipesService.seeRecipe(recipeId);
+    return this.recipesService.seeRecipe(+recipeId);
   }
 
   @Patch(':recipeId')

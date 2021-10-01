@@ -7,6 +7,7 @@ interface Props {
   fill: string;
   top: number;
   left: number;
+  opac: boolean;
 }
 
 const Svg = styled.svg<Props>`
@@ -15,6 +16,8 @@ const Svg = styled.svg<Props>`
   top: ${(props) => (props.top ? props.top : 0)}em;
   left: ${(props) => (props.left ? props.left : 0)}em;
   background-color: none;
+  opacity: ${(props) => (props.opac ? "1" : "0")};
+  transition: 1s;
 `;
 
 const Ball = (props: Props) => {
@@ -24,6 +27,7 @@ const Ball = (props: Props) => {
       height={props.height ? props.height : "157"}
       top={props.top}
       left={props.left}
+      opac={props.opac}
       viewBox="0 0 165 157"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

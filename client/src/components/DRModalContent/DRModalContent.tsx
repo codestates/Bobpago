@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { RootState } from "reducers";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import Profile from "components/Profile/Comment/Profile";
 import {
   UserProfile,
   ProfileImage,
@@ -9,6 +10,7 @@ import {
   UserName,
   UpdatedAt,
   CommentContent,
+  CommentEdit,
   CommentImage,
   Container,
   RemoveIcon,
@@ -29,9 +31,12 @@ const DRModalContent = ({ comment, setCommentData }: Props) => {
     userId: myId,
   } = useSelector((state: RootState) => state.AccesstokenReducer);
   const [time, setTime] = useState("2021-01-01[월]");
+  const [editCommentInput, setEditCommentInput] = useState<string>("");
+  const [edit, setEdit] = useState<boolean>(false);
 
   useEffect(() => {
     setTime(changeTime(comment.updatedAt));
+    setEditCommentInput(comment.content);
   }, []);
 
   async function getData() {
@@ -75,24 +80,66 @@ const DRModalContent = ({ comment, setCommentData }: Props) => {
     }
   };
 
+  const handleEditComment = async () => {
+    try {
+      if (edit) {
+        const data = await axios.patch(
+          `${serverUrl}/recipe/${comment.recipeId}/comment/${comment.id}?tokenType=${tokenType}`,
+          {
+            content: editCommentInput,
+          },
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        setEdit(false);
+        getData();
+      } else {
+        setEdit(true);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <>
       <Container>
         <UserProfile>
-          <ProfileImage />
+          <ProfileImage>
+            <Profile
+              size={3}
+              src={
+                comment &&
+                comment.user.imageUrl &&
+                S3Url + comment.user.imageUrl
+              }
+            />
+          </ProfileImage>
           <UserEtcBox>
             <UserName>{comment && comment.user.nickname}</UserName>
             <UpdatedAt>{time}</UpdatedAt>
           </UserEtcBox>
         </UserProfile>
-        <CommentContent>{comment && comment.content}</CommentContent>
+        {!edit ? (
+          <CommentContent>{comment && comment.content}</CommentContent>
+        ) : (
+          <CommentEdit
+            value={editCommentInput}
+            onChange={(e) => setEditCommentInput(e.target.value)}
+          />
+        )}
         {comment.imageUrl && (
           <CommentImage src={S3Url + comment.imageUrl} alt="없는 이미지" />
         )}
         {comment && comment.user.id === myId && (
           <>
             <RemoveIcon onClick={() => handleDeleteComment()} />
-            <EditIcon />
+            <EditIcon onClick={() => handleEditComment()} />
           </>
         )}
       </Container>

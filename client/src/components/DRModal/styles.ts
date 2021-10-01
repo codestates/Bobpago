@@ -95,3 +95,11 @@ export const CameraIcon = styled(Camera)`
   top: 130%;
   cursor: pointer;
 `;
+
+export const ImgText = styled.span`
+  position: absolute;
+  left: 5%;
+  top: 123%;
+  height: 2em;
+  width: 20em;
+`;
