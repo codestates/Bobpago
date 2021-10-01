@@ -30,17 +30,30 @@ let CommentsService = class CommentsService {
             userId,
             recipeId,
         });
-        await this.commentRepository.save(comment);
+        const newComment = await this.commentRepository.save(comment);
         return {
-            data: comment,
+            data: newComment,
             statusCode: 201,
             message: '댓글 작성을 완료했습니다',
         };
     }
     async findAll(recipeId) {
-        const comment = await this.commentRepository.find({ recipeId });
+        const comment = await this.commentRepository.find({
+            relations: ['user'],
+            where: { recipeId },
+        });
+        const newComment = comment.map((el) => {
+            const user = {
+                id: el.user.id,
+                nickname: el.user.nickname,
+                imageUrl: el.user.imageUrl,
+            };
+            delete el.userId;
+            delete el.user;
+            return Object.assign(Object.assign({}, el), { user });
+        });
         return {
-            data: comment,
+            data: newComment,
             statusCode: 200,
             message: '댓글 조회 완료했습니다',
         };
