@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { SET_ACCESSTOKEN } from "actions/Accesstoken";
 import { showNothing } from "actions/SignUpAndSignIn";
-import { LoadingContainer, LoadingContent, LoadingImage } from "./styles";
+import { LoadingContainer, LoadingImage } from "./styles";
 
 const NaverLoading = () => {
   const history = useHistory();

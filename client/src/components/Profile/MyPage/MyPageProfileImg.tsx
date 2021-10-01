@@ -1,7 +1,5 @@
-import React, { useRef } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "reducers";
-import axios from "axios";
+import React from "react";
+
 import {
   ProfileContainer,
   ProfileIcon,

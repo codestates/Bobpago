@@ -1,13 +1,11 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import {
   Flip,
-  Text,
   Front,
   BackgroundImg,
   Back,
   DescriptionText,
   orderArr,
-  UploadIcon,
   UploadImg,
   UploadImgText,
 } from "./styles";

@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import { RootState } from "reducers";
 import Nav from "components/Nav/Nav";
 import MyPageProfileImg from "components/Profile/MyPage/MyPageProfileImg";
-import BookmarkCard from "components/Card/MyPage/BookmarkCard";
 import Card from "components/Card/MyPage/Card";
 import FollowingModal from "components/FollowModal/FollowingModal";
 import FollowerModal from "components/FollowModal/FollowerModal";
@@ -40,14 +39,12 @@ const UserPage = () => {
     userId: myId,
   } = useSelector((state: RootState) => state.AccesstokenReducer);
   const [myPostNum, setMyPostNum] = useState<number>(6);
-  const [bookmarkNum, setBookmarkNum] = useState<number>(6);
   const [standardNum, setStandardNum] = useState<number>(6);
   const [followeeInfo, setFolloweeInfo] = useState<any>([]);
   const [followerInfo, setFollowerInfo] = useState<any>([]);
   const [followingModal, setFollowingModal] = useState<boolean>(false);
   const [followerModal, setFollowerModal] = useState<boolean>(false);
   const [userPosts, setUserPosts] = useState<any>([]);
-  const [bookmarks, setBookmarks] = useState<any>([]);
   const [follow, setFollow] = useState<boolean>(false);
   const [userInfo, setUserInfo] = useState<any>([]);
   const profileS3Url = process.env.REACT_APP_S3_IMG_URL;
