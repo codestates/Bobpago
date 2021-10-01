@@ -23,7 +23,7 @@ const FollowList: React.FC<ListProps> = ({ follow }) => {
           size={5.7}
           src={
             follow.imageUrl &&
-            `${process.env.REACT_APP_S3_IMG_URL}/${follow.imageUrl}`
+            `${process.env.REACT_APP_S3_IMG_URL}${follow.imageUrl}`
           }
         />
       </ProfileImgContainer>

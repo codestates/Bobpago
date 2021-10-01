@@ -80,6 +80,8 @@ export const EggPago = styled.img`
   left: 5%;
   animation: ${animate} 5s linear infinite;
   animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: 2.5s;
+  opacity: 0;
   cursor: pointer;
 `;
 
@@ -93,8 +95,9 @@ export const MatchTextContainer = styled.div`
   flex-direction: column;
   /* transform: translateY(-25%); */
   top: 5%;
-  z-index: 10;
-  transition: 0.5s;
+  z-index: 5;
+  transition: 2s;
+  opacity: 0;
 `;
 
 export const MatchTopContainer = styled.div`

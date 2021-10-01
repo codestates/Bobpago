@@ -51,7 +51,6 @@ const Ingredient = ({
         },
       }
     );
-    console.log(data);
     setOptions(data.data.data);
   }
 
