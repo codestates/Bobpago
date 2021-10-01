@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Trash } from "@styled-icons/boxicons-solid/Trash/Trash";
 import { Edit } from "@styled-icons/boxicons-solid/Edit/Edit";
+import { Like } from "@styled-icons/boxicons-solid/Like/Like";
 
 export const TotalSudoContainer = styled.div`
   width: 100%;
@@ -41,12 +42,15 @@ export const UserProfile = styled.div`
 export const ProfileImage = styled.div`
   width: 2em;
   height: 2em;
-  border-radius: 50%;
-  background-color: #cecece;
+  // border-radius: 50%;
+  // background-color: #cecece;
   margin-right: 1em;
 `;
 
-export const UserEtcBox = styled.div``;
+export const UserEtcBox = styled.div`
+  position: relative;
+  bottom: 0.3em;
+`;
 
 export const UserName = styled.div`
   font-size: 18px;
@@ -62,6 +66,16 @@ export const CommentContent = styled.div`
   background-color: #ffffff;
   margin-bottom: 1em;
   font-size: 14px;
+`;
+
+export const CommentEdit = styled.input`
+  width: 80%;
+  background-color: #ffffff;
+  margin-bottom: 1em;
+  font-size: 14px;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid grey;
 `;
 
 export const CommentImage = styled.img`
@@ -92,3 +106,5 @@ export const EditIcon = styled(Edit)`
   fill: grey;
   cursor: pointer;
 `;
+
+export const LikeIcon = styled(Like)``;

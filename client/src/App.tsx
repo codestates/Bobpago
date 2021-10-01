@@ -78,7 +78,7 @@ function App() {
         <WriteRecipe />
         <NofiticationCenter />
       </Route>
-      <Route path="/editrecipe">
+      <Route path="/editrecipe/:recipeId">
         <EditRecipe />
         <NofiticationCenter />
       </Route>
