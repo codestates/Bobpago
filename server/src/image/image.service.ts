@@ -161,12 +161,14 @@ export class ImageService {
           const commentImage = await this.commentRepository.findOne({
             id,
           });
-          await s3
-            .deleteObject({
-              Bucket: process.env.AWS_S3_BUCKET_NAME,
-              Key: commentImage.imageUrl,
-            })
-            .promise();
+          if (commentImage.imageUrl) {
+            await s3
+              .deleteObject({
+                Bucket: process.env.AWS_S3_BUCKET_NAME,
+                Key: commentImage.imageUrl,
+              })
+              .promise();
+          }
           break;
         case 'user':
           const userImage = await this.userRepository.findOne({

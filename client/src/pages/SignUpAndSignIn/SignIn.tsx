@@ -186,15 +186,30 @@ const SignIn = () => {
             <p>SNS 계정으로 간편 로그인</p>
             <OAuthIconContainer>
               <a href={googleUri}>
-                <img className="google" src="/img/google.png" width="37" />
+                <img
+                  className="google"
+                  src="/img/google.png"
+                  alt="구글로그인"
+                  width="37"
+                />
               </a>
               &nbsp;&nbsp;&nbsp;
               <a href={kakaoUri}>
-                <img className="kakao" src="/img/kakao.png" width="36" />
+                <img
+                  className="kakao"
+                  src="/img/kakao.png"
+                  alt="카카오로그인"
+                  width="36"
+                />
               </a>
               &nbsp;&nbsp;&nbsp;
               <a href={naverUri}>
-                <img className="naver" src="/img/naver.png" width="36" />
+                <img
+                  className="naver"
+                  src="/img/naver.png"
+                  alt="네이버로그인"
+                  width="36"
+                />
               </a>
             </OAuthIconContainer>
           </OAuthContainer>

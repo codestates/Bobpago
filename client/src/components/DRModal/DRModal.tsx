@@ -1,9 +1,10 @@
 import DRModalContent from "components/DRModalContent/DRModalContent";
 import axios from "axios";
 import { TotalSudoContainer } from "components/DRModalContent/styles";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "reducers";
 import React, { useState, useEffect, useRef } from "react";
+import { showSignUp } from "actions/SignUpAndSignIn";
 import {
   CommentModal,
   CommentContainer,
@@ -14,6 +15,7 @@ import {
   CommentPostButton,
   CloseIcon,
   CameraIcon,
+  ImgText,
 } from "./styles";
 
 interface DRModalProps {
@@ -22,6 +24,7 @@ interface DRModalProps {
 }
 
 const DRModal: React.FC<DRModalProps> = ({ handleModalClose, recipeId }) => {
+  const dispatch = useDispatch();
   const { accessToken, tokenType } = useSelector(
     (state: RootState) => state.AccesstokenReducer
   );
@@ -47,7 +50,9 @@ const DRModal: React.FC<DRModalProps> = ({ handleModalClose, recipeId }) => {
   }, []);
 
   //댓글 누를 때 토큰 없으면 로그인 화면 띄움
-  const handleShowLogin = () => {};
+  const handleShowLogin = () => {
+    if (!accessToken) dispatch(showSignUp());
+  };
 
   // 댓글 작성
   const handlePostComment = async () => {
@@ -89,7 +94,7 @@ const DRModal: React.FC<DRModalProps> = ({ handleModalClose, recipeId }) => {
       console.log(err);
     }
   };
-
+  console.log(imgInput);
   const handleImgInputClick = () => {
     if (inputImgRef.current) inputImgRef.current.click();
   };
@@ -132,6 +137,7 @@ const DRModal: React.FC<DRModalProps> = ({ handleModalClose, recipeId }) => {
             onChange={handleImgChange}
           />
           <CameraIcon onClick={() => handleImgInputClick()} />
+          {imgInput && <ImgText>{imgInput.name}</ImgText>}
           <ButtonContainer>
             <CommentPostButton color="transparent">취소</CommentPostButton>
             <CommentPostButton

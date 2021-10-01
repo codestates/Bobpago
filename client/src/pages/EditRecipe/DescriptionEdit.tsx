@@ -1,9 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import useHover from "utils/useHover";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router";
 import { RootState } from "reducers";
 import { resetEditPageEdit, goToPrevPageEdit } from "actions/EditRecipePage";
-import { setDescription } from "actions/WriteRecipeContents";
+import {
+  resetEditAllContents,
+  editDescription,
+} from "actions/EditRecipeContents";
+import axios from "axios";
 import {
   BookContainer,
   Cover,
@@ -21,34 +26,47 @@ import {
   DescriptionSlide,
   NextButton,
   PrevButton,
-  CompleteButton,
   ModalContainer,
   ModalBackground,
   ModalTitle,
   ModalBtn,
   ModalBtnNo,
+  UploadImg,
+  UploadImgText,
 } from "./styles";
-import Page from "components/Book/Page";
+import Page from "components/Book/EditPage";
 
 const Description = ({
   page,
   scale,
   setCircle1IsHover,
   setCircle2IsHover,
+  locationProps,
 }: any) => {
+  const S3Url = process.env.REACT_APP_S3_IMG_URL;
   const dispatch = useDispatch();
+  const history = useHistory();
   const [circle1, circle1IsHover] = useHover();
   const [circle2, circle2IsHover] = useHover();
   const [description, setDescriptionPage] = useState<any>([""]);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [modalOn, setModalOn] = useState<boolean>(false);
+  const [imgFiles, setImgFiles] = useState<any>([]);
   const frontCoverRef = useRef<any>(null);
+  const inputFileRef = useRef<any>(null);
+  const { accessToken, tokenType } = useSelector(
+    (state: RootState) => state.AccesstokenReducer
+  );
   const LoadedDescription = useSelector(
     (state: RootState) => state.EditRecipeContentsReducer.description
+  );
+  const contents = useSelector(
+    (state: RootState) => state.EditRecipeContentsReducer
   );
 
   useEffect(() => {
     setDescriptionPage(LoadedDescription);
+    setImgFiles(contents.image);
   }, []);
 
   useEffect(() => {
@@ -66,8 +84,7 @@ const Description = ({
   }, [circle1IsHover]);
 
   const handleStoreIngredient = () => {
-    dispatch(setDescription(description));
-    dispatch(resetEditPageEdit());
+    dispatch(editDescription(description));
     setModalOn(true);
   };
 
@@ -81,7 +98,7 @@ const Description = ({
     } else {
       frontCoverRef.current.style.transform = "rotateY(-1deg)";
       setTimeout(() => {
-        frontCoverRef.current.style.zIndex = 99;
+        if (frontCoverRef.current) frontCoverRef.current.style.zIndex = 99;
       }, 310);
     }
   }, [currentPage]);
@@ -100,22 +117,78 @@ const Description = ({
     setDescriptionPage(copiedDescription);
   };
 
-  const handleSubmitRecipe = () => {};
-  // const [img, setImg] = useState<any>({
-  //   detailImageFile: null,
-  //   detailImageUrl: null,
-  // });
+  const handleSubmitRecipe = async () => {
+    try {
+      const data = await axios.patch(
+        `${process.env.REACT_APP_SERVER_URL}/recipe/${locationProps}?tokenType=${tokenType}`,
+        {
+          title: contents.title,
+          amount: contents.serving,
+          level: contents.difficulty,
+          estTime: contents.time,
+          ingredientId: contents.ingredient,
+          description: contents.description,
+        },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      const recipeId = data.data.data.recipe.id;
+      console.log(data);
 
-  // const setImageFromFile = (event: any) => {
-  //   const {
-  //     target: { files },
-  //   } = event;
-  //   let reader = new FileReader();
-  //   reader.onload = function () {
-  //     setImg({ result: reader.result });
-  //   };
-  //   reader.readAsDataURL(file);
-  // };
+      const ImgData = imgFiles.map((el: any, i: number) => {
+        if (typeof imgFiles[i] === "object") {
+          const formData = new FormData();
+          formData.append("files", imgFiles[i]);
+          return formData;
+        } else {
+          return S3Url + imgFiles[i];
+        }
+      });
+      console.log(ImgData);
+      const uploadImg = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/image/${recipeId}?tokenType=${tokenType}&path=recipe`,
+        ImgData,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "multipart/form-data",
+            authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      console.log(uploadImg);
+      history.push({
+        pathname: `/detailrecipe/:${recipeId}`,
+        state: recipeId,
+      });
+      dispatch(resetEditPageEdit());
+      dispatch(resetEditAllContents());
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleImgChange = (e: any, j: number) => {
+    let copiedDescription = description.slice();
+    let copiedImgFiles = imgFiles.slice();
+    for (let i = 0; i < e.target.files.length; i++) {
+      if (copiedDescription.length < i + j) copiedDescription.push("");
+      copiedImgFiles[i + j] = e.target.files[i];
+    }
+    setDescriptionPage(copiedDescription);
+    setImgFiles(copiedImgFiles);
+  };
+
+  const handleClickInput = () => {
+    if (inputFileRef.current) {
+      inputFileRef.current.click();
+    }
+  };
 
   return (
     <>
@@ -125,19 +198,36 @@ const Description = ({
           <FlipBook>
             <FrontCover ref={frontCoverRef}>
               <FrontCoverBack className="back">
-                {/* <input
-              type="file"
-              id="detail_image"
-              accept="image/*"
-              onChange={({ target: { files } }) => {
-                if (files.length) {
-                  setImageFromFile({
-                    file: files[0],
-                    setImageUrl: ({ result }) => setState({detailImageFile: files[0], detailImageUrl: result});
-                }
-          }}
-            ></input> */}
-                {/* <UploadedImg src={fileUrl} alt="없는 이미지" /> */}
+                <input
+                  type="file"
+                  multiple
+                  ref={inputFileRef}
+                  hidden
+                  onChange={(e) => handleImgChange(e, 0)}
+                />
+                {imgFiles[0] && (
+                  <img
+                    className="food"
+                    src={
+                      typeof imgFiles[0] === "object"
+                        ? URL.createObjectURL(imgFiles[0])
+                        : imgFiles[0]
+                        ? S3Url + imgFiles[0]
+                        : undefined
+                    }
+                    alt="이미지 없음"
+                  />
+                )}
+                <UploadImg
+                  className={
+                    imgFiles[0] || imgFiles[0] instanceof FormData
+                      ? "uploaded"
+                      : "not_yet"
+                  }
+                  onClick={() => handleClickInput()}
+                  src="/img/uploadicon.png"
+                />
+                {!imgFiles[0] && <UploadImgText>이미지 업로드</UploadImgText>}
               </FrontCoverBack>
               <FrontCoverFront className="front">
                 <FrontCoverImg src="/img/ingredient.png" />
@@ -150,11 +240,13 @@ const Description = ({
             {description.map((el: any, i: number) => {
               return (
                 <Page
+                  imgFile={imgFiles[i + 1] && imgFiles[i + 1]}
                   currentPage={currentPage}
                   text={el}
                   key={i}
                   selfPage={i + 1}
                   handleChangeDescription={handleChangeDescription}
+                  handleImgChange={handleImgChange}
                 />
               );
             })}

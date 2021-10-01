@@ -10,6 +10,7 @@ import {
   RightMainFooter,
   TimeIcon,
 } from "./styles";
+import { useHistory } from "react-router";
 import { RootState } from "reducers";
 import { useSelector } from "react-redux";
 
@@ -22,7 +23,11 @@ interface DifficultyType {
 }
 
 const DRContent: React.FC<DRContentProps> = () => {
+  const history = useHistory();
   const [loading, setLoading] = useState(true);
+  const { userId: myId } = useSelector(
+    (state: RootState) => state.AccesstokenReducer
+  );
   const recipeState = useSelector(
     (state: RootState) => state.DetailRecipeReducer
   );
@@ -50,9 +55,24 @@ const DRContent: React.FC<DRContentProps> = () => {
     }
   }, [recipeState]);
 
+  const handleMoveToUserPage = () => {
+    console.log(recipeState.user);
+    const userId = recipeState.user.id;
+    if (userId === myId) {
+      history.push({
+        pathname: `/mypage`,
+      });
+    } else {
+      history.push({
+        pathname: `/userpage/${userId}`,
+        state: userId,
+      });
+    }
+  };
+
   return (
     <RightContent>
-      <RightContentWriter>
+      <RightContentWriter onClick={() => handleMoveToUserPage()}>
         {loading ? "LOADING" : recipeState.user.nickname}
       </RightContentWriter>
       <RightContentTitle>
