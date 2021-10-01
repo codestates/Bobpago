@@ -1,6 +1,6 @@
 import styled, { keyframes } from "styled-components";
 import { QuestionMarkCircle } from "@styled-icons/evaicons-solid/QuestionMarkCircle/QuestionMarkCircle";
-
+import { main } from "theme";
 import { NavigateNext } from "@styled-icons/material-rounded/NavigateNext/NavigateNext";
 
 interface SlideProps {
@@ -12,7 +12,7 @@ export const ContainerWrapper = styled.div`
   width: 100%;
   height: 100%;
   position: absolute;
-  background-color: #ececec;
+  background-color: ${main.bg};
   display: flex;
   flex-direction: row;
   box-sizing: border-box;
@@ -24,7 +24,7 @@ export const TitleSlide = styled.div<SlideProps>`
   position: absolute;
   left: ${(props) => -props.page * 100 + "%" || "0"};
   width: 100%;
-  background-color: #ececec;
+  background-color: ${main.bg};
   height: 100%;
   transform: ${(props) => (props.scale === 0 ? "scale(1)" : "scale(0.93)")};
   transition: all 0.7s ease;
@@ -523,6 +523,15 @@ export const FrontCoverBack = styled(Back)`
   flex-direction: column;
   background-color: #f3f3f3;
   box-shadow: -6px 0px 8px 1px rgba(0, 0, 0, 0.1);
+  .uploaded {
+    top: 80%;
+    opacity: 0.7;
+  }
+  .food {
+    width: auto;
+    object-fit: center;
+    max-height: 100%;
+  }
 `;
 
 export const FrontCoverFront = styled(Front)`
@@ -652,3 +661,29 @@ export const orderArr = [
 ];
 
 // export const name = styled.div``;
+export const UploadImg = styled.img`
+  cursor: pointer;
+  width: 4.5em;
+  height: 4.5em;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  transition: all 0.3s ease;
+  &:hover {
+    transform: translate(-50%, 0%) scale(1.1);
+  }
+`;
+
+export const UploadImgText = styled.p`
+  margin: 0 auto;
+  width: 100%;
+  width: 6em;
+  font-size: 20px;
+  display: block;
+  position: relative;
+  transform: translateY(200%);
+  align-text: center;
+  color: #8f8f8f;
+  font-weight: 500;
+`;

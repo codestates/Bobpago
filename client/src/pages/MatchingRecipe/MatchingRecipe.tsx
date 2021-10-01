@@ -31,6 +31,9 @@ const MatchingRecipe = () => {
   const tooltipRef = useRef<any>(null);
   const sliderRef = useRef<any>(null);
   const titleTextRef = useRef<any>(null);
+  const eggPagoRef = useRef<any>(null);
+  const leftBallRef = useRef<any>(null);
+  const rightBallRef = useRef<any>(null);
 
   const [turnOn, setTurnOn] = useState(false);
   const [wind, setWind] = useState(0);
@@ -130,6 +133,21 @@ const MatchingRecipe = () => {
         })
       }
     }
+    leftBallRef.current.style.opacity = "0";
+    rightBallRef.current.style.opacity = "0";
+    setTimeout(() => {
+      handleData();
+      setWind(rotateMaker());
+      cardRef.current.style.transform = "translate(0%)";
+      eggPagoRef.current.style.opacity = "1";
+      titleTextRef.current.style.opacity = "1";
+    }, 200);
+    setTimeout(() => {
+      leftBallRef.current.style.transition = "1s";
+      leftBallRef.current.style.opacity = "1";
+      rightBallRef.current.style.transition = "1s";
+      rightBallRef.current.style.opacity = "1";
+    }, 1000);
   }, []);
 
 
@@ -140,9 +158,13 @@ const MatchingRecipe = () => {
 
       {/* 꾸미기 영역 */}
       <Weather rotateMaker={wind} />
-      <EggPago src="/img/eggpago.png" />
-      <Circle1 />
-      <Circle2 />
+      <EggPago ref={eggPagoRef} src="/img/eggpago.png" />
+      <div ref={leftBallRef}>
+        <Circle1 />
+      </div>
+      <div ref={rightBallRef}>
+        <Circle2 />
+      </div>
       {/* 꾸미기 영역 */}
 
       {/* 타이틀 텍스트 */}
