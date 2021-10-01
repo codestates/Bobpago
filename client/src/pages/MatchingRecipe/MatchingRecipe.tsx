@@ -103,6 +103,35 @@ const MatchingRecipe = () => {
   };
 
   useEffect(() => {
+    handleData();
+    let handleWheel : boolean = false;
+    setWind(rotateMaker());
+    cardRef.current.style.transform = "translate(0%)";
+    sliderRef.current.addEventListener('mousewheel',(e:any)=> {
+      e.preventDefault();
+      const container = sliderRef.current;
+      const containerScrollPosition = sliderRef.current.scrollLeft;
+
+      container.scrollTo({
+        top: 0,
+        left: containerScrollPosition + e.deltaY,
+      });
+      handleWheel = true
+    })
+    if(handleWheel){
+      return () => {
+        sliderRef.current.removeEventListener('mousewheel', (e: any)=> {
+          e.preventDefault();
+          const container = sliderRef.current;
+          const containerScrollPosition = sliderRef.current.scrollLeft;
+
+          container.scrollTo({
+            top: 0,
+            left: containerScrollPosition + e.deltaY,
+          });
+        })
+      }
+    }
     leftBallRef.current.style.opacity = "0";
     rightBallRef.current.style.opacity = "0";
     setTimeout(() => {
@@ -119,6 +148,8 @@ const MatchingRecipe = () => {
       rightBallRef.current.style.opacity = "1";
     }, 1000);
   }, []);
+
+
 
   return (
     <TotalMatchContainer>
@@ -167,30 +198,7 @@ const MatchingRecipe = () => {
       <MatchCardScroll ref={cardRef}>
         <MatchCardContainer
           ref={sliderRef}
-          onMouseDown={(e) => {
-            isDown = true;
-            sliderRef.current.classList.add("active");
-            startX = e.pageX - sliderRef.current.offsetLeft;
-            scrollLeft = sliderRef.current.scrollLeft;
-          }}
-          onMouseLeave={() => {
-            isDown = false;
-            sliderRef.current.classList.remove("active");
-          }}
-          onMouseUp={() => {
-            isDown = false;
-            sliderRef.current.classList.remove("active");
-          }}
-          onMouseMove={(e) => {
-            if (!isDown) {
-              return;
-            }
-            e.preventDefault();
-
-            const x = e.pageX - sliderRef.current.offsetLeft;
-            const walk = x - startX;
-            sliderRef.current.scrollLeft = scrollLeft - walk;
-          }}
+          id="container"
         >
           {!turnOn
             ? data.map((item: any) => {
