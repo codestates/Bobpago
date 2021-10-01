@@ -90,7 +90,7 @@ export class ImageService {
 
       case 'comment':
         const comment = await this.commentRepository.findOne({
-          recipeId: id,
+          id,
         });
         comment.imageUrl = urls[0];
         await this.commentRepository.save(comment);
@@ -138,7 +138,7 @@ export class ImageService {
     };
   }
 
-  async deleteById(id, path): Promise<void> {
+  async deleteById(id: number, path: string): Promise<void> {
     try {
       switch (path) {
         case 'recipe':
@@ -161,12 +161,14 @@ export class ImageService {
           const commentImage = await this.commentRepository.findOne({
             id,
           });
-          await s3
-            .deleteObject({
-              Bucket: process.env.AWS_S3_BUCKET_NAME,
-              Key: commentImage.imageUrl,
-            })
-            .promise();
+          if (commentImage.imageUrl) {
+            await s3
+              .deleteObject({
+                Bucket: process.env.AWS_S3_BUCKET_NAME,
+                Key: commentImage.imageUrl,
+              })
+              .promise();
+          }
           break;
         case 'user':
           const userImage = await this.userRepository.findOne({
@@ -190,5 +192,18 @@ export class ImageService {
         message: '사진 업로드 실패',
       });
     }
+  }
+
+  // 특정 레시피 삭제시 안에 있던 댓글 S3 이미지 전체 삭제
+  async deleteComments(recipeId: number) {
+    const comments = await this.commentRepository.find({ recipeId });
+    console.log('⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️', comments);
+    await Promise.all(
+      comments.map(async (comment) => {
+        if (comment.imageUrl !== '') {
+          return await this.deleteById(comment.id, 'comment');
+        }
+      }),
+    );
   }
 }
