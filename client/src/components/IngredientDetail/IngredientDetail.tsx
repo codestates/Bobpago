@@ -30,9 +30,9 @@ const IngredientDetail = ({
     if (
       clickState.clickData.filter((item) => {
         return item.id === id;
-      }).length === 1
+      }).length === 0
     ) {
-      setLight(!light);
+      setLight(false);
     }
   }, []);
 
