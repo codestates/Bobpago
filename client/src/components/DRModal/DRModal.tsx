@@ -94,7 +94,7 @@ const DRModal: React.FC<DRModalProps> = ({ handleModalClose, recipeId }) => {
     if (inputImgRef.current) inputImgRef.current.click();
   };
 
-  const handleImgChange = (e) => {
+  const handleImgChange = (e: any) => {
     setImgInput(e.target.files[0]);
   };
 
