@@ -55,9 +55,6 @@ const DetailRecipe = () => {
   const loginState = useSelector(
     (state: RootState) => state.AccesstokenReducer
   );
-  const recipeState = useSelector(
-    (state: RootState) => state.DetailRecipeReducer
-  );
 
   const [start, setStart] = useState<boolean>(false);
   const [dummy, setDummy] = useState<number[]>([]);
@@ -156,9 +153,7 @@ const DetailRecipe = () => {
     handlePageData();
   }, []);
 
-  useEffect(() => {
-    // console.log(recipeData);
-  }, [handlePageData]);
+  useEffect(() => {}, [handlePageData]);
 
   useEffect(() => {
     if (recipeData !== null) {
@@ -228,16 +223,6 @@ const DetailRecipe = () => {
           main.style.transform = `translateY(${i * -100}%)`;
           sub.style.transform = `translateY(${i * -100}%)`;
         }
-
-        // rightScrollRef.current.style.transform = `translateY(${i * -262}px)`;
-        // topBoxRef.current.style.transform = `translateY(${i * -100}%)`;
-        // leftBoxRef.current.style.transform = `translateX(${i * -moveRatio}%)`;
-        // rightBoxRef.current.style.transform = `translateX(${
-        //   moveRatio - 100 - moveRatio * -i
-        // }%)`;
-        // imageRef.current.style.transform = `translateY(${i * -100}%)`;
-        // mainRef.current.style.transform = `translateY(${i * -100}%)`;
-        // subRef.current.style.transform = `translateY(${i * -100}%)`;
 
         if (anim) {
           anim.restart();
