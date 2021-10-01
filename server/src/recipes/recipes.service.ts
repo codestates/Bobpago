@@ -15,6 +15,8 @@ import { RecipeImage } from '../entities/recipe-image.entity';
 import { RecipeReaction } from 'src/entities/recipe-reaction.entity';
 import { ImageService } from '../image/image.service';
 import { EALREADY } from 'constants';
+import { CommentsService } from '../comments/comments.service';
+import { Ingredient } from 'src/entities/ingredient.entity';
 
 @Injectable()
 export class RecipesService {
@@ -27,7 +29,10 @@ export class RecipesService {
     private recipeImageRepository: Repository<RecipeImage>,
     @InjectRepository(RecipeReaction)
     private recipeReactionRepository: Repository<RecipeReaction>,
+    @InjectRepository(Ingredient)
+    private ingredientRepository: Repository<Ingredient>,
     private readonly imageService: ImageService,
+    private readonly commentsService: CommentsService,
   ) {}
 
   async createRecipe(
@@ -135,21 +140,16 @@ export class RecipesService {
     console.log('🚀', descs);
   }
 
-  async deleteRecipe(recipeId) {
+  async deleteRecipe(recipeId: number) {
     try {
       // 1. AWS S3에서 이미지 객체 삭제
       await this.imageService.deleteById(recipeId, 'recipe');
 
-      // 2. 레시피_재료 테이블에서 레시피 아이디 기준으로 삭제
-      await this.recipeIngredientRepository.delete({ recipeId });
+      // 2. 댓글 S3 이미지 삭제
+      await this.imageService.deleteComments(recipeId);
 
-      // 3. 레시피_이미지 테이블에서 레시피 아이디 기준으로 삭제
-      await this.recipeImageRepository.delete({ recipeId });
-
-      // 4. 레시피 테이블에서 삭제
+      // 3. 레시피 테이블에서 삭제
       await this.recipeRepository.delete({ id: recipeId });
-
-      // 싱크 true 하면 onDelete: casecade 한거 적용되는데, 싱크 false하면 오류뜸 ㅠ
 
       return {
         data: null,
@@ -161,15 +161,15 @@ export class RecipesService {
     }
   }
 
-  async seeRecipe(recipeId: string): Promise<ResType> {
+  async seeRecipe(recipeId: number): Promise<ResType> {
     try {
       const recipeData = await this.recipeRepository.findOne({
         relations: ['user', 'recipeImages', 'recipeReactions'],
-        where: { id: +recipeId },
+        where: { id: recipeId },
       });
       const { user, userId, recipeImages, recipeReactions, ...recipe } =
         recipeData;
-      await this.recipeRepository.update(+recipeId, {
+      await this.recipeRepository.update(recipeId, {
         views: recipe.views + 1,
       });
 
@@ -181,7 +181,7 @@ export class RecipesService {
 
       const recipeIngredients = await this.recipeIngredientRepository.find({
         relations: ['ingredient'],
-        where: { recipeId: +recipeId },
+        where: { recipeId },
       });
 
       const ingredients = recipeIngredients.map((el) => {
@@ -216,12 +216,21 @@ export class RecipesService {
 
   async matchRecipes(ingredients: number[]): Promise<ResType> {
     try {
+      // 0. 메인 재료만 뽑아내기 위해 재료정보 탐색하여 'main'만 필터 진행
+      const ingredientsInfo = await this.ingredientRepository.find({
+        where: ingredients.map((id) => {
+          return { id };
+        }),
+      });
+      const mainIngredients = ingredientsInfo.filter(
+        (el) => el.type === 'main',
+      );
+
       // 1. 재료에 해당되는 recipeIngredient 전부 조회
-      const mainIngredients = ingredients.filter((id) => id < 100);
       const recipeIngredients = await this.recipeIngredientRepository.find({
         relations: ['recipe'],
-        where: mainIngredients.map((id) => {
-          return { ingredientId: id };
+        where: mainIngredients.map((el) => {
+          return { ingredientId: el.id };
         }),
       });
 
@@ -313,7 +322,7 @@ export class RecipesService {
       });
 
       return {
-        data: resultSort,
+        data: resultSort.filter((el, idx) => idx < 20),
         statusCode: 200,
         message: '레시피 매칭이 완료되었습니다.',
       };

@@ -29,7 +29,7 @@ export class RecipesController {
 
   @Get(':recipeId')
   async findOneRecipe(@Param('recipeId') recipeId: string): Promise<ResType> {
-    return this.recipesService.seeRecipe(recipeId);
+    return this.recipesService.seeRecipe(+recipeId);
   }
 
   @Patch(':recipeId')
@@ -42,8 +42,8 @@ export class RecipesController {
   }
 
   @Delete(':recipeId')
-  async delete(@Param('recipeId') recipeId): Promise<ResType> {
-    return this.recipesService.deleteRecipe(recipeId);
+  async delete(@Param('recipeId') recipeId: string): Promise<ResType> {
+    return this.recipesService.deleteRecipe(+recipeId);
   }
 
   @Post('match')

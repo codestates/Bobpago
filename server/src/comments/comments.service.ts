@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import { Comment } from '../entities/comment.entity';
 import { User } from 'src/entities/user.entity';
 import { CommentReaction } from '../entities/comment-reaction.entity';
+import { ImageService } from '../image/image.service';
 
 @Injectable()
 export class CommentsService {
@@ -14,6 +15,7 @@ export class CommentsService {
     @InjectRepository(Comment) private commentRepository: Repository<Comment>,
     @InjectRepository(CommentReaction)
     private commentReactionRepository: Repository<CommentReaction>,
+    private readonly imageService: ImageService,
   ) {}
 
   async create(
@@ -26,18 +28,32 @@ export class CommentsService {
       userId,
       recipeId,
     });
-    await this.commentRepository.save(comment);
+    const newComment = await this.commentRepository.save(comment);
     return {
-      data: comment,
+      data: newComment,
       statusCode: 201,
       message: '댓글 작성을 완료했습니다',
     };
   }
 
   async findAll(recipeId: number): Promise<ResType> {
-    const comment = await this.commentRepository.find({ recipeId });
+    const comment = await this.commentRepository.find({
+      relations: ['user'],
+      where: { recipeId },
+    });
+
+    const newComment = comment.map((el) => {
+      const user = {
+        id: el.user.id,
+        nickname: el.user.nickname,
+        imageUrl: el.user.imageUrl,
+      };
+      delete el.userId;
+      delete el.user;
+      return { ...el, user };
+    });
     return {
-      data: comment,
+      data: newComment,
       statusCode: 200,
       message: '댓글 조회 완료했습니다',
     };
@@ -57,6 +73,10 @@ export class CommentsService {
   async delete(commentId: number): Promise<ResType> {
     let message;
     try {
+      // 1. S3 이미지 삭제
+      await this.imageService.deleteById(commentId, 'comment');
+
+      // 2. 댓글 레포지토리 삭제
       const result = await this.commentRepository.delete(commentId);
       if (result.affected) {
         message = '댓글을 삭제 하였습니다.';

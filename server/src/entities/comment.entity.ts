@@ -35,15 +35,16 @@ export class Comment extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => Recipe, (recipe) => recipe.comments)
+  @ManyToOne(() => Recipe, (recipe) => recipe.comments, { onDelete: 'CASCADE' })
   recipe: Recipe;
 
-  @ManyToOne(() => User, (user) => user.comments)
+  @ManyToOne(() => User, (user) => user.comments, { onDelete: 'CASCADE' })
   user: User;
 
   @OneToMany(
     () => CommentReaction,
     (commentReaction) => commentReaction.comment,
+    { eager: true },
   )
   commentReactions: CommentReaction[];
 }

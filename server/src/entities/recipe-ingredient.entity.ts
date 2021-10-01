@@ -32,6 +32,8 @@ export class RecipeIngredient extends BaseEntity {
   })
   recipe: Recipe;
 
-  @ManyToOne(() => Ingredient, (ingredient) => ingredient.recipeIngredients)
+  @ManyToOne(() => Ingredient, (ingredient) => ingredient.recipeIngredients, {
+    onDelete: 'CASCADE',
+  })
   ingredient: Ingredient;
 }

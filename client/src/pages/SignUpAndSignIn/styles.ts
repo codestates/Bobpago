@@ -9,7 +9,7 @@ export const WholeContainer = styled.div`
   margin: 0 auto;
   left: 0;
   right: 0;
-  z-index: 100;
+  z-index: 100000;
   @media only screen and (max-width: 480px) {
     width: 100%;
     height: 100%;
@@ -35,6 +35,7 @@ export const Container = styled.div`
   margin-right: auto;
   text-align: center;
   justify-content: center;
+  z-index: 100000;
   @media only screen and (max-width: 480px) {
     height: 100%;
   }
