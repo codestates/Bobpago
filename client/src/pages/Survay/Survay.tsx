@@ -38,6 +38,7 @@ import { RootState } from "reducers";
 import { useHistory } from "react-router-dom";
 import { notify } from "actions/Notification";
 
+
 const Survay = () => {
   const [move, setmove] = useState<number>(window.innerWidth);
   const [left, setLeft] = useState<boolean>(false);

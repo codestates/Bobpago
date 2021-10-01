@@ -1,6 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
-import SearchBar from "components/SearchBar/SearchBar";
-import Book from "components/Book/Book";
+import React, { useState, useEffect } from "react";
 import Nav from "components/Nav/Nav";
 import Title from "./Title";
 import Time from "./Time";

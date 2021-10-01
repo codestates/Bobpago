@@ -23,7 +23,6 @@ import {
   editDifficulty,
   editIngredient,
   editServing,
-  editImage,
 } from "actions/EditRecipeContents";
 
 const EditRecipe = () => {

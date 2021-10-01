@@ -19,7 +19,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { showSignIn } from "actions/SignUpAndSignIn";
 import { RootState } from "reducers";
 import { removeAccessToken } from "actions/Accesstoken";
-import { CLEAR_CLICK_DATA } from "actions/IngredientAction";
 
 const Nav = ({ opac }: { opac: boolean }) => {
   const [authorization, setAuthorization] = useState(false);
