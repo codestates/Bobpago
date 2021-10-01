@@ -1,8 +1,6 @@
-import { getFilterData } from "actions/IngredientAction";
 import IngredientDetail from "components/IngredientDetail/IngredientDetail";
 import React from "react";
-import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "reducers";
 import { CookerRecipeContainer } from "./styles";
 

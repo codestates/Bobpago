@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import useHover from "utils/useHover";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
-import { goToNextPage, goToPrevPage } from "actions/WriteRecipePage";
+import { goToPrevPage } from "actions/WriteRecipePage";
 import { setDescription } from "actions/WriteRecipeContents";
 import { RootState } from "reducers";
 import axios from "axios";
@@ -10,7 +10,6 @@ import {
   DescriptionSlide,
   NextButton,
   PrevButton,
-  CompleteButton,
   ModalContainer,
   ModalBackground,
   ModalTitle,

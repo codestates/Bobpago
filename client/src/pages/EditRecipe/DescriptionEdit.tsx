@@ -21,7 +21,6 @@ import {
   DescriptionSlide,
   NextButton,
   PrevButton,
-  CompleteButton,
   ModalContainer,
   ModalBackground,
   ModalTitle,

@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import Nav from "components/Nav/Nav";
 import React, { useRef } from "react";
 import {
@@ -36,7 +35,7 @@ import Ingredient from "components/Ingredient/Ingredient";
 import { useDispatch, useSelector } from "react-redux";
 import { CLEAR_CLICK_DATA, GET_FILTER_DATA } from "actions/IngredientAction";
 import { RootState } from "reducers";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const Survay = () => {
   const [move, setmove] = useState<number>(window.innerWidth);

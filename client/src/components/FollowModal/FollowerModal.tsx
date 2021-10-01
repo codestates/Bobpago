@@ -7,7 +7,6 @@ import {
   ProfileContainer,
   ProfileTextContainer,
   NameContainer,
-  dummy,
   ViewAllContainer,
   XIcon,
 } from "./styles";
