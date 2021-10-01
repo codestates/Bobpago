@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
 import useHover from "utils/useHover";
 import Tag from "components/Tag/Tag";
 import WriteRecipeStarRating from "components/StarRating/WriteRecipe/WriteRecipeStarRating";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "reducers";
 import { goToNextPageEdit, goToPrevPageEdit } from "actions/EditRecipePage";
-import { setDifficulty, setIngredient } from "actions/WriteRecipeContents";
+import { editDifficulty, editIngredient } from "actions/EditRecipeContents";
 import {
   IngredientSlide,
   IngredientTitle,
@@ -44,24 +45,26 @@ const Ingredient = ({
     (state: RootState) => state.EditRecipeContentsReducer
   );
 
+  async function getData() {
+    const data = await axios.get(
+      `${process.env.REACT_APP_SERVER_URL}/ingredient`,
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    setOptions(data.data.data);
+    const selectedData = options.filter(
+      (el: any) => contents.ingredient.indexOf(el.id) !== -1
+    );
+    setSelected(selectedData);
+  }
+
   useEffect(() => {
-    const arr = [
-      { id: 1, name: "김치" },
-      { id: 2, name: "단무지" },
-      { id: 3, name: "깍두기" },
-      { id: 4, name: "참치" },
-      { id: 5, name: "햄" },
-      { id: 6, name: "소세지" },
-      { id: 7, name: "마늘" },
-      { id: 8, name: "양파" },
-      { id: 9, name: "카레가루" },
-      { id: 10, name: "3분짜장" },
-      { id: 11, name: "간장" },
-      { id: 12, name: "소금" },
-      { id: 13, name: "설탕" },
-      { id: 14, name: "식초" },
-    ];
-    setOptions(arr);
+    getData();
+    setDifficulty2(contents.difficulty);
   }, []);
 
   useEffect(() => {
@@ -70,10 +73,6 @@ const Ingredient = ({
     );
     setSelected(alreadySelected);
   }, [options]);
-
-  useEffect(() => {
-    setDifficulty2(contents.difficulty);
-  }, []);
 
   useEffect(() => {
     if (circle2IsHover) setCircle2IsHover(true);
@@ -87,8 +86,8 @@ const Ingredient = ({
 
   const handleStoreIngredient = () => {
     const filteredSelected = selected.map((el: any) => el.id);
-    dispatch(setDifficulty(difficulty));
-    dispatch(setIngredient(filteredSelected));
+    dispatch(editDifficulty(difficulty));
+    dispatch(editIngredient(filteredSelected));
     dispatch(goToNextPageEdit());
   };
 

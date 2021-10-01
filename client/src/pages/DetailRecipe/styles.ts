@@ -1,5 +1,9 @@
 import styled, { css, keyframes } from "styled-components";
 import { BookmarkFill } from "@styled-icons/bootstrap/BookmarkFill";
+import { EyeFill } from "@styled-icons/bootstrap/EyeFill/EyeFill";
+import { Edit } from "@styled-icons/boxicons-solid/Edit/Edit";
+import { SuitHeartFill } from "@styled-icons/bootstrap/SuitHeartFill/SuitHeartFill";
+import { SuitHeart } from "@styled-icons/bootstrap/SuitHeart/SuitHeart";
 
 export const pageLeftMoveAnimate = keyframes`
     0% {
@@ -434,6 +438,56 @@ export const BookMarkIcon = styled(BookmarkFill)<BookmarkProps>`
   &:active {
     color: red;
   }
+`;
+
+export const EditIcon = styled(Edit)`
+  position: fixed;
+  width: 26px;
+  top: 23.5%;
+  right: 8%;
+  z-index: 1000;
+  transition: 0.1s;
+  cursor: pointer;
+  fill: grey;
+`;
+
+export const ViewContainer = styled.div`
+  position: fixed;
+  width: 65px;
+  top: 32.5%;
+  right: 5.5%;
+  z-index: 1000;
+  transition: 0.1s;
+  display: flex;
+  flex-direction: row;
+`;
+
+export const ViewIcon = styled(EyeFill)`
+  width: 20px;
+  height: 20px;
+  fill: grey;
+  margin-right: 3px;
+`;
+
+export const LikeFillIcon = styled(SuitHeartFill)`
+  width: 20px;
+  height: 20px;
+  fill: #de3344;
+  margin-right: 3px;
+  margin-left: 6px;
+  position: relative;
+  bottom: 1px;
+  cursor: pointer;
+`;
+export const LikeIcon = styled(SuitHeart)`
+  width: 20px;
+  height: 20px;
+  fill: #de3344;
+  margin-right: 3px;
+  margin-left: 6px;
+  position: relative;
+  bottom: 1px;
+  cursor: pointer;
 `;
 
 export const Loading = styled.div`
