@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import useHover from "utils/useHover";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
-import { goToNextPage, goToPrevPage } from "actions/WriteRecipePage";
-import { setDescription } from "actions/WriteRecipeContents";
+import { resetWritePage, goToPrevPage } from "actions/WriteRecipePage";
+import { setDescription, resetAllContents } from "actions/WriteRecipeContents";
 import { RootState } from "reducers";
 import axios from "axios";
 import {
@@ -147,6 +147,8 @@ const Description = ({
         pathname: `/detailrecipe/:${recipeId}`,
         state: recipeId,
       });
+      dispatch(resetWritePage());
+      dispatch(resetAllContents());
     } catch (err) {
       console.log(err);
     }
