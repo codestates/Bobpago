@@ -44,6 +44,7 @@ export class Comment extends BaseEntity {
   @OneToMany(
     () => CommentReaction,
     (commentReaction) => commentReaction.comment,
+    { eager: true },
   )
   commentReactions: CommentReaction[];
 }
