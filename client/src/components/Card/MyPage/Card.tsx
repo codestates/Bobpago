@@ -28,7 +28,13 @@ const Card = ({ index, fix, postData, removeMyPost }: FixProps) => {
   let history = useHistory();
   return (
     <CardContainer
-      onClick={() => !fix && history.push(`/detailrecipe/${postData.id}`)}
+      onClick={() =>
+        !fix &&
+        history.push({
+          pathname: `/detailrecipe/:${postData.id}`,
+          state: postData.id,
+        })
+      }
     >
       <RemoveIcon
         src="/img/minus.png"

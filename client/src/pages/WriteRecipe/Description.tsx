@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import useHover from "utils/useHover";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router";
 import { goToNextPage, goToPrevPage } from "actions/WriteRecipePage";
 import { setDescription } from "actions/WriteRecipeContents";
 import { RootState } from "reducers";
@@ -42,6 +43,7 @@ const Description = ({
   setCircle2IsHover,
 }: any) => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const [circle1, circle1IsHover] = useHover();
   const [circle2, circle2IsHover] = useHover();
   const [description, setDescriptionPage] = useState<any>([""]);
@@ -106,40 +108,48 @@ const Description = ({
   };
 
   const handleSubmitRecipe = async () => {
-    const data = await axios.post(
-      `${process.env.REACT_APP_SERVER_URL}/recipe?tokenType=${tokenType}`,
-      {
-        title: contents.title,
-        amount: contents.serving,
-        level: contents.difficulty,
-        estTime: contents.time,
-        ingredientId: contents.ingredient,
-        description: contents.description,
-      },
-      {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${accessToken}`,
+    try {
+      const data = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/recipe?tokenType=${tokenType}`,
+        {
+          title: contents.title,
+          amount: contents.serving,
+          level: contents.difficulty,
+          estTime: contents.time,
+          ingredientId: contents.ingredient,
+          description: contents.description,
         },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      const recipeId = data.data.data.recipe.id;
+      const formData = new FormData();
+      for (let i = 0; i < imgFiles.length; i++) {
+        formData.append("files", imgFiles[i]);
       }
-    );
-    const recipeId = data.data.data.recipe.id;
-    const formData = new FormData();
-    for (let i = 0; i < imgFiles.length; i++) {
-      formData.append("files", imgFiles[i]);
+      const uploadImg = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/image/${recipeId}?tokenType=${tokenType}&path=recipe`,
+        formData,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "multipart/form-data",
+            authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      history.push({
+        pathname: `/detailrecipe/:${recipeId}`,
+        state: recipeId,
+      });
+    } catch (err) {
+      console.log(err);
     }
-    const uploadImg = await axios.post(
-      `${process.env.REACT_APP_SERVER_URL}/image/${recipeId}?tokenType=${tokenType}&path=recipe`,
-      formData,
-      {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "multipart/form-data",
-          authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
   };
 
   const handleImgChange = (e: any, j: number) => {

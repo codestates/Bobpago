@@ -33,7 +33,12 @@ const BookmarkCard = ({
   let history = useHistory();
   return (
     <CardContainer
-      onClick={() => history.push(`/detailrecipe/${postData.recipeId}`)}
+      onClick={() =>
+        history.push({
+          pathname: `/detailrecipe/:${postData.recipeId}`,
+          state: postData.recipeId,
+        })
+      }
     >
       <RemoveIcon
         src="/img/minus.png"

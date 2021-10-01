@@ -51,6 +51,7 @@ import { SET_DETAIL_DATA } from "actions/DetailRecipe";
 const DetailRecipe = () => {
   const dispatch = useDispatch();
   const location = useLocation();
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
   const locationProps = location.state;
   const loginState = useSelector(
     (state: RootState) => state.AccesstokenReducer
@@ -134,15 +135,12 @@ const DetailRecipe = () => {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handlePageData = async () => {
-    const data = await axios.get(
-      `http://localhost:3000/recipe/${locationProps}`,
-      {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const data = await axios.get(`${serverUrl}/recipe/${locationProps}`, {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     const descriptions = data.data.data.recipe.descriptions;
     let dummyData: number[] = [];
     for (let i = 0; i < descriptions.length; i++) {
@@ -267,7 +265,9 @@ const DetailRecipe = () => {
         return <DRContainer key={i} />;
       })}
       <DRContent />
-      {modalOpen ? <DRModal handleModalClose={handleModalClose} /> : null}
+      {modalOpen ? (
+        <DRModal recipeId={locationProps} handleModalClose={handleModalClose} />
+      ) : null}
       <TotalPageMap>
         <TotalPageMapContainer>
           {dummy.map((item: number, i: number) => {

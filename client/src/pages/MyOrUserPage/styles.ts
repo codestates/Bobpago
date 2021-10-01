@@ -7,10 +7,9 @@ import { main } from "theme";
 
 export const Container = styled.div`
   position: relative;
-  // top: 4em;
   padding-top: 4em;
   width: 100%;
-  height: 150%;
+  min-height: 100vh;
   background-color: ${main.bg};
 `;
 
