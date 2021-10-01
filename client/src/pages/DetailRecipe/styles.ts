@@ -1,5 +1,6 @@
 import styled, { css, keyframes } from "styled-components";
 import { BookmarkFill } from "@styled-icons/bootstrap/BookmarkFill";
+import { main } from "theme";
 import { EyeFill } from "@styled-icons/bootstrap/EyeFill/EyeFill";
 import { Edit } from "@styled-icons/boxicons-solid/Edit/Edit";
 import { SuitHeartFill } from "@styled-icons/bootstrap/SuitHeartFill/SuitHeartFill";
@@ -406,7 +407,7 @@ export const CommentButton = styled.button`
   bottom: 13%;
   width: 5em;
   height: 2.5em;
-  background-color: #d43838;
+  background-color: ${main.buttonColor};
   transition: 0.5s;
   color: #ffffff;
   outline: none;
