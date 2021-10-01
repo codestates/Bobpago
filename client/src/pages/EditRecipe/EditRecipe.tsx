@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
 import Nav from "components/Nav/Nav";
 import Title from "./TitleEdit";
 import Time from "./TimeEdit";
@@ -8,8 +9,13 @@ import Circle1 from "components/MovingCircle/WriteRecipe/WriteRecipeCircle1";
 import Circle2 from "components/MovingCircle/WriteRecipe/WriteRecipeCircle2";
 import { ContainerWrapper } from "./styles";
 import { useSelector, useDispatch } from "react-redux";
+import { useHistory, useLocation } from "react-router";
 import { RootState } from "reducers";
-import { goToNextPageEdit, goToPrevPageEdit } from "actions/EditRecipePage";
+import {
+  goToNextPageEdit,
+  goToPrevPageEdit,
+  resetEditPageEdit,
+} from "actions/EditRecipePage";
 import {
   editTitle,
   editTime,
@@ -23,8 +29,15 @@ const EditRecipe = () => {
   const [circle1IsHover, setCircle1IsHover] = useState<boolean>(false);
   const [circle2IsHover, setCircle2IsHover] = useState<boolean>(false);
   const dispatch = useDispatch();
+  const location = useLocation();
+  const history = useHistory();
+  const locationProps = location.state;
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
   const page = useSelector(
     (state: RootState) => state.EditRecipePageReducer.currentPage
+  );
+  const { accessToken, userId } = useSelector(
+    (state: RootState) => state.AccesstokenReducer
   );
   const [scale, setScale] = useState<number>(0);
 
@@ -34,18 +47,37 @@ const EditRecipe = () => {
     setTimeout(() => setScale(page), 700);
   }, [page]);
 
+  async function getData() {
+    const response = await axios.get(`${serverUrl}/recipe/${locationProps}`, {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = response.data.data;
+    if (userId !== data.user.id) {
+      history.push("/");
+      return;
+    }
+    const mainIngredients = data.ingredients.main.map((el) => el.id);
+    const subIngredients = data.ingredients.sub.map((el) => el.id);
+    const ingredients = [...mainIngredients, ...subIngredients];
+    dispatch(editTitle(data.recipe.title));
+    dispatch(editDifficulty(data.recipe.level));
+    dispatch(editIngredient(ingredients));
+    dispatch(editServing(data.recipe.amount));
+    dispatch(editTime(data.recipe.estTime));
+    dispatch(editDescription(data.recipe.descriptions));
+    dispatch(editImage(data.recipe.imageUrls));
+  }
   useEffect(() => {
-    dispatch(editTitle(String(Math.random())));
-    dispatch(editDifficulty(2));
-    dispatch(editIngredient([2, 4, 5]));
-    dispatch(editServing(2));
-    dispatch(editTime(10));
-    dispatch(editDescription(["adsf", "bbbb", "cccc", "dddd"]));
+    getData();
+    // dispatch(resetEditPageEdit());
   }, []);
 
   return (
     <>
-      <Nav opac={false} />
+      <Nav opac={true} />
       <ContainerWrapper>
         <Title
           setCircle1IsHover={setCircle1IsHover}
@@ -70,6 +102,7 @@ const EditRecipe = () => {
           setCircle2IsHover={setCircle2IsHover}
           page={page - 3}
           scale={scale - 3}
+          locationProps={locationProps}
         />
         <Circle1 circle1IsHover={circle1IsHover} />
         <Circle2 circle2IsHover={circle2IsHover} />

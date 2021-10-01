@@ -35,12 +35,17 @@ import {
   TotalPageMapContainer,
   TotalPageMapContent,
   Loading,
+  ViewContainer,
+  ViewIcon,
+  LikeFillIcon,
+  LikeIcon,
+  EditIcon,
 } from "./styles";
 import { koreaRed, koreaBlue, koreaYellow } from "koreaTheme";
 import { gsap } from "gsap/dist/gsap";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-import { useLocation } from "react-router";
+import { useLocation, useHistory } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "reducers";
 import DRModal from "components/DRModal/DRModal";
@@ -51,13 +56,11 @@ import { SET_DETAIL_DATA } from "actions/DetailRecipe";
 const DetailRecipe = () => {
   const dispatch = useDispatch();
   const location = useLocation();
+  const history = useHistory();
   const serverUrl = process.env.REACT_APP_SERVER_URL;
   const locationProps = location.state;
   const loginState = useSelector(
     (state: RootState) => state.AccesstokenReducer
-  );
-  const recipeState = useSelector(
-    (state: RootState) => state.DetailRecipeReducer
   );
 
   const [start, setStart] = useState<boolean>(false);
@@ -66,7 +69,6 @@ const DetailRecipe = () => {
   const [bookmark, setBookmark] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [recipeData, setRecipeData] = useState<any>(null);
-
   const rightScrollRef = useRef<any>(null);
   const bookmarkRef = useRef<any>(null);
   const topBoxRef = useRef<any>(null);
@@ -75,15 +77,46 @@ const DetailRecipe = () => {
   const imageRef = useRef<any>(null);
   const mainRef = useRef<any>(null);
   const subRef = useRef<any>(null);
-
-  const handleBookmark = () => {
-    const bookmarkState = [...bookmarkRef.current.classList].includes("active");
+  // console.log(recipeData);
+  const handleBookmark = async () => {
+    // const bookmarkState = [...bookmarkRef.current.classList].includes("active");
     if (loginState.accessToken === "") {
       dispatch(showSignIn());
-    } else if (bookmarkState) {
-      bookmarkRef.current.classList.remove("active");
-    } else {
-      bookmarkRef.current.classList.add("active");
+      return;
+    }
+    try {
+      if (!bookmark) {
+        const data = await axios.post(
+          `${serverUrl}/${locationProps}/bookmarks?tokenType=${loginState.tokenType}`,
+          {},
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `Bearer ${loginState.accessToken}`,
+            },
+          }
+        );
+        console.log(data);
+        setBookmark(true);
+        bookmarkRef.current.classList.add("active");
+      } else {
+        const data = await axios.delete(
+          `${serverUrl}/${locationProps}/bookmarks?tokenType=${loginState.tokenType}`,
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `Bearer ${loginState.accessToken}`,
+            },
+          }
+        );
+        console.log(data);
+        setBookmark(false);
+        bookmarkRef.current.classList.remove("active");
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -147,6 +180,7 @@ const DetailRecipe = () => {
       dummyData.push(descriptions[i]);
     }
     setRecipeData(data.data.data);
+    setBookmark(data.data.data.recipe.bookmark_state);
     setDummy(dummyData);
   };
 
@@ -154,9 +188,7 @@ const DetailRecipe = () => {
     handlePageData();
   }, []);
 
-  useEffect(() => {
-    // console.log(recipeData);
-  }, [handlePageData]);
+  useEffect(() => {}, [handlePageData]);
 
   useEffect(() => {
     if (recipeData !== null) {
@@ -227,16 +259,6 @@ const DetailRecipe = () => {
           sub.style.transform = `translateY(${i * -100}%)`;
         }
 
-        // rightScrollRef.current.style.transform = `translateY(${i * -262}px)`;
-        // topBoxRef.current.style.transform = `translateY(${i * -100}%)`;
-        // leftBoxRef.current.style.transform = `translateX(${i * -moveRatio}%)`;
-        // rightBoxRef.current.style.transform = `translateX(${
-        //   moveRatio - 100 - moveRatio * -i
-        // }%)`;
-        // imageRef.current.style.transform = `translateY(${i * -100}%)`;
-        // mainRef.current.style.transform = `translateY(${i * -100}%)`;
-        // subRef.current.style.transform = `translateY(${i * -100}%)`;
-
         if (anim) {
           anim.restart();
         }
@@ -256,6 +278,35 @@ const DetailRecipe = () => {
       });
     }
   }, [loading]);
+
+  const handleReaction = async () => {
+    try {
+      let nextReaction;
+      if (recipeData.recipe.recipe_reaction_state === 1) nextReaction = 0;
+      else nextReaction = 1;
+      const data = await axios.post(
+        `${serverUrl}/recipe/${locationProps}?reaction=${nextReaction}&tokenType=${loginState.tokenType}`,
+        {},
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${loginState.accessToken}`,
+          },
+        }
+      );
+      handlePageData();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleEditRecipe = () => {
+    history.push({
+      pathname: `/editrecipe/${locationProps}`,
+      state: locationProps,
+    });
+  };
 
   return loading === false ? (
     <DRTotalContainer>
@@ -390,6 +441,19 @@ const DetailRecipe = () => {
         ref={bookmarkRef}
         onClick={handleBookmark}
       />
+      {recipeData.user.id === loginState.userId && (
+        <EditIcon onClick={() => handleEditRecipe()} />
+      )}
+      <ViewContainer>
+        <ViewIcon />
+        {recipeData.recipe.views}
+        {recipeData.recipe.recipe_reaction_state === 1 ? (
+          <LikeFillIcon onClick={() => handleReaction()} />
+        ) : (
+          <LikeIcon onClick={() => handleReaction()} />
+        )}
+        {recipeData.recipe.recipe_reaciton_count}
+      </ViewContainer>
     </DRTotalContainer>
   ) : (
     <Loading>loading</Loading>

@@ -36,12 +36,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { CLEAR_CLICK_DATA, GET_FILTER_DATA } from "actions/IngredientAction";
 import { RootState } from "reducers";
 import { useHistory } from "react-router-dom";
+import { notify } from "actions/Notification";
+
 
 const Survay = () => {
   const [move, setmove] = useState<number>(window.innerWidth);
   const [left, setLeft] = useState<boolean>(false);
   const [right, setRight] = useState<boolean>(false);
-  const state = useSelector((state: RootState) => state.IngredientReducer);
+  const [ball, setBall] = useState<boolean>(true);
   const clickState = useSelector(
     (state: RootState) => state.IngredientClickReducer
   );
@@ -49,6 +51,8 @@ const Survay = () => {
   const history = useHistory();
   const tooltipRef = useRef<any>(null);
   const tooltipRightRef = useRef<any>(null);
+  const goodCookerRef = useRef<any>(null);
+  const badCookerRef = useRef<any>(null);
 
   // 최초에 무브 컨테이너를 가운데로 두기위해서 사용한 useState이며, type은 number로 선언한다.
 
@@ -83,10 +87,19 @@ const Survay = () => {
   };
 
   const handlePageMove = () => {
-    history.push({
-      pathname: "/matching",
-      state: clickState.clickData,
-    });
+    if (clickState.clickData.length >= 3) {
+      goodCookerRef.current.style.transform = "translateY(100%)";
+      badCookerRef.current.style.transform = "translateY(100%)";
+      setBall(false);
+      setTimeout(() => {
+        history.push({
+          pathname: "/matching",
+          state: clickState.clickData,
+        });
+      }, 1500);
+    } else {
+      dispatch(notify("재료를 3개 이상 골라주셔야 합니다!"));
+    }
   };
 
   useEffect(() => {
@@ -122,6 +135,7 @@ const Survay = () => {
             fill={"#a0c065"}
             top={30}
             left={50}
+            opac={ball}
           />
           <Ball
             width={"1000"}
@@ -129,6 +143,7 @@ const Survay = () => {
             fill={"#5990a5"}
             top={30}
             left={175}
+            opac={ball}
           />
           <Ball
             width={"200"}
@@ -136,9 +151,10 @@ const Survay = () => {
             fill={"#fa5827"}
             top={10}
             left={140}
+            opac={ball}
           />
           <GoodCookerPage>
-            <GoodCookerContainer>
+            <GoodCookerContainer ref={goodCookerRef}>
               <GoodCookerForm>
                 <TooltipContainer>
                   <GoodCookerTitle>
@@ -146,7 +162,6 @@ const Survay = () => {
                   </GoodCookerTitle>
                   <LeftQuestionIcons
                     onMouseEnter={() => {
-                      console.log(tooltipRef);
                       tooltipRef.current.style.opacity = "1";
                     }}
                     onMouseLeave={() => {
@@ -181,7 +196,7 @@ const Survay = () => {
             </TextContainer>
           </AreYouGoodPage>
           <BadCookerPage>
-            <BadCookerContainer>
+            <BadCookerContainer ref={badCookerRef}>
               <RightTooltipContainer>
                 <RightQuestionIcons
                   onMouseEnter={() => {

@@ -43,6 +43,7 @@ export const RightContentWriter = styled.div`
   border: 3px solid #2d325b;
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
+  cursor: pointer;
 `;
 
 export const RightContentTitle = styled.div`

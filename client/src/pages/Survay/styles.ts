@@ -121,6 +121,8 @@ export const BadCookerContainer = styled.div`
   display: flex;
   flex-direction: column;
   transform: translateY(6em);
+  transition: 1.5s;
+  transition-timing-function: cubic-bezier(0.98, -0.6, 0.19, 1.61);
 `;
 
 export const BadCookerTitleContainer = styled.div`
@@ -135,7 +137,7 @@ export const BadCookerTitleContainer = styled.div`
 
 export const PostButton = styled.button`
   position: absolute;
-  bottom: 14%;
+  bottom: 12%;
   right: 0;
   width: 8em;
   height: 2em;
@@ -162,6 +164,8 @@ export const GoodCookerContainer = styled.div`
   display: flex;
   flex-direction: column;
   transform: translateY(5.5em);
+  transition: 1.5s;
+  transition-timing-function: cubic-bezier(0.98, -0.6, 0.19, 1.61);
 `;
 
 export const GoodCookerForm = styled.div`
