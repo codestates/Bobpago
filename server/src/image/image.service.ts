@@ -90,7 +90,7 @@ export class ImageService {
 
       case 'comment':
         const comment = await this.commentRepository.findOne({
-          recipeId: id,
+          id,
         });
         comment.imageUrl = urls[0];
         await this.commentRepository.save(comment);
