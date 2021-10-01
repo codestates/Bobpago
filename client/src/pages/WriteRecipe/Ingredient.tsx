@@ -3,8 +3,7 @@ import axios from "axios";
 import useHover from "utils/useHover";
 import Tag from "components/Tag/Tag";
 import WriteRecipeStarRating from "components/StarRating/WriteRecipe/WriteRecipeStarRating";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "reducers";
+import { useDispatch } from "react-redux";
 import { goToNextPage, goToPrevPage } from "actions/WriteRecipePage";
 import { setDifficulty, setIngredient } from "actions/WriteRecipeContents";
 import {

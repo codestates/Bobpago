@@ -15,8 +15,6 @@ import {
   TheOtherTimeTooltip,
   TheOtherTimeTooltipText,
   ExpectedTimeContainer,
-  ExpectedTimeTooltip,
-  ExpectedTimeTooltipText,
   NextButton,
   PrevButton,
   PeopleNumInput,

@@ -1,17 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
-import styled from "styled-components";
 import Page from "./Page";
 import {
   BookContainer,
   Cover,
   FlipBook,
-  Flip,
-  Text,
-  Front,
-  BackgroundImg,
-  Back,
-  NextBtn,
-  BackBtn,
   FrontCoverImg,
   FrontCover,
   FrontCoverLogo,

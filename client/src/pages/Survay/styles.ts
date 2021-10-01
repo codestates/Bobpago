@@ -235,7 +235,7 @@ export const LeftSurvayTooltip = styled.div`
   opacity: 0;
   transition: 0.3s;
   /* top: -70%; */
-  right: 10%;
+  right: 15%;
   z-index: 100;
   span {
     font-size: 12px;

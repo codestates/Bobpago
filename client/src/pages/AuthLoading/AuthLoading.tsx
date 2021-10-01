@@ -1,11 +1,10 @@
 import axios from "axios";
 import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
-import { RootState } from "reducers";
 import { SET_ACCESSTOKEN } from "actions/Accesstoken";
 import { showNothing } from "actions/SignUpAndSignIn";
-import { LoadingContainer, LoadingContent, LoadingImage } from "./styles";
+import { LoadingContainer, LoadingImage } from "./styles";
 
 const AuthLoading = () => {
   const history = useHistory();
