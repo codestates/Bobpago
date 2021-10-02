@@ -76,7 +76,7 @@ const Nav = ({ opac }: { opac: boolean }) => {
               </Link>
             </NavEtcList>
             <NavEtcList>
-              <LoginLogout onClick={() => handleLogout()}>Logout</LoginLogout>
+              <LoginLogout onClick={() => handleLogout()}>로그아웃</LoginLogout>
             </NavEtcList>
           </NavEtcUl>
         ) : (
@@ -90,7 +90,7 @@ const Nav = ({ opac }: { opac: boolean }) => {
                   // }
                 }}
               >
-                Login
+                로그인
               </LoginLogout>
             </NavEtcList>
           </NavEtcUl>

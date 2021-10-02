@@ -184,14 +184,14 @@ const Time = ({ page, scale, setCircle1IsHover, setCircle2IsHover }: any) => {
         </TheOtherTimeContainer>
       </RecipeTimeSlide>
       <NextButton ref={circle2} page={page} onClick={() => handleStoreTime()}>
-        Next
+        다음
       </NextButton>
       <PrevButton
         ref={circle1}
         page={page}
         onClick={() => dispatch(goToPrevPage())}
       >
-        Prev
+        이전
       </PrevButton>
     </>
   );

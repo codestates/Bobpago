@@ -23,6 +23,7 @@ import {
   editDifficulty,
   editIngredient,
   editServing,
+  editImage,
 } from "actions/EditRecipeContents";
 
 const EditRecipe = () => {
@@ -59,8 +60,8 @@ const EditRecipe = () => {
       history.push("/");
       return;
     }
-    const mainIngredients = data.ingredients.main.map((el) => el.id);
-    const subIngredients = data.ingredients.sub.map((el) => el.id);
+    const mainIngredients = data.ingredients.main.map((el: any) => el.id);
+    const subIngredients = data.ingredients.sub.map((el: any) => el.id);
     const ingredients = [...mainIngredients, ...subIngredients];
     dispatch(editTitle(data.recipe.title));
     dispatch(editDifficulty(data.recipe.level));

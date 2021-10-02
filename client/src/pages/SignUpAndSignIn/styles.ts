@@ -1,5 +1,6 @@
 import styled, { keyframes } from "styled-components";
 import { Email } from "@styled-icons/material-rounded/Email";
+import { main } from "theme";
 
 export const WholeContainer = styled.div`
   width: 22em;
@@ -7,6 +8,7 @@ export const WholeContainer = styled.div`
   height: 33em;
   text-align: center;
   margin: 0 auto;
+  
   left: 0;
   right: 0;
   z-index: 100000;
@@ -56,7 +58,7 @@ export const BackgroundImg = styled.img`
 export const InputContainer = styled.form`
   position: relative;
   width: 100%;
-  padding: 8.5%;
+  padding: 8.5% 8.5% 5% 8.5% ;
   z-index: 1;
   float: left;
 `;
@@ -65,6 +67,7 @@ export const Logo = styled.img`
   width: 9em;
   display: block;
   margin: 0 auto;
+  font-size: ${main.smallestFont};
   margin-top: -0.5em;
   @media only screen and (max-width: 480px) {
     width: 12em;
@@ -75,7 +78,7 @@ export const Logo = styled.img`
 export const Placeholder = styled.label`
   text-align: left;
   position: absolute;
-  left: 2.7em;
+  left: 3.2em;
   z-index: 1;
   color: #7a7a76;
   font-size: 20px;
@@ -103,9 +106,9 @@ export const InputWrapper = styled.input`
   position: relative;
   border-radius: 3em;
   border: 1.5px solid #c2c2c2;
-  height: 3em;
+  height: 2.3em; 
   width: 100%;
-  font-size: 15px;
+  font-size: 1em;
   margin-top: 0.4em;
   margin-bottom: 0.4em;
   padding-left: 1em;
@@ -140,20 +143,20 @@ export const ErrMsg = styled(InputTitle)`
   margin-bottom: 0.3em;
   height: 0.5em;
   color: #dd584a;
-  font-size: 10px;
   span {
     padding-left: 1em;
     animation: ${shake} 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97);
     display: none;
+    font-size: 1em;
   }
 `;
 export const Ask = styled(InputTitle)`
   text-align: center;
   position: relative;
-  padding: 0 auto;
+  padding: 0;
   top: 1em;
   padding-bottom: 0.6em;
-  font-size: 13px;
+  font-size: 0.9em;
 
   a {
     text-decoration: none;
@@ -167,7 +170,7 @@ export const OAuthContainer = styled.div`
   border-top: 1px solid #757575;
   margin-top: 1.5em;
   p {
-    font-size: 13px;
+    font-size: 1em;
     color: #757575;
   }
 `;
@@ -255,9 +258,9 @@ export const ButtonWrapper = styled.button`
   display: block;
   margin-top: 1em;
   width: 100%;
-  height: 2.5em;
+  height: 2.3em;
   line-height: 2.3em;
-  font-size: 16px;
+  font-size: 1.2em;
   font-family: sans-serif;
   text-decoration: none;
   color: #000;
@@ -281,7 +284,7 @@ export const ButtonWrapper = styled.button`
     left: 0;
     width: 0;
     height: 100%;
-    background: #1a1a1a;
+    background: #DA5544;
     transition: all 0.4s;
   }
   &:hover:after {
@@ -300,12 +303,12 @@ export const ButtonText = styled.span`
   &:hover {
     position: relative;
     z-index: 3;
-    color: #fff;
+    color: #e2e2ea;
   }
   &:after {
     position: relative;
     z-index: 3;
-    color: #fff;
+    color: #e2e2ea;
     width: 100%;
   }
 `;
