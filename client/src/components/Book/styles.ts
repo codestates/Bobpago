@@ -74,7 +74,6 @@ export const Back = styled.div`
   }
   .food {
     width: auto;
-    object-fit: center;
     max-height: 100%;
   }
   color: #000;
@@ -86,7 +85,7 @@ export const Back = styled.div`
   left: 0;
   z-index: 99;
   transform: rotateY(180deg);
-  box-shadow: inset 20px 0 50px rgba(0, 0, 0, 0.5) 0 2px 5px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   background-color: #f3f3f3;
@@ -95,7 +94,7 @@ export const Back = styled.div`
   justify-content: center;
   display: flex;
   flex-direction: column;
-  align-text: center;
+  text-align: center;
 `;
 
 export const Front = styled.div`

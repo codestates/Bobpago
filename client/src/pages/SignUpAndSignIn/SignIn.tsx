@@ -183,14 +183,14 @@ const SignIn = () => {
             </a>
           </Ask>
           <OAuthContainer>
-            <p>SNS 계정으로 간편 로그인</p>
+            <p>소셜계정으로 간편 로그인</p>
             <OAuthIconContainer>
               <a href={googleUri}>
                 <img
                   className="google"
                   src="/img/google.png"
                   alt="구글로그인"
-                  width="37"
+                  width="45"
                 />
               </a>
               &nbsp;&nbsp;&nbsp;
@@ -199,7 +199,7 @@ const SignIn = () => {
                   className="kakao"
                   src="/img/kakao.png"
                   alt="카카오로그인"
-                  width="36"
+                  width="42"
                 />
               </a>
               &nbsp;&nbsp;&nbsp;
@@ -208,7 +208,7 @@ const SignIn = () => {
                   className="naver"
                   src="/img/naver.png"
                   alt="네이버로그인"
-                  width="36"
+                  width="42"
                 />
               </a>
             </OAuthIconContainer>

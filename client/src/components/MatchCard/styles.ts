@@ -44,8 +44,8 @@ export const waitWind = keyframes`
 `;
 
 export const MatchCardBox = styled.div<MatchCardProps>`
-  min-width: 15em;
-  height: 18em;
+  min-width: 17em;
+  height: 20em;
   background-color: #000000;
   display: flex;
   flex-direction: column;
@@ -71,9 +71,9 @@ export const MatchCardBox = styled.div<MatchCardProps>`
 `;
 
 export const CardTitle = styled.div`
-  margin-top: 2em;
+  margin-top: 1em;
   flex: 5;
-  font-size: 18px;
+  font-size: ${main.smallFont};
   z-index: 10;
   font-weight: 700;
   color: white;
@@ -81,19 +81,19 @@ export const CardTitle = styled.div`
     1px 1px 0 #000;
 
   @media only screen and (max-width: 768px) {
-    font-size: ${main.mostSmallFont};
+    font-size: ${main.smallestFont};
     margin-top: 1.5em;
   }
 `;
 
 export const CardDifficulty = styled.div`
   flex: 0.1;
-  font-size: 24px;
+  font-size: ${main.smallFont};
   z-index: 10;
   color: #e0e035;
   text-shadow: 0 0 2px rgba(0, 0, 0, 1);
   @media only screen and (max-width: 768px) {
-    font-size: 16px;
+    font-size: ${main.smallestFont};
   }
 `;
 
@@ -119,7 +119,7 @@ export const SudoContainer = styled.div`
   cursor: pointer;
   width: 100%;
   height: 100%;
-  background: #0000006a;
+  background: #00000015;
   border-radius: 15px;
   transition: 0.5s;
   z-index: 80;
@@ -144,6 +144,7 @@ export const CardLikesContainer = styled.div`
 
 export const CardLikesIcon = styled(Like)`
   width: 20px;
+  margin-left: 0.5rem;
   margin-right: 0.2em;
   @media only screen and (max-width: 768px) {
     width: 15px;
@@ -151,7 +152,7 @@ export const CardLikesIcon = styled(Like)`
 `;
 
 export const CardLikesText = styled.div`
-  font-size: 15px;
+  font-size: ${main.smallestFont};
   @media only screen and (max-width: 768px) {
     font-size: 14px;
   }
@@ -172,6 +173,8 @@ export const CardTimesIcon = styled(Time)`
 `;
 
 export const CardTimesText = styled.div`
+  font-size: ${main.smallestFont};
+  margin-right: 0.5rem;
   @media only screen and (max-width: 768px) {
     font-size: 14px;
   }
@@ -225,13 +228,13 @@ export const HiddenTopContainer = styled.div`
 `;
 
 export const HiddenTitle = styled.div`
-  font-size: 42px;
+  font-size: ${main.middleFont};
   font-weight: 700;
   margin-right: 0.2em;
 `;
 
 export const HiddenAmount = styled.div`
-  font-size: 24px;
+  font-size: ${main.smallFont};
 `;
 
 export const HiddenMainIngredient = styled.div`
@@ -247,16 +250,21 @@ export const MainIngredientContainer = styled.ul`
 `;
 
 export const MainIngredientText = styled.div`
-  font-size: 24px;
+  font-size: ${main.smallFont};
+  color: black;
 `;
 
 export const MainIngredient = styled.li`
-  font-size: 18px;
-  margin-left: 2em;
+  font-size: ${main.smallFont};
+  margin-left: 0.6em;
+  
+  list-style: none;
+  
 `;
 
 export const HiddenSubIngredient = styled.div`
   display: flex;
+  flex-wrap: wrap;
   margin-top: 2em;
 `;
 
@@ -268,11 +276,12 @@ export const SubIngredientContainer = styled.ul`
 `;
 
 export const SubIngredientText = styled.div`
-  font-size: 24px;
+  font-size: ${main.smallFont};
+  color: black
 `;
 
 export const SubIngredient = styled.li`
-  font-size: 18px;
+  font-size: ${main.smallFont};
   margin-left: 2em;
 `;
 
@@ -283,12 +292,12 @@ export const HiddenCookingTimeContainer = styled.div`
 `;
 
 export const HiddenCookingTimeText = styled.div`
-  font-size: 24px;
+  font-size: ${main.smallFont};
   margin-right: 0.3em;
 `;
 
 export const HiddenCookingTime = styled.div`
-  font-size: 24px;
+  font-size: ${main.smallFont};
 `;
 
 export const HiddenDifficultyContainer = styled.div`
@@ -298,12 +307,12 @@ export const HiddenDifficultyContainer = styled.div`
 `;
 
 export const HiddenDifficultyText = styled.div`
-  font-size: 24px;
+  font-size: ${main.smallFont};
   margin-right: 0.3em;
 `;
 
 export const HiddenDifficulty = styled.div`
-  font-size: 24px;
+  font-size: ${main.middleFont};
   color: orange;
 `;
 
@@ -323,7 +332,7 @@ export const HiddenPageMoveButton = styled.button`
   position: absolute;
   right: 5%;
   bottom: 5%;
-  width: 10em;
+  width: 8em;
   height: 2.5em;
   background-color: #d43838;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
@@ -332,7 +341,9 @@ export const HiddenPageMoveButton = styled.button`
   outline: none;
   border: none;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 10px;
+  font-size: ${main.smallFont};
+
 
   &:hover {
     background-color: red;

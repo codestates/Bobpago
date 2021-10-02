@@ -90,7 +90,7 @@ export const EggHeadPago = styled.img<pagoProps>`
 
 export const PinkHeadPago = styled.img<pagoProps>`
   position: fixed;
-  left: 70%;
+  left: 30%;
   top: 10%;
   width: 4%;
   height: 4%;
@@ -300,7 +300,6 @@ export const HiddenPage = styled.div<HiddenProps>`
   left: -18em;
   top: -5em;
   transform: translateX(0%) scale(3);
-  z-index: 10000;
   animation: ${({ start }) => {
     if (start === "true") {
       return css`
@@ -364,7 +363,7 @@ export const SubIngredientContainer = styled.div`
   border: 3px solid #2d325b;
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
-  z-index: 5;
+  z-index: 4;
 `;
 
 export const SubIngredient = styled.div`
@@ -408,6 +407,7 @@ export const CommentButton = styled.button`
   width: 5em;
   height: 2.5em;
   background-color: ${main.buttonColor};
+  font-size: 1.2em;
   transition: 0.5s;
   color: #ffffff;
   outline: none;
@@ -457,10 +457,13 @@ export const ViewContainer = styled.div`
   width: 65px;
   top: 32.5%;
   right: 5.5%;
-  z-index: 1000;
+  z-index: 100;
   transition: 0.1s;
   display: flex;
   flex-direction: row;
+  font-size: 1.2em;
+  
+
 `;
 
 export const ViewIcon = styled(EyeFill)`
