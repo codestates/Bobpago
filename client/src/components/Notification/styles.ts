@@ -1,4 +1,5 @@
 import styled, { keyframes } from "styled-components";
+import {main} from "../../theme";
 
 export const NotificationContainer = styled.div`
   font-size: 1rem;
@@ -33,7 +34,7 @@ export const Notification = styled.div`
   transform: translateX(90%);
   transition: all 1s ease-in-out;
   animation: ${toastInRight} 3.2s;
-  background: #4000c7;
+  background: royalblue;
   border-radius: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
   color: #000;
