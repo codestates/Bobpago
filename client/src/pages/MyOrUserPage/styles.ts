@@ -378,14 +378,13 @@ export const CheckPassword = styled.div`
   top: 30%;
   width: 20em;
   margin: 0 auto;
-  height: 13em;
+  height: 11em;
   background: #ebebeb;
   z-index: 100;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   text-align: center;
-  z-index: 11;
 `;
 
 export const CheckPasswordInput = styled.input`
@@ -405,6 +404,7 @@ export const ChangeUseInfoContainer = styled(CheckPassword)`
 export const CheckPasswordBtn = styled(EditCompleteBtn)`
   position: relative;
   text-align: center;
+  top: 0.5em;
   transform: translateX(12em);
 `;
 
