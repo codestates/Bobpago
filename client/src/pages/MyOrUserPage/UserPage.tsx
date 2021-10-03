@@ -15,6 +15,7 @@ import {
   ProfileContentsContainer,
   ProfileName,
   ProfileIntroduce,
+  ProfileRecommend,
   FollowContainer,
   FollowBtn,
   FollowNum,
@@ -22,6 +23,8 @@ import {
   MyPostTitle,
   DivisionLine,
   GridContainer,
+  NoPostContainer,
+  NoPostText,
   PlusIcon,
   IconContainer,
   FollowBtn2,
@@ -181,51 +184,65 @@ const UserPage = () => {
             <ProfileContentsContainer>
               <ProfileName>{userInfo && userInfo.nickname}</ProfileName>
               {!follow ? (
-                <FollowBtn2 onClick={() => handleFollow()}>Follow</FollowBtn2>
+                <FollowBtn2 onClick={() => handleFollow()}>팔로우하기</FollowBtn2>
               ) : (
                 <FollowedBtn onClick={() => handleFollow()}>
                   <CheckIcon />
-                  Following
+                  팔로우중
                 </FollowedBtn>
               )}
-              <ProfileIntroduce>
-                {userInfo && userInfo.profile}
-              </ProfileIntroduce>
+              {
+                userInfo.profile ?
+                    <ProfileIntroduce>
+                      {userInfo && userInfo.profile}
+                    </ProfileIntroduce> :
+                    <ProfileRecommend>아직 {userInfo.nickname}님의 소개글이 없어요😢</ProfileRecommend>
+              }
+
             </ProfileContentsContainer>
           </UserProfileContainer>
           <FollowContainer>
             <FollowBtn onClick={() => handleFolloweeModalOn()}>
-              Followee
+              팔로잉
             </FollowBtn>
             <FollowNum>{userInfo && userInfo.followees}</FollowNum>
             <FollowBtn onClick={() => handleFollowerModalOn()}>
-              Follower
+              팔로워
             </FollowBtn>
             <FollowNum>{userInfo && userInfo.followers}</FollowNum>
           </FollowContainer>
           <MyPostContainer>
-            <MyPostTitle>작성 글 목록</MyPostTitle>
+            <MyPostTitle>작성 레시피 목록</MyPostTitle>
             <DivisionLine />
-            <GridContainer>
-              {userPosts &&
-                userPosts
-                  .slice(0, myPostNum)
-                  .map((el: any, i: number) => (
-                    <Card index={i} key={i} postData={el} />
-                  ))}
-            </GridContainer>
-            <IconContainer>
-              {myPostNum > standardNum && userPosts.length > standardNum && (
-                <MinusIcon
-                  onClick={() => setMyPostNum(myPostNum - standardNum)}
-                />
-              )}
-              {userPosts.length > myPostNum && (
-                <PlusIcon
-                  onClick={() => setMyPostNum(myPostNum + standardNum)}
-                />
-              )}
-            </IconContainer>
+            {
+              userPosts.length !== 0 ?
+                  <>
+                    <GridContainer>
+                      {
+                        userPosts
+                            .slice(0, myPostNum).reverse()
+                            .map((el: any, i: number) => (
+                                <Card index={i} key={i} postData={el} />
+                            ))
+                      }
+                    </GridContainer>
+                    <IconContainer>
+                      {myPostNum > standardNum && userPosts.length > standardNum && (
+                          <MinusIcon
+                              onClick={() => setMyPostNum(myPostNum - standardNum)}
+                          />
+                      )}
+                      {userPosts.length > myPostNum && (
+                          <PlusIcon
+                              onClick={() => setMyPostNum(myPostNum + standardNum)}
+                          />
+                      )}
+                    </IconContainer>
+                  </> :
+                  <NoPostContainer>
+                    <NoPostText>아직 레시피가 없네요!</NoPostText>
+                  </NoPostContainer>
+            }
           </MyPostContainer>
         </PageContainer>
       </Container>

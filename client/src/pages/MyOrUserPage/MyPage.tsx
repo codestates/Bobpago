@@ -18,6 +18,7 @@ import {
   ProfileContentsContainer,
   ProfileName,
   ProfileIntroduce,
+  ProfileRecommend,
   FollowContainer,
   FollowBtn,
   FollowNum,
@@ -49,6 +50,8 @@ import {
   EditInput,
   ModalBackground2,
   Container,
+  NoPostContainer,
+  NoPostText,
 } from "./styles";
 
 interface Post {
@@ -340,7 +343,8 @@ const MyPage = () => {
       setCheckWithDrawModal(true);
     }
   };
-
+  console.log('⚡️⚡️⚡️⚡️⚡️⚡️⚡️');
+  console.log(bookmarkData);
   return (
     <>
       <Nav opac={true} />
@@ -355,7 +359,11 @@ const MyPage = () => {
             </ProfileImgContainer>
             <ProfileContentsContainer>
               <ProfileName>{nickname}</ProfileName>
-              <ProfileIntroduce>{introduce}</ProfileIntroduce>
+              {
+                introduce ?
+              <ProfileIntroduce>{introduce}</ProfileIntroduce> :
+              <ProfileRecommend>{nickname}님에 대해서 간단한 소개글을 작성해보세요😁</ProfileRecommend>
+              }
               <DropDownContainer>
                 <DotsIcon />
                 <MenuContainer className="menu">
@@ -371,16 +379,16 @@ const MyPage = () => {
           </UserProfileContainer>
           <FollowContainer>
             <FollowBtn onClick={() => handleFollowingModalOn()}>
-              Following
+              팔로잉
             </FollowBtn>
             <FollowNum>{followingNum}</FollowNum>
             <FollowBtn onClick={() => handleFollowerModalOn()}>
-              Follower
+              팔로워
             </FollowBtn>
             <FollowNum>{followerNum}</FollowNum>
           </FollowContainer>
           <MyPostContainer>
-            <MyPostTitle>내 글 목록</MyPostTitle>
+            <MyPostTitle>나의 레시피</MyPostTitle>
             <EditBtn
               onClick={() =>
                 myPostFix ? setMyPostFix(false) : setMyPostFix(true)
@@ -389,30 +397,39 @@ const MyPage = () => {
               수정
             </EditBtn>
             <DivisionLine />
-            <GridContainer>
-              {myPostData.slice(0, myPostNum).map((el: any, i: number) => (
-                <Card
-                  removeMyPost={removeMyPost}
-                  index={i}
-                  key={i}
-                  postData={el}
-                  fix={myPostFix}
-                />
-              ))}
-            </GridContainer>
-            <IconContainer>
-              {myPostNum > standardNum && myPostData.length > standardNum && (
-                <MinusIcon
-                  onClick={() => setMyPostNum(myPostNum - standardNum)}
-                />
-              )}
-              {myPostData.length > myPostNum && (
-                <PlusIcon
-                  onClick={() => setMyPostNum(myPostNum + standardNum)}
-                />
-              )}
-            </IconContainer>
+            {
+              myPostData.length !== 0 ?
+                <>
+                  <GridContainer>
+                    {myPostData.slice(0, myPostNum).reverse().map((el: any, i: number) => (
+                        <Card
+                            removeMyPost={removeMyPost}
+                            index={i}
+                            key={i}
+                            postData={el}
+                            fix={myPostFix}
+                        />
+                    ))}
+                  </GridContainer>
+                  <IconContainer>
+                    {myPostNum > standardNum && myPostData.length > standardNum && (
+                        <MinusIcon
+                            onClick={() => setMyPostNum(myPostNum - standardNum)}
+                        />
+                    )}
+                    {myPostData.length > myPostNum && (
+                        <PlusIcon
+                            onClick={() => setMyPostNum(myPostNum + standardNum)}
+                        />
+                    )}
+                  </IconContainer>
+                </> :
+                  <NoPostContainer>
+                    <NoPostText>아직 레시피가 없네요!</NoPostText>
+                  </NoPostContainer>
+            }
           </MyPostContainer>
+
           <MyPostContainer>
             <MyPostTitle>북마크 목록</MyPostTitle>
             <EditBtn
@@ -423,34 +440,41 @@ const MyPage = () => {
               수정
             </EditBtn>
             <DivisionLine />
-            <GridContainer>
-              {bookmarkData &&
-                bookmarkData
-                  .slice(0, bookmarkNum)
-                  .map((el: any, i: number) => (
-                    <BookmarkCard
-                      removeBookmarkCheck={removeBookmarkCheck}
-                      index={i}
-                      key={i}
-                      postData={el}
-                      fix={bookmarkFix}
-                    />
-                  ))}
-            </GridContainer>
-            <IconContainer>
-              {bookmarkData &&
-                bookmarkNum > standardNum &&
-                bookmarkData.length > standardNum && (
-                  <MinusIcon
-                    onClick={() => setBookmarkNum(bookmarkNum - standardNum)}
-                  />
-                )}
-              {bookmarkData.length >= bookmarkNum && (
-                <PlusIcon
-                  onClick={() => setBookmarkNum(bookmarkNum + standardNum)}
-                />
-              )}
-            </IconContainer>
+            {
+              bookmarkData !== 0 ?
+                  <>
+                    <GridContainer>
+                      {
+                        bookmarkData
+                          .slice(0, bookmarkNum).reverse()
+                          .map((el: any, i: number) => (
+                            <BookmarkCard
+                              removeBookmarkCheck={removeBookmarkCheck}
+                              index={i}
+                              key={i}
+                              postData={el}
+                              fix={bookmarkFix}
+                            />
+                          ))
+                      }
+                    </GridContainer>
+                    <IconContainer>
+                      {bookmarkData &&
+                      bookmarkNum > standardNum &&
+                      bookmarkData.length > standardNum && (
+                          <MinusIcon
+                              onClick={() => setBookmarkNum(bookmarkNum - standardNum)}
+                          />
+                      )}
+                      {bookmarkData.length >= bookmarkNum && (
+                          <PlusIcon
+                              onClick={() => setBookmarkNum(bookmarkNum + standardNum)}
+                          />
+                      )}
+                    </IconContainer>
+                  </> :
+                <NoPostContainer><NoPostText>북마크가 아직 없네요 😢</NoPostText></NoPostContainer>
+            }
           </MyPostContainer>
         </PageContainer>
       </Container>
@@ -490,7 +514,8 @@ const MyPage = () => {
           <CheckPassword>
             <CheckPasswordText>비밀번호 확인</CheckPasswordText>
             <CheckPasswordInput
-              value={passwordWithDraw}
+                type="password"
+                value={passwordWithDraw}
               onChange={(e) => setPasswordWithDraw(e.target.value)}
             />
             <CheckPasswordBtn onClick={() => passwordCheckWithDraw()}>
@@ -548,6 +573,7 @@ const MyPage = () => {
               <InputTitle>소개글</InputTitle>
               <EditInput
                 value={editIntroduce}
+                type='text-area'
                 onChange={(e) => setEditIntroduce(e.target.value)}
               />
             </InputContainer>

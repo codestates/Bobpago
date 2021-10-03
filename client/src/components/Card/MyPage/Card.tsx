@@ -55,13 +55,11 @@ const Card = ({ index, fix, postData, removeMyPost }: FixProps) => {
           {/* <CardArc>
             <path />
           </CardArc> */}
-          <div>
             {/* <CardThumb src="https://i.imgur.com/7D7I6dI.png" alt="" />
           <>
             <CardTitle>Jessica Parker</CardTitle>
             <CardStatus>1 hour ago</CardStatus> */}
             <CardTitle>{postData && postData.title}</CardTitle>
-          </div>
         </CardHeader>
         <CardDescription>
           난이도:{" "}
