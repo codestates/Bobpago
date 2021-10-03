@@ -508,22 +508,22 @@ const MyPage = () => {
           </CheckPassword>
         </>
       )}
-      {passwordModalWithDraw && (
-        <>
+      {
+        passwordModalWithDraw &&
+        (<>
           <ModalBackground2 onClick={() => setPasswordModalWithDraw(false)} />
           <CheckPassword>
             <CheckPasswordText>비밀번호 확인</CheckPasswordText>
             <CheckPasswordInput
-                type="password"
                 value={passwordWithDraw}
-              onChange={(e) => setPasswordWithDraw(e.target.value)}
+                onChange={(e) => setPasswordWithDraw(e.target.value)}
             />
             <CheckPasswordBtn onClick={() => passwordCheckWithDraw()}>
               확인
             </CheckPasswordBtn>
           </CheckPassword>
-        </>
-      )}
+        </>)
+      }
       {checkWithDrawModal && (
         <>
           <ModalBackground2 onClick={() => setCheckWithDrawModal(false)} />
