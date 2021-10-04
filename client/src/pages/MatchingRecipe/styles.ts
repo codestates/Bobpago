@@ -141,7 +141,7 @@ export const MatchTooltip = styled.div`
     width: 14em;
     left: 103%;
   }
-  div{
+  div {
     font-size: 1.2em;
   }
   span {

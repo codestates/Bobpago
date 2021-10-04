@@ -9,6 +9,7 @@ import {
   RightMainContent,
   RightMainFooter,
   TimeIcon,
+  UserIcon,
 } from "./styles";
 import { useHistory } from "react-router";
 import { RootState } from "reducers";
@@ -72,7 +73,7 @@ const DRContent: React.FC<DRContentProps> = () => {
   return (
     <RightContent>
       <RightContentWriter onClick={() => handleMoveToUserPage()}>
-
+        {loading ? null : <UserIcon />}
         {loading ? "LOADING" : recipeState.user.nickname}
       </RightContentWriter>
       <RightContentTitle>

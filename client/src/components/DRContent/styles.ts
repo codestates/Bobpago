@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Time } from "@styled-icons/boxicons-regular/Time";
 import { main } from "theme";
+import { UserCircle } from "@styled-icons/boxicons-regular/UserCircle";
 
 export const RightContent = styled.div`
   width: 45%;
@@ -112,4 +113,9 @@ export const RightMainFooter = styled.footer`
 
 export const TimeIcon = styled(Time)`
   width: 20px;
+`;
+
+export const UserIcon = styled(UserCircle)`
+  width: 25px;
+  margin-right: 0.2em;
 `;
