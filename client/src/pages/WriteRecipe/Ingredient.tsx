@@ -6,6 +6,7 @@ import WriteRecipeStarRating from "components/StarRating/WriteRecipe/WriteRecipe
 import { useDispatch } from "react-redux";
 import { goToNextPage, goToPrevPage } from "actions/WriteRecipePage";
 import { setDifficulty, setIngredient } from "actions/WriteRecipeContents";
+import { notify } from "actions/Notification";
 import {
   IngredientSlide,
   IngredientTitle,
@@ -69,6 +70,10 @@ const Ingredient = ({
   }, [circle1IsHover]);
 
   const handleStoreIngredient = () => {
+    if (selected.length === 0) {
+      dispatch(notify("재료를 한개 이상 넣어주세요"));
+      return;
+    }
     const filteredSelected = selected.map((el: Option) => el.id);
     dispatch(setDifficulty(difficulty));
     dispatch(setIngredient(filteredSelected));
@@ -124,10 +129,15 @@ const Ingredient = ({
   //React.KeyboardEvent<object> 로 key부분은 해결
   const enterKey = (e: any) => {
     e.preventDefault();
+    if (e.keyCode === 13 && e.target.value === "") {
+      handleStoreIngredient();
+      return;
+    }
     if (e.keyCode === 13 && e.target.value) {
       const [selectIndex, optionIndex] = nameFiltered(e.target.value);
       if (selectIndex === -1 && optionIndex !== -1) {
         updateDex(options[optionIndex]);
+        setSearch("");
       }
     }
     //키보드로 검색어 바꾸는 것 advanced로 해보기

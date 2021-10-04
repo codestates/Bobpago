@@ -37,6 +37,12 @@ const Title = ({ page, scale, setCircle1IsHover, setCircle2IsHover }: any) => {
     else setCircle1IsHover(false);
   }, [circle1IsHover]);
 
+  const handleEnterSlide = (e: any) => {
+    if (e.keyCode === 13) {
+      handleStoreTitle();
+    }
+  };
+
   return (
     <>
       <TitleSlide page={page} scale={scale}>
@@ -45,6 +51,7 @@ const Title = ({ page, scale, setCircle1IsHover, setCircle2IsHover }: any) => {
           value={recipeTitle}
           onChange={(e) => setRecipeTitle(e.target.value)}
           placeholder="레시피의 제목을 입력해주세요"
+          onKeyUp={(e: any) => handleEnterSlide(e)}
         />
       </TitleSlide>
       <NextButton ref={circle2} page={page} onClick={() => handleStoreTitle()}>

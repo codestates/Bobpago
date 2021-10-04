@@ -219,7 +219,7 @@ export const TheOtherTimeTooltipText = styled.span`
   border-radius: 5px;
   transform: translate(16em, 3.5em);
   &:after {
-    transform: translate(-13.5em, -2.5em);
+    transform: translate(-11.5em, -2.5em);
     content: " ";
     position: absolute;
     border-style: solid;

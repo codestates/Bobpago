@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "reducers";
 import { goToNextPageEdit, goToPrevPageEdit } from "actions/EditRecipePage";
 import { editDifficulty, editIngredient } from "actions/EditRecipeContents";
+import { notify } from "actions/Notification";
 import {
   IngredientSlide,
   IngredientTitle,
@@ -85,6 +86,10 @@ const Ingredient = ({
   }, [circle1IsHover]);
 
   const handleStoreIngredient = () => {
+    if (selected.length === 0) {
+      dispatch(notify("재료를 한개 이상 넣어주세요"));
+      return;
+    }
     const filteredSelected = selected.map((el: any) => el.id);
     dispatch(editDifficulty(difficulty));
     dispatch(editIngredient(filteredSelected));
@@ -140,6 +145,10 @@ const Ingredient = ({
   //React.KeyboardEvent<object> 로 key부분은 해결
   const enterKey = (e: any) => {
     e.preventDefault();
+    if (e.keyCode === 13 && e.target.value === "") {
+      handleStoreIngredient();
+      return;
+    }
     if (e.keyCode === 13 && e.target.value) {
       const [selectIndex, optionIndex] = nameFiltered(e.target.value);
       if (selectIndex === -1 && optionIndex !== -1) {

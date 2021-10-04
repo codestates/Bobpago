@@ -140,7 +140,9 @@ const MyPage = () => {
     setFollowingNum(data.followees);
     setFollowerNum(data.followers);
     setId(data.id);
-    setLoading(false);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
   }
 
   useEffect(() => {
@@ -523,6 +525,7 @@ const MyPage = () => {
                   수정
                 </EditBtn>
                 <DivisionLine />
+
                 {bookmarkData.length !== 0 ? (
                   <>
                     <GridContainer>

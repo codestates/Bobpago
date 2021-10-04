@@ -5,6 +5,7 @@ async function CheckExpired(
   tokenType: string,
   userId: number | null
 ) {
+  if (tokenType !== "jwt") return null;
   const serverUrl = process.env.REACT_APP_SERVER_URL;
   //'{"email":"aaa@aa.aa","iat":1633259477,"exp":1633277477}'
   const decodedJWT = window.atob(accessToken.split(".")[1]);
