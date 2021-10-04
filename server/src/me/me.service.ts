@@ -6,14 +6,25 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserReqDto } from './dto/request-dto/create-user.req.dto';
 import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
-import { ResType } from 'src/common/response-type';
+import { ResponseDto } from 'src/common/response.dto';
 import axios from 'axios';
-import { UpdateUserDto } from './dto/update-me.dto';
+import { UpdateUserReqDto } from './dto/request-dto/update-user.req.dto';
 import { Bookmark } from '../entities/bookmark.entity';
 import { Recipe } from 'src/entities/recipe.entity';
+import { RestoreUserReqDto } from './dto/request-dto/restore-user.req.dto';
+import { CheckInfoUserReqDto } from './dto/request-dto/checkInfo-user.req.dto';
+import { InternalServerErrorRes } from 'src/common/http-exception.dto';
+import { SeeUserResDto } from './dto/response-dto/see-user.res.dto';
+import { CreateUserResDto } from './dto/response-dto/create-user.res.dto';
+import { UpdateUserResDto } from './dto/response-dto/update-user.res.dto';
+import { DeleteUserResDto } from './dto/response-dto/delete-user.res.dto';
+import { RestoreUserResDto } from './dto/response-dto/restore-user.res.dto';
+import { CheckInfoUserResDto } from './dto/response-dto/checkInfo-user.res.dto';
+import { CreateBookmarkResDto } from './dto/response-dto/create-bookmark.res.dto';
+import { DeleteBookmarkResDto } from './dto/response-dto/delete-bookmark.res.dto';
 
 @Injectable()
 export class MeService {
@@ -26,7 +37,7 @@ export class MeService {
     private recipeRepository: Repository<Recipe>,
   ) {}
 
-  async signUp(createUserDto: CreateUserDto): Promise<any> {
+  async signUp(createUserDto: CreateUserReqDto): Promise<CreateUserResDto> {
     console.log(createUserDto);
     const { email, password, nickname } = createUserDto;
     // const salt = await bcrypt.genSalt();
@@ -53,7 +64,7 @@ export class MeService {
     }
   }
   //
-  async getMyInfo(user: User): Promise<ResType> {
+  async getMyInfo(user: User): Promise<SeeUserResDto> {
     const followees = user.followees.length;
     const followers = user.followers.length;
 
@@ -61,23 +72,27 @@ export class MeService {
       return { id: el.recipeId };
     });
 
-    const boomarks = await this.recipeRepository.find({
-      where: recipeIds,
-    });
-    delete user.bookmarks;
-    delete user.followees;
-    delete user.followers;
-    return {
-      data: { ...user, boomarks, followees, followers },
-      statusCode: 200,
-      message: `내 정보 조회에 성공하였습니다.`,
-    };
+    try {
+      const bookmarks = await this.recipeRepository.find({
+        where: recipeIds,
+      });
+      delete user.bookmarks;
+      delete user.followees;
+      delete user.followers;
+      return {
+        data: { ...user, bookmarks, followees, followers },
+        statusCode: 200,
+        message: `내 정보 조회에 성공하였습니다.`,
+      };
+    } catch (err) {
+      throw new NotFoundException('내 정보 조회에 실패하였습니다.');
+    }
   }
 
   async updateMyAccount(
     user: User,
-    updateUserDto: UpdateUserDto,
-  ): Promise<ResType> {
+    updateUserDto: UpdateUserReqDto,
+  ): Promise<UpdateUserResDto> {
     const { password, nickname, profile } = updateUserDto;
     try {
       await this.usersRepository.update(user.id, updateUserDto);
@@ -90,7 +105,7 @@ export class MeService {
         message: `내 정보 수정에 성공하였습니다.`,
       };
     } catch (err) {
-      throw new BadRequestException('내 정보 수정에 실패하였습니다.');
+      throw new NotFoundException('내 정보 수정에 실패하였습니다.');
     }
   }
 
@@ -98,7 +113,7 @@ export class MeService {
     user: User,
     accessToken: string,
     tokenType: string,
-  ): Promise<ResType> {
+  ): Promise<DeleteUserResDto> {
     // 1. jwt 회원탈퇴 경우
     if (tokenType === 'jwt') {
       await this.usersRepository.update(user.id, { refreshToken: null });
@@ -188,24 +203,29 @@ export class MeService {
     }
   }
 
-  async restoreMyAccount(email: string): Promise<ResType> {
+  async restoreMyAccount(
+    restoreUserDto: RestoreUserReqDto,
+  ): Promise<RestoreUserResDto> {
     try {
-      await this.usersRepository.restore({ email });
+      await this.usersRepository.restore({ email: restoreUserDto.email });
       return {
         data: null,
         statusCode: 200,
         message: '계정복구가 완료되었습니다.',
       };
     } catch (err) {
-      throw new BadRequestException('계정복구에 실패하였습니다.');
+      throw new NotFoundException('계정복구에 실패하였습니다.');
     }
   }
 
-  async checkMyInfo(user: User, password: string): Promise<ResType> {
+  async checkMyInfo(
+    user: User,
+    checkInfoUserDto: CheckInfoUserReqDto,
+  ): Promise<CheckInfoUserResDto> {
     try {
       const userInfo = await this.usersRepository.findOne({
         id: user.id,
-        password,
+        password: checkInfoUserDto.password,
       });
       if (userInfo) {
         return {
@@ -214,37 +234,47 @@ export class MeService {
           message: '회원정보 수정 권한이 확인되었습니다.',
         };
       } else {
-        throw new BadRequestException(
+        throw new NotFoundException(
           '회원정보 수정 권한 확인에 실패하였습니다.',
         );
       }
     } catch (err) {
-      throw new BadRequestException();
+      throw new NotFoundException('회원정보 수정 권한 확인에 실패하였습니다.');
     }
   }
 
-  async addBookmark(recipeId: string, user: User): Promise<ResType> {
-    const bookmark = await this.bookmarkRepository.create({
+  async addBookmark(
+    recipeId: string,
+    user: User,
+  ): Promise<CreateBookmarkResDto> {
+    const bookmark = await this.bookmarkRepository.findOne({
       userId: user.id,
       recipeId: +recipeId,
     });
-    try {
-      await this.bookmarkRepository.save(bookmark);
-      return {
-        data: {},
-        statusCode: 201,
-        message: '북마크가 추가되었습니다.',
-      };
-    } catch (e) {
-      throw new BadRequestException();
+    if (bookmark) {
+      throw new ConflictException('이미 추가된 북마크입니다.');
+    } else {
+      try {
+        await this.bookmarkRepository.save({
+          userId: user.id,
+          recipeId: +recipeId,
+        });
+        return {
+          data: null,
+          statusCode: 201,
+          message: '북마크가 추가되었습니다.',
+        };
+      } catch (err) {
+        throw new InternalServerErrorException();
+      }
     }
   }
 
-  async deleteBookamark(recipeId): Promise<ResType> {
+  async deleteBookamark(recipeId): Promise<DeleteBookmarkResDto> {
     await this.bookmarkRepository.delete({ recipeId: +recipeId });
     return {
-      data: {},
-      statusCode: 201,
+      data: null,
+      statusCode: 200,
       message: '북마크가 삭제 되었습니다.',
     };
   }

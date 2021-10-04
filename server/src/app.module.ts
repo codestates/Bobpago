@@ -44,44 +44,23 @@ export class AppModule implements NestModule {
     consumer.apply(LoggerMiddleware).forRoutes('*');
     consumer
       .apply(AuthCheckerMiddleware)
-      .exclude({ path: 'recipe/match', method: RequestMethod.POST })
-      .forRoutes(
-        { path: 'auth/signout', method: RequestMethod.POST },
-        { path: 'me', method: RequestMethod.GET },
-        { path: 'me', method: RequestMethod.PATCH },
-        { path: 'me', method: RequestMethod.DELETE },
-        { path: ':recipeId/bookmarks', method: RequestMethod.POST },
-        { path: ':recipeId/bookmarks', method: RequestMethod.DELETE },
-        { path: 'checkMyInfo', method: RequestMethod.POST },
-        { path: 'user/:userId/follower', method: RequestMethod.GET },
-        { path: 'user/:userId/followee', method: RequestMethod.GET },
-        { path: 'user/:userId/follow', method: RequestMethod.POST },
-        { path: 'user/:userId/follow', method: RequestMethod.DELETE },
-        { path: 'recipe', method: RequestMethod.POST },
-        { path: 'recipe/:recipeId', method: RequestMethod.PATCH },
-        { path: 'recipe/:recipeId', method: RequestMethod.DELETE },
-        { path: 'recipe/:recipeId', method: RequestMethod.POST },
-        { path: 'recipe/:recipeId/comment', method: RequestMethod.POST },
-        {
-          path: 'recipe/:recipeId/comment/:commentId',
-          method: RequestMethod.PATCH,
-        },
-        {
-          path: 'recipe/:recipeId/comment/:commentId',
-          method: RequestMethod.DELETE,
-        },
-        {
-          path: 'recipe/:recipeId/comment/:commentId',
-          method: RequestMethod.POST,
-        },
-        {
-          path: 'image',
-          method: RequestMethod.POST,
-        },
-        {
-          path: 'image',
-          method: RequestMethod.PATCH,
-        },
-      );
+      .exclude(
+        { path: 'signup', method: RequestMethod.POST },
+        { path: 'restore', method: RequestMethod.POST },
+        { path: 'auth/signin', method: RequestMethod.POST },
+        { path: 'auth/:userId/tokenRequest', method: RequestMethod.GET },
+        { path: 'auth/kakao', method: RequestMethod.GET },
+        { path: 'auth/naver', method: RequestMethod.GET },
+        { path: 'auth/google', method: RequestMethod.GET },
+        { path: 'recipe/:recipeId', method: RequestMethod.GET },
+        { path: 'recipe/match', method: RequestMethod.POST },
+        { path: 'recipe/:recipeId/comment', method: RequestMethod.GET },
+        { path: 'ingredient', method: RequestMethod.GET },
+        { path: 'ingredient/main', method: RequestMethod.GET },
+        { path: 'ingredient/basic', method: RequestMethod.GET },
+        { path: 'user/:userId', method: RequestMethod.GET },
+        { path: 'api', method: RequestMethod.GET },
+      )
+      .forRoutes('*');
   }
 }
