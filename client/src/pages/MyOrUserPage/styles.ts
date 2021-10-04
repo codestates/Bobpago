@@ -18,6 +18,7 @@ export const PageContainer = styled.div`
   margin: 0 auto;
   width: 50em;
   min-height: 10em;
+  height: 100%;
   position: relative;
   @media screen and (max-width: 768px) {
     width: 90%;
@@ -28,18 +29,18 @@ export const UserProfileContainer = styled.div`
   display: flex;
   flex-direction: row;
   min-height: 5em;
+  height: 15em;
   width: 100%;
 `;
 
 export const ProfileImgContainer = styled.div`
-  width: 40em;
-  padding: 3em;
+  width: 15em;
+  padding: 3.5em 1em 3em 3em;
 `;
 
 export const ProfileContentsContainer = styled.div`
-  padding: 2em;
-  padding-top: 4.5em;
-  padding-right: 0;
+  width: 40em;
+  padding: 3.5em 0 2em 1em;
   @media screen and (max-width: 768px) {
     padding-top: 3.5em;
   }
@@ -47,14 +48,28 @@ export const ProfileContentsContainer = styled.div`
 
 export const ProfileName = styled.p`
   display: inline-block;
-  font-size: 30px;
+  font-size: ${main.middleFont};
   font-weight: 350;
   margin-bottom: 0.2em;
 `;
 
-export const ProfileIntroduce = styled.p`
-  width: 30.5em;
+export const ProfileIntroduce = styled.div`
+  width: 20em;
+  font-size: 1.5em;
+  word-break: keep-all;
 `;
+
+export const ProfileRecommend = styled.div`
+  width: 20em;
+  position: relative;
+  top: 1em;
+  left: 2em;
+  color: dimgrey;
+  font-size: 1.5em;
+  word-break: keep-all;
+`;
+
+
 
 export const FollowContainer = styled.div`
   min-height: 5em;
@@ -63,10 +78,9 @@ export const FollowContainer = styled.div`
 `;
 
 export const FollowBtn = styled.button`
-  width: 9em;
-  height: 3em;
-
-  font-size: 18px;
+  width: 7em;
+  height: 2.5em;
+  font-size: 1.2em;
   background-color: #167ece;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   color: #ffffff;
@@ -86,7 +100,7 @@ export const FollowBtn = styled.button`
 `;
 
 export const FollowNum = styled.span`
-  font-size: 20px;
+  font-size: 1.5em;
 `;
 
 export const MyPostContainer = styled.div`
@@ -96,7 +110,7 @@ export const MyPostContainer = styled.div`
 
 export const MyPostTitle = styled.span`
   margin-left: 1em;
-  font-size: 33px;
+  font-size: 1.5em;
 `;
 
 export const EditBtn = styled.button`
@@ -104,7 +118,7 @@ export const EditBtn = styled.button`
   display: inline-block;
   width: 5em;
   height: 2em;
-  font-size: 16px;
+  font-size: 1em;
   margin-top: 0.3em;
   margin-right: 1em;
   background-color: #167ece;
@@ -117,11 +131,10 @@ export const EditBtn = styled.button`
 `;
 
 export const DivisionLine = styled.div`
-  margin: 0 auto;
-  margin-top: 0.8em;
+  margin: 0.8em auto 0;
   width: 97%;
   height: 2px;
-  background: #000;
+  background: grey;
 `;
 
 const gridAnime = keyframes`
@@ -150,6 +163,19 @@ export const GridContainer = styled.div`
     grid-template-columns: repeat(1, 1fr);
   }
 `;
+
+export const NoPostContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  
+`
+export const NoPostText = styled.span`
+  margin-top: 3em;
+  margin-bottom: 3em;
+  font-size: 2em;
+  color: dimgrey;
+`
+
 
 export const PlusIcon = styled(PlusLg)`
   width: 7em;
@@ -190,8 +216,8 @@ const fadeInRight = keyframes`
 
 export const DropDownContainer = styled.div`
   position: absolute;
-  top: 3em;
-  right: -1em;
+  top: 5em;
+  right: 1em;
   &:hover .menu {
     display: block;
     width: 7em;
@@ -227,11 +253,12 @@ export const Menu = styled.div`
 
 export const Menu1 = styled(Menu)`
   border: none;
+  font-size: 1em;
 `;
 
 export const Menu2 = styled(Menu)`
   border: none;
-
+  font-size: 1em;
   color: #d16262;
 `;
 
@@ -262,7 +289,7 @@ export const EditCompleteBtn = styled(EditBtn)`
 `;
 
 export const FollowBtn2 = styled(FollowBtn)`
-  font-size: 16px;
+  font-size: 1em;
   display: inline-block;
   border-radius: 10px;
   width: 5em;
@@ -280,7 +307,7 @@ export const FollowedBtn = styled.div`
   outline: none;
   border: none;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 1em;
   display: inline-block;
   border-radius: 10px;
   width: 7em;
@@ -298,7 +325,7 @@ const showModal = keyframes`
     transform: scale(0) ;
   }
   to {
-    top: 35%
+    top: 35%;
     transform: scale(1);
   }
 `;
@@ -315,7 +342,7 @@ export const ModalContainer = styled.div`
 
 export const ModalBackground = styled.div`
   position: fixed;
-  top: 0%;
+  top: 0;
   width: 100%;
   height: 100%;
   background: grey;
@@ -325,8 +352,7 @@ export const ModalBackground = styled.div`
 
 export const ModalTitle = styled.p`
   font-size: 22px;
-  margin: 3em auto;
-  margin-bottom: 2em;
+  margin: 3em auto 2em;
 `;
 
 export const ModalBtn = styled.button`
@@ -375,14 +401,15 @@ export const CheckPassword = styled.div`
   display: flex;
   flex-direction: column;
   text-align: center;
-  z-index: 11;
 `;
 
 export const CheckPasswordInput = styled.input`
+  text-align: center;
   margin: 0 auto;
   width: 80%;
   outline: none;
   height: 3em;
+  font-size: 1em;
   background: #fff;
 `;
 
@@ -393,12 +420,13 @@ export const ChangeUseInfoContainer = styled(CheckPassword)`
 
 export const CheckPasswordBtn = styled(EditCompleteBtn)`
   position: relative;
-  text-algin: right;
+  text-align: center;
+  top: 0.5em;
   transform: translateX(12em);
 `;
 
 export const CheckPasswordText = styled.p`
-  font-size: 20px;
+  font-size: 1.3em;
   margin: 1em auto;
 `;
 

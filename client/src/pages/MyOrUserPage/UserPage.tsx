@@ -18,6 +18,7 @@ import {
   ProfileContentsContainer,
   ProfileName,
   ProfileIntroduce,
+  ProfileRecommend,
   FollowContainer,
   FollowBtn,
   FollowNum,
@@ -25,6 +26,8 @@ import {
   MyPostTitle,
   DivisionLine,
   GridContainer,
+  NoPostContainer,
+  NoPostText,
   PlusIcon,
   IconContainer,
   FollowBtn2,
@@ -206,72 +209,83 @@ const UserPage = () => {
         <>
           <Nav opac={true} />
           <Container>
-            <PageContainer>
-              <UserProfileContainer>
-                <ProfileImgContainer>
-                  <MyPageProfileImg
-                    src={
-                      userInfo.imageUrl
-                        ? profileS3Url + userInfo.imageUrl
-                        : undefined
-                    }
-                    size={15}
-                  />
-                </ProfileImgContainer>
-                <ProfileContentsContainer>
-                  <ProfileName>{userInfo && userInfo.nickname}</ProfileName>
-                  {!follow ? (
-                    <FollowBtn2 onClick={() => handleFollow()}>
-                      Follow
-                    </FollowBtn2>
-                  ) : (
-                    <FollowedBtn onClick={() => handleFollow()}>
-                      <CheckIcon />
-                      Following
-                    </FollowedBtn>
-                  )}
-                  <ProfileIntroduce>
-                    {userInfo && userInfo.profile}
-                  </ProfileIntroduce>
-                </ProfileContentsContainer>
-              </UserProfileContainer>
-              <FollowContainer>
-                <FollowBtn onClick={() => handleFolloweeModalOn()}>
-                  Followee
-                </FollowBtn>
-                <FollowNum>{userInfo && userInfo.followees}</FollowNum>
-                <FollowBtn onClick={() => handleFollowerModalOn()}>
-                  Follower
-                </FollowBtn>
-                <FollowNum>{userInfo && userInfo.followers}</FollowNum>
-              </FollowContainer>
-              <MyPostContainer>
-                <MyPostTitle>작성 글 목록</MyPostTitle>
-                <DivisionLine />
-                <GridContainer>
-                  {userPosts &&
-                    userPosts
-                      .slice(0, myPostNum)
-                      .map((el: any, i: number) => (
-                        <Card index={i} key={i} postData={el} />
-                      ))}
-                </GridContainer>
-                <IconContainer>
-                  {myPostNum > standardNum &&
-                    userPosts.length > standardNum && (
-                      <MinusIcon
-                        onClick={() => setMyPostNum(myPostNum - standardNum)}
-                      />
-                    )}
-                  {userPosts.length > myPostNum && (
-                    <PlusIcon
-                      onClick={() => setMyPostNum(myPostNum + standardNum)}
-                    />
-                  )}
-                </IconContainer>
-              </MyPostContainer>
-            </PageContainer>
-          </Container>
+        <PageContainer>
+          <UserProfileContainer>
+            <ProfileImgContainer>
+              <MyPageProfileImg
+                src={
+                  userInfo.imageUrl
+                    ? profileS3Url + userInfo.imageUrl
+                    : undefined
+                }
+                size={15}
+              />
+            </ProfileImgContainer>
+            <ProfileContentsContainer>
+              <ProfileName>{userInfo && userInfo.nickname}</ProfileName>
+              {!follow ? (
+                <FollowBtn2 onClick={() => handleFollow()}>팔로우하기</FollowBtn2>
+              ) : (
+                <FollowedBtn onClick={() => handleFollow()}>
+                  <CheckIcon />
+                  팔로우중
+                </FollowedBtn>
+              )}
+              {
+                userInfo.profile ?
+                    <ProfileIntroduce>
+                      {userInfo && userInfo.profile}
+                    </ProfileIntroduce> :
+                    <ProfileRecommend>아직 {userInfo.nickname}님의 소개글이 없어요😢</ProfileRecommend>
+              }
+
+            </ProfileContentsContainer>
+          </UserProfileContainer>
+          <FollowContainer>
+            <FollowBtn onClick={() => handleFolloweeModalOn()}>
+              팔로잉
+            </FollowBtn>
+            <FollowNum>{userInfo && userInfo.followees}</FollowNum>
+            <FollowBtn onClick={() => handleFollowerModalOn()}>
+              팔로워
+            </FollowBtn>
+            <FollowNum>{userInfo && userInfo.followers}</FollowNum>
+          </FollowContainer>
+          <MyPostContainer>
+            <MyPostTitle>작성 레시피 목록</MyPostTitle>
+            <DivisionLine />
+            {
+              userPosts.length !== 0 ?
+                  <>
+                    <GridContainer>
+                      {
+                        userPosts
+                            .slice(0, myPostNum).reverse()
+                            .map((el: any, i: number) => (
+                                <Card index={i} key={i} postData={el} />
+                            ))
+                      }
+                    </GridContainer>
+                    <IconContainer>
+                      {myPostNum > standardNum && userPosts.length > standardNum && (
+                          <MinusIcon
+                              onClick={() => setMyPostNum(myPostNum - standardNum)}
+                          />
+                      )}
+                      {userPosts.length > myPostNum && (
+                          <PlusIcon
+                              onClick={() => setMyPostNum(myPostNum + standardNum)}
+                          />
+                      )}
+                    </IconContainer>
+                  </> :
+                  <NoPostContainer>
+                    <NoPostText>아직 레시피가 없네요!</NoPostText>
+                  </NoPostContainer>
+            }
+          </MyPostContainer>
+        </PageContainer>
+      </Container>
         </>
       )}
       {(followingModal || followerModal) && (
