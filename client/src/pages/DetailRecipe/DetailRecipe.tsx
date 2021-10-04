@@ -52,6 +52,8 @@ import DRModal from "components/DRModal/DRModal";
 import { showSignIn } from "actions/SignUpAndSignIn";
 import axios from "axios";
 import { SET_DETAIL_DATA } from "actions/DetailRecipe";
+import CheckExpired from "utils/CheckExpired";
+import { reissueAccessToken } from "actions/Accesstoken";
 
 const DetailRecipe = () => {
   const dispatch = useDispatch();
@@ -134,6 +136,16 @@ const DetailRecipe = () => {
     if (loginState.accessToken === "") {
       dispatch(showSignIn());
       return;
+    }
+    if (loginState.accessToken) {
+      const newToken = await CheckExpired(
+        loginState.accessToken,
+        loginState.tokenType,
+        loginState.userId
+      );
+      if (newToken) {
+        dispatch(reissueAccessToken(newToken));
+      }
     }
     try {
       if (!bookmark) {
@@ -232,6 +244,7 @@ const DetailRecipe = () => {
       dummyData.push(descriptions[i]);
     }
 
+
     const totalArrLength = data.data.data.recipe.descriptions;
     gsap.registerPlugin(ScrollToPlugin, ScrollTrigger);
 
@@ -282,6 +295,16 @@ const DetailRecipe = () => {
 
   const handleReaction = async () => {
     try {
+      if (loginState.accessToken) {
+        const newToken = await CheckExpired(
+          loginState.accessToken,
+          loginState.tokenType,
+          loginState.userId
+        );
+        if (newToken) {
+          dispatch(reissueAccessToken(newToken));
+        }
+      }
       let nextReaction;
       if (recipeData.recipe.recipe_reaction_state === 1) nextReaction = 0;
       else nextReaction = 1;
@@ -451,7 +474,7 @@ const DetailRecipe = () => {
         {recipeData.recipe.recipe_reaction_state === 1 ? (
           <LikeFillIcon onClick={() => handleReaction()} />
         ) : (
-          <LikeIcon onClick={() => handleReaction()} />
+          <LikeFillIcon onClick={() => handleReaction()} />
         )}
         {recipeData.recipe.recipe_reaciton_count}
       </ViewContainer>

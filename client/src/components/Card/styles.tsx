@@ -24,6 +24,12 @@ export const CardContainer = styled.div`
   &:hover .card__header {
     transform: translateY(0);
   }
+  @media screen and (max-width: 768px) {
+    width: 85%;
+  }
+  @media screen and (max-width: 480px) {
+    width: 90%;
+  }
 `;
 
 export const CardImage = styled.img`

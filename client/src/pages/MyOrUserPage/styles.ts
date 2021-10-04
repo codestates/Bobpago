@@ -19,6 +19,9 @@ export const PageContainer = styled.div`
   width: 50em;
   min-height: 10em;
   position: relative;
+  @media screen and (max-width: 768px) {
+    width: 90%;
+  }
 `;
 
 export const UserProfileContainer = styled.div`
@@ -37,6 +40,9 @@ export const ProfileContentsContainer = styled.div`
   padding: 2em;
   padding-top: 4.5em;
   padding-right: 0;
+  @media screen and (max-width: 768px) {
+    padding-top: 3.5em;
+  }
 `;
 
 export const ProfileName = styled.p`
@@ -70,6 +76,13 @@ export const FollowBtn = styled.button`
   border-radius: 26px;
   margin-right: 1em;
   margin-left: 3em;
+  @media screen and (max-width: 768px) {
+    font-size: 15px;
+  }
+  @media screen and (max-width: 480px) {
+    width: 7em;
+    margin-left: 1em;
+  }
 `;
 
 export const FollowNum = styled.span`
@@ -132,6 +145,9 @@ export const GridContainer = styled.div`
   // transition: max-height 0.8s;
   @media screen and (max-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
+  }
+  @media screen and (max-width: 480px) {
+    grid-template-columns: repeat(1, 1fr);
   }
 `;
 
@@ -241,7 +257,7 @@ export const EditCompleteBtn = styled(EditBtn)`
   top: 3em;
   right: -1em;
   border-radius: 10px;
-  background: #949494;
+  background: #167ece;
   box-shadow: none;
 `;
 
@@ -353,7 +369,7 @@ export const CheckPassword = styled.div`
   width: 20em;
   margin: 0 auto;
   height: 13em;
-  background: #ebebeb;
+  background: #e3e3e3;
   z-index: 100;
   border-radius: 10px;
   display: flex;
@@ -367,6 +383,7 @@ export const CheckPasswordInput = styled.input`
   width: 80%;
   outline: none;
   height: 3em;
+  background: #fff;
 `;
 
 export const ChangeUseInfoContainer = styled(CheckPassword)`
@@ -434,7 +451,9 @@ export const ModalBackground2 = styled(ModalBackground)`
   z-index: 10;
 `;
 
-// export const name = styled.div``;
+export const CheckEditBtn = styled(CheckPasswordBtn)`
+  transform: translateX(18.5em);
+`;
 
 // export const name = styled.div``;
 export const dummy = [

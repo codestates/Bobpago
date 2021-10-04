@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { resetWritePage, goToPrevPage } from "actions/WriteRecipePage";
 import { setDescription, resetAllContents } from "actions/WriteRecipeContents";
+import CheckExpired from "utils/CheckExpired";
+import { reissueAccessToken } from "actions/Accesstoken";
 import { RootState } from "reducers";
 import axios from "axios";
 import {
@@ -51,7 +53,7 @@ const Description = ({
   const [imgFiles, setImgFiles] = useState<any>([]);
   const frontCoverRef = useRef<any>(null);
   const inputFileRef = useRef<any>(null);
-  const { accessToken, tokenType } = useSelector(
+  const { accessToken, tokenType, userId } = useSelector(
     (state: RootState) => state.AccesstokenReducer
   );
   const contents = useSelector(
@@ -108,6 +110,12 @@ const Description = ({
 
   const handleSubmitRecipe = async () => {
     try {
+      if (accessToken) {
+        const newToken = await CheckExpired(accessToken, tokenType, userId);
+        if (newToken) {
+          dispatch(reissueAccessToken(newToken));
+        }
+      }
       const data = await axios.post(
         `${process.env.REACT_APP_SERVER_URL}/recipe?tokenType=${tokenType}`,
         {

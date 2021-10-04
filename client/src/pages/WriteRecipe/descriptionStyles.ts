@@ -13,6 +13,16 @@ export const UploadImg = styled.img`
   transition: all 0.3s ease;
   &:hover {
     transform: translate(-50%, 0%) scale(1.1);
+    @media screen and (max-width: 480px) {
+      transform: translate(-50%, 10%) scale(1.1) rotate(-90deg);
+    }
+  }
+  @media screen and (max-width: 768px) {
+    width: 4em;
+    height: 4em;
+  }
+  @media screen and (max-width: 480px) {
+    transform: translate(-50%, 10%) rotate(-90deg);
   }
 `;
 
@@ -27,6 +37,9 @@ export const UploadImgText = styled.p`
   align-text: center;
   color: #8f8f8f;
   font-weight: 500;
+  @media screen and (max-width: 480px) {
+    display: none;
+  }
 `;
 
 export const UploadIcon = styled(Upload)`
@@ -51,6 +64,9 @@ export const BookContainer = styled.div`
   justify-content: center;
   align-items: center;
   background: transparent;
+  @media screen and (max-width: 480px) {
+    transform: rotate(90deg);
+  }
 `;
 
 export const Cover = styled.div`
@@ -65,6 +81,14 @@ export const FlipBook = styled.div`
   perspective: 1500px;
   border-bottom-right-radius: 0.5em;
   border-top-right-radius: 0.5em;
+  @media screen and (max-width: 768px) {
+    width: 40%;
+    transform: translateX(7%);
+  }
+  @media screen and (max-width: 480px) {
+    height: 70%;
+    width: 50%;
+  }
 `;
 
 export const Back = styled.div`
@@ -132,13 +156,20 @@ export const BackBtn = styled.label`
 export const FrontCoverImg = styled.img`
   width: 70%;
   margin-top: -1em;
+  @media screen and (max-width: 480px) {
+    display: none;
+  }
 `;
 
 export const FrontCoverLogo = styled.img`
   margin-top: 5%;
   width: 30%;
   bottom: 1em;
+  @media screen and (max-width: 480px) {
+    display: none;
+  }
 `;
+
 export const FrontCoverBack = styled(Back)`
   justify-content: center;
   display: flex;
@@ -148,11 +179,17 @@ export const FrontCoverBack = styled(Back)`
   .uploaded {
     top: 80%;
     opacity: 0.7;
+    @media screen and (max-width: 480px) {
+      top: 5%;
+    }
   }
   .food {
     width: auto;
     object-fit: center;
     max-height: 100%;
+    @media screen and (max-width: 480px) {
+      transform: rotate(-90deg);
+    }
   }
 `;
 
@@ -167,6 +204,11 @@ export const FrontCoverFront = styled(Front)`
     color: #fff;
     background: #b1d4a3;
     width: 100%;
+    @media screen and (max-width: 480px) {
+      transform: rotate(-90deg) translateX(-75%);
+      background: transparent;
+      color: grey;
+    }
     h2 {
       position: relative;
       top: 30%;
@@ -188,6 +230,14 @@ export const NextPageBtn = styled(NavigateNext)`
   right: 1em;
   fill: #6da69a;
   cursor: pointer;
+  @media screen and (max-width: 768px) {
+    right: 0em;
+  }
+  @media screen and (max-width: 480px) {
+    right: auto;
+    bottom: 5.5em;
+    transform: rotate(90deg);
+  }
 `;
 
 export const PrevPageBtn = styled(NavigateNext)`
@@ -197,6 +247,14 @@ export const PrevPageBtn = styled(NavigateNext)`
   left: 1em;
   fill: #6da69a;
   cursor: pointer;
+  @media screen and (max-width: 768px) {
+    left: 0em;
+  }
+  @media screen and (max-width: 480px) {
+    left: auto;
+    top: 3.5em;
+    transform: rotate(-90deg);
+  }
 `;
 export const Flip = styled.div`
   width: 100%;
