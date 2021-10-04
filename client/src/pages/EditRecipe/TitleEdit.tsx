@@ -24,7 +24,7 @@ const Title = ({ page, scale, setCircle1IsHover, setCircle2IsHover }: any) => {
 
   useEffect(() => {
     setRecipeTitle(title);
-  }, []);
+  }, [title]);
 
   const handleStoreTitle = () => {
     if (!recipeTitle) {
