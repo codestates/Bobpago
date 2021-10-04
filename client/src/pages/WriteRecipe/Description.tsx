@@ -236,9 +236,9 @@ const Description = ({
             </BackCover>
           </FlipBook>
         </BookContainer>
-        <NextPageBtn onClick={() => handleCreateOrTurnPage()}>next</NextPageBtn>
+        <NextPageBtn onClick={() => handleCreateOrTurnPage()}>다음</NextPageBtn>
         <PrevPageBtn onClick={() => setCurrentPage(currentPage - 1)}>
-          prev
+          이전
         </PrevPageBtn>
       </DescriptionSlide>
       <NextButton
@@ -247,14 +247,14 @@ const Description = ({
         self={3}
         onClick={() => handleStoreIngredient()}
       >
-        Complete
+        완료
       </NextButton>
       <PrevButton
         ref={circle1}
         page={page}
         onClick={() => dispatch(goToPrevPage())}
       >
-        Prev
+        이전
       </PrevButton>
       {modalOn && (
         <>

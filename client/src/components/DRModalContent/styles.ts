@@ -53,19 +53,20 @@ export const UserEtcBox = styled.div`
 `;
 
 export const UserName = styled.div`
-  font-size: 18px;
   margin-bottom: 5px;
+  font-size: 1.2em;
+
 `;
 
 export const UpdatedAt = styled.div`
-  font-size: 12px;
+  font-size: 0.8em;
 `;
 
 export const CommentContent = styled.div`
   width: 80%;
   background-color: #ffffff;
   margin-bottom: 1em;
-  font-size: 14px;
+  font-size: 1em;
 `;
 
 export const CommentEdit = styled.input`

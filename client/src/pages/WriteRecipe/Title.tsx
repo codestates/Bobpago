@@ -44,18 +44,18 @@ const Title = ({ page, scale, setCircle1IsHover, setCircle2IsHover }: any) => {
         <TitleInput
           value={recipeTitle}
           onChange={(e) => setRecipeTitle(e.target.value)}
-          placeholder="→  레시피의 제목을 입력해주세요"
+          placeholder="레시피의 제목을 입력해주세요"
         />
       </TitleSlide>
       <NextButton ref={circle2} page={page} onClick={() => handleStoreTitle()}>
-        Next
+        다음
       </NextButton>
       <PrevButton
         ref={circle1}
         page={page}
         onClick={() => dispatch(goToPrevPage())}
       >
-        Prev
+        이전
       </PrevButton>
     </>
   );

@@ -205,9 +205,12 @@ const MatchingRecipe = () => {
             }}
           />
           <MatchTooltip ref={tooltipRef}>
-            밥파고의 추천 알고리즘으로 <br /> 생성된 레시피입니다! <br /> 한번
-            골라보세요! <br />
-            <span>마우스를 이용하여 오른쪽에서 왼쪽으로 드래그 해보세요!</span>
+            <div>
+              밥파고의 추천 알고리즘으로<br />
+              생성된 레시피입니다!<br />
+              한번 골라보세요!
+            </div>
+            <span>마우스 휠을 이용하여<br /> 오른쪽에서 왼쪽으로 스크롤 해보세요!</span>
           </MatchTooltip>
         </MatchTopContainer>
         <MyIngredient>

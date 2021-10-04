@@ -62,7 +62,7 @@ export const StarContainer = styled.div`
   position: relative;
   justify-content: center;
   align-items: center;
-  padding: 1em auto;
+  padding: 1em;
   display: table;
   margin-left: auto;
   margin-right: auto;
@@ -72,11 +72,12 @@ export const TitleInput = styled.input`
   width: 16em;
   font-size: 30px;
   border: none;
+  text-align: center;
   border-bottom: 2px solid #adadad;
   padding-bottom: 0.3em;
   padding-left: 0.3em;
   transform: translateX(0.8em);
-  color: #7a7a7a;
+  color: ${main.color};
   background: transparent;
   &:focus {
     outline: none;
@@ -298,13 +299,13 @@ interface PageProps {
 }
 
 export const NextButton = styled.button<PageProps>`
-  font-size: 18px;
+  font-size: 1.5em;
   position: fixed;
   bottom: 2em;
   z-index: 1;
   position: absolute;
   right: 2%;
-  width: 8em;
+  width: 6em;
   height: 2.5em;
   background-color: #167ece;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
