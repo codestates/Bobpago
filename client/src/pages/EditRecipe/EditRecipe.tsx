@@ -72,10 +72,13 @@ const EditRecipe = () => {
     dispatch(editTime(data.recipe.estTime));
     dispatch(editDescription(data.recipe.descriptions));
     dispatch(editImage(data.recipe.imageUrls));
-    setLoading(false);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
     // dispatch(editImage(data.recipe.imageUrls));
   }
   useEffect(() => {
+    dispatch(resetEditPageEdit());
     getData();
     // dispatch(resetEditPageEdit());
   }, []);
