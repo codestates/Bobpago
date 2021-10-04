@@ -1,4 +1,5 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
+import { useHistory } from "react-router";
 import Profile from "components/Profile/FollowList/Profile";
 import {
   FollowContainer,
@@ -17,9 +18,17 @@ interface ListProps {
 }
 
 const FollowList: React.FC<ListProps> = ({ follow }) => {
+  const history = useHistory();
+
+  const moveToUserPage = () => {
+    history.push({
+      pathname: `/userpage/${follow.id}`,
+      state: follow.id,
+    });
+  };
   return (
     <ProfileContainer>
-      <ProfileImgContainer>
+      <ProfileImgContainer onClick={() => moveToUserPage()}>
         <Profile
           size={5.7}
           src={
@@ -29,7 +38,9 @@ const FollowList: React.FC<ListProps> = ({ follow }) => {
         />
       </ProfileImgContainer>
       <ProfileTextContainer>
-        <NameContainer>{follow.nickname}</NameContainer>
+        <NameContainer onClick={() => moveToUserPage()}>
+          {follow.nickname}
+        </NameContainer>
       </ProfileTextContainer>
     </ProfileContainer>
   );
