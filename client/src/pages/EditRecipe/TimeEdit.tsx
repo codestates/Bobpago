@@ -93,6 +93,12 @@ const Time = ({ page, scale, setCircle1IsHover, setCircle2IsHover }: any) => {
     time !== "other" && setOtherTime("");
   }, [time]);
 
+  const handleEnterSlide = (e: any) => {
+    if (e.keyCode === 13) {
+      handleStoreTime();
+    }
+  };
+
   return (
     <>
       <RecipeTimeSlide page={page} scale={scale}>
@@ -194,6 +200,7 @@ const Time = ({ page, scale, setCircle1IsHover, setCircle2IsHover }: any) => {
             placeholder="숫자로만 입력해주세요! 예) 4인분 = 4"
             onChange={(e) => setPeople(e.target.value)}
             value={people}
+            onKeyUp={(e: any) => handleEnterSlide(e)}
           />
         </TheOtherTimeContainer>
       </RecipeTimeSlide>

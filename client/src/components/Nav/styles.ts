@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { ManageAccounts } from "@styled-icons/material-rounded/ManageAccounts";
 import { PostAdd } from "@styled-icons/material/PostAdd";
 import { main } from "theme";
@@ -48,7 +48,7 @@ export const NavLogo = styled.div<NavProps>`
 `;
 
 export const NavEtcContainer = styled.div`
-    margin-right: 4em;
+  margin-right: 4em;
 `;
 
 export const NavEtcUl = styled.ul`
@@ -61,6 +61,18 @@ export const NavEtcUl = styled.ul`
 
 export const NavEtcList = styled.li`
   margin-left: 1.5em;
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
+`;
+
+export const ResponsiveNavEtcList = styled(NavEtcList)`
+  display: none;
+  z-index: 100;
+  position: relative;
+  @media screen and (max-width: 768px) {
+    display: block;
+  }
 `;
 
 export const HumanIcon = styled(ManageAccounts)<NavProps>`
@@ -97,4 +109,63 @@ export const LoginLogout = styled.div<NavProps>`
   &:hover {
     color: red;
   }
+`;
+
+export const ModalBackground = styled.div`
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: grey;
+  opacity: 0.5;
+  z-index: 9999;
+`;
+
+export const ModalTitle = styled.p`
+  font-size: 22px;
+  margin: 3em auto;
+  margin-bottom: 2em;
+`;
+
+export const ModalBtn = styled.button`
+  outline: none;
+  border-radius: 10px;
+  border: none;
+  height: 1.5em;
+  font-size: 18px;
+  min-width: 3em;
+  background: #42a5c9;
+  color: #fff;
+  cursor: pointer;
+`;
+
+export const ModalBtnNo = styled(ModalBtn)`
+  background: #42a5c9;
+`;
+
+const showModal = keyframes`
+  from {
+    top: -10%;
+    right: -70%;
+    transform: scale(0) ;
+  }
+  to {
+    top: 35%
+    transform: scale(1);
+  }
+`;
+
+export const ModalContainer = styled.div`
+  position: fixed;
+  top: 35%;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  float: center;
+  width: 25em;
+  height: 13em;
+  animation: ${showModal} 0.5s;
+  z-index: 10000;
+  background: #f5f5f5;
+  border-radius: 15px;
+  text-align: center;
 `;
