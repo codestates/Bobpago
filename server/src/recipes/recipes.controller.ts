@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 import { RecipesService } from './recipes.service';
 import { CreateRecipeReqDto } from './dto/request-dto/create-recipe.req.dto';
-import { ResponseDto } from '../common/response.dto';
 import { GetUser } from 'src/common/decorator.dto';
 import { User } from 'src/entities/user.entity';
 import {
@@ -32,10 +31,10 @@ import { CreateRecipeResDto } from './dto/response-dto/create-recipe.res.dto';
 import { UpdateRecipeResDto } from './dto/response-dto/update-recipe.res.dto';
 import { DeleteRecipeResDto } from './dto/response-dto/delete-recipe.res.dto';
 import { CreateRecipeReactionResDto } from './dto/response-dto/create-recipe-reaction.res.dto';
-import { DeleteCommentReactionResDto } from 'src/comments/dto/response-dto/delete-comment-reaction.res.dto';
 import { SeeRecipeResDto } from './dto/response-dto/see-recipe.res.dto';
 import { MatchRecipeResDto } from './dto/response-dto/match-recipe.res.dto';
 import { MatchRecipeReqDto } from './dto/request-dto/match-recipe.req.dto';
+import { DeleteRecipeReactionResDto } from './dto/response-dto/delete-recipe-reaction.res.dto';
 
 @ApiTags('Recipe')
 @Controller('recipe')
@@ -215,7 +214,7 @@ export class RecipesController {
   @ApiResponse({
     status: 200,
     description: '레시피 삭제 성공',
-    type: DeleteCommentReactionResDto,
+    type: DeleteRecipeReactionResDto,
   })
   @ApiUnauthorizedResponse({
     description: '권한 없음',
