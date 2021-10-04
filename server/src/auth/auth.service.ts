@@ -9,10 +9,16 @@ import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
-import { CheckAuthDto } from './dto/check-auth.dto';
+import { CheckSignInReqDto } from './dto/request-dto/check-signin.req.dto';
 import { Response } from 'express';
-import { ResType } from 'src/common/response-type';
+import { ResponseDto } from 'src/common/response.dto';
 import axios from 'axios';
+import { CheckSignInResDto } from './dto/response-dto/check-signin.res.dto';
+import { CheckSignOutResDto } from './dto/response-dto/check-signout.res.dto';
+import { GenereateTokenResDto } from './dto/response-dto/generate-token.res.dto';
+import { CheckGoogleResDto } from './dto/response-dto/check-google.res.dto';
+import { CheckNaverResDto } from './dto/response-dto/check-naver.res.dts';
+import { CheckKakaoResDto } from './dto/response-dto/check-kakao.res.dto';
 
 @Injectable()
 export class AuthService {
@@ -22,8 +28,8 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signIn(checkAuthDto: CheckAuthDto): Promise<ResType> {
-    const { email, password } = checkAuthDto;
+  async signIn(checkSignInDto: CheckSignInReqDto): Promise<CheckSignInResDto> {
+    const { email, password } = checkSignInDto;
     const user = await this.usersRepository.findOne({ email });
 
     if (user) {
@@ -36,9 +42,14 @@ export class AuthService {
       await this.usersRepository.update(user.id, { refreshToken });
       const newUser = await this.usersRepository.findOne({ email });
       delete newUser.refreshToken;
+      delete newUser.password;
+      delete newUser.recipes;
+      delete newUser.bookmarks;
+      delete newUser.recipeReaction;
+      delete newUser.followees;
+      delete newUser.followers;
       // access 토큰은 생성해서 반환
       const accessToken = await this.jwtService.sign(payload);
-      delete newUser.password;
       return {
         data: {
           tokenType: 'jwt',
@@ -63,7 +74,7 @@ export class AuthService {
     user: User,
     tokenType: string,
     accessToken: string,
-  ): Promise<ResType> {
+  ): Promise<CheckSignOutResDto> {
     switch (tokenType) {
       // 1. jwt 로그아웃의 경우
       case 'jwt':
@@ -108,7 +119,10 @@ export class AuthService {
     }
   }
 
-  async newGenerateToken(userId: string, tokenType: string): Promise<ResType> {
+  async newGenerateToken(
+    userId: string,
+    tokenType: string,
+  ): Promise<GenereateTokenResDto> {
     // 1. jwt 새로운 토큰 발급
     if (tokenType === 'jwt') {
       const user = await this.usersRepository.findOne({
@@ -271,7 +285,7 @@ export class AuthService {
     }
   }
 
-  async kakaoSignIn(code: string): Promise<ResType> {
+  async kakaoSignIn(code: string): Promise<CheckKakaoResDto> {
     // 0. form-urlencoded 인코딩 함수
     const formUrlEncoded = (data) => {
       return Object.keys(data).reduce((acc, curr) => {
@@ -299,7 +313,6 @@ export class AuthService {
     const accessToken = tokenData.data.access_token;
     const refreshToken = tokenData.data.refresh_token;
 
-    console.log(tokenData);
     // 2. 사용자 정보 받기
     const userData = await axios.get('https://kapi.kakao.com/v2/user/me', {
       headers: {
@@ -356,7 +369,7 @@ export class AuthService {
     }
   }
 
-  async naverSignIn(code: string, state: string): Promise<ResType> {
+  async naverSignIn(code: string, state: string): Promise<CheckNaverResDto> {
     // 0. form-urlencoded 인코딩 함수
     const formUrlEncoded = (data) => {
       return Object.keys(data).reduce((acc, curr) => {
@@ -404,6 +417,8 @@ export class AuthService {
       delete user.bookmarks;
       delete user.followees;
       delete user.followers;
+      console.log(user);
+
       return {
         data: {
           tokenType: 'naver',
@@ -439,7 +454,7 @@ export class AuthService {
     }
   }
 
-  async googleSignIn(code: string, scope: string): Promise<any> {
+  async googleSignIn(code: string, scope: string): Promise<CheckGoogleResDto> {
     const formUrlEncoded = (data) => {
       return Object.keys(data).reduce((acc, curr) => {
         return acc + `&${curr}=${encodeURIComponent(data[curr])}`;
@@ -482,6 +497,8 @@ export class AuthService {
       delete user.bookmarks;
       delete user.followees;
       delete user.followers;
+      console.log(user);
+
       return {
         data: {
           tokenType: 'google',

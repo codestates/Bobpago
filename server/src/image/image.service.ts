@@ -3,10 +3,12 @@ import * as AWS from 'aws-sdk';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { RecipeImage } from '../entities/recipe-image.entity';
-import { ResType } from '../common/response-type';
+import { ResponseDto } from '../common/response.dto';
 import { Recipe } from '../entities/recipe.entity';
 import { Comment } from '../entities/comment.entity';
 import { User } from '../entities/user.entity';
+import { UpdateImagesDto } from './dto/upload-image.dto';
+import { UploadImagesDto } from './dto/update-image.dto';
 
 AWS.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -30,7 +32,7 @@ export class ImageService {
     private userRepository: Repository<User>,
   ) {}
 
-  async upload(files, id, path): Promise<ResType> {
+  async upload(files, id, path): Promise<UploadImagesDto> {
     console.log(files);
     const urls = [];
     await Promise.all(
@@ -105,7 +107,7 @@ export class ImageService {
     }
   }
 
-  async update(files, id, path): Promise<ResType> {
+  async update(files, id, path): Promise<UpdateImagesDto> {
     console.log(files);
     console.log('recipeId : ', id);
     // 1. S3 이미지 삭제

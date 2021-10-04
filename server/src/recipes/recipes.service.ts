@@ -3,10 +3,10 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateRecipeDto } from './dto/create-recipe.dto';
-import { UpdateRecipeDto } from './dto/update-recipe.dto';
+import { CreateRecipeReqDto } from './dto/request-dto/create-recipe.req.dto';
+import { UpdateRecipeReqDto } from './dto/request-dto/update-recipe.req.dto';
 import { Recipe } from '../entities/recipe.entity';
-import { ResType } from 'src/common/response-type';
+import { ResponseDto } from 'src/common/response.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entities/user.entity';
 import { Repository } from 'typeorm';
@@ -17,6 +17,13 @@ import { ImageService } from '../image/image.service';
 import { EALREADY } from 'constants';
 import { CommentsService } from '../comments/comments.service';
 import { Ingredient } from 'src/entities/ingredient.entity';
+import { CreateRecipeResDto } from './dto/response-dto/create-recipe.res.dto';
+import { UpdateRecipeResDto } from './dto/response-dto/update-recipe.res.dto';
+import { DeleteRecipeResDto } from './dto/response-dto/delete-recipe.res.dto';
+import { CreateRecipeReactionResDto } from './dto/response-dto/create-recipe-reaction.res.dto';
+import { SeeRecipeResDto } from './dto/response-dto/see-recipe.res.dto';
+import { MatchRecipeResDto } from './dto/response-dto/match-recipe.res.dto';
+import { MatchRecipeReqDto } from './dto/request-dto/match-recipe.req.dto';
 
 @Injectable()
 export class RecipesService {
@@ -36,11 +43,11 @@ export class RecipesService {
   ) {}
 
   async createRecipe(
-    createRecipeDto: CreateRecipeDto,
+    createRecipeReqDto: CreateRecipeReqDto,
     user: User,
-  ): Promise<ResType> {
+  ): Promise<CreateRecipeResDto> {
     const { title, amount, level, estTime, description, ingredientId } =
-      createRecipeDto;
+      createRecipeReqDto;
     // 레시피 저장
     const newRecipe = await this.recipeRepository.create({
       userId: user.id,
@@ -87,10 +94,9 @@ export class RecipesService {
   }
 
   async updateRecipe(
-    updateRecipeDto: UpdateRecipeDto,
-    user: User,
-    recipeId,
-  ): Promise<ResType> {
+    updateRecipeDto: UpdateRecipeReqDto,
+    recipeId: number,
+  ): Promise<UpdateRecipeResDto> {
     const { title, level, amount, estTime, ingredientId, description } =
       updateRecipeDto;
 
@@ -140,7 +146,7 @@ export class RecipesService {
     console.log('🚀', descs);
   }
 
-  async deleteRecipe(recipeId: number) {
+  async deleteRecipe(recipeId: number): Promise<DeleteRecipeResDto> {
     try {
       // 1. AWS S3에서 이미지 객체 삭제
       await this.imageService.deleteById(recipeId, 'recipe');
@@ -153,7 +159,7 @@ export class RecipesService {
 
       return {
         data: null,
-        statusCode: 201,
+        statusCode: 200,
         message: '레시피 삭제가 완료되었습니다.',
       };
     } catch (e) {
@@ -161,12 +167,13 @@ export class RecipesService {
     }
   }
 
-  async seeRecipe(recipeId: number): Promise<ResType> {
+  async seeRecipe(recipeId: number): Promise<SeeRecipeResDto> {
     try {
       const recipeData = await this.recipeRepository.findOne({
         relations: ['user', 'recipeImages', 'recipeReactions'],
         where: { id: recipeId },
       });
+
       const { user, userId, recipeImages, recipeReactions, ...recipe } =
         recipeData;
       await this.recipeRepository.update(recipeId, {
@@ -214,11 +221,13 @@ export class RecipesService {
     }
   }
 
-  async matchRecipes(ingredients: number[]): Promise<ResType> {
+  async matchRecipes(
+    matchRecipeReqDto: MatchRecipeReqDto,
+  ): Promise<MatchRecipeResDto> {
     try {
       // 0. 메인 재료만 뽑아내기 위해 재료정보 탐색하여 'main'만 필터 진행
       const ingredientsInfo = await this.ingredientRepository.find({
-        where: ingredients.map((id) => {
+        where: matchRecipeReqDto.ingredientId.map((id) => {
           return { id };
         }),
       });
@@ -335,7 +344,7 @@ export class RecipesService {
     userId: number,
     recipeId: number,
     reaction: number,
-  ): Promise<ResType> {
+  ): Promise<CreateRecipeReactionResDto> {
     if (reaction === 1) {
       try {
         await this.recipeReactionRepository.save({

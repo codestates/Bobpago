@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResType } from 'src/common/response-type';
 import { Ingredient } from 'src/entities/ingredient.entity';
 import { Repository } from 'typeorm';
+import { SeeAllIngredient } from './dto/see-all-ingredient.dto';
+import { SeeBasicIngredient } from './dto/see-basic-ingredient.dto';
+import { SeeMainIngredient } from './dto/see-main-ingredient.dto';
 
 @Injectable()
 export class IngredientsService {
@@ -11,7 +13,7 @@ export class IngredientsService {
     private ingredientRepository: Repository<Ingredient>,
   ) {}
 
-  async getAllIngredient(): Promise<ResType> {
+  async getAllIngredient(): Promise<SeeAllIngredient> {
     const ingredients = await this.ingredientRepository.find();
     return {
       data: ingredients,
@@ -20,7 +22,7 @@ export class IngredientsService {
     };
   }
 
-  async getMainIngredient(): Promise<ResType> {
+  async getMainIngredient(): Promise<SeeMainIngredient> {
     const ingredients = await this.ingredientRepository.find({ type: 'main' });
     return {
       data: ingredients,
@@ -29,7 +31,7 @@ export class IngredientsService {
     };
   }
 
-  async getBasicIngredient(): Promise<ResType> {
+  async getBasicIngredient(): Promise<SeeBasicIngredient> {
     const ingredients = await this.ingredientRepository.find({ basic: true });
     return {
       data: ingredients,

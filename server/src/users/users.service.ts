@@ -4,11 +4,16 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResType } from 'src/common/response-type';
+import { ResponseDto } from 'src/common/response.dto';
 import { Follow } from 'src/entities/follow.entity';
 import { Recipe } from 'src/entities/recipe.entity';
 import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
+import { CreateFollowResDto } from './dto/create-follow-res.dto';
+import { DeleteFollowResDto } from './dto/delete-follow-res.dto';
+import { SeeFolloweeResDto } from './dto/see-followee-res.dto';
+import { SeeFollowerResDto } from './dto/see-follower-res.dto';
+import { SeeOtherUserResDto } from './dto/see-other-user.res.dto';
 
 @Injectable()
 export class UsersService {
@@ -21,7 +26,7 @@ export class UsersService {
     private recipeRepository: Repository<Recipe>,
   ) {}
 
-  async getUserInfo(userId: string): Promise<ResType> {
+  async getUserInfo(userId: string): Promise<SeeOtherUserResDto> {
     const user = await this.usersRepository.findOne({ id: +userId });
     const followees = user.followees.length;
     const followers = user.followers.length;
@@ -46,7 +51,7 @@ export class UsersService {
     }
   }
 
-  async getFollowers(userId): Promise<ResType> {
+  async getFollowers(userId): Promise<SeeFollowerResDto> {
     const followeeId = +userId;
     const followers = await this.followRepository.find({
       relations: ['follower'],
@@ -74,7 +79,7 @@ export class UsersService {
     }
   }
 
-  async getFollowees(userId): Promise<ResType> {
+  async getFollowees(userId): Promise<SeeFolloweeResDto> {
     const followerId = +userId;
     const followees = await this.followRepository.find({
       relations: ['followee'],
@@ -102,7 +107,10 @@ export class UsersService {
     }
   }
 
-  async followUser(follower: User, userId: string): Promise<ResType> {
+  async followUser(
+    follower: User,
+    userId: string,
+  ): Promise<CreateFollowResDto> {
     const followerId = +follower.id;
     const followeeId = +userId;
     if (followerId === followeeId) {
@@ -126,7 +134,10 @@ export class UsersService {
     }
   }
 
-  async unFollowUser(follower: User, userId: string): Promise<ResType> {
+  async unFollowUser(
+    follower: User,
+    userId: string,
+  ): Promise<DeleteFollowResDto> {
     const followerId = +follower.id;
     const followeeId = +userId;
     console.log(followerId);
