@@ -1,4 +1,8 @@
-import { SET_ACCESSTOKEN, REMOVE_ACCESSTOKEN } from "actions/Accesstoken";
+import {
+  SET_ACCESSTOKEN,
+  REMOVE_ACCESSTOKEN,
+  REISSUE_ACCESSTOKEN,
+} from "actions/Accesstoken";
 import { Accesstoken } from "types";
 
 const initialState: Accesstoken = {
@@ -22,6 +26,10 @@ const AccesstokenReducer = (
         accessToken: action.payload.accessToken,
         tokenType: action.payload.tokenType,
         userId: action.payload.userId,
+      });
+    case REISSUE_ACCESSTOKEN:
+      return Object.assign({}, state, {
+        accessToken: action.payload.accessToken,
       });
     case REMOVE_ACCESSTOKEN:
       return Object.assign({}, state, {

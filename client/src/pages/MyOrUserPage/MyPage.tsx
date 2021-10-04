@@ -6,8 +6,10 @@ import Card from "components/Card/MyPage/Card";
 import BookmarkCard from "components/Card/MyPage/BookmarkCard";
 import FollowingModal from "components/FollowModal/FollowingModal";
 import FollowerModal from "components/FollowModal/FollowerModal";
+import CheckExpired from "utils/CheckExpired";
 import { useDispatch, useSelector } from "react-redux";
-import { removeAccessToken } from "actions/Accesstoken";
+import Loading from "components/Loading/Loading";
+import { removeAccessToken, reissueAccessToken } from "actions/Accesstoken";
 import { useHistory } from "react-router";
 import axios from "axios";
 import { RootState } from "reducers";
@@ -52,6 +54,7 @@ import {
   Container,
   NoPostContainer,
   NoPostText,
+  CheckEditBtn,
 } from "./styles";
 
 interface Post {
@@ -102,13 +105,20 @@ const MyPage = () => {
   const [followeeInfo, setFolloweeInfo] = useState<any>([]);
   const [followerInfo, setFollowerInfo] = useState<any>([]);
   const [temporaryImg, setTemporaryImg] = useState<string>("");
-  const { accessToken, tokenType } = useSelector(
+  const [loading, setLoading] = useState<boolean>(true);
+  const { accessToken, tokenType, userId } = useSelector(
     (state: RootState) => state.AccesstokenReducer
   );
   const history = useHistory();
   const dispatch = useDispatch();
 
   async function getData() {
+    if (accessToken) {
+      const newToken = await CheckExpired(accessToken, tokenType, userId);
+      if (newToken) {
+        dispatch(reissueAccessToken(newToken));
+      }
+    }
     const response = await axios.get(
       `${process.env.REACT_APP_SERVER_URL}/me?tokenType=${tokenType}`,
       {
@@ -124,10 +134,12 @@ const MyPage = () => {
     setIntroduce(data.profile);
     data.imageUrl &&
       setProfileImg(`${process.env.REACT_APP_S3_IMG_URL}${data.imageUrl}`);
+    setBookmarkData(data.boomarks);
     setMyPostData(data.recipes);
     setFollowingNum(data.followees);
     setFollowerNum(data.followers);
     setId(data.id);
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -149,6 +161,12 @@ const MyPage = () => {
   // 개인정보 수정 비밀번호 확인
   const passwordCheckEdit = async () => {
     try {
+      if (accessToken) {
+        const newToken = await CheckExpired(accessToken, tokenType, userId);
+        if (newToken) {
+          dispatch(reissueAccessToken(newToken));
+        }
+      }
       const data = await axios.post(
         `${process.env.REACT_APP_SERVER_URL}/checkMyInfo?tokenType=${tokenType}`,
         {
@@ -174,10 +192,16 @@ const MyPage = () => {
 
   // 회원탈퇴 비밀번호 확인
   const passwordCheckWithDraw = async () => {
+    if (accessToken) {
+      const newToken = await CheckExpired(accessToken, tokenType, userId);
+      if (newToken) {
+        dispatch(reissueAccessToken(newToken));
+      }
+    }
     const data = await axios.post(
       `${process.env.REACT_APP_SERVER_URL}/checkMyInfo?tokenType=${tokenType}`,
       {
-        password: password,
+        password: passwordWithDraw,
       },
       {
         withCredentials: true,
@@ -197,6 +221,12 @@ const MyPage = () => {
 
   // 회원정보 수정
   const handleChangeMyInfo = async () => {
+    if (accessToken) {
+      const newToken = await CheckExpired(accessToken, tokenType, userId);
+      if (newToken) {
+        dispatch(reissueAccessToken(newToken));
+      }
+    }
     if (temporaryImg) {
       const formData = new FormData();
       formData.append("files", temporaryImg);
@@ -216,8 +246,11 @@ const MyPage = () => {
     }
     const editedInfo: EditInfo = {};
     if (editPassword !== password) editedInfo.password = editPassword;
+    else editedInfo.password = password;
     if (editNickName !== nickname) editedInfo.nickname = editNickName;
+    else editedInfo.nickname = nickname;
     if (editIntroduce !== introduce) editedInfo.profile = editIntroduce;
+    else editedInfo.profile = introduce;
     if (Object.keys(editedInfo).length !== 0) {
       await axios.patch(
         `${process.env.REACT_APP_SERVER_URL}/me?tokenType=${tokenType}`,
@@ -243,6 +276,12 @@ const MyPage = () => {
   // 회원탈퇴
   const handleWithDraw = async () => {
     try {
+      if (accessToken) {
+        const newToken = await CheckExpired(accessToken, tokenType, userId);
+        if (newToken) {
+          dispatch(reissueAccessToken(newToken));
+        }
+      }
       const data = await axios.delete(
         `${process.env.REACT_APP_SERVER_URL}/me?tokenType=${tokenType}`,
         {
@@ -262,6 +301,12 @@ const MyPage = () => {
 
   //팔로잉 모달 켜기
   const handleFollowingModalOn = async () => {
+    if (accessToken) {
+      const newToken = await CheckExpired(accessToken, tokenType, userId);
+      if (newToken) {
+        dispatch(reissueAccessToken(newToken));
+      }
+    }
     const data = await axios.get(
       `${process.env.REACT_APP_SERVER_URL}/user/${id}/followee?tokenType=${tokenType}`,
       {
@@ -278,6 +323,12 @@ const MyPage = () => {
 
   //팔로워 모달 켜기
   const handleFollowerModalOn = async () => {
+    if (accessToken) {
+      const newToken = await CheckExpired(accessToken, tokenType, userId);
+      if (newToken) {
+        dispatch(reissueAccessToken(newToken));
+      }
+    }
     const data = await axios.get(
       `${process.env.REACT_APP_SERVER_URL}/user/${id}/follower?tokenType=${tokenType}`,
       {
@@ -294,6 +345,13 @@ const MyPage = () => {
 
   // 내 글 삭제
   const removeMyPost = async (i: number, id: number) => {
+    if (accessToken) {
+      const newToken = await CheckExpired(accessToken, tokenType, userId);
+      if (newToken) {
+        dispatch(reissueAccessToken(newToken));
+      }
+    }
+    console.log(id);
     const copiedData = myPostData.slice();
     copiedData.splice(i, 1);
     setMyPostData(copiedData);
@@ -307,10 +365,17 @@ const MyPage = () => {
         },
       }
     );
+    console.log(id);
   };
 
   // 북마크 삭제
   const removeBookmarkCheck = async (i: number, id: number) => {
+    if (accessToken) {
+      const newToken = await CheckExpired(accessToken, tokenType, userId);
+      if (newToken) {
+        dispatch(reissueAccessToken(newToken));
+      }
+    }
     const copiedData = bookmarkData.slice();
     copiedData.splice(i, 1);
     setBookmarkData(copiedData);
@@ -343,11 +408,20 @@ const MyPage = () => {
       setCheckWithDrawModal(true);
     }
   };
-  console.log('⚡️⚡️⚡️⚡️⚡️⚡️⚡️');
-  console.log(bookmarkData);
+  useEffect(() => {
+    if (!passwordModalEdit || !passwordModalWithDraw) {
+      setPassword("");
+      setPasswordWithDraw("");
+    }
+  }, [passwordModalEdit, passwordModalWithDraw]);
+
   return (
     <>
-      <Nav opac={true} />
+    {
+      loading ? 
+        <Loading/> :
+      <>
+      <Nav opac={true}/>
       <Container>
         <PageContainer>
           <UserProfileContainer>
@@ -478,6 +552,9 @@ const MyPage = () => {
           </MyPostContainer>
         </PageContainer>
       </Container>
+      </>
+    }
+
       {followingModal || followerModal ? (
         <ModalBackground onClick={() => ModalOff()} />
       ) : null}
@@ -528,7 +605,7 @@ const MyPage = () => {
         <>
           <ModalBackground2 onClick={() => setCheckWithDrawModal(false)} />
           <CheckWithDrawContainer>
-            <CheckPasswordText>탈퇴하시겠습니까?</CheckPasswordText>
+            <CheckPasswordText>정말로 탈퇴하시겠습니까?</CheckPasswordText>
             <BtnContainer>
               <WithDrawBtn onClick={() => handleWithDraw()}>네</WithDrawBtn>
               <WithDrawBtn onClick={() => setCheckWithDrawModal(false)}>
@@ -564,6 +641,7 @@ const MyPage = () => {
               <InputContainer>
                 <InputTitle>비밀번호</InputTitle>
                 <EditInput
+                  type="password"
                   value={editPassword}
                   onChange={(e) => setEditPassword(e.target.value)}
                 />
@@ -577,9 +655,9 @@ const MyPage = () => {
                 onChange={(e) => setEditIntroduce(e.target.value)}
               />
             </InputContainer>
-            <CheckPasswordBtn onClick={() => handleChangeMyInfo()}>
+            <CheckEditBtn onClick={() => handleChangeMyInfo()}>
               확인
-            </CheckPasswordBtn>
+            </CheckEditBtn>
           </EditInfoContainer>
         </>
       )}
