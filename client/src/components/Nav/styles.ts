@@ -54,7 +54,7 @@ export const NavEtcContainer = styled.div`
 export const NavEtcUl = styled.ul`
   display: flex;
   list-style: none;
-  margin-right: 2.5em;
+  margin-right: 1.2em;
   align-items: center;
   font-size: 1.7em;
 `;
