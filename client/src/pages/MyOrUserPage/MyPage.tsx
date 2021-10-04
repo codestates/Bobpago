@@ -6,8 +6,10 @@ import Card from "components/Card/MyPage/Card";
 import BookmarkCard from "components/Card/MyPage/BookmarkCard";
 import FollowingModal from "components/FollowModal/FollowingModal";
 import FollowerModal from "components/FollowModal/FollowerModal";
+import CheckExpired from "utils/CheckExpired";
 import { useDispatch, useSelector } from "react-redux";
-import { removeAccessToken } from "actions/Accesstoken";
+import Loading from "components/Loading/Loading";
+import { removeAccessToken, reissueAccessToken } from "actions/Accesstoken";
 import { useHistory } from "react-router";
 import axios from "axios";
 import { RootState } from "reducers";
@@ -18,6 +20,7 @@ import {
   ProfileContentsContainer,
   ProfileName,
   ProfileIntroduce,
+  ProfileRecommend,
   FollowContainer,
   FollowBtn,
   FollowNum,
@@ -49,6 +52,9 @@ import {
   EditInput,
   ModalBackground2,
   Container,
+  NoPostContainer,
+  NoPostText,
+  CheckEditBtn,
 } from "./styles";
 
 interface Post {
@@ -99,13 +105,20 @@ const MyPage = () => {
   const [followeeInfo, setFolloweeInfo] = useState<any>([]);
   const [followerInfo, setFollowerInfo] = useState<any>([]);
   const [temporaryImg, setTemporaryImg] = useState<string>("");
-  const { accessToken, tokenType } = useSelector(
+  const [loading, setLoading] = useState<boolean>(true);
+  const { accessToken, tokenType, userId } = useSelector(
     (state: RootState) => state.AccesstokenReducer
   );
   const history = useHistory();
   const dispatch = useDispatch();
 
   async function getData() {
+    if (accessToken) {
+      const newToken = await CheckExpired(accessToken, tokenType, userId);
+      if (newToken) {
+        dispatch(reissueAccessToken(newToken));
+      }
+    }
     const response = await axios.get(
       `${process.env.REACT_APP_SERVER_URL}/me?tokenType=${tokenType}`,
       {
@@ -121,10 +134,12 @@ const MyPage = () => {
     setIntroduce(data.profile);
     data.imageUrl &&
       setProfileImg(`${process.env.REACT_APP_S3_IMG_URL}${data.imageUrl}`);
+    setBookmarkData(data.boomarks);
     setMyPostData(data.recipes);
     setFollowingNum(data.followees);
     setFollowerNum(data.followers);
     setId(data.id);
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -146,6 +161,12 @@ const MyPage = () => {
   // 개인정보 수정 비밀번호 확인
   const passwordCheckEdit = async () => {
     try {
+      if (accessToken) {
+        const newToken = await CheckExpired(accessToken, tokenType, userId);
+        if (newToken) {
+          dispatch(reissueAccessToken(newToken));
+        }
+      }
       const data = await axios.post(
         `${process.env.REACT_APP_SERVER_URL}/checkMyInfo?tokenType=${tokenType}`,
         {
@@ -171,10 +192,16 @@ const MyPage = () => {
 
   // 회원탈퇴 비밀번호 확인
   const passwordCheckWithDraw = async () => {
+    if (accessToken) {
+      const newToken = await CheckExpired(accessToken, tokenType, userId);
+      if (newToken) {
+        dispatch(reissueAccessToken(newToken));
+      }
+    }
     const data = await axios.post(
       `${process.env.REACT_APP_SERVER_URL}/checkMyInfo?tokenType=${tokenType}`,
       {
-        password: password,
+        password: passwordWithDraw,
       },
       {
         withCredentials: true,
@@ -194,6 +221,12 @@ const MyPage = () => {
 
   // 회원정보 수정
   const handleChangeMyInfo = async () => {
+    if (accessToken) {
+      const newToken = await CheckExpired(accessToken, tokenType, userId);
+      if (newToken) {
+        dispatch(reissueAccessToken(newToken));
+      }
+    }
     if (temporaryImg) {
       const formData = new FormData();
       formData.append("files", temporaryImg);
@@ -213,8 +246,11 @@ const MyPage = () => {
     }
     const editedInfo: EditInfo = {};
     if (editPassword !== password) editedInfo.password = editPassword;
+    else editedInfo.password = password;
     if (editNickName !== nickname) editedInfo.nickname = editNickName;
+    else editedInfo.nickname = nickname;
     if (editIntroduce !== introduce) editedInfo.profile = editIntroduce;
+    else editedInfo.profile = introduce;
     if (Object.keys(editedInfo).length !== 0) {
       await axios.patch(
         `${process.env.REACT_APP_SERVER_URL}/me?tokenType=${tokenType}`,
@@ -240,6 +276,12 @@ const MyPage = () => {
   // 회원탈퇴
   const handleWithDraw = async () => {
     try {
+      if (accessToken) {
+        const newToken = await CheckExpired(accessToken, tokenType, userId);
+        if (newToken) {
+          dispatch(reissueAccessToken(newToken));
+        }
+      }
       const data = await axios.delete(
         `${process.env.REACT_APP_SERVER_URL}/me?tokenType=${tokenType}`,
         {
@@ -259,6 +301,12 @@ const MyPage = () => {
 
   //팔로잉 모달 켜기
   const handleFollowingModalOn = async () => {
+    if (accessToken) {
+      const newToken = await CheckExpired(accessToken, tokenType, userId);
+      if (newToken) {
+        dispatch(reissueAccessToken(newToken));
+      }
+    }
     const data = await axios.get(
       `${process.env.REACT_APP_SERVER_URL}/user/${id}/followee?tokenType=${tokenType}`,
       {
@@ -275,6 +323,12 @@ const MyPage = () => {
 
   //팔로워 모달 켜기
   const handleFollowerModalOn = async () => {
+    if (accessToken) {
+      const newToken = await CheckExpired(accessToken, tokenType, userId);
+      if (newToken) {
+        dispatch(reissueAccessToken(newToken));
+      }
+    }
     const data = await axios.get(
       `${process.env.REACT_APP_SERVER_URL}/user/${id}/follower?tokenType=${tokenType}`,
       {
@@ -291,6 +345,13 @@ const MyPage = () => {
 
   // 내 글 삭제
   const removeMyPost = async (i: number, id: number) => {
+    if (accessToken) {
+      const newToken = await CheckExpired(accessToken, tokenType, userId);
+      if (newToken) {
+        dispatch(reissueAccessToken(newToken));
+      }
+    }
+    console.log(id);
     const copiedData = myPostData.slice();
     copiedData.splice(i, 1);
     setMyPostData(copiedData);
@@ -304,10 +365,17 @@ const MyPage = () => {
         },
       }
     );
+    console.log(id);
   };
 
   // 북마크 삭제
   const removeBookmarkCheck = async (i: number, id: number) => {
+    if (accessToken) {
+      const newToken = await CheckExpired(accessToken, tokenType, userId);
+      if (newToken) {
+        dispatch(reissueAccessToken(newToken));
+      }
+    }
     const copiedData = bookmarkData.slice();
     copiedData.splice(i, 1);
     setBookmarkData(copiedData);
@@ -340,10 +408,20 @@ const MyPage = () => {
       setCheckWithDrawModal(true);
     }
   };
+  useEffect(() => {
+    if (!passwordModalEdit || !passwordModalWithDraw) {
+      setPassword("");
+      setPasswordWithDraw("");
+    }
+  }, [passwordModalEdit, passwordModalWithDraw]);
 
   return (
     <>
-      <Nav opac={true} />
+    {
+      loading ? 
+        <Loading/> :
+      <>
+      <Nav opac={true}/>
       <Container>
         <PageContainer>
           <UserProfileContainer>
@@ -355,7 +433,11 @@ const MyPage = () => {
             </ProfileImgContainer>
             <ProfileContentsContainer>
               <ProfileName>{nickname}</ProfileName>
-              <ProfileIntroduce>{introduce}</ProfileIntroduce>
+              {
+                introduce ?
+              <ProfileIntroduce>{introduce}</ProfileIntroduce> :
+              <ProfileRecommend>{nickname}님에 대해서 간단한 소개글을 작성해보세요😁</ProfileRecommend>
+              }
               <DropDownContainer>
                 <DotsIcon />
                 <MenuContainer className="menu">
@@ -371,16 +453,16 @@ const MyPage = () => {
           </UserProfileContainer>
           <FollowContainer>
             <FollowBtn onClick={() => handleFollowingModalOn()}>
-              Following
+              팔로잉
             </FollowBtn>
             <FollowNum>{followingNum}</FollowNum>
             <FollowBtn onClick={() => handleFollowerModalOn()}>
-              Follower
+              팔로워
             </FollowBtn>
             <FollowNum>{followerNum}</FollowNum>
           </FollowContainer>
           <MyPostContainer>
-            <MyPostTitle>내 글 목록</MyPostTitle>
+            <MyPostTitle>나의 레시피</MyPostTitle>
             <EditBtn
               onClick={() =>
                 myPostFix ? setMyPostFix(false) : setMyPostFix(true)
@@ -389,30 +471,39 @@ const MyPage = () => {
               수정
             </EditBtn>
             <DivisionLine />
-            <GridContainer>
-              {myPostData.slice(0, myPostNum).map((el: any, i: number) => (
-                <Card
-                  removeMyPost={removeMyPost}
-                  index={i}
-                  key={i}
-                  postData={el}
-                  fix={myPostFix}
-                />
-              ))}
-            </GridContainer>
-            <IconContainer>
-              {myPostNum > standardNum && myPostData.length > standardNum && (
-                <MinusIcon
-                  onClick={() => setMyPostNum(myPostNum - standardNum)}
-                />
-              )}
-              {myPostData.length > myPostNum && (
-                <PlusIcon
-                  onClick={() => setMyPostNum(myPostNum + standardNum)}
-                />
-              )}
-            </IconContainer>
+            {
+              myPostData.length !== 0 ?
+                <>
+                  <GridContainer>
+                    {myPostData.slice(0, myPostNum).reverse().map((el: any, i: number) => (
+                        <Card
+                            removeMyPost={removeMyPost}
+                            index={i}
+                            key={i}
+                            postData={el}
+                            fix={myPostFix}
+                        />
+                    ))}
+                  </GridContainer>
+                  <IconContainer>
+                    {myPostNum > standardNum && myPostData.length > standardNum && (
+                        <MinusIcon
+                            onClick={() => setMyPostNum(myPostNum - standardNum)}
+                        />
+                    )}
+                    {myPostData.length > myPostNum && (
+                        <PlusIcon
+                            onClick={() => setMyPostNum(myPostNum + standardNum)}
+                        />
+                    )}
+                  </IconContainer>
+                </> :
+                  <NoPostContainer>
+                    <NoPostText>아직 레시피가 없네요!</NoPostText>
+                  </NoPostContainer>
+            }
           </MyPostContainer>
+
           <MyPostContainer>
             <MyPostTitle>북마크 목록</MyPostTitle>
             <EditBtn
@@ -423,37 +514,47 @@ const MyPage = () => {
               수정
             </EditBtn>
             <DivisionLine />
-            <GridContainer>
-              {bookmarkData &&
-                bookmarkData
-                  .slice(0, bookmarkNum)
-                  .map((el: any, i: number) => (
-                    <BookmarkCard
-                      removeBookmarkCheck={removeBookmarkCheck}
-                      index={i}
-                      key={i}
-                      postData={el}
-                      fix={bookmarkFix}
-                    />
-                  ))}
-            </GridContainer>
-            <IconContainer>
-              {bookmarkData &&
-                bookmarkNum > standardNum &&
-                bookmarkData.length > standardNum && (
-                  <MinusIcon
-                    onClick={() => setBookmarkNum(bookmarkNum - standardNum)}
-                  />
-                )}
-              {bookmarkData.length >= bookmarkNum && (
-                <PlusIcon
-                  onClick={() => setBookmarkNum(bookmarkNum + standardNum)}
-                />
-              )}
-            </IconContainer>
+            {
+              bookmarkData !== 0 ?
+                  <>
+                    <GridContainer>
+                      {
+                        bookmarkData
+                          .slice(0, bookmarkNum).reverse()
+                          .map((el: any, i: number) => (
+                            <BookmarkCard
+                              removeBookmarkCheck={removeBookmarkCheck}
+                              index={i}
+                              key={i}
+                              postData={el}
+                              fix={bookmarkFix}
+                            />
+                          ))
+                      }
+                    </GridContainer>
+                    <IconContainer>
+                      {bookmarkData &&
+                      bookmarkNum > standardNum &&
+                      bookmarkData.length > standardNum && (
+                          <MinusIcon
+                              onClick={() => setBookmarkNum(bookmarkNum - standardNum)}
+                          />
+                      )}
+                      {bookmarkData.length >= bookmarkNum && (
+                          <PlusIcon
+                              onClick={() => setBookmarkNum(bookmarkNum + standardNum)}
+                          />
+                      )}
+                    </IconContainer>
+                  </> :
+                <NoPostContainer><NoPostText>북마크가 아직 없네요 😢</NoPostText></NoPostContainer>
+            }
           </MyPostContainer>
         </PageContainer>
       </Container>
+      </>
+    }
+
       {followingModal || followerModal ? (
         <ModalBackground onClick={() => ModalOff()} />
       ) : null}
@@ -484,26 +585,27 @@ const MyPage = () => {
           </CheckPassword>
         </>
       )}
-      {passwordModalWithDraw && (
-        <>
+      {
+        passwordModalWithDraw &&
+        (<>
           <ModalBackground2 onClick={() => setPasswordModalWithDraw(false)} />
           <CheckPassword>
             <CheckPasswordText>비밀번호 확인</CheckPasswordText>
             <CheckPasswordInput
-              value={passwordWithDraw}
-              onChange={(e) => setPasswordWithDraw(e.target.value)}
+                value={passwordWithDraw}
+                onChange={(e) => setPasswordWithDraw(e.target.value)}
             />
             <CheckPasswordBtn onClick={() => passwordCheckWithDraw()}>
               확인
             </CheckPasswordBtn>
           </CheckPassword>
-        </>
-      )}
+        </>)
+      }
       {checkWithDrawModal && (
         <>
           <ModalBackground2 onClick={() => setCheckWithDrawModal(false)} />
           <CheckWithDrawContainer>
-            <CheckPasswordText>탈퇴하시겠습니까?</CheckPasswordText>
+            <CheckPasswordText>정말로 탈퇴하시겠습니까?</CheckPasswordText>
             <BtnContainer>
               <WithDrawBtn onClick={() => handleWithDraw()}>네</WithDrawBtn>
               <WithDrawBtn onClick={() => setCheckWithDrawModal(false)}>
@@ -539,6 +641,7 @@ const MyPage = () => {
               <InputContainer>
                 <InputTitle>비밀번호</InputTitle>
                 <EditInput
+                  type="password"
                   value={editPassword}
                   onChange={(e) => setEditPassword(e.target.value)}
                 />
@@ -548,12 +651,13 @@ const MyPage = () => {
               <InputTitle>소개글</InputTitle>
               <EditInput
                 value={editIntroduce}
+                type='text-area'
                 onChange={(e) => setEditIntroduce(e.target.value)}
               />
             </InputContainer>
-            <CheckPasswordBtn onClick={() => handleChangeMyInfo()}>
+            <CheckEditBtn onClick={() => handleChangeMyInfo()}>
               확인
-            </CheckPasswordBtn>
+            </CheckEditBtn>
           </EditInfoContainer>
         </>
       )}

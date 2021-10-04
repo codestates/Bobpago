@@ -65,7 +65,7 @@ const Ingredient = ({
   useEffect(() => {
     getData();
     setDifficulty2(contents.difficulty);
-  }, []);
+  }, [contents.difficulty]);
 
   useEffect(() => {
     const alreadySelected = options.filter(
@@ -229,7 +229,7 @@ const Ingredient = ({
         self={2}
         onClick={() => handleStoreIngredient()}
       >
-        Next
+        다음
       </NextButton>
       <PrevButton
         ref={circle1}
@@ -237,7 +237,7 @@ const Ingredient = ({
         self={2}
         onClick={() => dispatch(goToPrevPageEdit())}
       >
-        Prev
+        이전
       </PrevButton>
     </>
   );

@@ -18,7 +18,8 @@ import SignUp from "pages/SignUpAndSignIn/SignUp";
 import { useDispatch, useSelector } from "react-redux";
 import { showSignIn } from "actions/SignUpAndSignIn";
 import { RootState } from "reducers";
-import { removeAccessToken } from "actions/Accesstoken";
+import { removeAccessToken, reissueAccessToken } from "actions/Accesstoken";
+import CheckExpired from "utils/CheckExpired";
 
 const Nav = ({ opac }: { opac: boolean }) => {
   const [authorization, setAuthorization] = useState(false);
@@ -30,6 +31,16 @@ const Nav = ({ opac }: { opac: boolean }) => {
 
   const handleLogout = async () => {
     try {
+      if (AccessState.accessToken) {
+        const newToken = await CheckExpired(
+          AccessState.accessToken,
+          AccessState.tokenType,
+          AccessState.userId
+        );
+        if (newToken) {
+          dispatch(reissueAccessToken(newToken));
+        }
+      }
       await axios.post(
         `${serverUrl}/auth/signout?tokenType=${AccessState.tokenType}`,
         {},
@@ -76,7 +87,7 @@ const Nav = ({ opac }: { opac: boolean }) => {
               </Link>
             </NavEtcList>
             <NavEtcList>
-              <LoginLogout onClick={() => handleLogout()}>Logout</LoginLogout>
+              <LoginLogout onClick={() => handleLogout()}>로그아웃</LoginLogout>
             </NavEtcList>
           </NavEtcUl>
         ) : (
@@ -90,7 +101,7 @@ const Nav = ({ opac }: { opac: boolean }) => {
                   // }
                 }}
               >
-                Login
+                로그인
               </LoginLogout>
             </NavEtcList>
           </NavEtcUl>

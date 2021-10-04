@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "reducers";
 import Nav from "components/Nav/Nav";
 import MyPageProfileImg from "components/Profile/MyPage/MyPageProfileImg";
+import Loading from "components/Loading/Loading";
 import Card from "components/Card/MyPage/Card";
 import FollowingModal from "components/FollowModal/FollowingModal";
 import FollowerModal from "components/FollowModal/FollowerModal";
+import CheckExpired from "utils/CheckExpired";
+import { reissueAccessToken } from "actions/Accesstoken";
 import {
   PageContainer,
   UserProfileContainer,
@@ -15,6 +18,7 @@ import {
   ProfileContentsContainer,
   ProfileName,
   ProfileIntroduce,
+  ProfileRecommend,
   FollowContainer,
   FollowBtn,
   FollowNum,
@@ -22,6 +26,8 @@ import {
   MyPostTitle,
   DivisionLine,
   GridContainer,
+  NoPostContainer,
+  NoPostText,
   PlusIcon,
   IconContainer,
   FollowBtn2,
@@ -38,6 +44,7 @@ const UserPage = () => {
     tokenType,
     userId: myId,
   } = useSelector((state: RootState) => state.AccesstokenReducer);
+  const dispatch = useDispatch();
   const [myPostNum, setMyPostNum] = useState<number>(6);
   const [standardNum, setStandardNum] = useState<number>(6);
   const [followeeInfo, setFolloweeInfo] = useState<any>([]);
@@ -49,9 +56,16 @@ const UserPage = () => {
   const [userInfo, setUserInfo] = useState<any>([]);
   const profileS3Url = process.env.REACT_APP_S3_IMG_URL;
   const serverUrl = process.env.REACT_APP_SERVER_URL;
+  const [loading, setLoading] = useState<boolean>(true);
   let { userId } = useParams<{ userId: string | undefined }>();
 
   async function getData() {
+    if (accessToken) {
+      const newToken = await CheckExpired(accessToken, tokenType, myId);
+      if (newToken) {
+        dispatch(reissueAccessToken(newToken));
+      }
+    }
     const response = await axios.get(
       `${process.env.REACT_APP_SERVER_URL}/user/${userId}?tokenType=${tokenType}`,
       {
@@ -65,10 +79,17 @@ const UserPage = () => {
     const data = response.data.data;
     setUserInfo(data);
     setUserPosts(data.recipes);
+    setLoading(false);
   }
 
   async function checkFollow() {
     try {
+      if (accessToken) {
+        const newToken = await CheckExpired(accessToken, tokenType, myId);
+        if (newToken) {
+          dispatch(reissueAccessToken(newToken));
+        }
+      }
       const followerData = await axios.get(
         `${process.env.REACT_APP_SERVER_URL}/user/${userId}/follower?tokenType=${tokenType}`,
         {
@@ -101,6 +122,12 @@ const UserPage = () => {
 
   const handleFollow = async () => {
     try {
+      if (accessToken) {
+        const newToken = await CheckExpired(accessToken, tokenType, myId);
+        if (newToken) {
+          dispatch(reissueAccessToken(newToken));
+        }
+      }
       if (follow) {
         const data = await axios.delete(
           `${serverUrl}/user/${userId}/follow?tokenType=${tokenType}`,
@@ -133,6 +160,12 @@ const UserPage = () => {
   };
 
   const handleFolloweeModalOn = async () => {
+    if (accessToken) {
+      const newToken = await CheckExpired(accessToken, tokenType, myId);
+      if (newToken) {
+        dispatch(reissueAccessToken(newToken));
+      }
+    }
     const data = await axios.get(
       `${process.env.REACT_APP_SERVER_URL}/user/${userId}/followee?tokenType=${tokenType}`,
       {
@@ -148,6 +181,12 @@ const UserPage = () => {
   };
 
   const handleFollowerModalOn = async () => {
+    if (accessToken) {
+      const newToken = await CheckExpired(accessToken, tokenType, myId);
+      if (newToken) {
+        dispatch(reissueAccessToken(newToken));
+      }
+    }
     const data = await axios.get(
       `${process.env.REACT_APP_SERVER_URL}/user/${userId}/follower?tokenType=${tokenType}`,
       {
@@ -164,8 +203,12 @@ const UserPage = () => {
 
   return (
     <>
-      <Nav opac={true} />
-      <Container>
+      {loading ? (
+        <Loading />
+      ) : (
+        <>
+          <Nav opac={true} />
+          <Container>
         <PageContainer>
           <UserProfileContainer>
             <ProfileImgContainer>
@@ -181,54 +224,70 @@ const UserPage = () => {
             <ProfileContentsContainer>
               <ProfileName>{userInfo && userInfo.nickname}</ProfileName>
               {!follow ? (
-                <FollowBtn2 onClick={() => handleFollow()}>Follow</FollowBtn2>
+                <FollowBtn2 onClick={() => handleFollow()}>팔로우하기</FollowBtn2>
               ) : (
                 <FollowedBtn onClick={() => handleFollow()}>
                   <CheckIcon />
-                  Following
+                  팔로우중
                 </FollowedBtn>
               )}
-              <ProfileIntroduce>
-                {userInfo && userInfo.profile}
-              </ProfileIntroduce>
+              {
+                userInfo.profile ?
+                    <ProfileIntroduce>
+                      {userInfo && userInfo.profile}
+                    </ProfileIntroduce> :
+                    <ProfileRecommend>아직 {userInfo.nickname}님의 소개글이 없어요😢</ProfileRecommend>
+              }
+
             </ProfileContentsContainer>
           </UserProfileContainer>
           <FollowContainer>
             <FollowBtn onClick={() => handleFolloweeModalOn()}>
-              Followee
+              팔로잉
             </FollowBtn>
             <FollowNum>{userInfo && userInfo.followees}</FollowNum>
             <FollowBtn onClick={() => handleFollowerModalOn()}>
-              Follower
+              팔로워
             </FollowBtn>
             <FollowNum>{userInfo && userInfo.followers}</FollowNum>
           </FollowContainer>
           <MyPostContainer>
-            <MyPostTitle>작성 글 목록</MyPostTitle>
+            <MyPostTitle>작성 레시피 목록</MyPostTitle>
             <DivisionLine />
-            <GridContainer>
-              {userPosts &&
-                userPosts
-                  .slice(0, myPostNum)
-                  .map((el: any, i: number) => (
-                    <Card index={i} key={i} postData={el} />
-                  ))}
-            </GridContainer>
-            <IconContainer>
-              {myPostNum > standardNum && userPosts.length > standardNum && (
-                <MinusIcon
-                  onClick={() => setMyPostNum(myPostNum - standardNum)}
-                />
-              )}
-              {userPosts.length > myPostNum && (
-                <PlusIcon
-                  onClick={() => setMyPostNum(myPostNum + standardNum)}
-                />
-              )}
-            </IconContainer>
+            {
+              userPosts.length !== 0 ?
+                  <>
+                    <GridContainer>
+                      {
+                        userPosts
+                            .slice(0, myPostNum).reverse()
+                            .map((el: any, i: number) => (
+                                <Card index={i} key={i} postData={el} />
+                            ))
+                      }
+                    </GridContainer>
+                    <IconContainer>
+                      {myPostNum > standardNum && userPosts.length > standardNum && (
+                          <MinusIcon
+                              onClick={() => setMyPostNum(myPostNum - standardNum)}
+                          />
+                      )}
+                      {userPosts.length > myPostNum && (
+                          <PlusIcon
+                              onClick={() => setMyPostNum(myPostNum + standardNum)}
+                          />
+                      )}
+                    </IconContainer>
+                  </> :
+                  <NoPostContainer>
+                    <NoPostText>아직 레시피가 없네요!</NoPostText>
+                  </NoPostContainer>
+            }
           </MyPostContainer>
         </PageContainer>
       </Container>
+        </>
+      )}
       {(followingModal || followerModal) && (
         <ModalBackground onClick={() => ModalOff()} />
       )}

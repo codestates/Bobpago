@@ -27,6 +27,7 @@ export const NavContainer = styled.div<NavProps>`
 
 export const NavLogoContainer = styled.div`
   padding: 1.2em;
+  margin-left: 5em;
   a {
     text-decoration: none;
   }
@@ -39,25 +40,27 @@ export const NavLogo = styled.div<NavProps>`
   color: ${({ opac }): any => {
     return opac ? "#ffffff" : "black";
   }};
-  font-size: 22px;
+  font-size: 2.5em;
 
   &:hover {
     color: red;
   }
 `;
 
-export const NavEtcContainer = styled.div``;
+export const NavEtcContainer = styled.div`
+    margin-right: 4em;
+`;
 
 export const NavEtcUl = styled.ul`
   display: flex;
   list-style: none;
-  margin-right: 2.5em;
+  margin-right: 1.2em;
   align-items: center;
-  font-size: 22px;
+  font-size: 1.7em;
 `;
 
 export const NavEtcList = styled.li`
-  margin-left: 2em;
+  margin-left: 1.5em;
 `;
 
 export const HumanIcon = styled(ManageAccounts)<NavProps>`

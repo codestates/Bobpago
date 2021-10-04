@@ -24,7 +24,7 @@ const Title = ({ page, scale, setCircle1IsHover, setCircle2IsHover }: any) => {
 
   useEffect(() => {
     setRecipeTitle(title);
-  }, []);
+  }, [title]);
 
   const handleStoreTitle = () => {
     if (!recipeTitle) {
@@ -56,14 +56,14 @@ const Title = ({ page, scale, setCircle1IsHover, setCircle2IsHover }: any) => {
         />
       </TitleSlide>
       <NextButton ref={circle2} page={page} onClick={() => handleStoreTitle()}>
-        Next
+        다음
       </NextButton>
       <PrevButton
         ref={circle1}
         page={page}
         onClick={() => dispatch(goToPrevPageEdit())}
       >
-        Prev
+        이전
       </PrevButton>
     </>
   );

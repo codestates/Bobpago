@@ -62,6 +62,9 @@ export const Circle = styled.div`
     background: rgba(219, 132, 156, 0.8);
     z-index: 0;
   }
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
 `;
 
 export const Circle2Container = styled.div`
@@ -117,5 +120,8 @@ export const Circle2Container = styled.div`
     border: none;
     z-index: 0;
     background: rgba(223, 237, 128, 0.8);
+  }
+  @media screen and (max-width: 768px) {
+    display: none;
   }
 `;

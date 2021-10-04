@@ -2,6 +2,8 @@ import DRModalContent from "components/DRModalContent/DRModalContent";
 import axios from "axios";
 import { TotalSudoContainer } from "components/DRModalContent/styles";
 import { useDispatch, useSelector } from "react-redux";
+import CheckExpired from "utils/CheckExpired";
+import { reissueAccessToken } from "actions/Accesstoken";
 import { RootState } from "reducers";
 import React, { useState, useEffect, useRef } from "react";
 import { showSignUp } from "actions/SignUpAndSignIn";
@@ -25,7 +27,7 @@ interface DRModalProps {
 
 const DRModal: React.FC<DRModalProps> = ({ handleModalClose, recipeId }) => {
   const dispatch = useDispatch();
-  const { accessToken, tokenType } = useSelector(
+  const { accessToken, tokenType, userId } = useSelector(
     (state: RootState) => state.AccesstokenReducer
   );
   const serverUrl = process.env.REACT_APP_SERVER_URL;
@@ -42,7 +44,6 @@ const DRModal: React.FC<DRModalProps> = ({ handleModalClose, recipeId }) => {
       },
     });
     setCommentData(data.data.data);
-    console.log(data);
   }
 
   useEffect(() => {
@@ -57,6 +58,12 @@ const DRModal: React.FC<DRModalProps> = ({ handleModalClose, recipeId }) => {
   // 댓글 작성
   const handlePostComment = async () => {
     try {
+      if (accessToken) {
+        const newToken = await CheckExpired(accessToken, tokenType, userId);
+        if (newToken) {
+          dispatch(reissueAccessToken(newToken));
+        }
+      }
       const data = await axios.post(
         `${serverUrl}/recipe/${recipeId}/comment?tokenType=${tokenType}`,
         {

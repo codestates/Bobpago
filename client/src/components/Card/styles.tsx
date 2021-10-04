@@ -24,6 +24,12 @@ export const CardContainer = styled.div`
   &:hover .card__header {
     transform: translateY(0);
   }
+  @media screen and (max-width: 768px) {
+    width: 85%;
+  }
+  @media screen and (max-width: 480px) {
+    width: 90%;
+  }
 `;
 
 export const CardImage = styled.img`
@@ -44,22 +50,19 @@ export const CardOverlay = styled.div`
   background-color: #fff;
   transform: translateY(100%);
   transition: 0.2s ease-in-out;
-  border: none;
-  border-color: #fff;
+  border: none #fff;
 `;
 
 export const CardHeader = styled.div`
   position: relative;
   display: flex;
   align-items: center;
-  padding: 2em;
-  padding-top: 1em;
+  padding: 1.3em 2em;
   border-radius: 30px 30px 0 0;
   background-color: #fff;
   transform: translateY(-90%);
   transition: 0.2s ease-in-out;
-  border: none;
-  border-color: #fff;
+  border: none #fff;
 `;
 
 export const CardArc = styled.svg`
@@ -69,9 +72,9 @@ export const CardArc = styled.svg`
   bottom: 100%;
   right: 0;
   z-index: 1;
-  border: none;
   fill: #fff;
-  border-color: #fff;
+  border: none #fff;
+
   path {
     fill: #fff;
     d: path("M 40 80 c 22 0 40 -22 40 -40 v 40 Z");
@@ -86,10 +89,11 @@ export const CardThumb = styled.img`
   border-color: #fff;
 `;
 
-export const CardTitle = styled.div`
+export const CardTitle = styled.span`
   font-size: 1.3em;
   margin: 0 auto;
   color: #6a515e;
+  word-break: keep-all;
   text-align: center;
   border-color: #fff;
 `;
