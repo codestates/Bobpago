@@ -73,9 +73,13 @@ export class MeService {
     });
 
     try {
-      const bookmarks = await this.recipeRepository.find({
-        where: recipeIds,
-      });
+      const bookmarks =
+        recipeIds.length !== 0
+          ? await this.recipeRepository.find({
+              where: recipeIds,
+            })
+          : [];
+
       delete user.bookmarks;
       delete user.followees;
       delete user.followers;

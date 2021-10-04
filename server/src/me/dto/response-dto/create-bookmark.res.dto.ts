@@ -8,6 +8,11 @@ export class CreateBookmarkResDto extends ResponseDto {
   data: any;
 
   @ApiProperty({
+    example: 201,
+  })
+  statusCode: number;
+
+  @ApiProperty({
     example: '북마크가 추가되었습니다.',
   })
   message: string;
