@@ -1,13 +1,20 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateCommentDto } from './dto/create-comment.dto';
-import { UpdateCommentDto } from './dto/update-comment.dto';
-import { ResType } from '../common/response-type';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Comment } from '../entities/comment.entity';
-import { User } from 'src/entities/user.entity';
 import { CommentReaction } from '../entities/comment-reaction.entity';
 import { ImageService } from '../image/image.service';
+import { CreateCommentResDto } from './dto/response-dto/create-comment.res.dto';
+import { CreateCommentReqDto } from './dto/request-dto/create-comment.req.dto';
+import { SeeCommentResDto } from './dto/response-dto/see-comment.res.dto';
+import { UpdateCommentResDto } from './dto/response-dto/update-comment.res.dto';
+import { UpdateCommentReqDto } from './dto/request-dto/update-comment.req.dto';
+import { DeleteCommentResDto } from './dto/response-dto/delete-comment.res.dto';
+import { CreateCommentReactionResDto } from './dto/response-dto/create-comment-reaction.res.dto';
 
 @Injectable()
 export class CommentsService {
@@ -19,58 +26,73 @@ export class CommentsService {
   ) {}
 
   async create(
-    content: string,
+    createCommentReqDto: CreateCommentReqDto,
     recipeId: number,
     userId: number,
-  ): Promise<ResType> {
-    const comment = await this.commentRepository.create({
-      content,
-      userId,
-      recipeId,
-    });
-    const newComment = await this.commentRepository.save(comment);
-    return {
-      data: newComment,
-      statusCode: 201,
-      message: '댓글 작성을 완료했습니다',
-    };
-  }
-
-  async findAll(recipeId: number): Promise<ResType> {
-    const comment = await this.commentRepository.find({
-      relations: ['user'],
-      where: { recipeId },
-    });
-
-    const newComment = comment.map((el) => {
-      const user = {
-        id: el.user.id,
-        nickname: el.user.nickname,
-        imageUrl: el.user.imageUrl,
+  ): Promise<CreateCommentResDto> {
+    try {
+      const comment = await this.commentRepository.create({
+        content: createCommentReqDto.content,
+        userId,
+        recipeId,
+      });
+      const newComment = await this.commentRepository.save(comment);
+      return {
+        data: newComment,
+        statusCode: 201,
+        message: '댓글 작성을 완료했습니다',
       };
-      delete el.userId;
-      delete el.user;
-      return { ...el, user };
-    });
-    return {
-      data: newComment,
-      statusCode: 200,
-      message: '댓글 조회 완료했습니다',
-    };
+    } catch (err) {
+      throw new BadRequestException('댓글 작성에 실패하였습니다.');
+    }
   }
 
-  async update(commentId: number, content: string): Promise<ResType> {
-    const comment = await this.commentRepository.findOne({ id: commentId });
-    comment.content = content;
-    await this.commentRepository.save(comment);
-    return {
-      data: comment,
-      statusCode: 200,
-      message: '댓글 수정을 완료했습니다',
-    };
+  async findAll(recipeId: number): Promise<SeeCommentResDto> {
+    try {
+      const comment = await this.commentRepository.find({
+        relations: ['user'],
+        where: { recipeId },
+      });
+
+      const newComment = comment.map((el) => {
+        const user = {
+          id: el.user.id,
+          nickname: el.user.nickname,
+          imageUrl: el.user.imageUrl,
+        };
+        delete el.userId;
+        delete el.user;
+        return { ...el, user };
+      });
+      return {
+        data: newComment,
+        statusCode: 200,
+        message: '댓글 조회 완료했습니다',
+      };
+    } catch (err) {
+      throw new NotFoundException('댓글 조회에 실패하였습니다.');
+    }
   }
 
-  async delete(commentId: number): Promise<ResType> {
+  async update(
+    commentId: number,
+    updateCommentReqDto: UpdateCommentReqDto,
+  ): Promise<UpdateCommentResDto> {
+    try {
+      const comment = await this.commentRepository.findOne({ id: commentId });
+      comment.content = updateCommentReqDto.content;
+      await this.commentRepository.save(comment);
+      return {
+        data: comment,
+        statusCode: 200,
+        message: '댓글 수정을 완료했습니다',
+      };
+    } catch (err) {
+      throw new NotFoundException('댓글 수정에 실패하였습니다.');
+    }
+  }
+
+  async delete(commentId: number): Promise<DeleteCommentResDto> {
     let message;
     try {
       // 1. S3 이미지 삭제
@@ -84,7 +106,7 @@ export class CommentsService {
         message = '이미 삭제되었습니다.';
       }
     } catch (e) {
-      throw new BadRequestException();
+      throw new BadRequestException('댓글 삭제에 실패하였습니다.');
     }
     return {
       data: null,
@@ -97,7 +119,7 @@ export class CommentsService {
     userId: number,
     commentId: number,
     reaction: number,
-  ): Promise<ResType> {
+  ): Promise<CreateCommentReactionResDto> {
     if (reaction === 1) {
       try {
         await this.commentReactionRepository.save({ userId, commentId });
@@ -136,7 +158,7 @@ export class CommentsService {
             reaction_state: 0,
           },
           statusCode: 200,
-          message: '레시피 좋아요가 이미 삭제되었습니다.',
+          message: '댓글 좋아요가 이미 삭제되었습니다.',
         };
       }
     } else {

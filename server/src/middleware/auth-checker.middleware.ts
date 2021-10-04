@@ -19,6 +19,7 @@ export class AuthCheckerMiddleware implements NestMiddleware {
     private usersRepository: Repository<User>,
     private readonly jwtService: JwtService,
   ) {}
+
   async use(req: Request, res: Response, next: NextFunction) {
     const { tokenType } = req.query;
     const accessToken = req.headers.authorization.split(' ')[1];
