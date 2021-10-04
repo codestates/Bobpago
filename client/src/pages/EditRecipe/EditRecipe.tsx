@@ -74,7 +74,6 @@ const EditRecipe = () => {
     dispatch(editImage(data.recipe.imageUrls));
     setLoading(false);
     // dispatch(editImage(data.recipe.imageUrls));
-
   }
   useEffect(() => {
     getData();
