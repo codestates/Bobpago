@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { RootState } from "reducers";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import Profile from "components/Profile/Comment/Profile";
+import CheckExpired from "utils/CheckExpired";
+import { reissueAccessToken } from "actions/Accesstoken";
 import {
   UserProfile,
   ProfileImage,
@@ -23,6 +25,7 @@ interface Props {
 }
 
 const DRModalContent = ({ comment, setCommentData }: Props) => {
+  const dispatch = useDispatch();
   const serverUrl = process.env.REACT_APP_SERVER_URL;
   const S3Url = process.env.REACT_APP_S3_IMG_URL;
   const {
@@ -64,6 +67,12 @@ const DRModalContent = ({ comment, setCommentData }: Props) => {
 
   const handleDeleteComment = async () => {
     try {
+      if (accessToken) {
+        const newToken = await CheckExpired(accessToken, tokenType, myId);
+        if (newToken) {
+          dispatch(reissueAccessToken(newToken));
+        }
+      }
       const data = await axios.delete(
         `${serverUrl}/recipe/${comment.recipeId}/comment/${comment.id}?tokenType=${tokenType}`,
         {
@@ -82,6 +91,12 @@ const DRModalContent = ({ comment, setCommentData }: Props) => {
 
   const handleEditComment = async () => {
     try {
+      if (accessToken) {
+        const newToken = await CheckExpired(accessToken, tokenType, myId);
+        if (newToken) {
+          dispatch(reissueAccessToken(newToken));
+        }
+      }
       if (edit) {
         const data = await axios.patch(
           `${serverUrl}/recipe/${comment.recipeId}/comment/${comment.id}?tokenType=${tokenType}`,

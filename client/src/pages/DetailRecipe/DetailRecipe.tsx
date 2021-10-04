@@ -52,6 +52,8 @@ import DRModal from "components/DRModal/DRModal";
 import { showSignIn } from "actions/SignUpAndSignIn";
 import axios from "axios";
 import { SET_DETAIL_DATA } from "actions/DetailRecipe";
+import CheckExpired from "utils/CheckExpired";
+import { reissueAccessToken } from "actions/Accesstoken";
 
 const DetailRecipe = () => {
   const dispatch = useDispatch();
@@ -69,6 +71,8 @@ const DetailRecipe = () => {
   const [bookmark, setBookmark] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [recipeData, setRecipeData] = useState<any>(null);
+  const [totalLength, setTotalLength] = useState<number>(0);
+
   const rightScrollRef = useRef<any>(null);
   const bookmarkRef = useRef<any>(null);
   const topBoxRef = useRef<any>(null);
@@ -77,12 +81,71 @@ const DetailRecipe = () => {
   const imageRef = useRef<any>(null);
   const mainRef = useRef<any>(null);
   const subRef = useRef<any>(null);
-  // console.log(recipeData);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const goToSection = (i: number, anim?: any) => {
+    gsap.to(window, {
+      scrollTo: { y: i * window.innerHeight, autoKill: false },
+      duration: 0.5,
+    });
+    const moveRatio = 100 / totalLength;
+    const image = document.body.querySelector(".image") as HTMLParagraphElement;
+    const rightScroll = document.body.querySelector(
+      ".rightScroll"
+    ) as HTMLParagraphElement;
+    const topBox = document.body.querySelector(
+      ".topbox"
+    ) as HTMLParagraphElement;
+    const leftBox = document.body.querySelector(
+      ".leftbox"
+    ) as HTMLParagraphElement;
+    const rightBox = document.body.querySelector(
+      ".rightbox"
+    ) as HTMLParagraphElement;
+    const main = document.body.querySelector(".main") as HTMLParagraphElement;
+    const sub = document.body.querySelector(".sub") as HTMLParagraphElement;
+    const totalMap = document.body.querySelectorAll(
+      ".totalMap"
+    ) as NodeListOf<Element>;
+    [...totalMap].map((item: any) => {
+      if ([...item.classList].includes(String(i))) {
+        item.classList.add("mapActive");
+      } else {
+        item.classList.remove("mapActive");
+      }
+    });
+    if (rightScroll && topBox && leftBox && rightBox && image && main && sub) {
+      rightScroll.style.transform = `translateY(${i * -262}px)`;
+      topBox.style.transform = `translateY(${i * -100}%)`;
+      leftBox.style.transform = `translateX(${i * -moveRatio}%)`;
+      rightBox.style.transform = `translateX(${
+        moveRatio - 100 - moveRatio * -i
+      }%)`;
+      image.style.transform = `translateY(${i * -100}%)`;
+      main.style.transform = `translateY(${i * -100}%)`;
+      sub.style.transform = `translateY(${i * -100}%)`;
+    }
+
+    if (anim) {
+      anim.restart();
+    }
+  };
+
   const handleBookmark = async () => {
     // const bookmarkState = [...bookmarkRef.current.classList].includes("active");
     if (loginState.accessToken === "") {
       dispatch(showSignIn());
       return;
+    }
+    if (loginState.accessToken) {
+      const newToken = await CheckExpired(
+        loginState.accessToken,
+        loginState.tokenType,
+        loginState.userId
+      );
+      if (newToken) {
+        dispatch(reissueAccessToken(newToken));
+      }
     }
     try {
       if (!bookmark) {
@@ -174,95 +237,39 @@ const DetailRecipe = () => {
         "Content-Type": "application/json",
       },
     });
+
     const descriptions = data.data.data.recipe.descriptions;
     let dummyData: number[] = [];
     for (let i = 0; i < descriptions.length; i++) {
       dummyData.push(descriptions[i]);
     }
+
+
+    const totalArrLength = data.data.data.recipe.descriptions;
+    gsap.registerPlugin(ScrollToPlugin, ScrollTrigger);
+
     setRecipeData(data.data.data);
     setBookmark(data.data.data.recipe.bookmark_state);
     setDummy(dummyData);
+    setTotalLength(totalArrLength.length);
   };
 
   useEffect(() => {
     handlePageData();
   }, []);
 
-  useEffect(() => {}, [handlePageData]);
-
   useEffect(() => {
     if (recipeData !== null) {
-      gsap.registerPlugin(ScrollToPlugin, ScrollTrigger);
+      setTotalLength(recipeData.recipe.descriptions.length);
       setLoading(false);
       return () => {};
     }
   }, [recipeData]);
 
   useEffect(() => {
-    if (loading === false) {
+    const render = document.querySelectorAll(".lol");
+    if (loading === false && render.length > 0) {
       dispatch({ type: SET_DETAIL_DATA, payload: recipeData });
-      setStart(true);
-      const totalLength = recipeData.recipe.descriptions.length;
-      const moveRatio = 100 / totalLength;
-
-      const goToSection = (i: number, anim?: any) => {
-        gsap.to(window, {
-          scrollTo: { y: i * window.innerHeight, autoKill: false },
-          duration: 0.5,
-        });
-        const image = document.body.querySelector(
-          ".image"
-        ) as HTMLParagraphElement;
-        const rightScroll = document.body.querySelector(
-          ".rightScroll"
-        ) as HTMLParagraphElement;
-        const topBox = document.body.querySelector(
-          ".topbox"
-        ) as HTMLParagraphElement;
-        const leftBox = document.body.querySelector(
-          ".leftbox"
-        ) as HTMLParagraphElement;
-        const rightBox = document.body.querySelector(
-          ".rightbox"
-        ) as HTMLParagraphElement;
-        const main = document.body.querySelector(
-          ".main"
-        ) as HTMLParagraphElement;
-        const sub = document.body.querySelector(".sub") as HTMLParagraphElement;
-        const totalMap = document.body.querySelectorAll(
-          ".totalMap"
-        ) as NodeListOf<Element>;
-        [...totalMap].map((item: any) => {
-          if ([...item.classList].includes(String(i))) {
-            item.classList.add("mapActive");
-          } else {
-            item.classList.remove("mapActive");
-          }
-        });
-        if (
-          rightScroll &&
-          topBox &&
-          leftBox &&
-          rightBox &&
-          image &&
-          main &&
-          sub
-        ) {
-          rightScroll.style.transform = `translateY(${i * -262}px)`;
-          topBox.style.transform = `translateY(${i * -100}%)`;
-          leftBox.style.transform = `translateX(${i * -moveRatio}%)`;
-          rightBox.style.transform = `translateX(${
-            moveRatio - 100 - moveRatio * -i
-          }%)`;
-          image.style.transform = `translateY(${i * -100}%)`;
-          main.style.transform = `translateY(${i * -100}%)`;
-          sub.style.transform = `translateY(${i * -100}%)`;
-        }
-
-        if (anim) {
-          anim.restart();
-        }
-      };
 
       gsap.utils.toArray(".lol").forEach((box: any, i) => {
         ScrollTrigger.create({
@@ -273,14 +280,31 @@ const DetailRecipe = () => {
         ScrollTrigger.create({
           trigger: box,
           start: "bottom bottom",
-          onEnterBack: () => goToSection(i),
+          end: "bottom 50%+=100px",
+          onEnterBack: () => {
+            goToSection(i);
+          },
         });
       });
     }
-  }, [loading]);
+  });
+
+  useEffect(() => {
+    setStart(true);
+  }, [goToSection]);
 
   const handleReaction = async () => {
     try {
+      if (loginState.accessToken) {
+        const newToken = await CheckExpired(
+          loginState.accessToken,
+          loginState.tokenType,
+          loginState.userId
+        );
+        if (newToken) {
+          dispatch(reissueAccessToken(newToken));
+        }
+      }
       let nextReaction;
       if (recipeData.recipe.recipe_reaction_state === 1) nextReaction = 0;
       else nextReaction = 1;
@@ -450,7 +474,7 @@ const DetailRecipe = () => {
         {recipeData.recipe.recipe_reaction_state === 1 ? (
           <LikeFillIcon onClick={() => handleReaction()} />
         ) : (
-          <LikeIcon onClick={() => handleReaction()} />
+          <LikeFillIcon onClick={() => handleReaction()} />
         )}
         {recipeData.recipe.recipe_reaciton_count}
       </ViewContainer>

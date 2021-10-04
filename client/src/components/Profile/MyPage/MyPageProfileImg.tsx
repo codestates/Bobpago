@@ -7,7 +7,7 @@ import {
   ProfileImg,
   EditContainer,
   EditIcon,
-} from "../styles";
+} from "./styles";
 
 interface Props {
   size?: number;
