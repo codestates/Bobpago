@@ -13,6 +13,16 @@ export const UploadImg = styled.img`
   transform: translate(-50%, 0%);
   &:hover {
     transform: translate(-50%, 0%) scale(1.1);
+    @media screen and (max-width: 480px) {
+      transform: translate(-50%, 10%) scale(1.1) rotate(-90deg);
+    }
+  }
+  @media screen and (max-width: 768px) {
+    width: 4em;
+    height: 4em;
+  }
+  @media screen and (max-width: 480px) {
+    transform: translate(-50%, 10%) rotate(-90deg);
   }
 `;
 
@@ -27,6 +37,9 @@ export const UploadImgText = styled.div`
   align-text: center;
   color: #8f8f8f;
   font-weight: 500;
+  @media screen and (max-width: 480px) {
+    display: none;
+  }
 `;
 
 export const BookContainer = styled.div`
@@ -121,6 +134,9 @@ export const BackgroundImg = styled.img`
   width: 100%;
   height: 100%;
   pointer-events: none;
+  @media screen and (max-width: 480px) {
+    display: none;
+  }
 `;
 
 export const NextBtn = styled.label`
@@ -243,6 +259,12 @@ export const DescriptionText = styled.textarea<LineHeightProps>`
       ? props.lineHeight + "em"
       : window.innerHeight * 0.0037 + 0.0398 + "em"};
   resize: none;
+  @media screen and (max-width: 480px) {
+    transform: translate(-20%, 50%) rotate(-90deg);
+    width: 200%;
+    height: 50%;
+    padding-top: 0em;
+  }
 `;
 
 interface ImgProps {

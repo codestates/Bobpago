@@ -65,7 +65,7 @@ const Ingredient = ({
   useEffect(() => {
     getData();
     setDifficulty2(contents.difficulty);
-  }, []);
+  }, [contents.difficulty]);
 
   useEffect(() => {
     const alreadySelected = options.filter(
