@@ -130,12 +130,12 @@ const MyPage = () => {
       }
     );
     const data = response.data.data;
+
     setNickname(data.nickname);
     setIntroduce(data.profile);
     data.imageUrl &&
       setProfileImg(`${process.env.REACT_APP_S3_IMG_URL}${data.imageUrl}`);
     setBookmarkData(data.bookmarks);
-    console.log(data.bookmarks);
     setMyPostData(data.recipes);
     setFollowingNum(data.followees);
     setFollowerNum(data.followers);
@@ -525,7 +525,8 @@ const MyPage = () => {
                   수정
                 </EditBtn>
                 <DivisionLine />
-                {bookmarkData !== 0 ? (
+
+                {bookmarkData.length !== 0 ? (
                   <>
                     <GridContainer>
                       {bookmarkData
