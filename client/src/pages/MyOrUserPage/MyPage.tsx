@@ -134,7 +134,7 @@ const MyPage = () => {
     setIntroduce(data.profile);
     data.imageUrl &&
       setProfileImg(`${process.env.REACT_APP_S3_IMG_URL}${data.imageUrl}`);
-    setBookmarkData(data.boomarks);
+    setBookmarkData(data.bookmarks);
     setMyPostData(data.recipes);
     setFollowingNum(data.followees);
     setFollowerNum(data.followers);
