@@ -20,7 +20,7 @@ export const NavContainer = styled.div<NavProps>`
     return opac ? "black" : "#ffffff";
   }};
   align-items: center;
-  z-index: 10;
+  z-index: 110;
   font-size: 18px;
   box-shadow: 0 0px 15px rgba(0, 0, 0, 0.2);
 `;
@@ -48,7 +48,7 @@ export const NavLogo = styled.div<NavProps>`
 `;
 
 export const NavEtcContainer = styled.div`
-    margin-right: 4em;
+  margin-right: 4em;
 `;
 
 export const NavEtcUl = styled.ul`

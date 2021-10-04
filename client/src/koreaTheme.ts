@@ -26,3 +26,11 @@ export const koreaYellow: string[] = [
   "ffe492",
   "ffe000",
 ];
+
+export const headPago: string[] = [
+  "/img/PinkHeadPago.png",
+  "/img/eggpago.png",
+  "/img/grayHeadPago.png",
+  "/img/sharkHeadPago.png",
+  "/img/oneEyedPago.png",
+];

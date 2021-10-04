@@ -40,8 +40,16 @@ import {
   LikeFillIcon,
   LikeIcon,
   EditIcon,
+  ReactionCount,
+  NotifiToast,
+  NotifiMainContainer,
+  NotifiSubContainer,
+  NotifiMainTitle,
+  NotifiMainIngredient,
+  NotifiSubTitle,
+  NotifiSubIngredient,
 } from "./styles";
-import { koreaRed, koreaBlue, koreaYellow } from "koreaTheme";
+import { koreaRed, koreaBlue, koreaYellow, headPago } from "koreaTheme";
 import { gsap } from "gsap/dist/gsap";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
@@ -73,14 +81,9 @@ const DetailRecipe = () => {
   const [recipeData, setRecipeData] = useState<any>(null);
   const [totalLength, setTotalLength] = useState<number>(0);
 
-  const rightScrollRef = useRef<any>(null);
   const bookmarkRef = useRef<any>(null);
-  const topBoxRef = useRef<any>(null);
-  const leftBoxRef = useRef<any>(null);
-  const rightBoxRef = useRef<any>(null);
-  const imageRef = useRef<any>(null);
-  const mainRef = useRef<any>(null);
-  const subRef = useRef<any>(null);
+  const countRef = useRef<any>(null);
+  const notifyRef = useRef<any>(null);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const goToSection = (i: number, anim?: any) => {
@@ -244,18 +247,45 @@ const DetailRecipe = () => {
       dummyData.push(descriptions[i]);
     }
 
-
     const totalArrLength = data.data.data.recipe.descriptions;
     gsap.registerPlugin(ScrollToPlugin, ScrollTrigger);
 
     setRecipeData(data.data.data);
-    setBookmark(data.data.data.recipe.bookmark_state);
+
     setDummy(dummyData);
     setTotalLength(totalArrLength.length);
   };
 
+  const handleMypageData = async () => {
+    const data = await axios.get(
+      `${serverUrl}/me?tokenType=${loginState.tokenType}`,
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${loginState.accessToken}`,
+        },
+      }
+    );
+
+    const BookmarkArr = data.data.data.bookmarks;
+    const isBookmarked =
+      BookmarkArr.filter((item: { id: number }) => {
+        return item.id === locationProps;
+      }).length === 1;
+
+    if (isBookmarked) {
+      setBookmark(true);
+    } else {
+    }
+  };
+
   useEffect(() => {
     handlePageData();
+    if (loginState.tokenType !== "") {
+      // 마이페이지 정보 호출
+      handleMypageData();
+    }
   }, []);
 
   useEffect(() => {
@@ -274,6 +304,7 @@ const DetailRecipe = () => {
       gsap.utils.toArray(".lol").forEach((box: any, i) => {
         ScrollTrigger.create({
           trigger: box,
+          start: "top 50%+=100px",
           onEnter: () => goToSection(i),
         });
 
@@ -305,21 +336,28 @@ const DetailRecipe = () => {
           dispatch(reissueAccessToken(newToken));
         }
       }
-      let nextReaction;
-      if (recipeData.recipe.recipe_reaction_state === 1) nextReaction = 0;
-      else nextReaction = 1;
+
+      if (recipeData.recipe.recipe_reaction_state === 0) {
+        recipeData.recipe.recipe_reaction_state = 1;
+        countRef.current.textContent++;
+      } else {
+        recipeData.recipe.recipe_reaction_state = 0;
+        countRef.current.textContent--;
+      }
+
+      const nextReaction = recipeData.recipe.recipe_reaction_state;
+
       const data = await axios.post(
         `${serverUrl}/recipe/${locationProps}?reaction=${nextReaction}&tokenType=${loginState.tokenType}`,
         {},
         {
           withCredentials: true,
           headers: {
-            "Content-Type": "application/json",
             authorization: `Bearer ${loginState.accessToken}`,
           },
         }
       );
-      handlePageData();
+      console.log(data);
     } catch (err) {
       console.log(err);
     }
@@ -330,6 +368,18 @@ const DetailRecipe = () => {
       pathname: `/editrecipe/${locationProps}`,
       state: locationProps,
     });
+  };
+
+  const handlePagoHead = () => {
+    const N = Math.floor(Math.random() * headPago.length);
+    return headPago[N];
+  };
+
+  const handleNotification = () => {
+    notifyRef.current.style.bottom = "5%";
+    setTimeout(() => {
+      notifyRef.current.style.bottom = "-20%";
+    }, 5000);
   };
 
   return loading === false ? (
@@ -343,7 +393,7 @@ const DetailRecipe = () => {
       {modalOpen ? (
         <DRModal recipeId={locationProps} handleModalClose={handleModalClose} />
       ) : null}
-      <TotalPageMap>
+      <TotalPageMap className="totalMap">
         <TotalPageMapContainer>
           {dummy.map((item: number, i: number) => {
             return <TotalPageMapContent className={`totalMap ${i}`} key={i} />;
@@ -351,7 +401,7 @@ const DetailRecipe = () => {
         </TotalPageMapContainer>
       </TotalPageMap>
       <ImageScroll>
-        <ImageContainer ref={imageRef} className="image">
+        <ImageContainer className="image">
           {recipeData.recipe.imageUrls.map((item: string, i: number) => {
             return (
               <ImageContent
@@ -363,14 +413,14 @@ const DetailRecipe = () => {
         </ImageContainer>
       </ImageScroll>
       <RightScroll>
-        <RightScrollContainer ref={rightScrollRef} className="rightScroll">
+        <RightScrollContainer className="rightScroll">
           {recipeData.recipe.descriptions.map((item: string, i: number) => {
             return <RightScrollContent key={i}>{item}</RightScrollContent>;
           })}
         </RightScrollContainer>
       </RightScroll>
       <TopBoxScroll>
-        <TopBoxContainer ref={topBoxRef} className="topbox">
+        <TopBoxContainer className="topbox">
           {dummy.map((item, i) => {
             return (
               <TopBoxContent
@@ -382,11 +432,7 @@ const DetailRecipe = () => {
         </TopBoxContainer>
       </TopBoxScroll>
       <LeftBoxScroll>
-        <LeftBoxContainer
-          ref={leftBoxRef}
-          className="leftbox"
-          length={dummy.length}
-        >
+        <LeftBoxContainer className="leftbox" length={dummy.length}>
           {dummy.map((item, i) => {
             return (
               <LeftBoxContent
@@ -398,11 +444,7 @@ const DetailRecipe = () => {
         </LeftBoxContainer>
       </LeftBoxScroll>
       <RightBoxScroll>
-        <RightBoxContainer
-          ref={rightBoxRef}
-          className="rightbox"
-          length={dummy.length}
-        >
+        <RightBoxContainer className="rightbox" length={dummy.length}>
           {dummy.map((item, i) => {
             return (
               <RightBoxContent
@@ -414,18 +456,22 @@ const DetailRecipe = () => {
         </RightBoxContainer>
       </RightBoxScroll>
       <MainIngredientContainer>
-        <MainIngredient ref={mainRef} className="main">
+        <MainIngredient className="main">
           {dummy.map((item, i) => {
             return (
-              <MainIngredientContent key={i}>주재료</MainIngredientContent>
+              <MainIngredientContent key={i}>
+                <img src={handlePagoHead()} alt="" />
+              </MainIngredientContent>
             );
           })}
         </MainIngredient>
       </MainIngredientContainer>
       <SubIngredientContainer>
-        <SubIngredient ref={subRef} className="sub">
+        <SubIngredient onClick={handleNotification} className="sub">
           {dummy.map((item, i) => {
-            return <SubIngredientContent key={i}>부재료</SubIngredientContent>;
+            return (
+              <SubIngredientContent key={i}>재료 보기</SubIngredientContent>
+            );
           })}
         </SubIngredient>
       </SubIngredientContainer>
@@ -436,28 +482,28 @@ const DetailRecipe = () => {
         position={positionMaker()}
         end={endPositionMaker()}
         time={pagoTimeMaker()}
-        src="/img/PinkHeadPago.png"
+        src={handlePagoHead()}
       />
       <EggHeadPago
         rotate={rotateMaker()}
         position={positionMaker()}
         end={endPositionMaker()}
         time={pagoTimeMaker()}
-        src="/img/eggpago.png"
+        src={handlePagoHead()}
       />
       <PinkHeadPago
         rotate={rotateMaker()}
         position={positionMaker()}
         end={endPositionMaker()}
         time={pagoTimeMaker()}
-        src="/img/PinkHeadPago.png"
+        src={handlePagoHead()}
       />
       <EggHeadPago
         rotate={rotateMaker()}
         position={positionMaker()}
         end={endPositionMaker()}
         time={pagoTimeMaker()}
-        src="/img/eggpago.png"
+        src={handlePagoHead()}
       />
       <BookMarkIcon
         className="default"
@@ -476,8 +522,28 @@ const DetailRecipe = () => {
         ) : (
           <LikeFillIcon onClick={() => handleReaction()} />
         )}
-        {recipeData.recipe.recipe_reaciton_count}
+        <ReactionCount ref={countRef}>
+          {recipeData.recipe.recipe_reaciton_count}
+        </ReactionCount>
       </ViewContainer>
+      <NotifiToast ref={notifyRef}>
+        <NotifiMainContainer>
+          <NotifiMainTitle>주재료 : </NotifiMainTitle>
+          <NotifiMainIngredient>
+            {recipeData.ingredients.main.map((item: any) => {
+              return <span>{item.name}</span>;
+            })}
+          </NotifiMainIngredient>
+        </NotifiMainContainer>
+        <NotifiSubContainer>
+          <NotifiSubTitle>부재료 : </NotifiSubTitle>
+          <NotifiSubIngredient>
+            {recipeData.ingredients.sub.map((item: any) => {
+              return <span>{item.name}</span>;
+            })}
+          </NotifiSubIngredient>
+        </NotifiSubContainer>
+      </NotifiToast>
     </DRTotalContainer>
   ) : (
     <Loading>loading</Loading>
