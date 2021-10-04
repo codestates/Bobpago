@@ -81,8 +81,8 @@ export const EggHeadPago = styled.img<pagoProps>`
   position: fixed;
   left: 70%;
   top: 10%;
-  width: 4%;
-  height: 4%;
+  width: 2.5%;
+  height: 2.5%;
   animation: ${({ rotate, position, end }) =>
       pinkPagoMove(rotate, position, end)}
     10s infinite;
@@ -349,6 +349,9 @@ export const MainIngredientContent = styled.div`
     color: red;
     transform: scale(1.2);
   }
+  img {
+    width: 50%;
+  }
 `;
 
 export const SubIngredientContainer = styled.div`
@@ -363,7 +366,7 @@ export const SubIngredientContainer = styled.div`
   border: 3px solid #2d325b;
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
-  z-index: 4;
+  z-index: 105;
 `;
 
 export const SubIngredient = styled.div`
@@ -430,6 +433,8 @@ export const BookMarkIcon = styled(BookmarkFill)<BookmarkProps>`
   z-index: 1000;
   transition: 0.1s;
   color: ${({ bookmark }) => {
+    console.log(bookmark);
+
     return bookmark ? "orangered" : "orange";
   }};
   cursor: pointer;
@@ -462,8 +467,6 @@ export const ViewContainer = styled.div`
   display: flex;
   flex-direction: row;
   font-size: 1.2em;
-  
-
 `;
 
 export const ViewIcon = styled(EyeFill)`
@@ -498,4 +501,63 @@ export const Loading = styled.div`
   width: 100%;
   height: 100vh;
   background-color: black;
+`;
+
+export const ReactionCount = styled.div``;
+
+export const NotifiToast = styled.div`
+  position: fixed;
+  width: 70%;
+  height: 20%;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  background-color: #eeeeee99;
+  flex-direction: column;
+  backdrop-filter: blur(20px);
+  bottom: -20%;
+  left: 15%;
+  z-index: 1000;
+  border-radius: 20px;
+  transition: 1.5s;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+
+  span {
+    margin-right: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+`;
+
+export const NotifiMainContainer = styled.div`
+  display: flex;
+`;
+
+export const NotifiMainTitle = styled.div`
+  font-size: 32px;
+  margin-left: 1em;
+`;
+
+export const NotifiMainIngredient = styled.div`
+  display: flex;
+  margin-left: 1em;
+  font-size: 24px;
+  min-width: 5em;
+`;
+
+export const NotifiSubContainer = styled.div`
+  display: flex;
+`;
+
+export const NotifiSubTitle = styled.div`
+  font-size: 32px;
+  margin-left: 1em;
+`;
+
+export const NotifiSubIngredient = styled.div`
+  display: flex;
+  margin-left: 1em;
+  font-size: 24px;
+  min-width: 5em;
 `;

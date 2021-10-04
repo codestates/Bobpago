@@ -67,6 +67,7 @@ function App() {
       </Route>
       <Route path="/detailrecipe/:recipeId">
         <DetailRecipe />
+        <NofiticationCenter />
       </Route>
       <Route path="/writerecipe">
         <WriteRecipe />
