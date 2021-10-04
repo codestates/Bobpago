@@ -130,6 +130,7 @@ const MyPage = () => {
       }
     );
     const data = response.data.data;
+
     setNickname(data.nickname);
     setIntroduce(data.profile);
     data.imageUrl &&
@@ -417,143 +418,156 @@ const MyPage = () => {
 
   return (
     <>
-    {
-      loading ? 
-        <Loading/> :
-      <>
-      <Nav opac={true}/>
-      <Container>
-        <PageContainer>
-          <UserProfileContainer>
-            <ProfileImgContainer>
-              <MyPageProfileImg
-                src={profileImg ? profileImg : undefined}
-                size={15}
-              />
-            </ProfileImgContainer>
-            <ProfileContentsContainer>
-              <ProfileName>{nickname}</ProfileName>
-              {
-                introduce ?
-              <ProfileIntroduce>{introduce}</ProfileIntroduce> :
-              <ProfileRecommend>{nickname}님에 대해서 간단한 소개글을 작성해보세요😁</ProfileRecommend>
-              }
-              <DropDownContainer>
-                <DotsIcon />
-                <MenuContainer className="menu">
-                  <Menu1 onClick={() => handleOpenModalEdit()}>
-                    개인정보수정
-                  </Menu1>
-                  <Menu2 onClick={() => handleOpenModalWithDraw()}>
-                    회원탈퇴
-                  </Menu2>
-                </MenuContainer>
-              </DropDownContainer>
-            </ProfileContentsContainer>
-          </UserProfileContainer>
-          <FollowContainer>
-            <FollowBtn onClick={() => handleFollowingModalOn()}>
-              팔로잉
-            </FollowBtn>
-            <FollowNum>{followingNum}</FollowNum>
-            <FollowBtn onClick={() => handleFollowerModalOn()}>
-              팔로워
-            </FollowBtn>
-            <FollowNum>{followerNum}</FollowNum>
-          </FollowContainer>
-          <MyPostContainer>
-            <MyPostTitle>나의 레시피</MyPostTitle>
-            <EditBtn
-              onClick={() =>
-                myPostFix ? setMyPostFix(false) : setMyPostFix(true)
-              }
-            >
-              수정
-            </EditBtn>
-            <DivisionLine />
-            {
-              myPostData.length !== 0 ?
-                <>
-                  <GridContainer>
-                    {myPostData.slice(0, myPostNum).reverse().map((el: any, i: number) => (
-                        <Card
+      {loading ? (
+        <Loading />
+      ) : (
+        <>
+          <Nav opac={true} />
+          <Container>
+            <PageContainer>
+              <UserProfileContainer>
+                <ProfileImgContainer>
+                  <MyPageProfileImg
+                    src={profileImg ? profileImg : undefined}
+                    size={15}
+                  />
+                </ProfileImgContainer>
+                <ProfileContentsContainer>
+                  <ProfileName>{nickname}</ProfileName>
+                  {introduce ? (
+                    <ProfileIntroduce>{introduce}</ProfileIntroduce>
+                  ) : (
+                    <ProfileRecommend>
+                      {nickname}님에 대해서 간단한 소개글을 작성해보세요😁
+                    </ProfileRecommend>
+                  )}
+                  <DropDownContainer>
+                    <DotsIcon />
+                    <MenuContainer className="menu">
+                      <Menu1 onClick={() => handleOpenModalEdit()}>
+                        개인정보수정
+                      </Menu1>
+                      <Menu2 onClick={() => handleOpenModalWithDraw()}>
+                        회원탈퇴
+                      </Menu2>
+                    </MenuContainer>
+                  </DropDownContainer>
+                </ProfileContentsContainer>
+              </UserProfileContainer>
+              <FollowContainer>
+                <FollowBtn onClick={() => handleFollowingModalOn()}>
+                  팔로잉
+                </FollowBtn>
+                <FollowNum>{followingNum}</FollowNum>
+                <FollowBtn onClick={() => handleFollowerModalOn()}>
+                  팔로워
+                </FollowBtn>
+                <FollowNum>{followerNum}</FollowNum>
+              </FollowContainer>
+              <MyPostContainer>
+                <MyPostTitle>나의 레시피</MyPostTitle>
+                <EditBtn
+                  onClick={() =>
+                    myPostFix ? setMyPostFix(false) : setMyPostFix(true)
+                  }
+                >
+                  수정
+                </EditBtn>
+                <DivisionLine />
+                {myPostData.length !== 0 ? (
+                  <>
+                    <GridContainer>
+                      {myPostData
+                        .slice(0, myPostNum)
+                        .reverse()
+                        .map((el: any, i: number) => (
+                          <Card
                             removeMyPost={removeMyPost}
                             index={i}
                             key={i}
                             postData={el}
                             fix={myPostFix}
-                        />
-                    ))}
-                  </GridContainer>
-                  <IconContainer>
-                    {myPostNum > standardNum && myPostData.length > standardNum && (
-                        <MinusIcon
-                            onClick={() => setMyPostNum(myPostNum - standardNum)}
-                        />
-                    )}
-                    {myPostData.length > myPostNum && (
+                          />
+                        ))}
+                    </GridContainer>
+                    <IconContainer>
+                      {myPostNum > standardNum &&
+                        myPostData.length > standardNum && (
+                          <MinusIcon
+                            onClick={() =>
+                              setMyPostNum(myPostNum - standardNum)
+                            }
+                          />
+                        )}
+                      {myPostData.length > myPostNum && (
                         <PlusIcon
-                            onClick={() => setMyPostNum(myPostNum + standardNum)}
+                          onClick={() => setMyPostNum(myPostNum + standardNum)}
                         />
-                    )}
-                  </IconContainer>
-                </> :
+                      )}
+                    </IconContainer>
+                  </>
+                ) : (
                   <NoPostContainer>
                     <NoPostText>아직 레시피가 없네요!</NoPostText>
                   </NoPostContainer>
-            }
-          </MyPostContainer>
+                )}
+              </MyPostContainer>
 
-          <MyPostContainer>
-            <MyPostTitle>북마크 목록</MyPostTitle>
-            <EditBtn
-              onClick={() =>
-                bookmarkFix ? setBookmarkFix(false) : setBookmarkFix(true)
-              }
-            >
-              수정
-            </EditBtn>
-            <DivisionLine />
-            {
-              bookmarkData !== 0 ?
+              <MyPostContainer>
+                <MyPostTitle>북마크 목록</MyPostTitle>
+                <EditBtn
+                  onClick={() =>
+                    bookmarkFix ? setBookmarkFix(false) : setBookmarkFix(true)
+                  }
+                >
+                  수정
+                </EditBtn>
+                <DivisionLine />
+                {bookmarkData.length !== 0 ? (
                   <>
                     <GridContainer>
-                      {
-                        bookmarkData
-                          .slice(0, bookmarkNum).reverse()
-                          .map((el: any, i: number) => (
-                            <BookmarkCard
-                              removeBookmarkCheck={removeBookmarkCheck}
-                              index={i}
-                              key={i}
-                              postData={el}
-                              fix={bookmarkFix}
-                            />
-                          ))
-                      }
+                      {bookmarkData
+                        .slice(0, bookmarkNum)
+                        .reverse()
+                        .map((el: any, i: number) => (
+                          <BookmarkCard
+                            removeBookmarkCheck={removeBookmarkCheck}
+                            index={i}
+                            key={i}
+                            postData={el}
+                            fix={bookmarkFix}
+                          />
+                        ))}
                     </GridContainer>
                     <IconContainer>
                       {bookmarkData &&
-                      bookmarkNum > standardNum &&
-                      bookmarkData.length > standardNum && (
+                        bookmarkNum > standardNum &&
+                        bookmarkData.length > standardNum && (
                           <MinusIcon
-                              onClick={() => setBookmarkNum(bookmarkNum - standardNum)}
+                            onClick={() =>
+                              setBookmarkNum(bookmarkNum - standardNum)
+                            }
                           />
-                      )}
+                        )}
                       {bookmarkData.length >= bookmarkNum && (
-                          <PlusIcon
-                              onClick={() => setBookmarkNum(bookmarkNum + standardNum)}
-                          />
+                        <PlusIcon
+                          onClick={() =>
+                            setBookmarkNum(bookmarkNum + standardNum)
+                          }
+                        />
                       )}
                     </IconContainer>
-                  </> :
-                <NoPostContainer><NoPostText>북마크가 아직 없네요 😢</NoPostText></NoPostContainer>
-            }
-          </MyPostContainer>
-        </PageContainer>
-      </Container>
-      </>
-    }
+                  </>
+                ) : (
+                  <NoPostContainer>
+                    <NoPostText>북마크가 아직 없네요 😢</NoPostText>
+                  </NoPostContainer>
+                )}
+              </MyPostContainer>
+            </PageContainer>
+          </Container>
+        </>
+      )}
 
       {followingModal || followerModal ? (
         <ModalBackground onClick={() => ModalOff()} />
@@ -585,22 +599,21 @@ const MyPage = () => {
           </CheckPassword>
         </>
       )}
-      {
-        passwordModalWithDraw &&
-        (<>
+      {passwordModalWithDraw && (
+        <>
           <ModalBackground2 onClick={() => setPasswordModalWithDraw(false)} />
           <CheckPassword>
             <CheckPasswordText>비밀번호 확인</CheckPasswordText>
             <CheckPasswordInput
-                value={passwordWithDraw}
-                onChange={(e) => setPasswordWithDraw(e.target.value)}
+              value={passwordWithDraw}
+              onChange={(e) => setPasswordWithDraw(e.target.value)}
             />
             <CheckPasswordBtn onClick={() => passwordCheckWithDraw()}>
               확인
             </CheckPasswordBtn>
           </CheckPassword>
-        </>)
-      }
+        </>
+      )}
       {checkWithDrawModal && (
         <>
           <ModalBackground2 onClick={() => setCheckWithDrawModal(false)} />
@@ -651,7 +664,7 @@ const MyPage = () => {
               <InputTitle>소개글</InputTitle>
               <EditInput
                 value={editIntroduce}
-                type='text-area'
+                type="text-area"
                 onChange={(e) => setEditIntroduce(e.target.value)}
               />
             </InputContainer>

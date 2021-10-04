@@ -36,8 +36,8 @@ const BookmarkCard = ({
       onClick={() =>
         !fix &&
         history.push({
-          pathname: `/detailrecipe/:${postData.recipeId}`,
-          state: postData.recipeId,
+          pathname: `/detailrecipe/:${postData.id}`,
+          state: postData.id,
         })
       }
     >
