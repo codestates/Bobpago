@@ -3,7 +3,7 @@ import { IsString, Length, Matches } from 'class-validator';
 
 export class CreateUserReqDto {
   @ApiProperty({
-    example: 'edge@gmail.com',
+    example: 'kimshouse@gmail.com',
     description: '이메일',
     required: true,
   })
@@ -24,7 +24,7 @@ export class CreateUserReqDto {
   readonly password: string;
 
   @ApiProperty({
-    example: 'edge',
+    example: '김씨네증축하숙집',
     description: '닉네임',
     required: true,
   })

@@ -21,7 +21,11 @@ import { User } from './entities/user.entity';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: process.env.NODE_ENV === 'prod' ? '.env.prod' : '.env',
+      ignoreEnvFile: process.env.NODE_ENV === 'prod',
+    }),
     TypeOrmModule.forRoot(typeORMConfig),
     TypeOrmModule.forFeature([User]),
     MeModule,

@@ -34,7 +34,8 @@ export class CommentReaction extends BaseEntity {
   })
   comment: Comment;
 
-  @OneToOne(() => User)
-  @JoinColumn()
+  @ManyToOne(() => User, (user) => user.commentReactions, {
+    onDelete: 'CASCADE',
+  })
   user: User;
 }

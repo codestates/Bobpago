@@ -56,11 +56,11 @@ export class User extends BaseEntity {
   @OneToMany(() => Comment, (comment) => comment.user)
   comments: Comment[];
 
-  @OneToOne(() => RecipeReaction)
-  recipeReaction: RecipeReaction;
+  @OneToMany(() => RecipeReaction, (recipeReaction) => recipeReaction.user)
+  recipeReactions: RecipeReaction[];
 
-  @OneToOne(() => CommentReaction)
-  commentReaction: CommentReaction;
+  @OneToMany(() => CommentReaction, (commentReaction) => commentReaction.user)
+  commentReactions: CommentReaction[];
 
   @OneToMany(() => Bookmark, (bookmark) => bookmark.user, { eager: true })
   bookmarks: Bookmark[];
