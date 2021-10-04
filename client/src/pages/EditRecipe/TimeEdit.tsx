@@ -42,7 +42,7 @@ const Time = ({ page, scale, setCircle1IsHover, setCircle2IsHover }: any) => {
     else if (contents.time === 50) setTimeRadio("50min");
     else setOtherTime(contents.time);
     setPeople(contents.serving);
-  }, []);
+  }, [contents.time, contents.serving]);
 
   useEffect(() => {
     if (circle2IsHover) setCircle2IsHover(true);
@@ -198,14 +198,14 @@ const Time = ({ page, scale, setCircle1IsHover, setCircle2IsHover }: any) => {
         </TheOtherTimeContainer>
       </RecipeTimeSlide>
       <NextButton ref={circle2} page={page} onClick={() => handleStoreTime()}>
-        Next
+        다음
       </NextButton>
       <PrevButton
         ref={circle1}
         page={page}
         onClick={() => dispatch(goToPrevPageEdit())}
       >
-        Prev
+        이전
       </PrevButton>
     </>
   );

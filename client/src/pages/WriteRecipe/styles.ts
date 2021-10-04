@@ -33,7 +33,11 @@ export const TitleSlide = styled.div<SlideProps>`
   text-align: center;
 `;
 
-export const RecipeTimeSlide = styled(TitleSlide)<SlideProps>``;
+export const RecipeTimeSlide = styled(TitleSlide)<SlideProps>`
+  .peopleNum {
+    margin-top: 1.5em;
+  }
+`;
 
 export const IngredientSlide = styled(TitleSlide)<SlideProps>``;
 
@@ -49,12 +53,16 @@ export const RecipeTitle = styled.div`
   margin-bottom: 0.5em;
   font-size: 60px;
   font-weight: 500;
+  @media screen and (max-width: 768px) {
+    margin-top: 5em;
+    font-size: 45px;
+  }
 `;
 export const StarContainer = styled.div`
   position: relative;
   justify-content: center;
   align-items: center;
-  padding: 1em auto;
+  padding: 1em;
   display: table;
   margin-left: auto;
   margin-right: auto;
@@ -64,20 +72,27 @@ export const TitleInput = styled.input`
   width: 16em;
   font-size: 30px;
   border: none;
+  text-align: center;
   border-bottom: 2px solid #adadad;
   padding-bottom: 0.3em;
   padding-left: 0.3em;
   transform: translateX(0.8em);
-  color: #7a7a7a;
+  color: ${main.color};
   background: transparent;
   &:focus {
     outline: none;
+  }
+  @media screen and (max-width: 768px) {
+    font-size: 25px;
   }
 `;
 
 export const ExpectedTime = styled(RecipeTitle)`
   display: inline;
   font-size: 40px;
+  @media screen and (max-width: 480px) {
+    font-size: 35px;
+  }
 `;
 
 const animShadow = keyframes`
@@ -86,8 +101,12 @@ const animShadow = keyframes`
   }
 `;
 export const RadioContainer = styled.div`
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  margin: 0 30%;
+  @media screen and (max-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -107,6 +126,11 @@ export const TimeRadioButton = styled.input.attrs({
   width: 7em;
   height: 4em;
   font-size: 17px;
+  @media screen and (max-width: 480px) {
+    width: 5.5em;
+    height: 3.4em;
+    font-size: 15px;
+  }
   color: #858585;
   background-color: #e0e0e0;
   border: 0px solid rgba(32, 72, 250, 0);
@@ -127,7 +151,11 @@ export const TimeRadioButton = styled.input.attrs({
     cursor: pointer;
     color: #858585;
     position: absolute;
-    transform: translate(-5.19em, 1.4em);
+    transform: translate(-4.8em, 1.4em);
+    @media screen and (max-width: 480px) {
+      font-size: 15px;
+      transform: translate(-4.8em, 1.4em);
+    }
   }
   &:focus + span {
     color: #fff;
@@ -162,7 +190,21 @@ export const PeopleNumInput = styled(TheOtherTimeInput)`
   width: 16em;
 `;
 
-export const TheOtherTimeContainer = styled(RadioContainer)``;
+export const TheOtherTimeContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  // grid-
+  // display: grid;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  #other {
+    transform: translate(-4.1em, 1.4em);
+    &:hover {
+      transform: translate(-4.1em, 1.4em) scale(1.1);
+    }
+  }
+`;
 
 export const TheOtherTimeTooltip = styled(QuestionMarkCircle)`
   position: relative;
@@ -237,10 +279,16 @@ export const IngredientTitle = styled(RecipeTitle)`
   margin-top: 1.5em;
 
   font-size: 40px;
+  @media screen and (max-width: 480px) {
+    margin-top: 1em;
+  }
 `;
 
 export const DifficultyTitle = styled(IngredientTitle)`
   margin-top: 3.5em;
+  @media screen and (max-width: 480px) {
+    margin-top: 2.5em;
+  }
 `;
 
 export const SearchBarTooltip = styled(ExpectedTimeTooltip)``;
@@ -251,13 +299,13 @@ interface PageProps {
 }
 
 export const NextButton = styled.button<PageProps>`
-  font-size: 18px;
+  font-size: 1.5em;
   position: fixed;
   bottom: 2em;
   z-index: 1;
   position: absolute;
   right: 2%;
-  width: 8em;
+  width: 6em;
   height: 2.5em;
   background-color: #167ece;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
@@ -307,6 +355,10 @@ export const SearchBarWrapper = styled.input`
   position: relative;
   z-index: 1;
   background: transparent;
+  @media screen and (max-width: 480px) {
+    height: 1.5em;
+    font-size: 19px;
+  }
 `;
 
 export const AutoContainer = styled.div`
@@ -351,6 +403,9 @@ export const TagContainer = styled.div`
   border-radius: 24px;
   &:focus {
     box-shadow: 0px 0px 0px 1px rgba(78, 171, 217, 1);
+  }
+  @media screen and (max-width: 480px) {
+    width: 80%;
   }
 `;
 

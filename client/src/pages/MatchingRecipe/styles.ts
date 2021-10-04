@@ -125,7 +125,7 @@ export const MatchTooltip = styled.div`
   flex-direction: column;
   padding: 1em;
   width: 15em;
-  height: 8em;
+  height: 10em;
   text-align: center;
   background-color: #ffffff;
   border: 1px solid black;
@@ -133,7 +133,6 @@ export const MatchTooltip = styled.div`
   border-radius: 10px;
   opacity: 0;
   transition: 0.3s;
-  top: -33%;
   left: 102%;
   z-index: 100;
   @media only screen and (max-width: 768px) {
@@ -142,8 +141,11 @@ export const MatchTooltip = styled.div`
     width: 14em;
     left: 103%;
   }
+  div{
+    font-size: 1.2em;
+  }
   span {
-    font-size: 12px;
+    font-size: 1.2em;
     font-weight: 700;
     margin-top: 1em;
     color: #aa0000;
@@ -158,7 +160,7 @@ export const MatchTooltip = styled.div`
     border-left: 1px solid black;
     border-bottom: 1px solid black;
     position: absolute;
-    top: 45%;
+    top: 30%;
     left: -2.7%;
     background-color: #ffffff;
     transform: rotateZ(45deg);
@@ -177,7 +179,7 @@ export const MatchCardScroll = styled.div`
   display: flex;
   align-items: center;
   transform: translateY(100%);
-  transition: 1.3s;
+  transition: 2s;
   overflow: hidden;
   z-index: 1;
   transition-timing-function: cubic-bezier(1, -0.275, 0.44, 1.25);
@@ -258,7 +260,7 @@ export const QuestionIcons = styled(QuestionCircle)`
 
 export const MyIngredient = styled.div`
   margin-top: 0.5em;
-  font-size: 24px;
+  font-size: ${main.middleFont};
   @media only screen and (max-width: 768px) {
     font-size: 28px;
   }

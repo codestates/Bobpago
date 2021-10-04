@@ -69,10 +69,10 @@ const DRContent: React.FC<DRContentProps> = () => {
       });
     }
   };
-
   return (
     <RightContent>
       <RightContentWriter onClick={() => handleMoveToUserPage()}>
+
         {loading ? "LOADING" : recipeState.user.nickname}
       </RightContentWriter>
       <RightContentTitle>

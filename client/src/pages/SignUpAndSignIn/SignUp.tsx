@@ -11,7 +11,7 @@ import {
   IconClose,
   ErrMsg,
   EyeIcon,
-  Ask2,
+  Ask,
   Logo,
 } from "./styles";
 import gsap from "gsap";
@@ -194,12 +194,12 @@ const SignUp = () => {
           >
             <ButtonText>회원가입</ButtonText>
           </ButtonWrapper>
-          <Ask2>
+          <Ask>
             계정이 이미 있으신가요?{" "}
             <a href="#" onClick={() => dispatch(showSignIn())}>
               로그인
             </a>
-          </Ask2>
+          </Ask>
         </InputContainer>
         <IconClose
           viewBox="0 0 24 24"

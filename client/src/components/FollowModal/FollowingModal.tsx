@@ -44,7 +44,7 @@ const FollowingModal = ({ setFollowingModal, follow }: Props) => {
   const [view, setView] = useState<number>(4);
   return (
     <FollowContainer>
-      <Title>Following</Title>
+      <Title>팔로잉</Title>
       <XIcon onClick={() => setFollowingModal(false)} />
       {follow &&
         follow.slice(0, view).map((el: any, i: number) => {
