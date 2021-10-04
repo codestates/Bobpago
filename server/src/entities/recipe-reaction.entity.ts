@@ -34,7 +34,8 @@ export class RecipeReaction extends BaseEntity {
   })
   recipe: Recipe;
 
-  @OneToOne(() => User)
-  @JoinColumn()
+  @ManyToOne(() => User, (user) => user.recipeReactions, {
+    onDelete: 'CASCADE',
+  })
   user: User;
 }
