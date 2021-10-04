@@ -34,6 +34,7 @@ const BookmarkCard = ({
   return (
     <CardContainer
       onClick={() =>
+        !fix &&
         history.push({
           pathname: `/detailrecipe/:${postData.recipeId}`,
           state: postData.recipeId,
@@ -49,7 +50,7 @@ const BookmarkCard = ({
         className="card__image"
         src={
           postData && postData.thumbnail
-            ? `${process.env.REACT_APP_S3_IMG_URL}/${postData.thumbnail}`
+            ? `${process.env.REACT_APP_S3_IMG_URL}${postData.thumbnail}`
             : undefined
         }
         alt=""

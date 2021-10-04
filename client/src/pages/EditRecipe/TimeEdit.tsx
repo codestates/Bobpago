@@ -42,7 +42,7 @@ const Time = ({ page, scale, setCircle1IsHover, setCircle2IsHover }: any) => {
     else if (contents.time === 50) setTimeRadio("50min");
     else setOtherTime(contents.time);
     setPeople(contents.serving);
-  }, []);
+  }, [contents.time, contents.serving]);
 
   useEffect(() => {
     if (circle2IsHover) setCircle2IsHover(true);

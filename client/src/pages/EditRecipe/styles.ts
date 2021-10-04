@@ -49,6 +49,10 @@ export const RecipeTitle = styled.div`
   margin-bottom: 0.5em;
   font-size: 60px;
   font-weight: 500;
+  @media screen and (max-width: 768px) {
+    margin-top: 5em;
+    font-size: 45px;
+  }
 `;
 export const StarContainer = styled.div`
   position: relative;
@@ -73,11 +77,17 @@ export const TitleInput = styled.input`
   &:focus {
     outline: none;
   }
+  @media screen and (max-width: 768px) {
+    font-size: 25px;
+  }
 `;
 
 export const ExpectedTime = styled(RecipeTitle)`
   display: inline;
   font-size: 40px;
+  @media screen and (max-width: 480px) {
+    font-size: 35px;
+  }
 `;
 
 const animShadow = keyframes`
@@ -86,9 +96,13 @@ const animShadow = keyframes`
   }
 `;
 export const RadioContainer = styled.div`
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  margin: 0 30%;
   justify-content: center;
+  @media screen and (max-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
   align-items: center;
   text-align: center;
   #other {
@@ -107,6 +121,11 @@ export const TimeRadioButton = styled.input.attrs({
   width: 7em;
   height: 4em;
   font-size: 17px;
+  @media screen and (max-width: 480px) {
+    width: 5.5em;
+    height: 3.4em;
+    font-size: 15px;
+  }
   color: #858585;
   background-color: #e0e0e0;
   border: 0px solid rgba(32, 72, 250, 0);
@@ -127,7 +146,11 @@ export const TimeRadioButton = styled.input.attrs({
     cursor: pointer;
     color: #858585;
     position: absolute;
-    transform: translate(-5.19em, 1.4em);
+    transform: translate(-4.8em, 1.4em);
+    @media screen and (max-width: 480px) {
+      font-size: 15px;
+      transform: translate(-4.8em, 1.4em);
+    }
   }
   &:focus + span {
     color: #fff;
@@ -237,10 +260,16 @@ export const IngredientTitle = styled(RecipeTitle)`
   margin-top: 1.5em;
 
   font-size: 40px;
+  @media screen and (max-width: 480px) {
+    margin-top: 1em;
+  }
 `;
 
 export const DifficultyTitle = styled(IngredientTitle)`
   margin-top: 3.5em;
+  @media screen and (max-width: 480px) {
+    margin-top: 2.5em;
+  }
 `;
 
 export const SearchBarTooltip = styled(ExpectedTimeTooltip)``;
@@ -307,6 +336,10 @@ export const SearchBarWrapper = styled.input`
   position: relative;
   z-index: 1;
   background: transparent;
+  @media screen and (max-width: 480px) {
+    height: 1.5em;
+    font-size: 19px;
+  }
 `;
 
 export const AutoContainer = styled.div`
@@ -351,6 +384,9 @@ export const TagContainer = styled.div`
   border-radius: 24px;
   &:focus {
     box-shadow: 0px 0px 0px 1px rgba(78, 171, 217, 1);
+  }
+  @media screen and (max-width: 480px) {
+    width: 80%;
   }
 `;
 
@@ -431,6 +467,10 @@ export const BookContainer = styled.div`
   justify-content: center;
   align-items: center;
   background: transparent;
+
+  @media screen and (max-width: 480px) {
+    transform: rotate(90deg);
+  }
 `;
 
 export const Cover = styled.div`
@@ -445,6 +485,14 @@ export const FlipBook = styled.div`
   perspective: 1500px;
   border-bottom-right-radius: 0.5em;
   border-top-right-radius: 0.5em;
+  @media screen and (max-width: 768px) {
+    width: 40%;
+    transform: translateX(7%);
+  }
+  @media screen and (max-width: 480px) {
+    height: 70%;
+    width: 50%;
+  }
 `;
 
 export const Back = styled.div`
@@ -510,12 +558,18 @@ export const BackBtn = styled.label`
 export const FrontCoverImg = styled.img`
   width: 70%;
   margin-top: -1em;
+  @media screen and (max-width: 480px) {
+    display: none;
+  }
 `;
 
 export const FrontCoverLogo = styled.img`
   margin-top: 5%;
   width: 30%;
   bottom: 1em;
+  @media screen and (max-width: 480px) {
+    display: none;
+  }
 `;
 export const FrontCoverBack = styled(Back)`
   justify-content: center;
@@ -526,11 +580,17 @@ export const FrontCoverBack = styled(Back)`
   .uploaded {
     top: 80%;
     opacity: 0.7;
+    @media screen and (max-width: 480px) {
+      top: 5%;
+    }
   }
   .food {
     width: auto;
     object-fit: center;
     max-height: 100%;
+    @media screen and (max-width: 480px) {
+      transform: rotate(-90deg);
+    }
   }
 `;
 
@@ -545,6 +605,11 @@ export const FrontCoverFront = styled(Front)`
     color: #fff;
     background: #b1d4a3;
     width: 100%;
+    @media screen and (max-width: 480px) {
+      transform: rotate(-90deg) translateX(-75%);
+      background: transparent;
+      color: grey;
+    }
     h2 {
       position: relative;
       top: 30%;
@@ -566,6 +631,14 @@ export const NextPageBtn = styled(NavigateNext)`
   right: 1em;
   fill: #6da69a;
   cursor: pointer;
+  @media screen and (max-width: 768px) {
+    right: 0em;
+  }
+  @media screen and (max-width: 480px) {
+    right: auto;
+    top: 3.5em;
+    transform: rotate(-90deg);
+  }
 `;
 
 export const PrevPageBtn = styled(NavigateNext)`
@@ -575,6 +648,14 @@ export const PrevPageBtn = styled(NavigateNext)`
   left: 1em;
   fill: #6da69a;
   cursor: pointer;
+  @media screen and (max-width: 768px) {
+    left: 0em;
+  }
+  @media screen and (max-width: 480px) {
+    left: auto;
+    bottom: 6em;
+    transform: rotate(90deg);
+  }
 `;
 export const Flip = styled.div`
   width: 100%;
@@ -672,6 +753,16 @@ export const UploadImg = styled.img`
   transition: all 0.3s ease;
   &:hover {
     transform: translate(-50%, 0%) scale(1.1);
+    @media screen and (max-width: 480px) {
+      transform: translate(-50%, 10%) scale(1.1) rotate(-90deg);
+    }
+  }
+  @media screen and (max-width: 768px) {
+    width: 4em;
+    height: 4em;
+  }
+  @media screen and (max-width: 480px) {
+    transform: translate(-50%, 10%) rotate(-90deg);
   }
 `;
 
@@ -686,4 +777,7 @@ export const UploadImgText = styled.p`
   align-text: center;
   color: #8f8f8f;
   font-weight: 500;
+  @media screen and (max-width: 480px) {
+    display: none;
+  }
 `;

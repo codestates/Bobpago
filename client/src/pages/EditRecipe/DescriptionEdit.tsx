@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { RootState } from "reducers";
 import { resetEditPageEdit, goToPrevPageEdit } from "actions/EditRecipePage";
+import CheckExpired from "utils/CheckExpired";
+import { reissueAccessToken } from "actions/Accesstoken";
 import {
   resetEditAllContents,
   editDescription,
@@ -54,7 +56,7 @@ const Description = ({
   const [imgFiles, setImgFiles] = useState<any>([]);
   const frontCoverRef = useRef<any>(null);
   const inputFileRef = useRef<any>(null);
-  const { accessToken, tokenType } = useSelector(
+  const { accessToken, tokenType, userId } = useSelector(
     (state: RootState) => state.AccesstokenReducer
   );
   const LoadedDescription = useSelector(
@@ -67,7 +69,7 @@ const Description = ({
   useEffect(() => {
     setDescriptionPage(LoadedDescription);
     setImgFiles(contents.image);
-  }, []);
+  }, [LoadedDescription, contents.image]);
 
   useEffect(() => {
     currentPage < 0 && setCurrentPage(0);
@@ -119,6 +121,12 @@ const Description = ({
 
   const handleSubmitRecipe = async () => {
     try {
+      if (accessToken) {
+        const newToken = await CheckExpired(accessToken, tokenType, userId);
+        if (newToken) {
+          dispatch(reissueAccessToken(newToken));
+        }
+      }
       const data = await axios.patch(
         `${process.env.REACT_APP_SERVER_URL}/recipe/${locationProps}?tokenType=${tokenType}`,
         {
@@ -137,31 +145,30 @@ const Description = ({
           },
         }
       );
-      const recipeId = data.data.data.recipe.id;
-      console.log(data);
+      const recipeId = data.data.data.recipeId;
+      // console.log(data);
 
-      const ImgData = imgFiles.map((el: any, i: number) => {
-        if (typeof imgFiles[i] === "object") {
-          const formData = new FormData();
-          formData.append("files", imgFiles[i]);
-          return formData;
-        } else {
-          return S3Url + imgFiles[i];
-        }
-      });
-      console.log(ImgData);
-      const uploadImg = await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/image/${recipeId}?tokenType=${tokenType}&path=recipe`,
-        ImgData,
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "multipart/form-data",
-            authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      console.log(uploadImg);
+      // const ImgData = imgFiles.map((el: any, i: number) => {
+      //   if (typeof imgFiles[i] === "object") {
+      //     const formData = new FormData();
+      //     formData.append("files", imgFiles[i]);
+      //     return formData;
+      //   } else {
+      //     return S3Url + imgFiles[i];
+      //   }
+      // });
+      // console.log(ImgData);
+      // const uploadImg = await axios.post(
+      //   `${process.env.REACT_APP_SERVER_URL}/image/${recipeId}?tokenType=${tokenType}&path=recipe`,
+      //   ImgData,
+      //   {
+      //     withCredentials: true,
+      //     headers: {
+      //       "Content-Type": "multipart/form-data",
+      //       authorization: `Bearer ${accessToken}`,
+      //     },
+      //   }
+      // );
       history.push({
         pathname: `/detailrecipe/:${recipeId}`,
         state: recipeId,
