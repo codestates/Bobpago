@@ -171,7 +171,7 @@ const Time = ({ page, scale, setCircle1IsHover, setCircle2IsHover }: any) => {
             숫자로만 입력해주세요! 예) 2시간 = 120
           </TheOtherTimeTooltipText>
         </TheOtherTimeContainer>
-        <ExpectedPeopleContainer>
+        <ExpectedPeopleContainer className="peopleNum">
           <ExpectedTime>몇 인분용 요리인지 적어주세요</ExpectedTime>
         </ExpectedPeopleContainer>
         <TheOtherTimeContainer>

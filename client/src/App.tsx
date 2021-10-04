@@ -15,6 +15,7 @@ import axios from "axios";
 import AuthLoading from "pages/AuthLoading/AuthLoading";
 import NaverLoading from "pages/AuthLoading/NaverLoading";
 import GoogleLoading from "pages/AuthLoading/GoogleLoading";
+import LandingPage from "pages/LandingPage/LandingPage";
 import { GET_ALL_DATA, GET_SMALL_DATA } from "actions/IngredientAction";
 function App() {
   const dispatch = useDispatch();
