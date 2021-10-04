@@ -8,7 +8,7 @@ import Weather from "components/Weather/Weather";
 import React from "react";
 import { useRef, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useLocation } from "react-router";
+import { useHistory, useLocation } from "react-router";
 import {
   TotalMatchContainer,
   EggPago,
@@ -37,18 +37,15 @@ const MatchingRecipe = () => {
   const [turnOn, setTurnOn] = useState(false);
   const [wind, setWind] = useState(0);
   const [data, setData] = useState<object[]>([]);
+  // const [isBlocking, setIsBlocking] = useState<boolean>(false);
 
   const location = useLocation<any>();
   const dispatch = useDispatch();
-  // const matchState = useSelector((state: RootState) => state.MatchingReducer);
+  const history = useHistory();
 
   const locationProps = location.state;
   const locationId = locationProps.map((item: any) => item.id);
   const locationIngredient = locationProps.map((item: any) => item.name);
-
-  let isDown = false;
-  let startX: number;
-  let scrollLeft: number;
 
   const handleData = async () => {
     const data = await axios.post(
@@ -70,7 +67,7 @@ const MatchingRecipe = () => {
   };
 
   const handleSwitch = () => {
-    cardRef.current.style.transform = "translateY(120%)";
+    // cardRef.current.style.transform = "translateY(120%)";
     setTimeout(() => {
       setTurnOn(!turnOn);
       hiddenRef1.current.classList.add("leftmove1");
@@ -91,10 +88,20 @@ const MatchingRecipe = () => {
     titleTextRef.current.style.opacity = 1;
   };
 
+  const handlePageUp = () => {
+    cardRef.current.style.transform = "translate(0%)";
+    eggPagoRef.current.style.opacity = "1";
+    titleTextRef.current.style.opacity = "1";
+    leftBallRef.current.style.transition = "1s";
+    leftBallRef.current.style.opacity = "1";
+    rightBallRef.current.style.transition = "1s";
+    rightBallRef.current.style.opacity = "1";
+  };
+
   const rotateMaker = () => {
     const rotateArr: number[] = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5];
     let rotatePick: number =
-      rotateArr[Math.floor(Math.random() * (rotateArr.length + 1))];
+      rotateArr[Math.floor(Math.random() * (rotateArr.length - 1))];
     return rotatePick;
   };
 
@@ -103,11 +110,32 @@ const MatchingRecipe = () => {
   };
 
   useEffect(() => {
+    if (
+      cardRef.current !== null &&
+      hiddenRef1.current !== null &&
+      tooltipRef.current !== null &&
+      sliderRef.current !== null &&
+      titleTextRef.current !== null &&
+      eggPagoRef.current !== null &&
+      leftBallRef.current !== null &&
+      rightBallRef.current !== null
+    ) {
+      leftBallRef.current.style.opacity = "0";
+      rightBallRef.current.style.opacity = "0";
+      setTimeout(() => {
+        handleData();
+        setWind(rotateMaker());
+        handlePageUp();
+      }, 1000);
+    } // page up after render.
+
     handleData();
-    let handleWheel : boolean = false;
+  }, []);
+
+  useEffect(() => {
+    let handleWheel: boolean = false;
     setWind(rotateMaker());
-    cardRef.current.style.transform = "translate(0%)";
-    sliderRef.current.addEventListener('mousewheel',(e:any)=> {
+    sliderRef.current.addEventListener("mousewheel", (e: any) => {
       e.preventDefault();
       const container = sliderRef.current;
       const containerScrollPosition = sliderRef.current.scrollLeft;
@@ -116,11 +144,11 @@ const MatchingRecipe = () => {
         top: 0,
         left: containerScrollPosition + e.deltaY,
       });
-      handleWheel = true
-    })
-    if(handleWheel){
+      handleWheel = true;
+    });
+    if (handleWheel) {
       return () => {
-        sliderRef.current.removeEventListener('mousewheel', (e: any)=> {
+        sliderRef.current.removeEventListener("mousewheel", (e: any) => {
           e.preventDefault();
           const container = sliderRef.current;
           const containerScrollPosition = sliderRef.current.scrollLeft;
@@ -129,27 +157,25 @@ const MatchingRecipe = () => {
             top: 0,
             left: containerScrollPosition + e.deltaY,
           });
-        })
-      }
+        });
+      };
     }
-    leftBallRef.current.style.opacity = "0";
-    rightBallRef.current.style.opacity = "0";
-    setTimeout(() => {
-      handleData();
-      setWind(rotateMaker());
-      cardRef.current.style.transform = "translate(0%)";
-      eggPagoRef.current.style.opacity = "1";
-      titleTextRef.current.style.opacity = "1";
-    }, 200);
-    setTimeout(() => {
-      leftBallRef.current.style.transition = "1s";
-      leftBallRef.current.style.opacity = "1";
-      rightBallRef.current.style.transition = "1s";
-      rightBallRef.current.style.opacity = "1";
-    }, 1000);
   }, []);
 
+  // useEffect(() => {
+  //   const unblock = history.block((location, action): any => {
+  //     if (action === "POP" && isBlocking) {
+  //       return window.confirm("뒤로 가겠습니까?");
+  //     }
+  //     return true;
+  //   });
 
+  //   return () => unblock();
+  // }, [isBlocking]);
+
+  // useEffect(() => {
+  //   setIsBlocking(true);
+  // }, []);
 
   return (
     <TotalMatchContainer>
@@ -196,10 +222,7 @@ const MatchingRecipe = () => {
       {/* 페이지 스크롤 이벤트 */}
       <HiddenPage ref={hiddenRef1}></HiddenPage>
       <MatchCardScroll ref={cardRef}>
-        <MatchCardContainer
-          ref={sliderRef}
-          id="container"
-        >
+        <MatchCardContainer ref={sliderRef} id="container">
           {!turnOn
             ? data.map((item: any) => {
                 return (

@@ -177,7 +177,7 @@ export const MatchCardScroll = styled.div`
   display: flex;
   align-items: center;
   transform: translateY(100%);
-  transition: 1.3s;
+  transition: 2s;
   overflow: hidden;
   z-index: 1;
   transition-timing-function: cubic-bezier(1, -0.275, 0.44, 1.25);

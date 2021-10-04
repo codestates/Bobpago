@@ -59,8 +59,8 @@ const EditRecipe = () => {
       history.push("/");
       return;
     }
-    const mainIngredients = data.ingredients.main.map((el) => el.id);
-    const subIngredients = data.ingredients.sub.map((el) => el.id);
+    const mainIngredients = data.ingredients.main.map((el: any) => el.id);
+    const subIngredients = data.ingredients.sub.map((el: any) => el.id);
     const ingredients = [...mainIngredients, ...subIngredients];
     dispatch(editTitle(data.recipe.title));
     dispatch(editDifficulty(data.recipe.level));
@@ -68,7 +68,7 @@ const EditRecipe = () => {
     dispatch(editServing(data.recipe.amount));
     dispatch(editTime(data.recipe.estTime));
     dispatch(editDescription(data.recipe.descriptions));
-    dispatch(editImage(data.recipe.imageUrls));
+    // dispatch(editImage(data.recipe.imageUrls));
   }
   useEffect(() => {
     getData();
