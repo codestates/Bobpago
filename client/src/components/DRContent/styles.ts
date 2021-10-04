@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Time } from "@styled-icons/boxicons-regular/Time";
+import { main } from "theme";
 
 export const RightContent = styled.div`
   width: 45%;
@@ -35,6 +36,7 @@ export const RightContentWriter = styled.div`
   height: 10%;
   padding: 1em;
   display: flex;
+  font-size: 1.5em;
   justify-content: center;
   align-items: center;
   transform: translate(20%, 5%);
@@ -69,6 +71,7 @@ export const RightContentTime = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
+  font-size: ${main.smallestFont};
   justify-content: center;
   align-items: center;
 `;
@@ -83,6 +86,7 @@ export const RightContentDifficulty = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: ${main.smallestFont};
 `;
 
 export const RightMainContent = styled.div`

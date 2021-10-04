@@ -76,7 +76,7 @@ export const TextContainer = styled.div`
 
 export const HeadText = styled.h1`
   flex: 1;
-  font-size: ${main.mostbigFont};
+  font-size: ${main.biggestFont};
   z-index: 1;
   background-color: transparent;
 `;
@@ -137,7 +137,7 @@ export const BadCookerTitleContainer = styled.div`
 
 export const PostButton = styled.button`
   position: absolute;
-  bottom: 12%;
+  bottom: 13%;
   right: 0;
   width: 8em;
   height: 2em;
@@ -145,11 +145,11 @@ export const PostButton = styled.button`
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   transition: 0.5s;
   color: #ffffff;
-  border-radius: 2px;
+  border-radius: 0.5em;
   outline: none;
   border: none;
   cursor: pointer;
-  font-size: 20px;
+  font-size: ${main.smallestFont};
 
   &:hover {
     background-color: #a8e7ff;
@@ -170,7 +170,7 @@ export const GoodCookerContainer = styled.div`
 
 export const GoodCookerForm = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: left;
   align-items: center;
   padding: 1em;
 `;
@@ -187,7 +187,8 @@ export const GoodCookerTitle = styled.div`
 
 export const GoodCookerSearchForm = styled.div`
   height: 100%;
-  width: 20%;
+  width: 30%;
+  margin-right: 1em;
   display: flex;
   align-items: center;
   position: relative;
@@ -198,10 +199,10 @@ export const GoodCookerSearch = styled.input`
   width: 100%;
   padding-left: 1.5em;
   border: none;
-  border-radius: 2px;
+  border-radius: 0.5em;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
   outline: none;
-  font-size: ${main.mostSmallFont};
+  font-size: ${main.smallestFont};
   @media only screen and (max-width: 768px) {
     font-size: 14px;
     height: 100%;

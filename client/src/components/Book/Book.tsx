@@ -111,9 +111,9 @@ const Book = () => {
           </BackCover>
         </FlipBook>
       </BookContainer>
-      <NextPageBtn onClick={() => handleCreateOrTurnPage()}>next</NextPageBtn>
+      <NextPageBtn onClick={() => handleCreateOrTurnPage()}>다음</NextPageBtn>
       <PrevPageBtn onClick={() => setCurrentPage(currentPage - 1)}>
-        prev
+        이전
       </PrevPageBtn>
     </>
   );

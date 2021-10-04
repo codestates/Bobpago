@@ -18,15 +18,13 @@ export const CommentModal = styled.div`
 
 export const CommentContainer = styled.div`
   position: absolute;
-  width: 80%;
-  height: 90%;
-  left: 10%;
-  top: 5%;
+  width: 60%;
+  height: 80%;
+  left: 20%;
+  top: 10%;
   background-color: rgba(230, 230, 230, 1);
   z-index: 100;
-  padding: 2em;
-  padding-top: 3em;
-  padding-right: 3em;
+  padding: 3em 3em 2em 2em;
   border-radius: 15px;
 `;
 
@@ -37,6 +35,7 @@ export const SudoContainer = styled.div`
   overflow-x: hidden;
   padding: 2em;
   border-radius: 10px;
+  font-size: 1.5em;
 `;
 
 export const PostCommentContainer = styled.div`
@@ -54,12 +53,14 @@ export const PostCommentInput = styled.input`
   border: none;
   border-bottom: 1px solid gray;
   background-color: transparent;
+  font-size: 1.5em;
 `;
 
 export const ButtonContainer = styled.div`
   position: absolute;
   bottom: -2.5em;
   right: 0;
+  
 `;
 
 export const CommentPostButton = styled.button<ButtonColor>`
@@ -70,6 +71,7 @@ export const CommentPostButton = styled.button<ButtonColor>`
   background-color: ${({ color }) => {
     return color;
   }};
+  font-size: 1.5em;
   color: black;
   border-radius: 5px;
   transition: 0.5s;
@@ -89,7 +91,7 @@ export const CloseIcon = styled(CloseOutline)`
 `;
 
 export const CameraIcon = styled(Camera)`
-  width: 20px;
+  width: 30px;
   position: absolute;
   left: 0;
   top: 130%;

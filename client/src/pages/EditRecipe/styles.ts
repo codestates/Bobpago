@@ -58,7 +58,7 @@ export const StarContainer = styled.div`
   position: relative;
   justify-content: center;
   align-items: center;
-  padding: 1em auto;
+  padding: 1em;
   display: table;
   margin-left: auto;
   margin-right: auto;
