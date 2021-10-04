@@ -14,14 +14,14 @@ export class UpdateUserReqDto extends PickType(CreateUserReqDto, [
   readonly password: string;
 
   @ApiProperty({
-    example: '리얼엣지',
+    example: '김씨네증축하숙집',
     required: false,
   })
   @IsString()
   readonly nickname: string;
 
   @ApiProperty({
-    example: '저는 리얼엣지 입니다.',
+    example: '증축된 김씨네하숙집입니다. 많이 사랑해주세요~',
     description: '프로필',
     required: false,
   })
