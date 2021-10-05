@@ -45,7 +45,7 @@ export class AuthService {
       delete newUser.password;
       delete newUser.recipes;
       delete newUser.bookmarks;
-      delete newUser.recipeReaction;
+      delete newUser.recipeReactions;
       delete newUser.followees;
       delete newUser.followers;
       // access 토큰은 생성해서 반환
