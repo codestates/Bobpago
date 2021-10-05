@@ -42,7 +42,7 @@ const EditRecipe = () => {
     (state: RootState) => state.AccesstokenReducer
   );
   const [scale, setScale] = useState<number>(0);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     page < 0 && dispatch(goToNextPageEdit());
@@ -51,6 +51,7 @@ const EditRecipe = () => {
   }, [page]);
 
   async function getData() {
+    setLoading(true);
     const response = await axios.get(`${serverUrl}/recipe/${locationProps}`, {
       withCredentials: true,
       headers: {

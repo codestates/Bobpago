@@ -67,6 +67,7 @@ const Nav = ({ opac }: { opac: boolean }) => {
       );
       dispatch(removeAccessToken());
       setAuthorization(false);
+      setSidebarOn(false);
       history.push("/landing");
     } catch (err) {
       const error = err as AxiosError;
@@ -119,7 +120,11 @@ const Nav = ({ opac }: { opac: boolean }) => {
               </NavEtcList>
               <ResponsiveNavEtcList>
                 <Hamburger sidebarOn={sidebarOn} setSidebarOn={setSidebarOn} />
-                <SideBar sidebarOn={sidebarOn} />
+                <SideBar
+                  setLogoutModal={setLogoutModal}
+                  sidebarOn={sidebarOn}
+                  setSidebarOn={setSidebarOn}
+                />
               </ResponsiveNavEtcList>
             </NavEtcUl>
           ) : (

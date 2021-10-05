@@ -57,11 +57,13 @@ const UserPage = () => {
   const [userInfo, setUserInfo] = useState<any>([]);
   const profileS3Url = process.env.REACT_APP_S3_IMG_URL;
   const serverUrl = process.env.REACT_APP_SERVER_URL;
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   let { userId } = useParams<{ userId: string | undefined }>();
 
   async function getData() {
+
     try{
+          setLoading(true);
       const response = await axios.get(
         `${process.env.REACT_APP_SERVER_URL}/user/${userId}?tokenType=${tokenType}`,
         {
@@ -271,7 +273,6 @@ const UserPage = () => {
                     <GridContainer>
                       {userPosts
                         .slice(0, myPostNum)
-                        .reverse()
                         .map((el: any, i: number) => (
                           <Card index={i} key={i} postData={el} />
                         ))}

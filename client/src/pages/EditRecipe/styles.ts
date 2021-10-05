@@ -8,6 +8,33 @@ interface SlideProps {
   scale: number;
 }
 
+const pageLeftMoveAnimate = keyframes`
+    0% {
+      transform: translate(100%,-100%);
+    }
+
+    20% {
+      border-radius: 87% 13% 70% 30% / 75% 30% 70% 25% ;
+    }
+
+    40% {
+      border-radius: 18% 82% 27% 73% / 75% 30% 70% 25% ;
+    }
+
+    60% {
+      border-radius: 100% 0% 0% 100% / 100% 0% 100% 0% ;
+    }
+
+    80% {
+      border-radius: 43% 57% 0% 100% / 100% 0% 100% 0% ;
+    }
+
+    100% {
+      transform: scale(3.5);
+      border-radius: 0% 100% 0% 100% / 100% 0% 100% 0% ;
+    }
+`;
+
 export const ContainerWrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -18,6 +45,27 @@ export const ContainerWrapper = styled.div`
   box-sizing: border-box;
   transition: all 0.3s ease;
   overflow: hidden;
+  .leftmove1 {
+    animation: ${pageLeftMoveAnimate} 3s;
+    animation-fill-mode: forwards;
+  }
+`;
+
+interface HiddenProps {
+  start?: boolean;
+}
+
+export const HiddenPage = styled.div<HiddenProps>`
+  width: 120%;
+  height: 120%;
+  background-color: #000000;
+  transform: translate(100%, -100%);
+  transition: 1s;
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  z-index: 1000;
+  position: absolute;
+  top: 0;
+  left: 0;
 `;
 
 export const TitleSlide = styled.div<SlideProps>`
@@ -62,17 +110,18 @@ export const StarContainer = styled.div`
   display: table;
   margin-left: auto;
   margin-right: auto;
+  text-align: center;
 `;
 export const TitleInput = styled.input`
   margin-top: 0.5em;
   width: 16em;
   font-size: 30px;
   border: none;
+  text-align: center;
   border-bottom: 2px solid #adadad;
   padding-bottom: 0.3em;
-  padding-left: 0.3em;
   transform: translateX(0.8em);
-  color: #7a7a7a;
+  color: ${main.color};
   background: transparent;
   &:focus {
     outline: none;
@@ -99,10 +148,10 @@ export const RadioContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   margin: 0 30%;
-  justify-content: center;
   @media screen and (max-width: 768px) {
     grid-template-columns: repeat(3, 1fr);
   }
+  justify-content: center;
   align-items: center;
   text-align: center;
   #other {
@@ -185,7 +234,20 @@ export const PeopleNumInput = styled(TheOtherTimeInput)`
   width: 16em;
 `;
 
-export const TheOtherTimeContainer = styled(RadioContainer)``;
+export const TheOtherTimeContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  // grid-
+  // display: grid;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  #other {
+    transform: translate(-4.1em, 1.4em);
+    &:hover {
+      transform: translate(-4.1em, 1.4em) scale(1.1);
+    }
+  }`;
 
 export const TheOtherTimeTooltip = styled(QuestionMarkCircle)`
   position: relative;
@@ -202,7 +264,7 @@ export const TheOtherTimeTooltip = styled(QuestionMarkCircle)`
 
 export const TheOtherTimeTooltipText = styled.span`
   position: absolute;
-  width: 17em;
+  width: 10em;
   height: 2.5em;
   visibility: hidden;
   background-color: #2e424d;
@@ -230,11 +292,11 @@ export const TheOtherTimeTooltipText = styled.span`
 `;
 export const ExpectedTimeContainer = styled.div`
   margin-bottom: 1em;
-  margin-top: 7em;
+  margin-top: 10em;
 `;
 
 export const ExpectedPeopleContainer = styled(ExpectedTimeContainer)`
-  margin-top: 5em;
+  margin-top: 3em;
 `;
 export const ExpectedTimeTooltip = styled(QuestionMarkCircle)`
   display: inline;
@@ -280,13 +342,13 @@ interface PageProps {
 }
 
 export const NextButton = styled.button<PageProps>`
-  font-size: 18px;
+  font-size: 1.5em;
   position: fixed;
   bottom: 2em;
   z-index: 1;
   position: absolute;
   right: 2%;
-  width: 8em;
+  width: 6em;
   height: 2.5em;
   background-color: #167ece;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
@@ -404,7 +466,7 @@ const showModal = keyframes`
     transform: scale(0) ;
   }
   to {
-    top: 35%
+    top: 35%;
     transform: scale(1);
   }
 `;
@@ -419,7 +481,7 @@ export const ModalContainer = styled.div`
   width: 25em;
   height: 13em;
   animation: ${showModal} 0.5s;
-  z-index: 10000;
+  z-index: 90;
   background: #f5f5f5;
   border-radius: 15px;
   text-align: center;
@@ -431,13 +493,12 @@ export const ModalBackground = styled.div`
   height: 100%;
   background: grey;
   opacity: 0.5;
-  z-index: 9999;
+  z-index: 89;
 `;
 
 export const ModalTitle = styled.p`
   font-size: 22px;
-  margin: 3em auto;
-  margin-bottom: 2em;
+  margin: 3em auto 2em;
 `;
 
 export const ModalBtn = styled.button`
@@ -505,7 +566,7 @@ export const Back = styled.div`
   left: 0;
   z-index: 99;
   transform: rotateY(180deg);
-  box-shadow: inset 20px 0 50px rgba(0, 0, 0, 0.5) 0 2px 5px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 20px 0 50px rgba(0, 0, 0, 0.5);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   background-color: #d5d6ce;

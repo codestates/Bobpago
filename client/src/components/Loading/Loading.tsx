@@ -47,7 +47,7 @@ const Loading = () => {
           x={-1}
         >
           <animateMotion
-            dur="1s"
+            dur="1.5s"
             rotate="auto"
             repeatCount="indefinite"
             path="M20,50 C20,-50 180,150 180,50 C180-50 20,150 20,50 z"

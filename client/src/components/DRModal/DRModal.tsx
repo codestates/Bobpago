@@ -18,6 +18,8 @@ import {
   CloseIcon,
   CameraIcon,
   ImgText,
+  NoCommentText,
+  NoCommentContainer,
 } from "./styles";
 import { useHistory } from "react-router-dom";
 
@@ -126,7 +128,8 @@ const DRModal: React.FC<DRModalProps> = ({ handleModalClose, recipeId }) => {
       <CommentContainer>
         <CloseIcon onClick={handleModalClose} />
         <SudoContainer>
-          {commentData
+          {
+            commentData.length !==0
             ? commentData.map((el: any, i: number) => (
                 <DRModalContent
                   setCommentData={setCommentData}
@@ -134,7 +137,10 @@ const DRModal: React.FC<DRModalProps> = ({ handleModalClose, recipeId }) => {
                   comment={el}
                 />
               ))
-            : "아직 댓글이 없습니다"}
+            : <NoCommentContainer>
+                  <NoCommentText>레시피에 대한 의견과 후기 사진을 공유하세요🍳</NoCommentText>
+            </NoCommentContainer>
+          }
         </SudoContainer>
         <PostCommentContainer>
           <PostCommentInput
@@ -156,12 +162,12 @@ const DRModal: React.FC<DRModalProps> = ({ handleModalClose, recipeId }) => {
           <CameraIcon onClick={() => handleImgInputClick()} />
           {imgInput && <ImgText>{imgInput.name}</ImgText>}
           <ButtonContainer>
-            <CommentPostButton color="transparent">취소</CommentPostButton>
+            {/*<CommentPostButton color="transparent">취소</CommentPostButton>*/}
             <CommentPostButton
               onClick={() => handlePostComment()}
               color="#3DA6FF"
             >
-              댓글
+              작성하기
             </CommentPostButton>
           </ButtonContainer>
         </PostCommentContainer>

@@ -6,11 +6,11 @@ interface IngredientProps {
 }
 
 export const BadCookerRecipe = styled.div<IngredientProps>`
-  width: 23%;
-  height: 20%;
+  width: 95%;
+  height: 14vh;
   z-index: 100;
   background-color: #382f22;
-  margin: 0.5em;
+  margin: 0.3em auto;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -64,7 +64,7 @@ export const BadCookerRecipe = styled.div<IngredientProps>`
     background-color: #ececec;
   }
 
-  @media only screen and (max-width: 768px) {
-    width: 20%;
-  }
+  // @media only screen and (max-width: 768px) {
+  //   width: 20%;
+  // }
 `;

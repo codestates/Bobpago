@@ -7,7 +7,6 @@ async function CheckExpired(
 ) {
   const serverUrl = process.env.REACT_APP_SERVER_URL;
   try {
-    console.log('check입장')
     const response = await axios.get(
       `${process.env.REACT_APP_SERVER_URL}/me?tokenType=${tokenType}`,
       {
@@ -33,7 +32,6 @@ async function CheckExpired(
         return newToken;
       })
       .catch((err) => {
-        console.log('입장')
         window.localStorage.clear();
         return null;
       });

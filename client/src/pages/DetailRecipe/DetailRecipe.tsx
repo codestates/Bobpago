@@ -329,17 +329,14 @@ const DetailRecipe = () => {
       gsap.utils.toArray(".lol").forEach((box: any, i) => {
         ScrollTrigger.create({
           trigger: box,
-          start: "top 50%+=100px",
           onEnter: () => goToSection(i),
         });
 
         ScrollTrigger.create({
           trigger: box,
           start: "bottom bottom",
-          end: "bottom 50%+=100px",
-          onEnterBack: () => {
-            goToSection(i);
-          },
+          end: "bottom 5%+=20px",
+          onEnterBack: () => goToSection(i),
         });
       });
     }
