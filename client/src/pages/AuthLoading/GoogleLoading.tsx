@@ -23,6 +23,7 @@ const GoogleLoading = () => {
       payload: {
         accessToken: googleAuth.data.data.accessToken,
         tokenType: googleAuth.data.data.tokenType,
+        userId: googleAuth.data.data.id,
       },
     });
   };

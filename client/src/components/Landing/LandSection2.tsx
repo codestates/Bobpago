@@ -156,13 +156,13 @@ const LandSection2: React.FC<LandSect2Props> = ({ scrollPosition }) => {
         <GifTextContainer>
           <GifTextTitle>오늘 뭐 해먹지..?</GifTextTitle>
           <GifTextContent>
-            밥파고는 이러한 고민들을 줄이기 위해 탄생했습니다!
+            밥파고는 이러한 고민을 대신해줍니다 🔎
           </GifTextContent>
           <GifTextContent>
-            냉장고에 재료를 입력하면 밥파고가 레시피를 찾아준다니까요!
+            냉장고의 재료를 입력하면 밥파고가 레시피를 찾아줍니다
           </GifTextContent>
           <GifTextContent>
-            혼자 사는 자취생도 저녁 준비하시는 어머니에게도 대추천!
+            자취생도 저녁 준비하시는 어머니에게도 안성맞춤
           </GifTextContent>
         </GifTextContainer>
       </GifContainer>
@@ -174,14 +174,15 @@ const LandSection2: React.FC<LandSect2Props> = ({ scrollPosition }) => {
         <GifTextContainer>
           <GifTextTitle>다양한 레시피</GifTextTitle>
           <GifTextContent>
-            저희 밥파고는 똑똑해서 많은 레시피를 알고있습니다!
+            🎓 우리 밥파고는 많은 레시피를 알고있습니다
           </GifTextContent>
           <GifTextContent>
-            들어간 재료를 생각해서 알아서 추천을 해준답니다~
+            들어간 재료를 바탕으로 추천을 해줍니다
           </GifTextContent>
           <GifTextContent>
-            또 레시피에 대한 내용들도 엄청 상세하게 되있다니까요!
+            레시피 정보를 미리보기 할 수도 있습니다
           </GifTextContent>
+          <GifTextContent>요리 과정을 상세하게 볼 수 있습니다</GifTextContent>
         </GifTextContainer>
         <GifImageContainer>
           <GifImage src="/img/LandingGif2.gif"></GifImage>
@@ -194,13 +195,14 @@ const LandSection2: React.FC<LandSect2Props> = ({ scrollPosition }) => {
         <GifTextContainer>
           <GifTextTitle>레시피 포스팅</GifTextTitle>
           <GifTextContent>
-            내가 진짜 너무 맛있게 먹은 요리를 공유하고 싶을 때!
+            밥파고는 새로운 레시피도 수집합니다 📜
           </GifTextContent>
           <GifTextContent>
-            나의 레시피를 남들에게 알려주기 위한 특별 기능!
+            당신의 특별한 레시피를 밥파고에 맡겨주세요
           </GifTextContent>
-          <GifTextContent>여러분만의 레시피를 공유해보세요!</GifTextContent>
-          <GifTextContent> 더 많이 밥파고가 추천해줍니다!</GifTextContent>
+          <GifTextContent>
+            우리 밥파고처럼 레시피 스타가 될 수 있습니다
+          </GifTextContent>
         </GifTextContainer>
       </GifContainer>
       <GifContainer
@@ -211,13 +213,13 @@ const LandSection2: React.FC<LandSect2Props> = ({ scrollPosition }) => {
         <GifTextContainer>
           <GifTextTitle>내가 쓴 글과 북마크</GifTextTitle>
           <GifTextContent>
-            내가 쓴 글은 차곡차곡 내 페이지에 쌓이고 있답니다.
+            ⭐️ 내가 쓴 레시피는 차곡차곡 쌓이고 있습니다.
           </GifTextContent>
           <GifTextContent>
-            레시피를 쌓아가는 재미도 같이 느낄 수 있는 밥파고!
+            레시피를 쌓아가는 재미도 같이 느낄 수 있는 밥파고
           </GifTextContent>
           <GifTextContent>
-            다른 사람의 레시피도 볼 수 있게 북마크 목록이 있어요!
+            다른 사람의 레시피를 수집할 수 있는 북마크도 있어요
           </GifTextContent>
         </GifTextContainer>
         <GifImageContainer>

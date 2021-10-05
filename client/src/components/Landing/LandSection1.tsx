@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Ball from "components/Svg/Ball/Ball";
+import { useHistory } from "react-router";
 
 interface SectionTextOne {
   fontsize?: string;
@@ -158,10 +159,15 @@ const SectionOneButton = styled.button`
 `;
 
 const LandSection1 = () => {
+  const history = useHistory();
+  const handlePageMove = () => {
+    history.push("/survey");
+  };
+
   return (
     <LandingSectionOne>
       <SectionOneTitle left={"8%"} width={"48%"} lineLeft={"52%"}>
-        {/* 지금 냉장고에 있는 <span>재료를 골라보세요!</span> */}
+        밥파고는 당신의 <span>냉장고가 궁금해요</span>
       </SectionOneTitle>
       <SectionOneTitle
         fontsize={"4em"}
@@ -170,16 +176,18 @@ const LandSection1 = () => {
         width={"17%"}
         lineLeft={"54%"}
       >
-        {/* 가지고 있는 재료들로 <span>레시피</span>를 알려주는 */}
+        가지고 있는 재료들로 <span>레시피</span>를 알려주는
       </SectionOneTitle>
       <SectionOneTitle fontsize={"4em"} top={"64%"} left={"8%"}>
-        {/* <span>레시피 추천 로봇 밥파고</span> */}
+        <span>레시피 추천 로봇 밥파고</span>
       </SectionOneTitle>
       <BobPagoimg src="/img/BobpagoNosub.png" />
       <SosegeImg src="/img/sosege.png" />
       <BreadImg src="/img/bbang.png" />
       <AllIngredientImg src="/img/Allingredient.png" />
-      <SectionOneButton>지금 바로 시작하기.</SectionOneButton>
+      <SectionOneButton onClick={handlePageMove}>
+        지금 바로 시작하기.
+      </SectionOneButton>
       {/* <Ball
         width={"80%"}
         height={"80%"}

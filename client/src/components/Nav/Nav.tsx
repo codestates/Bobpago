@@ -13,13 +13,13 @@ import {
   HumanIcon,
   BoardIcon,
   LoginLogout,
-  NavLogo,
   ModalBackground,
   ModalContainer,
   ModalTitle,
   ModalBtn,
   ModalBtnNo,
   ResponsiveNavEtcList,
+  BobPagoIcon,
 } from "./styles";
 import { Link } from "react-router-dom";
 import SignIn from "pages/SignUpAndSignIn/SignIn";
@@ -61,21 +61,23 @@ const Nav = ({ opac }: { opac: boolean }) => {
           withCredentials: true,
           headers: {
             "Content-Type": "application/json",
-            authorization: `Bearer ${newToken ? newToken : AccessState.accessToken}`,
+            authorization: `Bearer ${
+              newToken ? newToken : AccessState.accessToken
+            }`,
           },
         }
       );
       dispatch(removeAccessToken());
       setAuthorization(false);
       setSidebarOn(false);
-      history.push("/landing");
+      history.push("/");
     } catch (err) {
       const error = err as AxiosError;
       if (error.response) {
         if (error.response.status === 401) {
           dispatch(removeAccessToken());
           setAuthorization(false);
-          history.push("/landing");
+          history.push("/");
         }
       }
       console.log(err);
@@ -96,8 +98,8 @@ const Nav = ({ opac }: { opac: boolean }) => {
         <SignIn />
         <SignUp />
         <NavLogoContainer>
-          <Link to="/">
-            <NavLogo>밥파고</NavLogo>
+          <Link to="/survey">
+            <BobPagoIcon src="/img/Bobpago2.png" />
           </Link>
         </NavLogoContainer>
         <NavEtcContainer>

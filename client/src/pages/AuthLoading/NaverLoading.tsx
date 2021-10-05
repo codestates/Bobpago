@@ -21,6 +21,7 @@ const NaverLoading = () => {
       payload: {
         accessToken: naverAuth.data.data.accessToken,
         tokenType: naverAuth.data.data.tokenType,
+        userId: naverAuth.data.data.id,
       },
     });
   };
