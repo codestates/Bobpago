@@ -145,10 +145,10 @@ const Ingredient = ({
   //React.KeyboardEvent<object> 로 key부분은 해결
   const enterKey = (e: any) => {
     e.preventDefault();
-    if (e.keyCode === 13 && e.target.value === "") {
-      handleStoreIngredient();
-      return;
-    }
+    // if (e.keyCode === 13 && e.target.value === "") {
+    //   handleStoreIngredient();
+    //   return;
+    // }
     if (e.keyCode === 13 && e.target.value) {
       const [selectIndex, optionIndex] = nameFiltered(e.target.value);
       if (selectIndex === -1 && optionIndex !== -1) {

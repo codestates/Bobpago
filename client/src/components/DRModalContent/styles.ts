@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { Trash } from "@styled-icons/boxicons-solid/Trash/Trash";
 import { Edit } from "@styled-icons/boxicons-solid/Edit/Edit";
 import { Like } from "@styled-icons/boxicons-solid/Like/Like";
+import { CheckmarkSquareOutline } from "@styled-icons/evaicons-outline/CheckmarkSquareOutline/CheckmarkSquareOutline";
 
 export const TotalSudoContainer = styled.div`
   width: 100%;
@@ -107,6 +108,17 @@ export const EditIcon = styled(Edit)`
   cursor: pointer;
 `;
 
+
+export const EditCompleteIcon = styled(CheckmarkSquareOutline)`
+  position: absolute;
+  width: 1em;
+  height: 1em;
+  top: 0em;
+  right: 3em;
+  fill: #16ce69;
+  cursor: pointer;
+`;
+
 export const LikeContainer = styled.div`
   position: absolute;
   right: 1em;
@@ -121,3 +133,4 @@ export const LikeIcon = styled(Like)`
 `;
 
 export const LikeText = styled.div``;
+

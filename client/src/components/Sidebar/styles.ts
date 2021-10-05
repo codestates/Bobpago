@@ -91,7 +91,7 @@ export const ListEl = styled.p`
   font-size: 45px;
   width: 100%;
   margin-top: 1em;
-
+  color: black;
   &:hover {
     p {
       transform: scale(1.1);
@@ -109,12 +109,15 @@ export const LogoutEl = styled.div`
   bottom: 3em;
   font-size: 45px;
   &:hover {
-    p {
+    div {
       transform: scale(1.1);
     }
-    svg {
-      transform: scale(1.1);
-    }
+    // p {
+    //   transform: scale(1.1);
+    // }
+    // svg {
+    //   transform: scale(1.1);
+    // }
   }
 `;
 
@@ -123,16 +126,12 @@ export const LogoutIcon = styled(LogOut)`
   display: inline-block;
   width: 1.5em;
   height: 1.5em;
-
-  &:hover {
-    transform: scale(1.1);
-  }
 `;
 
 export const ListText = styled.p`
   display: inline-block;
   transition: all 0.2s ease-out;
-  &:hover {
-    transform: scale(1.1);
-  }
+`;
+export const LogoutWrapper = styled.div`
+  transition: all 0.2s ease-out;
 `;
