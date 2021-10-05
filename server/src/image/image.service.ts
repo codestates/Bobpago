@@ -33,7 +33,6 @@ export class ImageService {
   ) {}
 
   async upload(files, id, path): Promise<UploadImagesDto> {
-    console.log(files);
     const urls = [];
     await Promise.all(
       files.map(async (file) => {
@@ -108,8 +107,6 @@ export class ImageService {
   }
 
   async update(files, id, path): Promise<UpdateImagesDto> {
-    console.log(files);
-    console.log('recipeId : ', id);
     // 1. S3 이미지 삭제
     await this.deleteById(id, path);
 
@@ -149,7 +146,6 @@ export class ImageService {
           });
           await Promise.all(
             recipeImages.map(async (file) => {
-              console.log(file);
               if (file.imageUrl !== '') {
                 await s3
                   .deleteObject({
@@ -188,8 +184,6 @@ export class ImageService {
         default:
           throw new BadRequestException('path정보가 정확하지 않습니다.');
       }
-
-      console.log('🚀🚀🚀🚀🚀🚀🚀🚀');
     } catch (e) {
       throw new BadRequestException({
         statusCode: 400,
@@ -201,7 +195,6 @@ export class ImageService {
   // 특정 레시피 삭제시 안에 있던 댓글 S3 이미지 전체 삭제
   async deleteComments(recipeId: number) {
     const comments = await this.commentRepository.find({ recipeId });
-    console.log('⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️', comments);
     await Promise.all(
       comments.map(async (comment) => {
         if (comment.imageUrl !== '') {

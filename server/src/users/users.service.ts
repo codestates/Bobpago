@@ -140,7 +140,6 @@ export class UsersService {
   ): Promise<DeleteFollowResDto> {
     const followerId = +follower.id;
     const followeeId = +userId;
-    console.log(followerId);
     if (followerId === followeeId) {
       throw new ConflictException('스스로를 언팔로우 할 수 없습니다.');
     }

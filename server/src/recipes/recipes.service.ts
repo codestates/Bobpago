@@ -128,7 +128,6 @@ export class RecipesService {
   }
 
   async updateRecipeIngredientId(ingredientId, recipeId) {
-    console.log(ingredientId, recipeId);
     const ingredients = await this.recipeIngredientRepository.find({
       where: { recipeId },
     });
