@@ -75,7 +75,6 @@ export const ButtonContainer = styled.div`
   position: absolute;
   bottom: -3.5em;
   right: 0;
-  
 `;
 
 export const CommentPostButton = styled.button<ButtonColor>`
