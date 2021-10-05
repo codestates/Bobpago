@@ -86,6 +86,9 @@ export const EggHeadPago = styled.img<pagoProps>`
   animation: ${({ rotate, position, end }) =>
       pinkPagoMove(rotate, position, end)}
     10s infinite;
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
 `;
 
 export const PinkHeadPago = styled.img<pagoProps>`
@@ -97,6 +100,9 @@ export const PinkHeadPago = styled.img<pagoProps>`
   animation: ${({ rotate, position, end }) =>
       pinkPagoMove(rotate, position, end)}
     10s infinite;
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
 `;
 
 export const DRTotalContainer = styled.div`
@@ -114,12 +120,34 @@ export const TotalPageMap = styled.div`
   left: 2%;
   top: 37%;
   z-index: 100;
+  @media screen and (max-width: 768px) {
+    z-index: 1;
+    top: 95%;
+    left: 35%;
+  }
+  @media screen and (max-width: 600px) {
+    z-index: 1;
+    top: 95%;
+    left: 29%;
+  }
+  @media screen and (max-width: 500px) {
+    z-index: 1;
+    top: 95%;
+    left: 30%;
+  }
 `;
 
 export const TotalPageMapContainer = styled.div`
   .mapActive {
     transition: 1s;
     background-color: #f78aaa;
+  }
+  @media screen and (max-width: 768px) {
+    display: flex;
+    .mapActive {
+      transition: 1s;
+      background-color: #f71818;
+    }
   }
 `;
 
@@ -134,6 +162,10 @@ export const TotalPageMapContent = styled.div`
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.9);
   margin-top: 20px;
   border-radius: 50px;
+  @media screen and (max-width: 768px) {
+    min-width: 10px;
+    margin-right: 20px;
+  }
 `;
 
 export const RightScroll = styled.div`
@@ -149,6 +181,13 @@ export const RightScroll = styled.div`
   border-top: 1px solid black;
   border-bottom: 1px solid black;
   /* position: relative; */
+  @media screen and (max-width: 768px) {
+    width: 90%;
+    height: 30%;
+    top: 55%;
+    right: 4.3%;
+    z-index: 10;
+  }
 `;
 
 export const RightScrollContainer = styled.div`
@@ -260,13 +299,24 @@ export const ImageScroll = styled.div`
   position: fixed;
   width: 40%;
   height: 70%;
-  background-color: #ececec;
+  background-color: #ffffff;
   top: 10.5em;
   left: 5%;
   z-index: 1;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  @media screen and (max-width: 768px) {
+    width: 90%;
+    height: 30%;
+    top: 14.7%;
+    box-shadow: none;
+    border-radius: 0;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    left: 5.6%;
+    border: 3px solid #2d325b;
+  }
 `;
 
 export const ImageContainer = styled.div`
@@ -279,6 +329,7 @@ export const ImageContainer = styled.div`
 `;
 
 export const ImageContent = styled.img`
+  border-radius: 30px;
   width: 100%;
   height: 100%;
   background-color: #ffffff;
@@ -325,6 +376,9 @@ export const MainIngredientContainer = styled.div`
   border-left: 2px solid #2d325b;
   /* border-top-right-radius: 15px; */
   z-index: 900;
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
 `;
 
 export const MainIngredient = styled.div`
@@ -366,7 +420,15 @@ export const SubIngredientContainer = styled.div`
   border: 3px solid #2d325b;
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
-  z-index: 105;
+  z-index: 5;
+  @media screen and (max-width: 768px) {
+    min-width: 90%;
+    height: 10%;
+    left: 5.7%;
+    top: 85%;
+    z-index: 5;
+    border: 4px solid #2d325b;
+  }
 `;
 
 export const SubIngredient = styled.div`
@@ -401,6 +463,14 @@ export const SudoContainer = styled.div`
   border-radius: 15px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
   z-index: 1;
+  @media screen and (max-width: 768px) {
+    width: 90%;
+    height: 80.5%;
+    left: 5.6%;
+    top: 14.5%;
+    border: 3px solid #2d325b;
+    border-top: 1px solid #2d325b;
+  }
 `;
 
 export const CommentButton = styled.button`
@@ -417,11 +487,18 @@ export const CommentButton = styled.button`
   border: none;
   cursor: pointer;
   border-radius: 5px;
-  z-index: 1500;
+  z-index: 10;
 
   &:hover {
     background-color: red;
     transform: scale(1.1);
+  }
+  @media screen and (max-width: 768px) {
+    bottom: 8%;
+    right: 8%;
+    width: 4em;
+    height: 2em;
+    font-size: 1em;
   }
 `;
 
@@ -430,7 +507,7 @@ export const BookMarkIcon = styled(BookmarkFill)<BookmarkProps>`
   width: 25px;
   top: 23.5%;
   right: 5.5%;
-  z-index: 1000;
+  z-index: 100;
   transition: 0.1s;
   color: ${({ bookmark }) => {
     console.log(bookmark);
@@ -443,6 +520,10 @@ export const BookMarkIcon = styled(BookmarkFill)<BookmarkProps>`
   }
   &:active {
     color: red;
+  }
+  @media screen and (max-width: 768px) {
+    top: 48%;
+    width: 20px;
   }
 `;
 
@@ -467,6 +548,9 @@ export const ViewContainer = styled.div`
   display: flex;
   flex-direction: row;
   font-size: 1.2em;
+  @media screen and (max-width: 768px) {
+    top: 45%;
+  }
 `;
 
 export const ViewIcon = styled(EyeFill)`
@@ -512,7 +596,7 @@ export const NotifiToast = styled.div`
   display: flex;
   justify-content: center;
   align-content: center;
-  background-color: #eeeeee99;
+  background-color: #a8e7ffce;
   flex-direction: column;
   backdrop-filter: blur(20px);
   bottom: -20%;
@@ -528,6 +612,9 @@ export const NotifiToast = styled.div`
     justify-content: center;
     align-items: center;
   }
+  @media screen and (max-width: 768px) {
+    height: 10%;
+  }
 `;
 
 export const NotifiMainContainer = styled.div`
@@ -537,6 +624,9 @@ export const NotifiMainContainer = styled.div`
 export const NotifiMainTitle = styled.div`
   font-size: 32px;
   margin-left: 1em;
+  @media screen and (max-width: 768px) {
+    font-size: 24px;
+  }
 `;
 
 export const NotifiMainIngredient = styled.div`
@@ -544,6 +634,9 @@ export const NotifiMainIngredient = styled.div`
   margin-left: 1em;
   font-size: 24px;
   min-width: 5em;
+  @media screen and (max-width: 768px) {
+    font-size: 18px;
+  }
 `;
 
 export const NotifiSubContainer = styled.div`
@@ -553,6 +646,9 @@ export const NotifiSubContainer = styled.div`
 export const NotifiSubTitle = styled.div`
   font-size: 32px;
   margin-left: 1em;
+  @media screen and (max-width: 768px) {
+    font-size: 24px;
+  }
 `;
 
 export const NotifiSubIngredient = styled.div`
@@ -560,4 +656,7 @@ export const NotifiSubIngredient = styled.div`
   margin-left: 1em;
   font-size: 24px;
   min-width: 5em;
+  @media screen and (max-width: 768px) {
+    font-size: 18px;
+  }
 `;

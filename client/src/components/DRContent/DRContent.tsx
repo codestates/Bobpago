@@ -85,7 +85,10 @@ const DRContent: React.FC<DRContentProps> = () => {
           {loading ? "LOADING" : recipeState.recipe.estTime + ":00"}
         </RightContentTime>
         <RightContentDifficulty>
-          난이도: {loading ? "LOADING" : handleLevel(recipeState.recipe.level)}
+          난이도:
+          <span>
+            {loading ? "LOADING" : handleLevel(recipeState.recipe.level)}
+          </span>
         </RightContentDifficulty>
       </RightContentBasic>
       <RightMainContent>
