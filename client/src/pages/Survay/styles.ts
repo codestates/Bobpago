@@ -17,6 +17,20 @@ export const QuestionMove = keyframes`
   }
 `;
 
+export const ArrowMove = keyframes`
+  0% {
+    transform: rotateZ(45deg);
+  }
+
+  50% {
+    transform: rotateZ(45deg) skew(5deg, 5deg);
+  }
+
+  100% {
+    transform: rotateZ(45deg);
+  }
+`;
+
 interface MyProps {
   move?: number;
   bg?: string;
@@ -58,6 +72,7 @@ export const GoodCookerPage = styled.section`
   display: flex;
   justify-content: center;
   align-items: center;
+  /* position: relative; */
 `; // 요리를 잘하는 유저에 해당하는 페이지.
 
 export const BadCookerPage = styled.section`
@@ -415,5 +430,56 @@ export const RightQuestionIcons = styled(QuestionCircle)`
 
   &:hover {
     animation: normal;
+  }
+`;
+
+export const HiddenContainer = styled.div`
+  width: 100%;
+  height: 400vh;
+  transform: scale(1.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #ffc69b;
+  z-index: 1000;
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  transition: 2s;
+`;
+
+export const ArrowRight = styled.div`
+  width: 40px;
+  height: 40px;
+  border-right: 5px solid black;
+  border-top: 5px solid black;
+  transform: rotateZ(45deg);
+  position: absolute;
+  left: 31.2%;
+  top: 50%;
+  z-index: 100;
+  transition: 0.3s;
+  cursor: pointer;
+  animation: ${ArrowMove} 2s infinite;
+  &:hover {
+    border-right: 5px solid #00aa00;
+    border-top: 5px solid #00aa00;
+  }
+`;
+
+export const ArrowLeft = styled.div`
+  width: 40px;
+  height: 40px;
+  border-left: 5px solid black;
+  border-bottom: 5px solid black;
+  transform: rotateZ(45deg);
+  position: absolute;
+  right: 31.2%;
+  top: 50%;
+  z-index: 100;
+  transition: 0.3s;
+  cursor: pointer;
+  animation: ${ArrowMove} 2s infinite;
+  &:hover {
+    border-left: 5px solid #00aa00;
+    border-bottom: 5px solid #00aa00;
   }
 `;

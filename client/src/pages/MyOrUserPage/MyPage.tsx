@@ -490,7 +490,6 @@ const MyPage = () => {
                     <GridContainer>
                       {myPostData
                         .slice(0, myPostNum)
-                        .reverse()
                         .map((el: any, i: number) => (
                           <Card
                             removeMyPost={removeMyPost}
@@ -540,7 +539,6 @@ const MyPage = () => {
                     <GridContainer>
                       {bookmarkData
                         .slice(0, bookmarkNum)
-                        .reverse()
                         .map((el: any, i: number) => (
                           <BookmarkCard
                             removeBookmarkCheck={removeBookmarkCheck}

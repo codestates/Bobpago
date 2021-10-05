@@ -60,7 +60,7 @@ export class RecipesService {
 
     try {
       // 저장이 끝나고 난 후에, 생성된 레시피 id를 이용하여 recipeIngredient 테이블에 생성
-      await this.createRecipeIngredientId(ingredientId, recipe);
+      await this.createRecipeIngredientId(ingredientId, recipe.id);
 
       //생성된 레시피 id를 이용하여 recipeImages 테이블에 desc 저장
       await this.createRecipeDesc(description, recipe);
@@ -75,9 +75,9 @@ export class RecipesService {
     }
   }
 
-  async createRecipeIngredientId(ingredientId, recipe) {
+  async createRecipeIngredientId(ingredientId, recipeId) {
     const recipeIngredientId = ingredientId.map((id) => {
-      return { ingredientId: id, recipeId: recipe.id };
+      return { ingredientId: id, recipeId };
     });
     const entities = await this.recipeIngredientRepository.create(
       recipeIngredientId,
@@ -128,13 +128,23 @@ export class RecipesService {
   }
 
   async updateRecipeIngredientId(ingredientId, recipeId) {
+    console.log(ingredientId, recipeId);
     const ingredients = await this.recipeIngredientRepository.find({
-      recipeId,
+      where: { recipeId },
     });
-    for (let i = 0; i < ingredients.length; i++) {
-      ingredients[i].ingredientId = ingredientId[i];
+    // 기존에 갖고있던 재료 길이와 수정된 재료의 길이가 일치 하지 않는 경우
+    if (ingredients.length !== ingredientId.length) {
+      // 테이블에 있던 기존 데이터는 삭제한다
+      await this.recipeIngredientRepository.delete({ recipeId });
+
+      // 새롭게 재료 id를 레시피 id 기준으로 추가해준다
+      await this.createRecipeIngredientId(ingredientId, recipeId);
+    } else {
+      for (let i = 0; i < ingredients.length; i++) {
+        ingredients[i].ingredientId = ingredientId[i];
+      }
+      await this.recipeIngredientRepository.save(ingredients);
     }
-    await this.recipeIngredientRepository.save(ingredients);
   }
 
   async updateRecipeDesc(description, recipeId) {
@@ -143,7 +153,6 @@ export class RecipesService {
       descs[i].description = description[i];
     }
     await this.recipeImageRepository.save(descs);
-    console.log('🚀', descs);
   }
 
   async deleteRecipe(recipeId: number): Promise<DeleteRecipeResDto> {

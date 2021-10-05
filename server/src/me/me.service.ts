@@ -79,7 +79,8 @@ export class MeService {
               where: recipeIds,
             })
           : [];
-
+      bookmarks.reverse();
+      user.recipes.reverse();
       delete user.bookmarks;
       delete user.followees;
       delete user.followers;

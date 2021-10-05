@@ -73,7 +73,7 @@ export const CommentEdit = styled.input`
   width: 80%;
   background-color: #ffffff;
   margin-bottom: 1em;
-  font-size: 14px;
+  font-size: 0.8em;
   outline: none;
   border: none;
   border-bottom: 1px solid grey;
@@ -108,7 +108,6 @@ export const EditIcon = styled(Edit)`
   cursor: pointer;
 `;
 
-export const LikeIcon = styled(Like)``;
 
 export const EditCompleteIcon = styled(CheckmarkSquareOutline)`
   position: absolute;
@@ -119,3 +118,19 @@ export const EditCompleteIcon = styled(CheckmarkSquareOutline)`
   fill: #16ce69;
   cursor: pointer;
 `;
+
+export const LikeContainer = styled.div`
+  position: absolute;
+  right: 1em;
+  bottom: 0;
+  display: flex;
+`;
+
+export const LikeIcon = styled(Like)`
+  width: 20px;
+  margin-right: 0.5em;
+  cursor: pointer;
+`;
+
+export const LikeText = styled.div``;
+
