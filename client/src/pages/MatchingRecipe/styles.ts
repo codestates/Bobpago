@@ -366,3 +366,18 @@ export const ArrowLeftIcon = styled(ArrowLeft)`
   width: 60px;
   margin-right: 0.3em;
 `;
+
+export const LoadingContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+`;
+
+export const LoadingContent = styled.div`
+  font-size: 128px;
+  position: absolute;
+  top: 3.5em;
+`;

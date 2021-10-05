@@ -124,7 +124,7 @@ export const RightContentDifficulty = styled.div`
     border-bottom: 3px solid #2d325b;
 
     font-size: 18px;
-    span {
+    div {
       font-size: 12px;
     }
   }

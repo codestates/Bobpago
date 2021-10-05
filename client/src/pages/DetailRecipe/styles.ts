@@ -123,17 +123,20 @@ export const TotalPageMap = styled.div`
   @media screen and (max-width: 768px) {
     z-index: 1;
     top: 95%;
-    left: 35%;
+    display: flex;
+    justify-content: center;
   }
   @media screen and (max-width: 600px) {
     z-index: 1;
     top: 95%;
-    left: 29%;
+    display: flex;
+    justify-content: center;
   }
   @media screen and (max-width: 500px) {
     z-index: 1;
     top: 95%;
-    left: 30%;
+    display: flex;
+    justify-content: center;
   }
 `;
 

@@ -26,6 +26,8 @@ import {
   NoMatchingText,
   SudoNoContainer,
   ArrowLeftIcon,
+  LoadingContainer,
+  LoadingContent,
 } from "./styles";
 
 const MatchingRecipe = () => {
@@ -43,6 +45,7 @@ const MatchingRecipe = () => {
   const [turnOn, setTurnOn] = useState(false);
   const [wind, setWind] = useState(0);
   const [data, setData] = useState<object[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   // const [isBlocking, setIsBlocking] = useState<boolean>(false);
 
   const location = useLocation<any>();
@@ -148,11 +151,12 @@ const MatchingRecipe = () => {
     // } // page up after render.
 
     handleData();
+    setLoading(true);
   }, []);
 
   useEffect(() => {
     if (data.length > 0) {
-      linearRef.current.style.opacity = 1;
+      linearRef.current.style.opacity = "1";
       let handleWheel: boolean = false;
 
       sliderRef.current.addEventListener("mousewheel", (e: any) => {
@@ -251,7 +255,11 @@ const MatchingRecipe = () => {
       {/* 페이지 스크롤 이벤트 */}
       <HiddenPage ref={hiddenRef1}></HiddenPage>
       <MatchCardScroll ref={cardRef}>
-        {data.length > 0 ? (
+        {loading === false ? (
+          <LoadingContainer>
+            <LoadingContent>로딩중...</LoadingContent>
+          </LoadingContainer>
+        ) : data.length > 0 ? (
           <MatchCardContainer ref={sliderRef} id="container">
             {!turnOn
               ? data.map((item: any) => {
