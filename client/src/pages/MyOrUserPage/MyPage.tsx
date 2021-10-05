@@ -105,7 +105,7 @@ const MyPage = () => {
   const [followeeInfo, setFolloweeInfo] = useState<any>([]);
   const [followerInfo, setFollowerInfo] = useState<any>([]);
   const [temporaryImg, setTemporaryImg] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const { accessToken, tokenType, userId } = useSelector(
     (state: RootState) => state.AccesstokenReducer
   );
@@ -113,36 +113,43 @@ const MyPage = () => {
   const dispatch = useDispatch();
 
   async function getData() {
+    setLoading(true);
+    let newToken = null;
     if (accessToken) {
-      const newToken = await CheckExpired(accessToken, tokenType, userId);
+      newToken = await CheckExpired(accessToken, tokenType, userId);
       if (newToken) {
-        dispatch(reissueAccessToken(newToken));
+        await dispatch(reissueAccessToken(newToken));
       }
     }
-    const response = await axios.get(
-      `${process.env.REACT_APP_SERVER_URL}/me?tokenType=${tokenType}`,
-      {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-    const data = response.data.data;
-
-    setNickname(data.nickname);
-    setIntroduce(data.profile);
-    data.imageUrl &&
-      setProfileImg(`${process.env.REACT_APP_S3_IMG_URL}${data.imageUrl}`);
-    setBookmarkData(data.bookmarks);
-    setMyPostData(data.recipes);
-    setFollowingNum(data.followees);
-    setFollowerNum(data.followers);
-    setId(data.id);
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER_URL}/me?tokenType=${tokenType}`,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${newToken ? newToken : accessToken}`,
+          },
+        }
+      );
+      const data = response.data.data;
+      console.log(response);
+      setNickname(data.nickname);
+      setIntroduce(data.profile);
+      data.imageUrl &&
+        setProfileImg(`${process.env.REACT_APP_S3_IMG_URL}${data.imageUrl}`);
+      setBookmarkData(data.bookmarks);
+      setMyPostData(data.recipes);
+      setFollowingNum(data.followees);
+      setFollowerNum(data.followers);
+      setId(data.id);
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
+    } catch (err) {
+      history.push("/landing");
+      console.log(err);
+    }
   }
 
   useEffect(() => {
@@ -354,21 +361,23 @@ const MyPage = () => {
         dispatch(reissueAccessToken(newToken));
       }
     }
-    console.log(id);
-    const copiedData = myPostData.slice();
-    copiedData.splice(i, 1);
-    setMyPostData(copiedData);
-    const data = await axios.delete(
-      `${process.env.REACT_APP_SERVER_URL}/recipe/${id}?tokenType=${tokenType}`,
-      {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-    console.log(id);
+    try {
+      const copiedData = myPostData.slice();
+      copiedData.splice(i, 1);
+      setMyPostData(copiedData);
+      const data = await axios.delete(
+        `${process.env.REACT_APP_SERVER_URL}/recipe/${id}?tokenType=${tokenType}`,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   // 북마크 삭제

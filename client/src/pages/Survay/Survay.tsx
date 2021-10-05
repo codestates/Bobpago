@@ -26,6 +26,7 @@ import {
   RightSurvayTooltip,
   RightQuestionIcons,
   RightTooltipContainer,
+  LeftTooltipContainer,
   HiddenContainer,
   ArrowRight,
   ArrowLeft,
@@ -51,7 +52,6 @@ const Survay = () => {
   );
   const dispatch = useDispatch();
   const history = useHistory();
-  const tooltipRef = useRef<any>(null);
   const tooltipRightRef = useRef<any>(null);
   const goodCookerRef = useRef<any>(null);
   const badCookerRef = useRef<any>(null);
@@ -179,30 +179,25 @@ const Survay = () => {
             <GoodCookerContainer ref={goodCookerRef}>
               <GoodCookerForm>
                 <TooltipContainer>
-                  <GoodCookerTitle>
-                    냉장고와 찬장에 있는 재료를 골라주세요!
-                  </GoodCookerTitle>
-                  <LeftQuestionIcons
-                    onMouseEnter={() => {
-                      tooltipRef.current.style.opacity = "1";
-                    }}
-                    onMouseLeave={() => {
-                      tooltipRef.current.style.opacity = "0";
-                    }}
-                  />
-                  <LeftSurvayTooltip ref={tooltipRef}>
-                    최소한 3개의 재료를 선택해야 넘어갈 수 있습니다!
-                  </LeftSurvayTooltip>
+                  <LeftTooltipContainer>
+                    <GoodCookerTitle>
+                      냉장고와 찬장에 있는 재료를 골라주세요!
+                    </GoodCookerTitle>
+                    <LeftQuestionIcons />
+                    <LeftSurvayTooltip>
+                      최소한 3개의 재료를 선택해야 넘어갈 수 있습니다!
+                    </LeftSurvayTooltip>
+                  </LeftTooltipContainer>
+                  <GoodCookerSearchForm>
+                    <GoodCookerSearch
+                      onChange={(e: any) => {
+                        handleSearch(e);
+                      }}
+                      placeholder="식재료를 검색해보세요!"
+                    ></GoodCookerSearch>
+                    <SearchIcon />
+                  </GoodCookerSearchForm>
                 </TooltipContainer>
-                <GoodCookerSearchForm>
-                  <GoodCookerSearch
-                    onChange={(e: any) => {
-                      handleSearch(e);
-                    }}
-                    placeholder="식재료를 검색해보세요!"
-                  ></GoodCookerSearch>
-                  <SearchIcon />
-                </GoodCookerSearchForm>
               </GoodCookerForm>
               <Ingredient check="Good" />
               <PostButton onClick={handlePageMove}>레시피 찾기</PostButton>
@@ -220,6 +215,10 @@ const Survay = () => {
           <BadCookerPage>
             <ArrowLeft onClick={handleAreUGood} ref={badLeftBtnRef} />
             <BadCookerContainer ref={badCookerRef}>
+              {/* <RightTitleContainer> */}
+              <BadCookerTitleContainer>
+                냉장고와 찬장에 있는 재료를 골라주세요!
+              </BadCookerTitleContainer>
               <RightTooltipContainer>
                 <RightQuestionIcons
                   onMouseEnter={() => {
@@ -233,9 +232,7 @@ const Survay = () => {
                   최소한 3개의 재료를 선택해야 넘어갈 수 있습니다!
                 </RightSurvayTooltip>
               </RightTooltipContainer>
-              <BadCookerTitleContainer>
-                냉장고와 찬장에 있는 재료를 골라주세요!
-              </BadCookerTitleContainer>
+              {/* </RightTitleContainer> */}
               <Ingredient check="Bad" />
               <PostButton onClick={handlePageMove}>레시피 찾기</PostButton>
             </BadCookerContainer>

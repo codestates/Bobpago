@@ -129,11 +129,12 @@ const Ingredient = ({
   //React.KeyboardEvent<object> 로 key부분은 해결
   const enterKey = (e: any) => {
     e.preventDefault();
-    if (e.keyCode === 13 && e.target.value === "") {
-      handleStoreIngredient();
-      return;
-    }
-    if (e.keyCode === 13 && e.target.value) {
+    // 엔터가 두번 눌림 나중에 해보자!
+    // if (e.keyCode === 13 && search === "") {
+    //   handleStoreIngredient();
+    //   return;
+    // } else
+    if (e.keyCode === 13 && search) {
       const [selectIndex, optionIndex] = nameFiltered(e.target.value);
       if (selectIndex === -1 && optionIndex !== -1) {
         updateDex(options[optionIndex]);
@@ -187,7 +188,7 @@ const Ingredient = ({
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               autoComplete="off"
-              onKeyUp={enterKey}
+              onKeyUp={(e) => enterKey(e)}
             />
           </Container>
           {display && (

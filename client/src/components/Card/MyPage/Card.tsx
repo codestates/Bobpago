@@ -55,11 +55,11 @@ const Card = ({ index, fix, postData, removeMyPost }: FixProps) => {
           {/* <CardArc>
             <path />
           </CardArc> */}
-            {/* <CardThumb src="https://i.imgur.com/7D7I6dI.png" alt="" />
+          {/* <CardThumb src="https://i.imgur.com/7D7I6dI.png" alt="" />
           <>
             <CardTitle>Jessica Parker</CardTitle>
             <CardStatus>1 hour ago</CardStatus> */}
-            <CardTitle>{postData && postData.title}</CardTitle>
+          <CardTitle>{postData && postData.title}</CardTitle>
         </CardHeader>
         <CardDescription>
           난이도:{" "}

@@ -150,12 +150,14 @@ export class ImageService {
           await Promise.all(
             recipeImages.map(async (file) => {
               console.log(file);
-              await s3
-                .deleteObject({
-                  Bucket: process.env.AWS_S3_BUCKET_NAME,
-                  Key: file.imageUrl,
-                })
-                .promise();
+              if (file.imageUrl !== '') {
+                await s3
+                  .deleteObject({
+                    Bucket: process.env.AWS_S3_BUCKET_NAME,
+                    Key: file.imageUrl,
+                  })
+                  .promise();
+              }
             }),
           );
           break;

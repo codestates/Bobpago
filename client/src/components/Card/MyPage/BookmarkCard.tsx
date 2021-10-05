@@ -43,7 +43,7 @@ const BookmarkCard = ({
     >
       <RemoveIcon
         src="/img/minus.png"
-        onClick={() => removeBookmarkCheck(index, postData.recipeId)}
+        onClick={() => removeBookmarkCheck(index, postData.id)}
         fix={fix}
       />
       <CardImage

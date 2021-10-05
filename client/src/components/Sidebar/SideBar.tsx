@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import {
   Navigation,
   NavigationInner,
@@ -7,9 +8,10 @@ import {
   LogoutEl,
   LogoutIcon,
   ListText,
+  LogoutWrapper,
 } from "./styles";
 
-const SideBar = ({ sidebarOn }: any) => {
+const SideBar = ({ sidebarOn, setLogoutModal, setSidebarOn }: any) => {
   const containerRef = useRef<any>(null);
 
   useEffect(() => {
@@ -28,16 +30,22 @@ const SideBar = ({ sidebarOn }: any) => {
         <NavigationInner className="navigation__inner">
           {/*   마이페이지,게시글 작성, 로그아웃   */}
           <ListContainer>
-            <ListEl>
-              <ListText>마이페이지</ListText>
-            </ListEl>
-            <ListEl>
-              <ListText>게시글작성</ListText>
-            </ListEl>
+            <Link to="/mypage">
+              <ListEl onClick={() => setSidebarOn(false)}>
+                <ListText>마이페이지</ListText>
+              </ListEl>
+            </Link>
+            <Link to="/writerecipe">
+              <ListEl onClick={() => setSidebarOn(false)}>
+                <ListText>게시글작성</ListText>
+              </ListEl>
+            </Link>
           </ListContainer>
-          <LogoutEl>
-            <ListText>로그아웃</ListText>
-            <LogoutIcon />
+          <LogoutEl onClick={() => setLogoutModal(true)}>
+            <LogoutWrapper>
+              <ListText>로그아웃</ListText>
+              <LogoutIcon />
+            </LogoutWrapper>
           </LogoutEl>
         </NavigationInner>
       </Navigation>

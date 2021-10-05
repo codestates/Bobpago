@@ -17,6 +17,7 @@ import {
   Container,
   RemoveIcon,
   EditIcon,
+  EditCompleteIcon,
   LikeIcon,
   LikeContainer,
   LikeText,
@@ -224,7 +225,11 @@ const DRModalContent = ({ comment, setCommentData }: Props) => {
         {comment && comment.user.id === myId && (
           <>
             <RemoveIcon onClick={() => handleDeleteComment()} />
-            <EditIcon onClick={() => handleEditComment()} />
+            {!edit ? (
+              <EditIcon onClick={() => handleEditComment()} />
+            ) : (
+              <EditCompleteIcon onClick={() => handleEditComment()} />
+            )}
           </>
         )}
       </Container>

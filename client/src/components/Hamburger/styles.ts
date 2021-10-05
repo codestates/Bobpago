@@ -6,8 +6,8 @@ export const MenuBtn = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 80px;
-  height: 80px;
+  width: 50px;
+  height: 60px;
   cursor: pointer;
   transition: all 0.5s ease-in-out;
   /* border: 3px solid #fff; */
@@ -27,8 +27,8 @@ export const MenuBtn = styled.div`
 `;
 
 export const MenuBtnBurger = styled.div`
-  width: 50px;
-  height: 6px;
+  width: 45px;
+  height: 5px;
   background: black;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(255, 101, 47, 0.2);
@@ -39,8 +39,8 @@ export const MenuBtnBurger = styled.div`
     z-index: 300;
     content: "";
     position: absolute;
-    width: 50px;
-    height: 6px;
+    width: 45px;
+    height: 5px;
     background: black;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(255, 101, 47, 0.2);

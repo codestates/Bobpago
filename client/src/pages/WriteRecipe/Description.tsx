@@ -17,6 +17,7 @@ import {
   ModalTitle,
   ModalBtn,
   ModalBtnNo,
+  HiddenPage,
 } from "./styles";
 import Page from "components/Book/Page";
 import {
@@ -53,6 +54,7 @@ const Description = ({
   const [imgFiles, setImgFiles] = useState<any>([]);
   const frontCoverRef = useRef<any>(null);
   const inputFileRef = useRef<any>(null);
+  const hiddenRef1 = useRef<any>(null);
   const { accessToken, tokenType, userId } = useSelector(
     (state: RootState) => state.AccesstokenReducer
   );
@@ -109,6 +111,7 @@ const Description = ({
   };
 
   const handleSubmitRecipe = async () => {
+    hiddenRef1.current.classList.add("leftmove1");
     try {
       if (accessToken) {
         const newToken = await CheckExpired(accessToken, tokenType, userId);
@@ -150,10 +153,13 @@ const Description = ({
           },
         }
       );
-      history.push({
-        pathname: `/detailrecipe/:${recipeId}`,
-        state: recipeId,
-      });
+      setTimeout(() => {
+        history.push({
+          pathname: `/detailrecipe/:${recipeId}`,
+          state: recipeId,
+        });
+      }, 700);
+
       dispatch(resetWritePage());
       dispatch(resetAllContents());
     } catch (err) {
@@ -267,6 +273,7 @@ const Description = ({
           </ModalContainer>
         </>
       )}
+      <HiddenPage ref={hiddenRef1} />
     </>
   );
 };
