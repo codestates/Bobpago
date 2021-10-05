@@ -264,7 +264,6 @@ const UserPage = () => {
                     <GridContainer>
                       {userPosts
                         .slice(0, myPostNum)
-                        .reverse()
                         .map((el: any, i: number) => (
                           <Card index={i} key={i} postData={el} />
                         ))}
