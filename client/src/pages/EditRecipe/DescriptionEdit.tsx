@@ -35,6 +35,7 @@ import {
   ModalBtnNo,
   UploadImg,
   UploadImgText,
+  HiddenPage,
 } from "./styles";
 import Page from "components/Book/EditPage";
 
@@ -55,7 +56,8 @@ const Description = ({
   const [modalOn, setModalOn] = useState<boolean>(false);
   const [imgFiles, setImgFiles] = useState<any>([]);
   const frontCoverRef = useRef<any>(null);
-  const inputFileRef = useRef<any>(null);
+  // const inputFileRef = useRef<any>(null);
+  const hiddenRef1 = useRef<any>(null);
   const { accessToken, tokenType, userId } = useSelector(
     (state: RootState) => state.AccesstokenReducer
   );
@@ -120,6 +122,7 @@ const Description = ({
   };
 
   const handleSubmitRecipe = async () => {
+    hiddenRef1.current.classList.add("leftmove1");
     try {
       if (accessToken) {
         const newToken = await CheckExpired(accessToken, tokenType, userId);
@@ -169,10 +172,12 @@ const Description = ({
       //     },
       //   }
       // );
-      history.push({
-        pathname: `/detailrecipe/:${recipeId}`,
-        state: recipeId,
-      });
+      setTimeout(() => {
+        history.push({
+          pathname: `/detailrecipe/:${recipeId}`,
+          state: recipeId,
+        });
+      }, 700);
       dispatch(resetEditPageEdit());
       dispatch(resetEditAllContents());
     } catch (err) {
@@ -191,11 +196,11 @@ const Description = ({
     setImgFiles(copiedImgFiles);
   };
 
-  const handleClickInput = () => {
-    if (inputFileRef.current) {
-      inputFileRef.current.click();
-    }
-  };
+  // const handleClickInput = () => {
+  //   if (inputFileRef.current) {
+  //     inputFileRef.current.click();
+  //   }
+  // };
 
   return (
     <>
@@ -205,13 +210,13 @@ const Description = ({
           <FlipBook>
             <FrontCover ref={frontCoverRef}>
               <FrontCoverBack className="back">
-                <input
+                {/* <input
                   type="file"
                   multiple
                   ref={inputFileRef}
                   hidden
                   onChange={(e) => handleImgChange(e, 0)}
-                />
+                /> */}
                 {imgFiles[0] && (
                   <img
                     className="food"
@@ -225,7 +230,7 @@ const Description = ({
                     alt="이미지 없음"
                   />
                 )}
-                <UploadImg
+                {/* <UploadImg
                   className={
                     imgFiles[0] || imgFiles[0] instanceof FormData
                       ? "uploaded"
@@ -234,7 +239,7 @@ const Description = ({
                   onClick={() => handleClickInput()}
                   src="/img/uploadicon.png"
                 />
-                {!imgFiles[0] && <UploadImgText>이미지 업로드</UploadImgText>}
+                {!imgFiles[0] && <UploadImgText>이미지 업로드</UploadImgText>} */}
               </FrontCoverBack>
               <FrontCoverFront className="front">
                 <FrontCoverImg src="/img/ingredient.png" />
@@ -294,6 +299,7 @@ const Description = ({
           </ModalContainer>
         </>
       )}
+      <HiddenPage ref={hiddenRef1} />
     </>
   );
 };
