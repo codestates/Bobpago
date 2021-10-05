@@ -27,6 +27,9 @@ import {
   RightQuestionIcons,
   RightTooltipContainer,
   LeftTooltipContainer,
+  HiddenContainer,
+  ArrowRight,
+  ArrowLeft,
 } from "./styles";
 
 import Ball from "components/Svg/Ball/Ball";
@@ -52,6 +55,9 @@ const Survay = () => {
   const tooltipRightRef = useRef<any>(null);
   const goodCookerRef = useRef<any>(null);
   const badCookerRef = useRef<any>(null);
+  const hiddenRef = useRef<any>(null);
+  const goodRightBtnRef = useRef<any>(null);
+  const badLeftBtnRef = useRef<any>(null);
 
   // 최초에 무브 컨테이너를 가운데로 두기위해서 사용한 useState이며, type은 number로 선언한다.
 
@@ -89,6 +95,8 @@ const Survay = () => {
     if (clickState.clickData.length >= 3) {
       goodCookerRef.current.style.transform = "translateY(100%)";
       badCookerRef.current.style.transform = "translateY(100%)";
+      goodRightBtnRef.current.style.opacity = "0";
+      badLeftBtnRef.current.style.opacity = "0";
       setBall(false);
       setTimeout(() => {
         history.push({
@@ -101,7 +109,20 @@ const Survay = () => {
     }
   };
 
+  const handleAreUGood = () => {
+    setmove(window.innerWidth);
+    if (left) {
+      setLeft(false);
+    } else if (right) {
+      setRight(false);
+    }
+  };
+
   useEffect(() => {
+    setTimeout(() => {
+      hiddenRef.current.style.left = "130%";
+      hiddenRef.current.style.transform = "scale(1.2)";
+    }, 100);
     dispatch({ type: CLEAR_CLICK_DATA });
   }, []);
 
@@ -127,6 +148,7 @@ const Survay = () => {
     <>
       <Nav opac={true} />
       <MainContainer>
+        <HiddenContainer ref={hiddenRef} />
         <TotalContainer move={move}>
           <Ball
             width={"1000"}
@@ -153,6 +175,7 @@ const Survay = () => {
             opac={ball}
           />
           <GoodCookerPage>
+            <ArrowRight onClick={handleAreUGood} ref={goodRightBtnRef} />
             <GoodCookerContainer ref={goodCookerRef}>
               <GoodCookerForm>
                 <TooltipContainer>
@@ -190,6 +213,7 @@ const Survay = () => {
             </TextContainer>
           </AreYouGoodPage>
           <BadCookerPage>
+            <ArrowLeft onClick={handleAreUGood} ref={badLeftBtnRef} />
             <BadCookerContainer ref={badCookerRef}>
               {/* <RightTitleContainer> */}
               <BadCookerTitleContainer>

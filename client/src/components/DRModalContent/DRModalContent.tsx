@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { RootState } from "reducers";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
@@ -18,6 +18,9 @@ import {
   RemoveIcon,
   EditIcon,
   EditCompleteIcon,
+  LikeIcon,
+  LikeContainer,
+  LikeText,
 } from "./styles";
 
 interface Props {
@@ -37,6 +40,13 @@ const DRModalContent = ({ comment, setCommentData }: Props) => {
   const [time, setTime] = useState("2021-01-01[월]");
   const [editCommentInput, setEditCommentInput] = useState<string>("");
   const [edit, setEdit] = useState<boolean>(false);
+  const [reaction, setReaction] = useState<any>([]);
+
+  const likeRef = useRef<any>(null);
+
+  const loginState = useSelector(
+    (state: RootState) => state.AccesstokenReducer
+  );
 
   useEffect(() => {
     setTime(changeTime(comment.updatedAt));
@@ -122,9 +132,69 @@ const DRModalContent = ({ comment, setCommentData }: Props) => {
     }
   };
 
+  const handleCommentReactions = async () => {
+    try {
+      if (loginState.accessToken) {
+        const newToken = await CheckExpired(
+          loginState.accessToken,
+          loginState.tokenType,
+          loginState.userId
+        );
+        if (newToken) {
+          dispatch(reissueAccessToken(newToken));
+        }
+      }
+
+      const data = await axios.get(
+        `${serverUrl}/recipe/${comment.recipeId}/comment`,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const newData = data.data.data.filter(
+        (item: any) => comment.id === item.id
+      );
+
+      let nextReaction: number = 0;
+      const isLiked =
+        newData[0].commentReactions.filter(
+          (item: { userId: number }) => item.userId === loginState.userId
+        ).length >= 1;
+
+      if (isLiked === true) {
+        nextReaction = 0;
+        likeRef.current.textContent--;
+      } else if (isLiked === false) {
+        nextReaction = 1;
+        likeRef.current.textContent++;
+      }
+
+      const postReactionData = await axios.post(
+        `${serverUrl}/recipe/${comment.recipeId}/comment/${comment.id}?reaction=${nextReaction}&tokenType=${loginState.tokenType}`,
+        {},
+        {
+          withCredentials: true,
+          headers: {
+            authorization: `Bearer ${loginState.accessToken}`,
+          },
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <>
       <Container>
+        <LikeContainer>
+          <LikeIcon onClick={handleCommentReactions} />
+          <LikeText ref={likeRef}>{comment.commentReactions.length}</LikeText>
+        </LikeContainer>
         <UserProfile>
           <ProfileImage>
             <Profile

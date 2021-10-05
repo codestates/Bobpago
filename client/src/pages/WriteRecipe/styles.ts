@@ -114,6 +114,7 @@ export const StarContainer = styled.div`
   display: table;
   margin-left: auto;
   margin-right: auto;
+  text-align: center;
 `;
 export const TitleInput = styled.input`
   margin-top: 0.5em;
@@ -123,7 +124,6 @@ export const TitleInput = styled.input`
   text-align: center;
   border-bottom: 2px solid #adadad;
   padding-bottom: 0.3em;
-  padding-left: 0.3em;
   transform: translateX(0.8em);
   color: ${main.color};
   background: transparent;
@@ -297,11 +297,11 @@ export const TheOtherTimeTooltipText = styled.span`
 `;
 export const ExpectedTimeContainer = styled.div`
   margin-bottom: 1em;
-  margin-top: 7em;
+  margin-top: 10em;
 `;
 
 export const ExpectedPeopleContainer = styled(ExpectedTimeContainer)`
-  margin-top: 5em;
+  margin-top: 2em;
 `;
 export const ExpectedTimeTooltip = styled(QuestionMarkCircle)`
   display: inline;
@@ -471,7 +471,7 @@ const showModal = keyframes`
     transform: scale(0) ;
   }
   to {
-    top: 35%
+    top: 35%;
     transform: scale(1);
   }
 `;
@@ -503,8 +503,7 @@ export const ModalBackground = styled.div`
 
 export const ModalTitle = styled.p`
   font-size: 22px;
-  margin: 3em auto;
-  margin-bottom: 2em;
+  margin: 3em auto 2em;
 `;
 
 export const ModalBtn = styled.button`
@@ -560,7 +559,7 @@ export const Back = styled.div`
   left: 0;
   z-index: 99;
   transform: rotateY(180deg);
-  box-shadow: inset 20px 0 50px rgba(0, 0, 0, 0.5) 0 2px 5px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 20px 0 50px rgba(0, 0, 0, 0.5);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   background-color: #d5d6ce;
@@ -613,6 +612,9 @@ export const BackBtn = styled.label`
 export const FrontCoverImg = styled.img`
   width: 70%;
   margin-top: -1em;
+  @media screen and (max-width: 480px) {
+    display: none;
+  }
 `;
 
 export const FrontCoverLogo = styled.img`
@@ -639,6 +641,11 @@ export const FrontCoverFront = styled(Front)`
     color: #fff;
     background: #b1d4a3;
     width: 100%;
+    @media screen and (max-width: 480px) {
+      transform: rotate(-90deg) translateX(-75%);
+      background: transparent;
+      color: grey;
+    }
     h2 {
       position: relative;
       top: 30%;

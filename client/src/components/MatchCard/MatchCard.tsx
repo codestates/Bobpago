@@ -187,7 +187,7 @@ const MatchCard: React.FC<MatchCardProps> = ({
               <HiddenAmount>{`(${amount}인분)`}</HiddenAmount>
             </HiddenTopContainer>
             <HiddenMainIngredient>
-              <MainIngredientText>필수 재료 : </MainIngredientText>
+              <MainIngredientText>주 재료 : </MainIngredientText>
               <MainIngredientContainer>
                 {ingredients.main.map((item) => {
                   return (
