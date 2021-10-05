@@ -1,9 +1,9 @@
 import DRModalContent from "components/DRModalContent/DRModalContent";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { TotalSudoContainer } from "components/DRModalContent/styles";
 import { useDispatch, useSelector } from "react-redux";
 import CheckExpired from "utils/CheckExpired";
-import { reissueAccessToken } from "actions/Accesstoken";
+import { reissueAccessToken, removeAccessToken } from "actions/Accesstoken";
 import { RootState } from "reducers";
 import React, { useState, useEffect, useRef } from "react";
 import { showSignUp } from "actions/SignUpAndSignIn";
@@ -19,6 +19,7 @@ import {
   CameraIcon,
   ImgText,
 } from "./styles";
+import { useHistory } from "react-router-dom";
 
 interface DRModalProps {
   handleModalClose: VoidFunction;
@@ -35,6 +36,7 @@ const DRModal: React.FC<DRModalProps> = ({ handleModalClose, recipeId }) => {
   const [commentInput, setCommentInput] = useState<string>("");
   const [imgInput, setImgInput] = useState<any>("");
   const inputImgRef = useRef<any>(null);
+  const history = useHistory();
 
   async function getData() {
     const data = await axios.get(`${serverUrl}/recipe/${recipeId}/comment`, {
@@ -57,13 +59,14 @@ const DRModal: React.FC<DRModalProps> = ({ handleModalClose, recipeId }) => {
 
   // 댓글 작성
   const handlePostComment = async () => {
-    try {
-      if (accessToken) {
-        const newToken = await CheckExpired(accessToken, tokenType, userId);
-        if (newToken) {
-          dispatch(reissueAccessToken(newToken));
-        }
+    let newToken = null;
+    if (accessToken) {
+      newToken = await CheckExpired(accessToken, tokenType, userId);
+      if (newToken) {
+        dispatch(reissueAccessToken(newToken));
       }
+    }
+    try {
       const data = await axios.post(
         `${serverUrl}/recipe/${recipeId}/comment?tokenType=${tokenType}`,
         {
@@ -73,7 +76,7 @@ const DRModal: React.FC<DRModalProps> = ({ handleModalClose, recipeId }) => {
           withCredentials: true,
           headers: {
             "Content-Type": "application/json",
-            authorization: `Bearer ${accessToken}`,
+            authorization: `Bearer ${newToken ? newToken : accessToken}`,
           },
         }
       );
@@ -89,7 +92,7 @@ const DRModal: React.FC<DRModalProps> = ({ handleModalClose, recipeId }) => {
             withCredentials: true,
             headers: {
               "Content-Type": "multipart/form-data",
-              authorization: `Bearer ${accessToken}`,
+              authorization: `Bearer ${newToken ? newToken : accessToken}`,
             },
           }
         );
@@ -98,6 +101,13 @@ const DRModal: React.FC<DRModalProps> = ({ handleModalClose, recipeId }) => {
       setImgInput("");
       getData();
     } catch (err) {
+      const error = err as AxiosError;
+      if (error.response) {
+        if (error.response.status === 401) {
+          dispatch(removeAccessToken());
+          // history.push("/landing");
+        }
+      }
       console.log(err);
     }
   };

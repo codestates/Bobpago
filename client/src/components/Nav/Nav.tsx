@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useHistory } from "react-router";
 import Hamburger from "components/Hamburger/Hamburger";
 import SideBar from "components/Sidebar/SideBar";
@@ -42,17 +42,18 @@ const Nav = ({ opac }: { opac: boolean }) => {
   const [sidebarOn, setSidebarOn] = useState<boolean>(false);
 
   const handleLogout = async () => {
-    try {
-      if (AccessState.accessToken) {
-        const newToken = await CheckExpired(
-          AccessState.accessToken,
-          AccessState.tokenType,
-          AccessState.userId
-        );
-        if (newToken) {
-          dispatch(reissueAccessToken(newToken));
-        }
+    let newToken = null;
+    if (AccessState.accessToken) {
+      newToken = await CheckExpired(
+        AccessState.accessToken,
+        AccessState.tokenType,
+        AccessState.userId
+      );
+      if (newToken) {
+        dispatch(reissueAccessToken(newToken));
       }
+    }
+    try {
       await axios.post(
         `${serverUrl}/auth/signout?tokenType=${AccessState.tokenType}`,
         {},
@@ -60,7 +61,7 @@ const Nav = ({ opac }: { opac: boolean }) => {
           withCredentials: true,
           headers: {
             "Content-Type": "application/json",
-            authorization: `Bearer ${AccessState.accessToken}`,
+            authorization: `Bearer ${newToken ? newToken : AccessState.accessToken}`,
           },
         }
       );
@@ -68,13 +69,24 @@ const Nav = ({ opac }: { opac: boolean }) => {
       setAuthorization(false);
       history.push("/landing");
     } catch (err) {
+      const error = err as AxiosError;
+      if (error.response) {
+        if (error.response.status === 401) {
+          dispatch(removeAccessToken());
+          setAuthorization(false);
+          history.push("/landing");
+        }
+      }
       console.log(err);
     }
   };
 
   useEffect(() => {
-    if (AccessState.accessToken !== "") {
+    console.log(AccessState);
+    if (AccessState.accessToken) {
       setAuthorization(true);
+    } else {
+      setAuthorization(false);
     }
   }, [AccessState]);
   return (

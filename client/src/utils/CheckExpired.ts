@@ -5,29 +5,39 @@ async function CheckExpired(
   tokenType: string,
   userId: number | null
 ) {
-  if (tokenType !== "jwt") return null;
   const serverUrl = process.env.REACT_APP_SERVER_URL;
-  //'{"email":"aaa@aa.aa","iat":1633259477,"exp":1633277477}'
-  const decodedJWT = window.atob(accessToken.split(".")[1]);
-  const parsedJWT = JSON.parse(decodedJWT);
-  const now = new Date();
-  const fiveMinutes = 1000 * 60 * 5;
-
-  if (parsedJWT.exp * 1000 - now.getTime() <= fiveMinutes) {
+  try {
+    console.log('check입장')
     const response = await axios.get(
-      `${serverUrl}/auth/${userId}/tokenRequest?tokenType=${tokenType}`,
+      `${process.env.REACT_APP_SERVER_URL}/me?tokenType=${tokenType}`,
       {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return accessToken;
+  } catch (err) {
+    const result = await axios
+      .get(`${serverUrl}/auth/${userId}/tokenRequest?tokenType=${tokenType}`, {
         withCredentials: true,
         headers: {
           "Content-Type": "multipart/form-data",
           authorization: `Bearer ${accessToken}`,
         },
-      }
-    );
-    const newToken = response.data.data.accessToken;
-    return newToken;
-  } else {
-    return null;
+      })
+      .then((response) => {
+        const newToken = response.data.data.accessToken;
+        return newToken;
+      })
+      .catch((err) => {
+        console.log('입장')
+        window.localStorage.clear();
+        return null;
+      });
+    return result;
   }
 }
 
