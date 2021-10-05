@@ -15,12 +15,14 @@ const AuthLoading = () => {
     const kakaoAuth = await axios.get(
       `${process.env.REACT_APP_SERVER_URL}/auth/kakao?code=${kakao}`
     );
+    console.log(kakaoAuth);
 
     dispatch({
       type: SET_ACCESSTOKEN,
       payload: {
         accessToken: kakaoAuth.data.data.accessToken,
         tokenType: kakaoAuth.data.data.tokenType,
+        userId: kakaoAuth.data.data.id,
       },
     });
   };

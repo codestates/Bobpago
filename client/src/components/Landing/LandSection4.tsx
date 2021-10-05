@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { ArrowToTop } from "@styled-icons/boxicons-regular/ArrowToTop";
+import { useHistory } from "react-router";
 
 const LandingSectionFive = styled.section`
   width: 100%;
@@ -318,6 +319,8 @@ interface Landing5Props {
 }
 
 const LandSection4: React.FC<Landing5Props> = ({ position }) => {
+  const history = useHistory();
+
   const text1Ref = useRef<any>(null);
   const text2Ref = useRef<any>(null);
   const paperRef = useRef<any>(null);
@@ -328,6 +331,10 @@ const LandSection4: React.FC<Landing5Props> = ({ position }) => {
 
   const handleToTop = () => {
     window.scrollTo(0, 0);
+  };
+
+  const handlePageMove = () => {
+    history.push("/survey");
   };
 
   useEffect(() => {
@@ -389,7 +396,9 @@ const LandSection4: React.FC<Landing5Props> = ({ position }) => {
             <span ref={LinearRef}>레시피</span>는 내가 찾아줄게!
           </LandingFiveText2>
           <BobpagoHorizental ref={BobpagoRef} src="/img/BobpagoRow.png" />
-          <PageMoveButton ref={ButtonRef}>시작하기.</PageMoveButton>
+          <PageMoveButton onClick={handlePageMove} ref={ButtonRef}>
+            시작하기.
+          </PageMoveButton>
           <Footer ref={FooterRef}>
             <FooterTopContainer>
               <FooterTopLeftContainer>
@@ -426,22 +435,22 @@ const LandSection4: React.FC<Landing5Props> = ({ position }) => {
                 <FooterTopRightUl>
                   <FooterTopRightLi>
                     <FooterTopRightA href="https://github.com/tjdgns5272">
-                      Seong-Hun Park
+                      Seonghun Park
                     </FooterTopRightA>
                   </FooterTopRightLi>
                   <FooterTopRightLi>
                     <FooterTopRightA href="https://github.com/pinion7">
-                      Min-Su Park
+                      Minsoo Park
                     </FooterTopRightA>
                   </FooterTopRightLi>
                   <FooterTopRightLi>
                     <FooterTopRightA href="https://github.com/Freetargeter">
-                      Chi-Won Aan
+                      Chiwon Ahn
                     </FooterTopRightA>
                   </FooterTopRightLi>
                   <FooterTopRightLi>
                     <FooterTopRightA href="https://github.com/VVSOGI/Bobpago">
-                      Woo-Seok Kim
+                      Wooseok Kim
                     </FooterTopRightA>
                   </FooterTopRightLi>
                 </FooterTopRightUl>

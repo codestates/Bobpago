@@ -167,7 +167,7 @@ export const BadCookerTitleContainer = styled.div`
   display: flex;
   align-items: center;
   padding-left: 0.3em;
-  font-size: 32px;
+  font-size: 48px;
   font-weight: 700;
 `;
 
@@ -215,7 +215,8 @@ export const GoodCookerTitle = styled.div`
   font-size: 48px;
   font-weight: 700;
   // margin-right: 0.5em
-  width: 12em;
+  width: auto;
+  margin-right: 0.5em;
   @media only screen and (max-width: 1024px) {
     font-size: 35px;
   }
@@ -313,7 +314,7 @@ export const LeftSurvayTooltip = styled.div`
   z-index: 100;
   display: none;
   animation: ${fadeInAnim} 0.3s;
-  transform: translate(38em, 0em);
+  transform: translate(32em, 0em);
   @media only screen and (max-width: 1024px) {
     transform: translate(30em, 0em);
   }
@@ -321,7 +322,7 @@ export const LeftSurvayTooltip = styled.div`
     width: 9em;
     height: 3em;
     padding: 0em;
-    transform: translate(25em, -0.3em);
+    transform: translate(18em, -0.3em);
   }
   span {
     font-size: 12px;

@@ -181,7 +181,7 @@ const Survay = () => {
                 <TooltipContainer>
                   <LeftTooltipContainer>
                     <GoodCookerTitle>
-                      냉장고와 찬장에 있는 재료를 골라주세요!
+                      다양한 재료들로 구성해보세요 🍱
                     </GoodCookerTitle>
                     <LeftQuestionIcons />
                     <LeftSurvayTooltip>
@@ -205,7 +205,7 @@ const Survay = () => {
           </GoodCookerPage>
           <AreYouGoodPage>
             <TextContainer>
-              <HeadText>요리에 일가견이 있으신가요?</HeadText>
+              <HeadText>냉장고가 터지기 직전인가요?</HeadText>
               <ChoiceContainer>
                 <Positive onClick={handlePositive}>YES</Positive>
                 <Negative onClick={handleNegative}>NO</Negative>
@@ -217,7 +217,7 @@ const Survay = () => {
             <BadCookerContainer ref={badCookerRef}>
               {/* <RightTitleContainer> */}
               <BadCookerTitleContainer>
-                냉장고와 찬장에 있는 재료를 골라주세요!
+                간단한 재료들로 구성해보세요 🍳
               </BadCookerTitleContainer>
               <RightTooltipContainer>
                 <RightQuestionIcons
