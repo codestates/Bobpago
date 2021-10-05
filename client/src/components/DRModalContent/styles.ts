@@ -73,7 +73,7 @@ export const CommentEdit = styled.input`
   width: 80%;
   background-color: #ffffff;
   margin-bottom: 1em;
-  font-size: 14px;
+  font-size: 0.8em;
   outline: none;
   border: none;
   border-bottom: 1px solid grey;
