@@ -8,6 +8,33 @@ interface SlideProps {
   scale: number;
 }
 
+const pageLeftMoveAnimate = keyframes`
+    0% {
+      transform: translate(100%,-100%);
+    }
+
+    20% {
+      border-radius: 87% 13% 70% 30% / 75% 30% 70% 25% ;
+    }
+
+    40% {
+      border-radius: 18% 82% 27% 73% / 75% 30% 70% 25% ;
+    }
+
+    60% {
+      border-radius: 100% 0% 0% 100% / 100% 0% 100% 0% ;
+    }
+
+    80% {
+      border-radius: 43% 57% 0% 100% / 100% 0% 100% 0% ;
+    }
+
+    100% {
+      transform: scale(3.5);
+      border-radius: 0% 100% 0% 100% / 100% 0% 100% 0% ;
+    }
+`;
+
 export const ContainerWrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -18,6 +45,27 @@ export const ContainerWrapper = styled.div`
   box-sizing: border-box;
   transition: all 0.3s ease;
   overflow: hidden;
+  .leftmove1 {
+    animation: ${pageLeftMoveAnimate} 3s;
+    animation-fill-mode: forwards;
+  }
+`;
+
+interface HiddenProps {
+  start?: boolean;
+}
+
+export const HiddenPage = styled.div<HiddenProps>`
+  width: 120%;
+  height: 120%;
+  background-color: #000000;
+  transform: translate(100%, -100%);
+  transition: 1s;
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  z-index: 1000;
+  position: absolute;
+  top: 0;
+  left: 0;
 `;
 
 export const TitleSlide = styled.div<SlideProps>`
@@ -419,7 +467,7 @@ export const ModalContainer = styled.div`
   width: 25em;
   height: 13em;
   animation: ${showModal} 0.5s;
-  z-index: 10000;
+  z-index: 90;
   background: #f5f5f5;
   border-radius: 15px;
   text-align: center;
@@ -431,7 +479,7 @@ export const ModalBackground = styled.div`
   height: 100%;
   background: grey;
   opacity: 0.5;
-  z-index: 9999;
+  z-index: 89;
 `;
 
 export const ModalTitle = styled.p`

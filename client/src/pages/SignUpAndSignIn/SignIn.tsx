@@ -16,6 +16,8 @@ import {
   Placeholder,
   Ask,
   Logo,
+  SignInBackground,
+  SignInBackground2,
 } from "./styles";
 import gsap from "gsap";
 import Loading from "components/Loading/LoginLoading";
@@ -233,6 +235,8 @@ const SignIn = () => {
             <BackgroundImg src="/img/loginWallpaper.png" alt="배경" />
           </Background>
         </Container>
+        <SignInBackground2 />
+        <SignInBackground />
       </WholeContainer>
       {loading && <Loading />}
     </>

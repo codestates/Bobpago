@@ -56,10 +56,11 @@ const UserPage = () => {
   const [userInfo, setUserInfo] = useState<any>([]);
   const profileS3Url = process.env.REACT_APP_S3_IMG_URL;
   const serverUrl = process.env.REACT_APP_SERVER_URL;
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   let { userId } = useParams<{ userId: string | undefined }>();
 
   async function getData() {
+    setLoading(true);
     if (accessToken) {
       const newToken = await CheckExpired(accessToken, tokenType, myId);
       if (newToken) {

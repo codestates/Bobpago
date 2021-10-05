@@ -8,7 +8,7 @@ export const WholeContainer = styled.div`
   height: 33em;
   text-align: center;
   margin: 0 auto;
-  
+
   left: 0;
   right: 0;
   z-index: 100000;
@@ -23,10 +23,10 @@ export const EmailIcon = styled(Email)`
 `;
 
 export const Container = styled.div`
-  border: 3px solid #e3e3e3;
+  border: 1px solid #e3e3e3;
   border-radius: 10%;
   position: absolute;
-  background-color: #f7f5eb;
+  background-color: #f0e3a1;
   color: #000;
   width: 100%;
   overflow-x: hidden;
@@ -38,7 +38,7 @@ export const Container = styled.div`
   text-align: center;
   justify-content: center;
   z-index: 100000;
-  @media only screen and (max-width: 480px) {
+  b @media only screen and (max-width: 480px) {
     height: 100%;
   }
 `;
@@ -58,7 +58,7 @@ export const BackgroundImg = styled.img`
 export const InputContainer = styled.form`
   position: relative;
   width: 100%;
-  padding: 8.5% 8.5% 5% 8.5% ;
+  padding: 8.5% 8.5% 5% 8.5%;
   z-index: 1;
   float: left;
 `;
@@ -106,7 +106,7 @@ export const InputWrapper = styled.input`
   position: relative;
   border-radius: 3em;
   border: 1.5px solid #c2c2c2;
-  height: 2.3em; 
+  height: 2.3em;
   width: 100%;
   font-size: 1em;
   margin-top: 0.4em;
@@ -284,7 +284,7 @@ export const ButtonWrapper = styled.button`
     left: 0;
     width: 0;
     height: 100%;
-    background: #DA5544;
+    background: #da5544;
     transition: all 0.4s;
   }
   &:hover:after {
@@ -323,4 +323,46 @@ export const IconClose = styled.svg`
   path {
     fill: #bababa;
   }
+`;
+
+const BackgroundAnim = keyframes`
+  0% {
+    display: none;
+  }
+  1% {
+    display: block;
+      backdrop-filter: blur(1px);
+
+  }
+  100% {
+    display: block;
+      backdrop-filter: blur(152px);
+
+  }
+`;
+
+export const SignInBackground = styled.div`
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  opacity: 0.4;
+  background-color: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(20px);
+  // animation: ${BackgroundAnim} 2s;
+  // filter: blue(100px);
+`;
+
+export const SignInBackground2 = styled.div`
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  opacity: 0.4;
+  background-color: #bdbdbd;
+  opacity: 0.3;
+  // animation: ${BackgroundAnim} 2s;
+  // filter: blue(100px);
 `;
