@@ -264,7 +264,6 @@ export class AuthService {
             withCredentials: true,
           },
         );
-        console.log(result);
         return {
           data: {
             tokenType: 'google',
@@ -311,7 +310,6 @@ export class AuthService {
         withCredentials: true,
       },
     );
-    console.log(tokenData);
     const accessToken = tokenData.data.access_token;
     const refreshToken = tokenData.data.refresh_token;
 
@@ -419,7 +417,6 @@ export class AuthService {
       delete user.bookmarks;
       delete user.followees;
       delete user.followers;
-      console.log(user);
 
       return {
         data: {
@@ -485,7 +482,6 @@ export class AuthService {
     const data = await axios.get(
       `https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=${id_token}`,
     );
-    console.log(data);
     const { name, email } = data.data;
 
     try {
@@ -499,7 +495,6 @@ export class AuthService {
       delete user.bookmarks;
       delete user.followees;
       delete user.followers;
-      console.log(user);
 
       return {
         data: {

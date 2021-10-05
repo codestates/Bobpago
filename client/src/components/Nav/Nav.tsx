@@ -78,12 +78,10 @@ const Nav = ({ opac }: { opac: boolean }) => {
           history.push("/landing");
         }
       }
-      console.log(err);
     }
   };
 
   useEffect(() => {
-    console.log(AccessState);
     if (AccessState.accessToken) {
       setAuthorization(true);
     } else {

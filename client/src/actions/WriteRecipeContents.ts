@@ -8,7 +8,6 @@ export const SET_SERVING = "SET_SERVING";
 export const RESET_ALL_CONTENTS = "RESET_ALL_CONTENTS";
 
 export const setTitle = (title: string) => {
-  console.log(title);
   return {
     type: SET_TITLE,
     payload: { title },

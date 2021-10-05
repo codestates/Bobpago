@@ -38,7 +38,6 @@ export class MeService {
   ) {}
 
   async signUp(createUserDto: CreateUserReqDto): Promise<CreateUserResDto> {
-    console.log(createUserDto);
     const { email, password, nickname } = createUserDto;
     // const salt = await bcrypt.genSalt();
     // const hashedPassword = await bcrypt.hash(password, salt);
