@@ -55,7 +55,6 @@ export const UserEtcBox = styled.div`
 export const UserName = styled.div`
   margin-bottom: 5px;
   font-size: 1.2em;
-
 `;
 
 export const UpdatedAt = styled.div`
@@ -108,4 +107,17 @@ export const EditIcon = styled(Edit)`
   cursor: pointer;
 `;
 
-export const LikeIcon = styled(Like)``;
+export const LikeContainer = styled.div`
+  position: absolute;
+  right: 1em;
+  bottom: 0;
+  display: flex;
+`;
+
+export const LikeIcon = styled(Like)`
+  width: 20px;
+  margin-right: 0.5em;
+  cursor: pointer;
+`;
+
+export const LikeText = styled.div``;

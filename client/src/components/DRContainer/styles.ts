@@ -17,29 +17,6 @@ export const LeftContainer = styled.section`
   flex-direction: column;
 `;
 
-export const LeftTopDiv = styled.div`
-  flex: 2.5;
-  background-color: rosybrown;
-`;
-
-export const LeftBottomContainer = styled.div`
-  flex: 1;
-  background-color: rosybrown;
-  display: flex;
-`;
-
-export const LeftBottomLeftDiv = styled.div<DRStylesProps>`
-  flex: 1;
-  background-color: ${({ color }) => {
-    return color ? color : "rosybrown";
-  }};
-`;
-
-export const LeftBottomRightDiv = styled.div`
-  flex: 1;
-  background-color: rosybrown;
-`;
-
 export const RightContainer = styled.section`
   background-color: ${main.bg};
   flex: 1;

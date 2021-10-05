@@ -331,6 +331,8 @@ const LandSection4: React.FC<Landing5Props> = ({ position }) => {
   };
 
   useEffect(() => {
+    console.dir(paperRef);
+
     if (position < 5000) {
       text1Ref.current.style.opacity = "0";
       text1Ref.current.style.transition = "0.2s";
