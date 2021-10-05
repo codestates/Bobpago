@@ -126,7 +126,7 @@ const MatchingRecipe = () => {
       hiddenRef1.current.style.backgroundColor = "#ffc69b";
     }, 400);
     setTimeout(() => {
-      history.push("/");
+      history.push("/survey");
     }, 2000);
   };
 

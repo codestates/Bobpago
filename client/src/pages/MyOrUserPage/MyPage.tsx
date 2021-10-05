@@ -151,7 +151,7 @@ const MyPage = () => {
       if (error.response) {
         if (error.response.status === 401) {
           dispatch(removeAccessToken());
-          history.push("/landing");
+          history.push("/");
         }
       }
     }
@@ -206,7 +206,7 @@ const MyPage = () => {
       if (error.response) {
         if (error.response.status === 401) {
           dispatch(removeAccessToken());
-          history.push("/landing");
+          history.push("/");
         } else {
           alert("비밀번호가 틀렸습니다");
         }
@@ -240,15 +240,15 @@ const MyPage = () => {
       if (data) {
         setPasswordModalWithDraw(false);
         setCheckWithDrawModal(true);
-      } else {        
+      } else {
         alert("비밀번호가 틀렸습니다");
       }
     } catch (err) {
-    const error = err as AxiosError;
+      const error = err as AxiosError;
       if (error.response) {
         if (error.response.status === 401) {
           dispatch(removeAccessToken());
-          history.push("/landing");
+          history.push("/");
         } else {
           alert("비밀번호가 틀렸습니다");
         }
@@ -265,7 +265,7 @@ const MyPage = () => {
         dispatch(reissueAccessToken(newToken));
       }
     }
-    try{
+    try {
       if (temporaryImg) {
         const formData = new FormData();
         formData.append("files", temporaryImg);
@@ -315,7 +315,7 @@ const MyPage = () => {
       if (error.response) {
         if (error.response.status === 401) {
           dispatch(removeAccessToken());
-          history.push("/landing");
+          history.push("/");
         }
       }
     }
@@ -348,7 +348,7 @@ const MyPage = () => {
       if (error.response) {
         if (error.response.status === 401) {
           dispatch(removeAccessToken());
-          history.push("/landing");
+          history.push("/");
         }
       }
       console.log(err);
@@ -382,7 +382,7 @@ const MyPage = () => {
       if (error.response) {
         if (error.response.status === 401) {
           dispatch(removeAccessToken());
-          history.push("/landing");
+          history.push("/");
         }
       }
     }
@@ -397,7 +397,7 @@ const MyPage = () => {
         dispatch(reissueAccessToken(newToken));
       }
     }
-    try{
+    try {
       const data = await axios.get(
         `${process.env.REACT_APP_SERVER_URL}/user/${id}/follower?tokenType=${tokenType}`,
         {
@@ -415,7 +415,7 @@ const MyPage = () => {
       if (error.response) {
         if (error.response.status === 401) {
           dispatch(removeAccessToken());
-          history.push("/landing");
+          history.push("/");
         }
       }
     }
@@ -449,7 +449,7 @@ const MyPage = () => {
       if (error.response) {
         if (error.response.status === 401) {
           dispatch(removeAccessToken());
-          history.push("/landing");
+          history.push("/");
         }
       }
       console.log(err);
@@ -484,7 +484,7 @@ const MyPage = () => {
       if (error.response) {
         if (error.response.status === 401) {
           dispatch(removeAccessToken());
-          history.push("/landing");
+          history.push("/");
         }
       }
     }

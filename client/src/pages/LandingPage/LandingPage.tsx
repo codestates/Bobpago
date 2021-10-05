@@ -103,18 +103,20 @@ const LandingPage = () => {
 
   const onScroll = useCallback((): void => {
     positionEx = window.pageYOffset;
-    console.log(positionEx, "land");
-    if (positionEx > 10000) {
-      NavRef.current.style.backgroundColor = "#feefe6ce";
-    }
-    if (positionEx > 0) {
-      NavRef.current.classList.add("navActive");
-      NavlogoRef.current.classList.add("logoActive");
-      NavlistRef.current.classList.add("listActive");
-    } else {
-      NavRef.current.classList.remove("navActive");
-      NavlogoRef.current.classList.remove("logoActive");
-      NavlistRef.current.classList.remove("listActive");
+    // console.log(positionEx, "land");
+    if (NavRef.current && NavlogoRef.current && NavlistRef.current) {
+      if (positionEx > 10000) {
+        NavRef.current.style.backgroundColor = "#feefe6ce";
+      }
+      if (positionEx > 0) {
+        NavRef.current.classList.add("navActive");
+        NavlogoRef.current.classList.add("logoActive");
+        NavlistRef.current.classList.add("listActive");
+      } else {
+        NavRef.current.classList.remove("navActive");
+        NavlogoRef.current.classList.remove("logoActive");
+        NavlistRef.current.classList.remove("listActive");
+      }
     }
 
     setScrollPosition(window.pageYOffset);

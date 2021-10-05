@@ -29,21 +29,12 @@ export const NavLogoContainer = styled.div`
   padding: 1.2em;
   margin-left: 5em;
   a {
+    display: flex;
     text-decoration: none;
+    align-items: center;
   }
-`;
-
-export const NavLogo = styled.div<NavProps>`
-  text-decoration: none;
-  cursor: pointer;
-  transition: 0.2s;
-  color: ${({ opac }): any => {
-    return opac ? "#ffffff" : "black";
-  }};
-  font-size: 2.5em;
-
-  &:hover {
-    color: red;
+  @media screen and (max-width: 768px) {
+    margin-left: 3em;
   }
 `;
 
@@ -168,4 +159,10 @@ export const ModalContainer = styled.div`
   background: #f5f5f5;
   border-radius: 15px;
   text-align: center;
+`;
+
+export const BobPagoIcon = styled.img`
+  width: 12em;
+  height: 3.5em;
+  object-fit: contain;
 `;

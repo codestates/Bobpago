@@ -38,7 +38,7 @@ export const Container = styled.div`
   text-align: center;
   justify-content: center;
   z-index: 100000;
-  b @media only screen and (max-width: 480px) {
+  @media only screen and (max-width: "480px") {
     height: 100%;
   }
 `;
@@ -347,11 +347,8 @@ export const SignInBackground = styled.div`
   width: 100%;
   height: 100%;
   position: fixed;
-  opacity: 0.4;
   background-color: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(20px);
-  // animation: ${BackgroundAnim} 2s;
-  // filter: blue(100px);
+  backdrop-filter: blur(2px);
 `;
 
 export const SignInBackground2 = styled.div`
