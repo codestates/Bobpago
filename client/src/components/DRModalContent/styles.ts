@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { Trash } from "@styled-icons/boxicons-solid/Trash/Trash";
 import { Edit } from "@styled-icons/boxicons-solid/Edit/Edit";
 import { Like } from "@styled-icons/boxicons-solid/Like/Like";
+import { CheckmarkSquareOutline } from "@styled-icons/evaicons-outline/CheckmarkSquareOutline/CheckmarkSquareOutline";
 
 export const TotalSudoContainer = styled.div`
   width: 100%;
@@ -55,7 +56,6 @@ export const UserEtcBox = styled.div`
 export const UserName = styled.div`
   margin-bottom: 5px;
   font-size: 1.2em;
-
 `;
 
 export const UpdatedAt = styled.div`
@@ -73,7 +73,7 @@ export const CommentEdit = styled.input`
   width: 80%;
   background-color: #ffffff;
   margin-bottom: 1em;
-  font-size: 14px;
+  font-size: 0.8em;
   outline: none;
   border: none;
   border-bottom: 1px solid grey;
@@ -108,4 +108,29 @@ export const EditIcon = styled(Edit)`
   cursor: pointer;
 `;
 
-export const LikeIcon = styled(Like)``;
+
+export const EditCompleteIcon = styled(CheckmarkSquareOutline)`
+  position: absolute;
+  width: 1em;
+  height: 1em;
+  top: 0em;
+  right: 3em;
+  fill: #16ce69;
+  cursor: pointer;
+`;
+
+export const LikeContainer = styled.div`
+  position: absolute;
+  right: 1em;
+  bottom: 0;
+  display: flex;
+`;
+
+export const LikeIcon = styled(Like)`
+  width: 20px;
+  margin-right: 0.5em;
+  cursor: pointer;
+`;
+
+export const LikeText = styled.div``;
+

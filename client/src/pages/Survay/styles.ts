@@ -17,6 +17,20 @@ export const QuestionMove = keyframes`
   }
 `;
 
+export const ArrowMove = keyframes`
+  0% {
+    transform: rotateZ(45deg);
+  }
+
+  50% {
+    transform: rotateZ(45deg) skew(5deg, 5deg);
+  }
+
+  100% {
+    transform: rotateZ(45deg);
+  }
+`;
+
 interface MyProps {
   move?: number;
   bg?: string;
@@ -58,6 +72,7 @@ export const GoodCookerPage = styled.section`
   display: flex;
   justify-content: center;
   align-items: center;
+  /* position: relative; */
 `; // 요리를 잘하는 유저에 해당하는 페이지.
 
 export const BadCookerPage = styled.section`
@@ -79,6 +94,15 @@ export const HeadText = styled.h1`
   font-size: ${main.biggestFont};
   z-index: 1;
   background-color: transparent;
+  @media only screen and (max-width: 1024px) {
+    font-size: 5.5em;
+  }
+  @media only screen and (max-width: 768px) {
+    font-size: 4em;
+  }
+  @media only screen and (max-width: 480px) {
+    font-size: 3em;
+  }
 `;
 
 export const ChoiceContainer = styled.div`
@@ -100,6 +124,12 @@ export const Positive = styled.h1`
   &:active {
     transform: scale(1.5);
   }
+  @media only screen and (max-width: 768px) {
+    font-size: 1.2em;
+  }
+  @media only screen and (max-width: 480px) {
+    font-size: 1em;
+  }
 `;
 
 export const Negative = styled.h1`
@@ -112,6 +142,12 @@ export const Negative = styled.h1`
   }
   &:active {
     transform: scale(1.5);
+  }
+  @media only screen and (max-width: 768px) {
+    font-size: 1.2em;
+  }
+  @media only screen and (max-width: 480px) {
+    font-size: 1em;
   }
 `;
 
@@ -178,20 +214,32 @@ export const GoodCookerForm = styled.div`
 export const GoodCookerTitle = styled.div`
   font-size: 48px;
   font-weight: 700;
-  margin-right: 0.5em;
-
+  // margin-right: 0.5em
+  width: 12em;
+  @media only screen and (max-width: 1024px) {
+    font-size: 35px;
+  }
   @media only screen and (max-width: 768px) {
-    font-size: 16px;
+    font-size: 30px;
+  }
+  @media only screen and (max-width: 768px) {
+    font-size: 25px;
   }
 `;
 
 export const GoodCookerSearchForm = styled.div`
-  height: 100%;
-  width: 30%;
-  margin-right: 1em;
+  height: 3.5em;
+  width: 20em;
+  // margin-right: 1em;
+  margin-left: auto;
   display: flex;
+  right: 0;
   align-items: center;
   position: relative;
+  @media only screen and (max-width: 768px) {
+    margin-right: auto;
+    margin-left: 0;
+  }
 `;
 
 export const GoodCookerSearch = styled.input`
@@ -204,8 +252,8 @@ export const GoodCookerSearch = styled.input`
   outline: none;
   font-size: ${main.smallestFont};
   @media only screen and (max-width: 768px) {
-    font-size: 14px;
-    height: 100%;
+    // font-size: 14px;
+    // height: 100%;
     padding-top: 0.5em;
     padding-bottom: 0.5em;
   }
@@ -217,11 +265,29 @@ export const SearchIcon = styled(Search)`
   left: 7px;
 `;
 
+const fadeInAnim = keyframes`
+  0% {
+    display: none;
+    opacity: 0;
+  }
+  1% {
+    display: block;
+    opacity: 0;
+  }
+  100% {
+    display: block;
+    opacity: 1;
+  }
+`;
+
 export const TooltipContainer = styled.div`
   position: relative;
   /* transform: translate(48%, 190%); */
   width: 100%;
   display: flex;
+  @media only screen and (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 export const LeftSurvayTooltip = styled.div`
@@ -230,8 +296,10 @@ export const LeftSurvayTooltip = styled.div`
   align-items: center;
   flex-direction: column;
   padding: 1em;
-  width: 25%;
-  height: 100%;
+  padding-top: 0.2em;
+  // line-height: 2em;
+  width: 10em;
+  height: 90%;
   text-align: center;
   background-color: #ffffff;
   border: 1px solid black;
@@ -239,9 +307,22 @@ export const LeftSurvayTooltip = styled.div`
   border-radius: 10px;
   opacity: 0;
   transition: 0.3s;
+  z-index: 2;
   /* top: -70%; */
-  right: 15%;
+  // right: 15%;
   z-index: 100;
+  display: none;
+  animation: ${fadeInAnim} 0.3s;
+  transform: translate(38em, 0em);
+  @media only screen and (max-width: 1024px) {
+    transform: translate(30em, 0em);
+  }
+  @media only screen and (max-width: 768px) {
+    width: 9em;
+    height: 3em;
+    padding: 0em;
+    transform: translate(25em, -0.3em);
+  }
   span {
     font-size: 12px;
     font-weight: 700;
@@ -259,7 +340,23 @@ export const LeftSurvayTooltip = styled.div`
     left: -2.3%;
     background-color: #ffffff;
     transform: rotateZ(45deg);
+    z-index: 1;
+    transition: 0.3s;
+    @media only screen and (max-width: 768px) {
+      transform: translate(-0.1em, 0em) rotateZ(45deg);
+    }
   }
+  &:hover {
+    display: block;
+    opacity: 1;
+    transition: 0.3s;
+  }
+`;
+
+export const LeftTooltipContainer = styled.div`
+  display: inline-block;
+  display: flex;
+  // margin-right: 30%;
 `;
 
 export const LeftQuestionIcons = styled(QuestionCircle)`
@@ -268,9 +365,13 @@ export const LeftQuestionIcons = styled(QuestionCircle)`
   left: 75%;
   color: black;
   animation: ${QuestionMove} 2s infinite;
-
+  z-index: 10;
   &:hover {
     animation: normal;
+    & + div {
+      display: block;
+      opacity: 1;
+    }
   }
 `;
 
@@ -329,5 +430,56 @@ export const RightQuestionIcons = styled(QuestionCircle)`
 
   &:hover {
     animation: normal;
+  }
+`;
+
+export const HiddenContainer = styled.div`
+  width: 100%;
+  height: 400vh;
+  transform: scale(1.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #ffc69b;
+  z-index: 1000;
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  transition: 2s;
+`;
+
+export const ArrowRight = styled.div`
+  width: 40px;
+  height: 40px;
+  border-right: 5px solid black;
+  border-top: 5px solid black;
+  transform: rotateZ(45deg);
+  position: absolute;
+  left: 31.2%;
+  top: 50%;
+  z-index: 100;
+  transition: 0.3s;
+  cursor: pointer;
+  animation: ${ArrowMove} 2s infinite;
+  &:hover {
+    border-right: 5px solid #00aa00;
+    border-top: 5px solid #00aa00;
+  }
+`;
+
+export const ArrowLeft = styled.div`
+  width: 40px;
+  height: 40px;
+  border-left: 5px solid black;
+  border-bottom: 5px solid black;
+  transform: rotateZ(45deg);
+  position: absolute;
+  right: 31.2%;
+  top: 50%;
+  z-index: 100;
+  transition: 0.3s;
+  cursor: pointer;
+  animation: ${ArrowMove} 2s infinite;
+  &:hover {
+    border-left: 5px solid #00aa00;
+    border-bottom: 5px solid #00aa00;
   }
 `;

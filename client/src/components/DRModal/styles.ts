@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { CloseOutline } from "@styled-icons/evaicons-outline/CloseOutline";
 import { Camera } from "@styled-icons/bootstrap/Camera";
+import { main } from "theme";
 
 interface ButtonColor {
   color?: string;
@@ -30,17 +31,31 @@ export const CommentContainer = styled.div`
 
 export const SudoContainer = styled.div`
   background-color: #ffffff;
-  height: 90%;
+  height: 85%;
   overflow: scroll;
   overflow-x: hidden;
   padding: 2em;
   border-radius: 10px;
   font-size: 1.5em;
 `;
+export const NoCommentContainer = styled.div`
+  
+  display: flex;
+  justify-content: center;
+  align-content: center;
+`
+export const NoCommentText = styled.span`
+  position: relative;
+  text-align: center;
+  font-size: ${main.smallestFont};
+  color: dimgrey;
+  top: 4em;
+  
+`
 
 export const PostCommentContainer = styled.div`
   position: absolute;
-  bottom: 3em;
+  bottom: 4em;
   width: 93%;
   height: 5%;
   z-index: 100;
@@ -58,20 +73,20 @@ export const PostCommentInput = styled.input`
 
 export const ButtonContainer = styled.div`
   position: absolute;
-  bottom: -2.5em;
+  bottom: -3.5em;
   right: 0;
-  
 `;
 
 export const CommentPostButton = styled.button<ButtonColor>`
   margin-left: 1em;
-  padding: 0.5em 2em;
+  margin-top: 2em;
+  padding: 0.5em;
   outline: none;
   border: none;
   background-color: ${({ color }) => {
     return color;
   }};
-  font-size: 1.5em;
+  font-size: 1.3em;
   color: black;
   border-radius: 5px;
   transition: 0.5s;

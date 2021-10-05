@@ -27,14 +27,14 @@ const IngredientDetail = ({
   };
 
   useEffect(() => {
-    if (
-      clickState.clickData.filter((item) => {
-        return item.id === id;
-      }).length === 0
-    ) {
+    if (clickState.clickData.length === 0) {
       setLight(false);
+    } else if (
+      clickState.clickData.filter((item) => item.id === id).length > 0
+    ) {
+      setLight(true);
     }
-  }, []);
+  }, [clickState]);
 
   return (
     <BadCookerRecipe onClick={handleClick} light={light}>
