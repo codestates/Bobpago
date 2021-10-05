@@ -5,12 +5,12 @@ import { useHistory } from "react-router";
 import { RootState } from "reducers";
 import { resetEditPageEdit, goToPrevPageEdit } from "actions/EditRecipePage";
 import CheckExpired from "utils/CheckExpired";
-import { reissueAccessToken } from "actions/Accesstoken";
+import { reissueAccessToken, removeAccessToken } from "actions/Accesstoken";
 import {
   resetEditAllContents,
   editDescription,
 } from "actions/EditRecipeContents";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import {
   BookContainer,
   Cover,
@@ -123,13 +123,14 @@ const Description = ({
 
   const handleSubmitRecipe = async () => {
     hiddenRef1.current.classList.add("leftmove1");
-    try {
-      if (accessToken) {
-        const newToken = await CheckExpired(accessToken, tokenType, userId);
-        if (newToken) {
-          dispatch(reissueAccessToken(newToken));
-        }
+    let newToken = null;
+    if (accessToken) {
+      newToken = await CheckExpired(accessToken, tokenType, userId);
+      if (newToken) {
+        dispatch(reissueAccessToken(newToken));
       }
+    }
+    try {
       const data = await axios.patch(
         `${process.env.REACT_APP_SERVER_URL}/recipe/${locationProps}?tokenType=${tokenType}`,
         {
@@ -144,7 +145,7 @@ const Description = ({
           withCredentials: true,
           headers: {
             "Content-Type": "application/json",
-            authorization: `Bearer ${accessToken}`,
+            authorization: `Bearer ${newToken ? newToken : accessToken}`,
           },
         }
       );
@@ -181,6 +182,13 @@ const Description = ({
       dispatch(resetEditPageEdit());
       dispatch(resetEditAllContents());
     } catch (err) {
+      const error = err as AxiosError;
+      if (error.response) {
+        if (error.response.status === 401) {
+          dispatch(removeAccessToken());
+          history.push("/landing");
+        }
+      }
       console.log(err);
     }
   };

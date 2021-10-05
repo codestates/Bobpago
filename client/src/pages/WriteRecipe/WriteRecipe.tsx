@@ -15,16 +15,30 @@ import {
   resetWritePage,
 } from "actions/WriteRecipePage";
 import { resetAllContents } from "actions/WriteRecipeContents";
+import CheckExpired from "utils/CheckExpired";
+import { removeAccessToken } from "actions/Accesstoken";
+import { useHistory } from "react-router-dom";
 const WriteRecipe = () => {
+  const history = useHistory();
   const [circle1IsHover, setCircle1IsHover] = useState<boolean>(false);
   const [circle2IsHover, setCircle2IsHover] = useState<boolean>(false);
   const dispatch = useDispatch();
   const page = useSelector(
     (state: RootState) => state.WriteRecipePageReducer.currentPage
   );
+  const { accessToken, tokenType, userId } = useSelector((state: RootState) => state.AccesstokenReducer);
   const [scale, setScale] = useState<number>(0);
-
+    
   useEffect(() => {
+    async function checkToken () {
+      return await CheckExpired(accessToken, tokenType, userId);
+    }
+    checkToken().then(result => {
+      if (!result) {
+        dispatch(removeAccessToken());
+        history.push('/landing');
+      }
+    });
     return () => {
       dispatch(resetWritePage());
       dispatch(resetAllContents());

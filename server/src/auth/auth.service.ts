@@ -39,6 +39,7 @@ export class AuthService {
         secret: process.env.REFRESH_TOKEN_SECRET,
         expiresIn: process.env.REFRESH_TOKEN_EXPIRATION_TIME,
       });
+
       await this.usersRepository.update(user.id, { refreshToken });
       const newUser = await this.usersRepository.findOne({ email });
       delete newUser.refreshToken;
@@ -310,6 +311,7 @@ export class AuthService {
         withCredentials: true,
       },
     );
+    console.log(tokenData);
     const accessToken = tokenData.data.access_token;
     const refreshToken = tokenData.data.refresh_token;
 
