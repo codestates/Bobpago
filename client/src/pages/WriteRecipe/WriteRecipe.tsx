@@ -26,17 +26,19 @@ const WriteRecipe = () => {
   const page = useSelector(
     (state: RootState) => state.WriteRecipePageReducer.currentPage
   );
-  const { accessToken, tokenType, userId } = useSelector((state: RootState) => state.AccesstokenReducer);
+  const { accessToken, tokenType, userId } = useSelector(
+    (state: RootState) => state.AccesstokenReducer
+  );
   const [scale, setScale] = useState<number>(0);
-    
+
   useEffect(() => {
-    async function checkToken () {
+    async function checkToken() {
       return await CheckExpired(accessToken, tokenType, userId);
     }
-    checkToken().then(result => {
+    checkToken().then((result) => {
       if (!result) {
         dispatch(removeAccessToken());
-        history.push('/landing');
+        history.push("/");
       }
     });
     return () => {

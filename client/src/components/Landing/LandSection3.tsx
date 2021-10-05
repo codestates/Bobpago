@@ -87,13 +87,16 @@ const LandSection3: React.FC<LandSection3Props> = ({ scrollPosition }) => {
           <LandingFourLeftGif src="/img/LandingGif5.gif" />
         </LandingFourLeftContainer>
         <LandingFourRightContainer>
-          <LandingFourRightTitle>상세한 레시피 정보</LandingFourRightTitle>
+          <LandingFourRightTitle>모바일 기기 지원</LandingFourRightTitle>
           <LandingFourRightContent>
-            어렵지 않게 잘 정리되어 있는 레시피들을 이용해보세요! <br />
-            밥파고에 있는 레시피들은 다 잘 정리 되어있어서, <br />
-            사진과 레시피 내용을 보면서 요리를 만든다면 <br />
-            오늘 저녁 메뉴에 대한 걱정은 없을거에요! <br />
-            시간과 난이도도 잘 정리되어 있습니다.
+            모바일 환경에서도 밥파고를 만나볼 수 있습니다📱
+            <br />
+            요리를 할 때에도 밥파고는 당신과 함께합니다
+            <br />
+            가벼운 마음으로 요리를 시작해보세요!
+            <br />
+            오늘 한 끼도 해결 완료~ 🍲
+            <br />
           </LandingFourRightContent>
         </LandingFourRightContainer>
       </LandingFourContainer>

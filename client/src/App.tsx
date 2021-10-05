@@ -56,11 +56,11 @@ function App() {
   return (
     <Switch>
       <Route exact path="/">
+        <LandingPage />
+      </Route>
+      <Route path="/survey">
         <Survay />
         <NofiticationCenter />
-      </Route>
-      <Route path="/landing">
-        <LandingPage />
       </Route>
       <Route path="/matching">
         <MatchingRecipe />

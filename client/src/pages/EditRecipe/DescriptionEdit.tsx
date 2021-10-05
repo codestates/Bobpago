@@ -186,7 +186,7 @@ const Description = ({
       if (error.response) {
         if (error.response.status === 401) {
           dispatch(removeAccessToken());
-          history.push("/landing");
+          history.push("/");
         }
       }
       console.log(err);
