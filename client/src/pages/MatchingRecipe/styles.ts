@@ -1,5 +1,6 @@
 import styled, { keyframes } from "styled-components";
 import { QuestionCircle } from "@styled-icons/bootstrap/QuestionCircle";
+import { ArrowLeft } from "@styled-icons/bootstrap/ArrowLeft";
 import { main } from "theme";
 
 export const animate = keyframes`
@@ -58,6 +59,20 @@ export const QuestionMove = keyframes`
 
   100% {
     transform: rotateZ(0deg);
+  }
+`;
+
+export const NoMatchingTextMove = keyframes`
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.3);
+  }
+
+  100% {
+    transform: scale(1);
   }
 `;
 
@@ -179,7 +194,7 @@ export const MatchCardScroll = styled.div`
   display: flex;
   align-items: center;
   transform: translateY(100%);
-  transition: 2s;
+  transition: 1.3s;
   overflow: hidden;
   z-index: 1;
   transition-timing-function: cubic-bezier(1, -0.275, 0.44, 1.25);
@@ -234,6 +249,7 @@ export const HiddenPage = styled.div`
   width: 120%;
   height: 120%;
   background-color: #000000;
+  /* ffc69b */
   transform: translate(100%, -100%);
   transition: 1s;
   border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
@@ -273,4 +289,80 @@ export const Linear = styled.div`
   height: 5px;
   background-color: #bd3737;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+  opacity: 0;
+`;
+
+export const NoMatchingContainer = styled.div`
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const NoMatchingText = styled.div`
+  position: relative;
+  width: 50%;
+  height: 40%;
+  background-color: #ffffff;
+  z-index: 1000;
+  top: 1.5em;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  font-size: ${main.middleFont};
+  transition: 1s;
+  overflow: hidden;
+  transform: rotateY(0deg);
+  span {
+    animation: ${NoMatchingTextMove} 10s infinite;
+  }
+  &:hover {
+    transition: 1s;
+    /* transform: scale(1.2); */
+  }
+`;
+
+export const SudoNoContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background-color: #aabfff;
+  cursor: pointer;
+  left: 100%;
+  transition: 1s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 72px;
+  z-index: 1001;
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    ::before {
+      content: "";
+      position: absolute;
+      width: 0%;
+      height: 1%;
+      background-color: black;
+      left: 25%;
+      bottom: 39%;
+      transition: 1s;
+    }
+  }
+  &:hover {
+    div {
+      ::before {
+        width: 61%;
+      }
+    }
+  }
+`;
+
+export const ArrowLeftIcon = styled(ArrowLeft)`
+  width: 60px;
+  margin-right: 0.3em;
 `;

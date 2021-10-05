@@ -22,6 +22,10 @@ import {
   MatchTopContainer,
   MyIngredient,
   Linear,
+  NoMatchingContainer,
+  NoMatchingText,
+  SudoNoContainer,
+  ArrowLeftIcon,
 } from "./styles";
 
 const MatchingRecipe = () => {
@@ -33,6 +37,8 @@ const MatchingRecipe = () => {
   const eggPagoRef = useRef<any>(null);
   const leftBallRef = useRef<any>(null);
   const rightBallRef = useRef<any>(null);
+  const noSudoRef = useRef<any>(null);
+  const linearRef = useRef<any>(null);
 
   const [turnOn, setTurnOn] = useState(false);
   const [wind, setWind] = useState(0);
@@ -109,58 +115,73 @@ const MatchingRecipe = () => {
     return Math.floor(new Date().getTime() * Math.random());
   };
 
+  const handlePageBack = () => {
+    console.log("handle page back");
+    cardRef.current.style.transform = "translateY(120%)";
+    setTimeout(() => {
+      hiddenRef1.current.classList.add("leftmove1");
+      hiddenRef1.current.style.backgroundColor = "#ffc69b";
+    }, 400);
+    setTimeout(() => {
+      history.push("/");
+    }, 2000);
+  };
+
   useEffect(() => {
-    if (
-      cardRef.current !== null &&
-      hiddenRef1.current !== null &&
-      tooltipRef.current !== null &&
-      sliderRef.current !== null &&
-      titleTextRef.current !== null &&
-      eggPagoRef.current !== null &&
-      leftBallRef.current !== null &&
-      rightBallRef.current !== null
-    ) {
-      leftBallRef.current.style.opacity = "0";
-      rightBallRef.current.style.opacity = "0";
-      setTimeout(() => {
-        handleData();
-        setWind(rotateMaker());
-        handlePageUp();
-      }, 1000);
-    } // page up after render.
+    // if (
+    //   cardRef.current !== null &&
+    //   hiddenRef1.current !== null &&
+    //   tooltipRef.current !== null &&
+    //   sliderRef.current !== null &&
+    //   titleTextRef.current !== null &&
+    //   eggPagoRef.current !== null &&
+    //   leftBallRef.current !== null &&
+    //   rightBallRef.current !== null
+    // ) {
+    leftBallRef.current.style.opacity = "0";
+    rightBallRef.current.style.opacity = "0";
+    setTimeout(() => {
+      handleData();
+      setWind(rotateMaker());
+      handlePageUp();
+    }, 200);
+    // } // page up after render.
 
     handleData();
   }, []);
 
   useEffect(() => {
-    let handleWheel: boolean = false;
-    setWind(rotateMaker());
-    sliderRef.current.addEventListener("mousewheel", (e: any) => {
-      e.preventDefault();
-      const container = sliderRef.current;
-      const containerScrollPosition = sliderRef.current.scrollLeft;
+    if (data.length > 0) {
+      linearRef.current.style.opacity = 1;
+      let handleWheel: boolean = false;
 
-      container.scrollTo({
-        top: 0,
-        left: containerScrollPosition + e.deltaY,
-      });
-      handleWheel = true;
-    });
-    if (handleWheel) {
-      return () => {
-        sliderRef.current.removeEventListener("mousewheel", (e: any) => {
-          e.preventDefault();
-          const container = sliderRef.current;
-          const containerScrollPosition = sliderRef.current.scrollLeft;
+      sliderRef.current.addEventListener("mousewheel", (e: any) => {
+        e.preventDefault();
+        const container = sliderRef.current;
+        const containerScrollPosition = sliderRef.current.scrollLeft;
 
-          container.scrollTo({
-            top: 0,
-            left: containerScrollPosition + e.deltaY,
-          });
+        container.scrollTo({
+          top: 0,
+          left: containerScrollPosition + e.deltaY,
         });
-      };
+        handleWheel = true;
+      });
+      if (handleWheel) {
+        return () => {
+          sliderRef.current.removeEventListener("mousewheel", (e: any) => {
+            e.preventDefault();
+            const container = sliderRef.current;
+            const containerScrollPosition = sliderRef.current.scrollLeft;
+
+            container.scrollTo({
+              top: 0,
+              left: containerScrollPosition + e.deltaY,
+            });
+          });
+        };
+      }
     }
-  }, []);
+  }, [data]);
 
   // useEffect(() => {
   //   const unblock = history.block((location, action): any => {
@@ -230,33 +251,55 @@ const MatchingRecipe = () => {
       {/* 페이지 스크롤 이벤트 */}
       <HiddenPage ref={hiddenRef1}></HiddenPage>
       <MatchCardScroll ref={cardRef}>
-        <MatchCardContainer ref={sliderRef} id="container">
-          {!turnOn
-            ? data.map((item: any) => {
-                return (
-                  <MatchCard
-                    key={item.recipe.id}
-                    recipeId={item.recipe.id}
-                    title={item.recipe.title}
-                    level={item.recipe.level}
-                    amount={item.recipe.amount}
-                    thumbnail={item.recipe.thumbnail}
-                    time={item.recipe.estTime}
-                    views={item.recipe.views}
-                    id={idMaker()}
-                    wind={wind}
-                    rotate={rotateMaker()}
-                    handleSwitch={handleSwitch}
-                    ingredients={item.ingredients}
-                    handleReturn={handleReturn}
-                    handleOpacity={handleOpacity}
-                  />
-                );
-              })
-            : null}
-        </MatchCardContainer>
-        <Linear />
+        {data.length > 0 ? (
+          <MatchCardContainer ref={sliderRef} id="container">
+            {!turnOn
+              ? data.map((item: any) => {
+                  return (
+                    <MatchCard
+                      key={item.recipe.id}
+                      recipeId={item.recipe.id}
+                      title={item.recipe.title}
+                      level={item.recipe.level}
+                      amount={item.recipe.amount}
+                      thumbnail={item.recipe.thumbnail}
+                      time={item.recipe.estTime}
+                      views={item.recipe.views}
+                      id={idMaker()}
+                      wind={wind}
+                      rotate={rotateMaker()}
+                      handleSwitch={handleSwitch}
+                      ingredients={item.ingredients}
+                      handleReturn={handleReturn}
+                      handleOpacity={handleOpacity}
+                    />
+                  );
+                })
+              : null}
+          </MatchCardContainer>
+        ) : (
+          <NoMatchingContainer>
+            <NoMatchingText
+              onMouseOver={(e: any) => {
+                noSudoRef.current.style.left = "0%";
+              }}
+              onMouseLeave={(e: any) => {
+                noSudoRef.current.style.left = "100%";
+              }}
+            >
+              <span>매칭된 레시피가 없습니다 😢</span>
+              <SudoNoContainer onClick={handlePageBack} ref={noSudoRef}>
+                <div>
+                  <ArrowLeftIcon />
+                  다시 한번 재료 선택하기
+                </div>
+              </SudoNoContainer>
+            </NoMatchingText>
+          </NoMatchingContainer>
+        )}
+        <Linear ref={linearRef} />
       </MatchCardScroll>
+
       {/* 페이지 스크롤 이벤트 */}
     </TotalMatchContainer>
   );
