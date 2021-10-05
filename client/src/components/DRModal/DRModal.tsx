@@ -83,7 +83,6 @@ const DRModal: React.FC<DRModalProps> = ({ handleModalClose, recipeId }) => {
         }
       );
       const commentId = data.data.data.id;
-      console.log(data.data.data);
       if (imgInput) {
         const formData = new FormData();
         formData.append("files", imgInput);
@@ -110,10 +109,8 @@ const DRModal: React.FC<DRModalProps> = ({ handleModalClose, recipeId }) => {
           // history.push("/landing");
         }
       }
-      console.log(err);
     }
   };
-  console.log(imgInput);
   const handleImgInputClick = () => {
     if (inputImgRef.current) inputImgRef.current.click();
   };

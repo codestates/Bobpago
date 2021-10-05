@@ -513,8 +513,6 @@ export const BookMarkIcon = styled(BookmarkFill)<BookmarkProps>`
   z-index: 100;
   transition: 0.1s;
   color: ${({ bookmark }) => {
-    console.log(bookmark);
-
     return bookmark ? "orangered" : "orange";
   }};
   cursor: pointer;

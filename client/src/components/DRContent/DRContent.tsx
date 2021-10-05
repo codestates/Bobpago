@@ -57,7 +57,6 @@ const DRContent: React.FC<DRContentProps> = () => {
   }, [recipeState]);
 
   const handleMoveToUserPage = () => {
-    console.log(recipeState.user);
     const userId = recipeState.user.id;
     if (userId === myId) {
       history.push({

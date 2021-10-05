@@ -104,7 +104,6 @@ const DRModalContent = ({ comment, setCommentData }: Props) => {
           dispatch(removeAccessToken());
         }
       }
-      console.log(err);
     }
   };
 
@@ -143,7 +142,6 @@ const DRModalContent = ({ comment, setCommentData }: Props) => {
           dispatch(removeAccessToken());
         }
       }
-      console.log(err);
     }
   };
 
