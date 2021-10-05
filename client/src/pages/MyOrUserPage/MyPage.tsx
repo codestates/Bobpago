@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Loading from "components/Loading/Loading";
 import { removeAccessToken, reissueAccessToken } from "actions/Accesstoken";
 import { useHistory } from "react-router";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { RootState } from "reducers";
 import {
   PageContainer,
@@ -56,6 +56,7 @@ import {
   NoPostText,
   CheckEditBtn,
 } from "./styles";
+import { E } from "styled-icons/simple-icons";
 
 interface Post {
   amount: number;
@@ -105,7 +106,7 @@ const MyPage = () => {
   const [followeeInfo, setFolloweeInfo] = useState<any>([]);
   const [followerInfo, setFollowerInfo] = useState<any>([]);
   const [temporaryImg, setTemporaryImg] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const { accessToken, tokenType, userId } = useSelector(
     (state: RootState) => state.AccesstokenReducer
   );
@@ -113,36 +114,47 @@ const MyPage = () => {
   const dispatch = useDispatch();
 
   async function getData() {
+    setLoading(true);
+    let newToken = null;
     if (accessToken) {
-      const newToken = await CheckExpired(accessToken, tokenType, userId);
+      newToken = await CheckExpired(accessToken, tokenType, userId);
       if (newToken) {
         dispatch(reissueAccessToken(newToken));
       }
     }
-    const response = await axios.get(
-      `${process.env.REACT_APP_SERVER_URL}/me?tokenType=${tokenType}`,
-      {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${accessToken}`,
-        },
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER_URL}/me?tokenType=${tokenType}`,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${newToken ? newToken : accessToken}`,
+          },
+        }
+      );
+      const data = response.data.data;
+      setNickname(data.nickname);
+      setIntroduce(data.profile);
+      data.imageUrl &&
+        setProfileImg(`${process.env.REACT_APP_S3_IMG_URL}${data.imageUrl}`);
+      setBookmarkData(data.bookmarks);
+      setMyPostData(data.recipes);
+      setFollowingNum(data.followees);
+      setFollowerNum(data.followers);
+      setId(data.id);
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
+    } catch (err) {
+      const error = err as AxiosError;
+      if (error.response) {
+        if (error.response.status === 401) {
+          dispatch(removeAccessToken());
+          history.push("/landing");
+        }
       }
-    );
-    const data = response.data.data;
-
-    setNickname(data.nickname);
-    setIntroduce(data.profile);
-    data.imageUrl &&
-      setProfileImg(`${process.env.REACT_APP_S3_IMG_URL}${data.imageUrl}`);
-    setBookmarkData(data.bookmarks);
-    setMyPostData(data.recipes);
-    setFollowingNum(data.followees);
-    setFollowerNum(data.followers);
-    setId(data.id);
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
+    }
   }
 
   useEffect(() => {
@@ -163,13 +175,14 @@ const MyPage = () => {
 
   // 개인정보 수정 비밀번호 확인
   const passwordCheckEdit = async () => {
-    try {
-      if (accessToken) {
-        const newToken = await CheckExpired(accessToken, tokenType, userId);
-        if (newToken) {
-          dispatch(reissueAccessToken(newToken));
-        }
+    let newToken = null;
+    if (accessToken) {
+      newToken = await CheckExpired(accessToken, tokenType, userId);
+      if (newToken) {
+        dispatch(reissueAccessToken(newToken));
       }
+    }
+    try {
       const data = await axios.post(
         `${process.env.REACT_APP_SERVER_URL}/checkMyInfo?tokenType=${tokenType}`,
         {
@@ -179,7 +192,7 @@ const MyPage = () => {
           withCredentials: true,
           headers: {
             "Content-Type": "application/json",
-            authorization: `Bearer ${accessToken}`,
+            authorization: `Bearer ${newToken ? newToken : accessToken}`,
           },
         }
       );
@@ -189,209 +202,292 @@ const MyPage = () => {
       setEditIntroduce(introduce);
       setEditPassword(password);
     } catch (err) {
-      alert("비밀번호가 틀렸습니다");
+      const error = err as AxiosError;
+      if (error.response) {
+        if (error.response.status === 401) {
+          dispatch(removeAccessToken());
+          history.push("/landing");
+        } else {
+          alert("비밀번호가 틀렸습니다");
+        }
+      }
     }
   };
 
   // 회원탈퇴 비밀번호 확인
   const passwordCheckWithDraw = async () => {
+    let newToken = null;
     if (accessToken) {
-      const newToken = await CheckExpired(accessToken, tokenType, userId);
+      newToken = await CheckExpired(accessToken, tokenType, userId);
       if (newToken) {
         dispatch(reissueAccessToken(newToken));
       }
     }
-    const data = await axios.post(
-      `${process.env.REACT_APP_SERVER_URL}/checkMyInfo?tokenType=${tokenType}`,
-      {
-        password: passwordWithDraw,
-      },
-      {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${accessToken}`,
+    try {
+      const data = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/checkMyInfo?tokenType=${tokenType}`,
+        {
+          password: passwordWithDraw,
         },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${newToken ? newToken : accessToken}`,
+          },
+        }
+      );
+      if (data) {
+        setPasswordModalWithDraw(false);
+        setCheckWithDrawModal(true);
+      } else {        
+        alert("비밀번호가 틀렸습니다");
       }
-    );
-    if (data) {
-      setPasswordModalWithDraw(false);
-      setCheckWithDrawModal(true);
-    } else {
-      alert("비밀번호가 틀렸습니다");
+    } catch (err) {
+    const error = err as AxiosError;
+      if (error.response) {
+        if (error.response.status === 401) {
+          dispatch(removeAccessToken());
+          history.push("/landing");
+        } else {
+          alert("비밀번호가 틀렸습니다");
+        }
+      }
     }
   };
 
   // 회원정보 수정
   const handleChangeMyInfo = async () => {
+    let newToken = null;
     if (accessToken) {
-      const newToken = await CheckExpired(accessToken, tokenType, userId);
+      newToken = await CheckExpired(accessToken, tokenType, userId);
       if (newToken) {
         dispatch(reissueAccessToken(newToken));
       }
     }
-    if (temporaryImg) {
-      const formData = new FormData();
-      formData.append("files", temporaryImg);
-      const uploadImg = await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/image/${id}/?tokenType=${tokenType}&path=user`,
-        formData,
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "multipart/form-data",
-            authorization: `Bearer ${accessToken}`,
-          },
+    try{
+      if (temporaryImg) {
+        const formData = new FormData();
+        formData.append("files", temporaryImg);
+        const uploadImg = await axios.post(
+          `${process.env.REACT_APP_SERVER_URL}/image/${id}/?tokenType=${tokenType}&path=user`,
+          formData,
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "multipart/form-data",
+              authorization: `Bearer ${newToken ? newToken : accessToken}`,
+            },
+          }
+        );
+        const url = uploadImg.data.data.imageUrl;
+        setProfileImg(`${process.env.REACT_APP_S3_IMG_URL}${url}`);
+      }
+      const editedInfo: EditInfo = {};
+      if (editPassword !== password) editedInfo.password = editPassword;
+      else editedInfo.password = password;
+      if (editNickName !== nickname) editedInfo.nickname = editNickName;
+      else editedInfo.nickname = nickname;
+      if (editIntroduce !== introduce) editedInfo.profile = editIntroduce;
+      else editedInfo.profile = introduce;
+      if (Object.keys(editedInfo).length !== 0) {
+        await axios.patch(
+          `${process.env.REACT_APP_SERVER_URL}/me?tokenType=${tokenType}`,
+          editedInfo,
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `Bearer ${newToken ? newToken : accessToken}`,
+            },
+          }
+        );
+        getData();
+        setEditInfoModal(false);
+      } else if (temporaryImg) {
+        setEditInfoModal(false);
+      } else {
+        setEditInfoModal(false);
+        alert("바뀐 정보가 없습니다");
+      }
+    } catch (err) {
+      const error = err as AxiosError;
+      if (error.response) {
+        if (error.response.status === 401) {
+          dispatch(removeAccessToken());
+          history.push("/landing");
         }
-      );
-      const url = uploadImg.data.data.imageUrl;
-      setProfileImg(`${process.env.REACT_APP_S3_IMG_URL}${url}`);
-    }
-    const editedInfo: EditInfo = {};
-    if (editPassword !== password) editedInfo.password = editPassword;
-    else editedInfo.password = password;
-    if (editNickName !== nickname) editedInfo.nickname = editNickName;
-    else editedInfo.nickname = nickname;
-    if (editIntroduce !== introduce) editedInfo.profile = editIntroduce;
-    else editedInfo.profile = introduce;
-    if (Object.keys(editedInfo).length !== 0) {
-      await axios.patch(
-        `${process.env.REACT_APP_SERVER_URL}/me?tokenType=${tokenType}`,
-        editedInfo,
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-            authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      getData();
-      setEditInfoModal(false);
-    } else if (temporaryImg) {
-      setEditInfoModal(false);
-    } else {
-      setEditInfoModal(false);
-      alert("바뀐 정보가 없습니다");
+      }
     }
   };
 
   // 회원탈퇴
   const handleWithDraw = async () => {
-    try {
-      if (accessToken) {
-        const newToken = await CheckExpired(accessToken, tokenType, userId);
-        if (newToken) {
-          dispatch(reissueAccessToken(newToken));
-        }
+    let newToken = null;
+    if (accessToken) {
+      newToken = await CheckExpired(accessToken, tokenType, userId);
+      if (newToken) {
+        dispatch(reissueAccessToken(newToken));
       }
+    }
+    try {
       const data = await axios.delete(
         `${process.env.REACT_APP_SERVER_URL}/me?tokenType=${tokenType}`,
         {
           withCredentials: true,
           headers: {
             "Content-Type": "application/json",
-            authorization: `Bearer ${accessToken}`,
+            authorization: `Bearer ${newToken ? newToken : accessToken}`,
           },
         }
       );
       history.push("/");
       dispatch(removeAccessToken());
     } catch (err) {
+      const error = err as AxiosError;
+      if (error.response) {
+        if (error.response.status === 401) {
+          dispatch(removeAccessToken());
+          history.push("/landing");
+        }
+      }
       console.log(err);
     }
   };
 
   //팔로잉 모달 켜기
   const handleFollowingModalOn = async () => {
+    let newToken = null;
     if (accessToken) {
-      const newToken = await CheckExpired(accessToken, tokenType, userId);
+      newToken = await CheckExpired(accessToken, tokenType, userId);
       if (newToken) {
         dispatch(reissueAccessToken(newToken));
       }
     }
-    const data = await axios.get(
-      `${process.env.REACT_APP_SERVER_URL}/user/${id}/followee?tokenType=${tokenType}`,
-      {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${accessToken}`,
-        },
+    try {
+      const data = await axios.get(
+        `${process.env.REACT_APP_SERVER_URL}/user/${id}/followee?tokenType=${tokenType}`,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${newToken ? newToken : accessToken}`,
+          },
+        }
+      );
+      setFolloweeInfo(data.data.data);
+      setFollowingModal(true);
+    } catch (err) {
+      const error = err as AxiosError;
+      if (error.response) {
+        if (error.response.status === 401) {
+          dispatch(removeAccessToken());
+          history.push("/landing");
+        }
       }
-    );
-    setFolloweeInfo(data.data.data);
-    setFollowingModal(true);
+    }
   };
 
   //팔로워 모달 켜기
   const handleFollowerModalOn = async () => {
+    let newToken = null;
     if (accessToken) {
-      const newToken = await CheckExpired(accessToken, tokenType, userId);
+      newToken = await CheckExpired(accessToken, tokenType, userId);
       if (newToken) {
         dispatch(reissueAccessToken(newToken));
       }
     }
-    const data = await axios.get(
-      `${process.env.REACT_APP_SERVER_URL}/user/${id}/follower?tokenType=${tokenType}`,
-      {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${accessToken}`,
-        },
+    try{
+      const data = await axios.get(
+        `${process.env.REACT_APP_SERVER_URL}/user/${id}/follower?tokenType=${tokenType}`,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${newToken ? newToken : accessToken}`,
+          },
+        }
+      );
+      setFollowerInfo(data.data.data);
+      setFollowerModal(true);
+    } catch (err) {
+      const error = err as AxiosError;
+      if (error.response) {
+        if (error.response.status === 401) {
+          dispatch(removeAccessToken());
+          history.push("/landing");
+        }
       }
-    );
-    setFollowerInfo(data.data.data);
-    setFollowerModal(true);
+    }
   };
 
   // 내 글 삭제
   const removeMyPost = async (i: number, id: number) => {
+    let newToken = null;
     if (accessToken) {
-      const newToken = await CheckExpired(accessToken, tokenType, userId);
+      newToken = await CheckExpired(accessToken, tokenType, userId);
       if (newToken) {
         dispatch(reissueAccessToken(newToken));
       }
     }
-    console.log(id);
-    const copiedData = myPostData.slice();
-    copiedData.splice(i, 1);
-    setMyPostData(copiedData);
-    const data = await axios.delete(
-      `${process.env.REACT_APP_SERVER_URL}/recipe/${id}?tokenType=${tokenType}`,
-      {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${accessToken}`,
-        },
+    try {
+      const copiedData = myPostData.slice();
+      copiedData.splice(i, 1);
+      setMyPostData(copiedData);
+      const data = await axios.delete(
+        `${process.env.REACT_APP_SERVER_URL}/recipe/${id}?tokenType=${tokenType}`,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${newToken ? newToken : accessToken}`,
+          },
+        }
+      );
+    } catch (err) {
+      const error = err as AxiosError;
+      if (error.response) {
+        if (error.response.status === 401) {
+          dispatch(removeAccessToken());
+          history.push("/landing");
+        }
       }
-    );
-    console.log(id);
+      console.log(err);
+    }
   };
 
   // 북마크 삭제
   const removeBookmarkCheck = async (i: number, id: number) => {
+    let newToken = null;
     if (accessToken) {
-      const newToken = await CheckExpired(accessToken, tokenType, userId);
+      newToken = await CheckExpired(accessToken, tokenType, userId);
       if (newToken) {
         dispatch(reissueAccessToken(newToken));
       }
     }
-    const copiedData = bookmarkData.slice();
-    copiedData.splice(i, 1);
-    setBookmarkData(copiedData);
-    const data = await axios.delete(
-      `${process.env.REACT_APP_SERVER_URL}/${id}/bookmarks?tokenType=${tokenType}`,
-      {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${accessToken}`,
-        },
+    try {
+      const copiedData = bookmarkData.slice();
+      copiedData.splice(i, 1);
+      setBookmarkData(copiedData);
+      const data = await axios.delete(
+        `${process.env.REACT_APP_SERVER_URL}/${id}/bookmarks?tokenType=${tokenType}`,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${newToken ? newToken : accessToken}`,
+          },
+        }
+      );
+    } catch (err) {
+      const error = err as AxiosError;
+      if (error.response) {
+        if (error.response.status === 401) {
+          dispatch(removeAccessToken());
+          history.push("/landing");
+        }
       }
-    );
+    }
   };
 
   // 토큰타입이 jwt면 비밀번호 확인

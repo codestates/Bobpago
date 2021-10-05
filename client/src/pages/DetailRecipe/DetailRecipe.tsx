@@ -58,10 +58,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "reducers";
 import DRModal from "components/DRModal/DRModal";
 import { showSignIn } from "actions/SignUpAndSignIn";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { SET_DETAIL_DATA } from "actions/DetailRecipe";
 import CheckExpired from "utils/CheckExpired";
-import { reissueAccessToken } from "actions/Accesstoken";
+import { reissueAccessToken, removeAccessToken } from "actions/Accesstoken";
 
 const DetailRecipe = () => {
   const dispatch = useDispatch();
@@ -140,8 +140,9 @@ const DetailRecipe = () => {
       dispatch(showSignIn());
       return;
     }
+    let newToken = null;
     if (loginState.accessToken) {
-      const newToken = await CheckExpired(
+      newToken = await CheckExpired(
         loginState.accessToken,
         loginState.tokenType,
         loginState.userId
@@ -152,36 +153,41 @@ const DetailRecipe = () => {
     }
     try {
       if (!bookmark) {
-        const data = await axios.post(
+        await axios.post(
           `${serverUrl}/${locationProps}/bookmarks?tokenType=${loginState.tokenType}`,
           {},
           {
             withCredentials: true,
             headers: {
               "Content-Type": "application/json",
-              authorization: `Bearer ${loginState.accessToken}`,
+              authorization: `Bearer ${newToken ? newToken : loginState.accessToken}`,
             },
           }
         );
-        console.log(data);
         setBookmark(true);
         bookmarkRef.current.classList.add("active");
       } else {
-        const data = await axios.delete(
+        await axios.delete(
           `${serverUrl}/${locationProps}/bookmarks?tokenType=${loginState.tokenType}`,
           {
             withCredentials: true,
             headers: {
               "Content-Type": "application/json",
-              authorization: `Bearer ${loginState.accessToken}`,
+              authorization: `Bearer ${newToken ? newToken : loginState.accessToken}`,
             },
           }
         );
-        console.log(data);
         setBookmark(false);
         bookmarkRef.current.classList.remove("active");
       }
     } catch (err) {
+      const error = err as AxiosError;
+      if (error.response) {
+        if (error.response.status === 401) {
+          dispatch(removeAccessToken());
+          // history.push("/landing");
+        }
+      }
       console.log(err);
     }
   };
@@ -257,26 +263,45 @@ const DetailRecipe = () => {
   };
 
   const handleMypageData = async () => {
-    const data = await axios.get(
-      `${serverUrl}/me?tokenType=${loginState.tokenType}`,
-      {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${loginState.accessToken}`,
-        },
+    let newToken = null;
+    if (loginState.accessToken) {
+      newToken = await CheckExpired(
+        loginState.accessToken, 
+        loginState.tokenType, 
+        loginState.userId
+      );
+      if (newToken) {
+        dispatch(reissueAccessToken(newToken));
       }
-    );
+    }
+    try {
+      const data = await axios.get(
+        `${serverUrl}/me?tokenType=${loginState.tokenType}`,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${newToken ? newToken : loginState.accessToken}`,
+          },
+        }
+      );
+      const BookmarkArr = data.data.data.bookmarks;
+      const isBookmarked =
+        BookmarkArr.filter((item: { id: number }) => {
+          return item.id === locationProps;
+        }).length === 1;
 
-    const BookmarkArr = data.data.data.bookmarks;
-    const isBookmarked =
-      BookmarkArr.filter((item: { id: number }) => {
-        return item.id === locationProps;
-      }).length === 1;
-
-    if (isBookmarked) {
-      setBookmark(true);
-    } else {
+      if (isBookmarked) {
+        setBookmark(true);
+      } else {
+      }
+    } catch (err) {
+      const error = err as AxiosError;
+      if (error.response) {
+        if (error.response.status === 401) {
+          dispatch(removeAccessToken());
+        }
+      }
     }
   };
 
@@ -325,18 +350,18 @@ const DetailRecipe = () => {
   }, [goToSection]);
 
   const handleReaction = async () => {
-    try {
-      if (loginState.accessToken) {
-        const newToken = await CheckExpired(
-          loginState.accessToken,
-          loginState.tokenType,
-          loginState.userId
-        );
-        if (newToken) {
-          dispatch(reissueAccessToken(newToken));
-        }
+    let newToken = null;
+    if (loginState.accessToken) {
+      newToken = await CheckExpired(
+        loginState.accessToken,
+        loginState.tokenType,
+        loginState.userId
+      );
+      if (newToken) {
+        dispatch(reissueAccessToken(newToken));
       }
-
+    }
+    try {
       if (recipeData.recipe.recipe_reaction_state === 0) {
         recipeData.recipe.recipe_reaction_state = 1;
         countRef.current.textContent++;
@@ -346,19 +371,24 @@ const DetailRecipe = () => {
       }
 
       const nextReaction = recipeData.recipe.recipe_reaction_state;
-
       const data = await axios.post(
         `${serverUrl}/recipe/${locationProps}?reaction=${nextReaction}&tokenType=${loginState.tokenType}`,
         {},
         {
           withCredentials: true,
           headers: {
-            authorization: `Bearer ${loginState.accessToken}`,
+            authorization: `Bearer ${newToken ? newToken : loginState.accessToken}`,
           },
         }
       );
       console.log(data);
     } catch (err) {
+      const error = err as AxiosError;
+      if (error.response) {
+        if (error.response.status === 401) {
+          dispatch(removeAccessToken());
+        }
+      }
       console.log(err);
     }
   };

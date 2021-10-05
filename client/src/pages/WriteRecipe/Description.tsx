@@ -5,9 +5,9 @@ import { useHistory } from "react-router";
 import { resetWritePage, goToPrevPage } from "actions/WriteRecipePage";
 import { setDescription, resetAllContents } from "actions/WriteRecipeContents";
 import CheckExpired from "utils/CheckExpired";
-import { reissueAccessToken } from "actions/Accesstoken";
+import { reissueAccessToken, removeAccessToken } from "actions/Accesstoken";
 import { RootState } from "reducers";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import {
   DescriptionSlide,
   NextButton,
@@ -109,13 +109,14 @@ const Description = ({
   };
 
   const handleSubmitRecipe = async () => {
-    try {
-      if (accessToken) {
-        const newToken = await CheckExpired(accessToken, tokenType, userId);
-        if (newToken) {
-          dispatch(reissueAccessToken(newToken));
-        }
+    let newToken = null;
+    if (accessToken) {
+      newToken = await CheckExpired(accessToken, tokenType, userId);
+      if (newToken) {
+        dispatch(reissueAccessToken(newToken));
       }
+    }
+    try {
       const data = await axios.post(
         `${process.env.REACT_APP_SERVER_URL}/recipe?tokenType=${tokenType}`,
         {
@@ -130,7 +131,7 @@ const Description = ({
           withCredentials: true,
           headers: {
             "Content-Type": "application/json",
-            authorization: `Bearer ${accessToken}`,
+            authorization: `Bearer ${newToken ? newToken : accessToken}`,
           },
         }
       );
@@ -146,7 +147,7 @@ const Description = ({
           withCredentials: true,
           headers: {
             "Content-Type": "multipart/form-data",
-            authorization: `Bearer ${accessToken}`,
+            authorization: `Bearer ${newToken ? newToken : accessToken}`,
           },
         }
       );
@@ -157,6 +158,13 @@ const Description = ({
       dispatch(resetWritePage());
       dispatch(resetAllContents());
     } catch (err) {
+      const error = err as AxiosError;
+      if (error.response) {
+        if (error.response.status === 401) {
+          dispatch(removeAccessToken());
+          history.push("/landing");
+        }
+      }
       console.log(err);
     }
   };
