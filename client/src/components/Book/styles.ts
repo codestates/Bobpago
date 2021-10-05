@@ -131,8 +131,10 @@ export const BackgroundImg = styled.img`
   position: absolute;
   opacity: 0.2;
   transform: translateX(-96%);
-  width: 100%;
-  height: 100%;
+  right : -67%;
+  top: 2%;
+  width: 80%;
+  height: 95%;
   pointer-events: none;
   @media screen and (max-width: 480px) {
     display: none;
@@ -246,18 +248,18 @@ interface LineHeightProps {
 }
 
 export const DescriptionText = styled.textarea<LineHeightProps>`
-  width: 100%;
-  height: 100%;
+  position: relative;
+  top: 9%;
+  width: 65%;
+  height: 82%;
   outline: none;
   border: none;
+  text-align: center;
   background: transparent;
   z-index: 3;
   padding-top: 0.5em;
-  font-size: 150%;
-  line-height: ${(props) =>
-    props.lineHeight
-      ? props.lineHeight + "em"
-      : window.innerHeight * 0.0037 + 0.0398 + "em"};
+  font-size: 2.5em;
+  line-height: 1.3em;
   resize: none;
   @media screen and (max-width: 480px) {
     transform: translate(-20%, 50%) rotate(-90deg);
