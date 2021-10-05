@@ -17,7 +17,7 @@ async function CheckExpired(
         },
       }
     );
-    return null;
+    return accessToken;
   } catch (err) {
     const result = await axios
       .get(`${serverUrl}/auth/${userId}/tokenRequest?tokenType=${tokenType}`, {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { useParams } from "react-router";
+import axios, { AxiosError } from "axios";
+import { useHistory, useParams } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "reducers";
 import Nav from "components/Nav/Nav";
@@ -10,7 +10,7 @@ import Card from "components/Card/MyPage/Card";
 import FollowingModal from "components/FollowModal/FollowingModal";
 import FollowerModal from "components/FollowModal/FollowerModal";
 import CheckExpired from "utils/CheckExpired";
-import { reissueAccessToken } from "actions/Accesstoken";
+import { reissueAccessToken, removeAccessToken } from "actions/Accesstoken";
 import {
   PageContainer,
   UserProfileContainer,
@@ -44,6 +44,7 @@ const UserPage = () => {
     tokenType,
     userId: myId,
   } = useSelector((state: RootState) => state.AccesstokenReducer);
+  const history = useHistory();
   const dispatch = useDispatch();
   const [myPostNum, setMyPostNum] = useState<number>(6);
   const [standardNum, setStandardNum] = useState<number>(6);
@@ -60,46 +61,50 @@ const UserPage = () => {
   let { userId } = useParams<{ userId: string | undefined }>();
 
   async function getData() {
-    setLoading(true);
+
+    try{
+          setLoading(true);
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER_URL}/user/${userId}?tokenType=${tokenType}`,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = response.data.data;
+      setUserInfo(data);
+      setUserPosts(data.recipes);
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
+    } catch (err) {
+      // const error = err as AxiosError;
+      // if (error.response) {
+      //   if (error.response.status === 401) {
+      //     dispatch(removeAccessToken());
+      //   }
+      // }
+    }
+  }
+
+  async function checkFollow() {
+    let newToken = null;
     if (accessToken) {
-      const newToken = await CheckExpired(accessToken, tokenType, myId);
+      newToken = await CheckExpired(accessToken, tokenType, myId);
       if (newToken) {
         dispatch(reissueAccessToken(newToken));
       }
     }
-    const response = await axios.get(
-      `${process.env.REACT_APP_SERVER_URL}/user/${userId}?tokenType=${tokenType}`,
-      {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-    const data = response.data.data;
-    setUserInfo(data);
-    setUserPosts(data.recipes);
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-  }
-
-  async function checkFollow() {
     try {
-      if (accessToken) {
-        const newToken = await CheckExpired(accessToken, tokenType, myId);
-        if (newToken) {
-          dispatch(reissueAccessToken(newToken));
-        }
-      }
       const followerData = await axios.get(
         `${process.env.REACT_APP_SERVER_URL}/user/${userId}/follower?tokenType=${tokenType}`,
         {
           withCredentials: true,
           headers: {
             "Content-Type": "application/json",
-            authorization: `Bearer ${accessToken}`,
+            authorization: `Bearer ${newToken ? newToken : accessToken}`,
           },
         }
       );
@@ -109,6 +114,12 @@ const UserPage = () => {
         followers.some((el: any) => el.id === myId) &&
         setFollow(true);
     } catch (err) {
+      const error = err as AxiosError;
+      if (error.response) {
+        if (error.response.status === 401) {
+          dispatch(removeAccessToken());
+        }
+      }
       console.log(err);
     }
   }
@@ -124,13 +135,14 @@ const UserPage = () => {
   };
 
   const handleFollow = async () => {
-    try {
-      if (accessToken) {
-        const newToken = await CheckExpired(accessToken, tokenType, myId);
-        if (newToken) {
-          dispatch(reissueAccessToken(newToken));
-        }
+    let newToken = null;
+    if (accessToken) {
+      newToken = await CheckExpired(accessToken, tokenType, myId);
+      if (newToken) {
+        dispatch(reissueAccessToken(newToken));
       }
+    }
+    try {
       if (follow) {
         const data = await axios.delete(
           `${serverUrl}/user/${userId}/follow?tokenType=${tokenType}`,
@@ -138,7 +150,7 @@ const UserPage = () => {
             withCredentials: true,
             headers: {
               "Content-Type": "application/json",
-              authorization: `Bearer ${accessToken}`,
+              authorization: `Bearer ${newToken ? newToken : accessToken}`,
             },
           }
         );
@@ -151,57 +163,53 @@ const UserPage = () => {
             withCredentials: true,
             headers: {
               "Content-Type": "application/json",
-              authorization: `Bearer ${accessToken}`,
+              authorization: `Bearer ${newToken ? newToken : accessToken}`,
             },
           }
         );
         setFollow(true);
       }
     } catch (err) {
+      const error = err as AxiosError;
+      if (error.response) {
+        if (error.response.status === 401) {
+          dispatch(removeAccessToken());
+        }
+      }
       console.log(err);
     }
   };
 
   const handleFolloweeModalOn = async () => {
-    if (accessToken) {
-      const newToken = await CheckExpired(accessToken, tokenType, myId);
-      if (newToken) {
-        dispatch(reissueAccessToken(newToken));
-      }
-    }
-    const data = await axios.get(
-      `${process.env.REACT_APP_SERVER_URL}/user/${userId}/followee?tokenType=${tokenType}`,
-      {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-    setFolloweeInfo(data.data.data);
-    setFollowingModal(true);
+    try{
+      const data = await axios.get(
+        `${process.env.REACT_APP_SERVER_URL}/user/${userId}/followee?tokenType=${tokenType}`,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setFolloweeInfo(data.data.data);
+      setFollowingModal(true);
+    } catch (err) {}
   };
 
   const handleFollowerModalOn = async () => {
-    if (accessToken) {
-      const newToken = await CheckExpired(accessToken, tokenType, myId);
-      if (newToken) {
-        dispatch(reissueAccessToken(newToken));
-      }
-    }
-    const data = await axios.get(
-      `${process.env.REACT_APP_SERVER_URL}/user/${userId}/follower?tokenType=${tokenType}`,
-      {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-    setFollowerInfo(data.data.data);
-    setFollowerModal(true);
+    try {
+      const data = await axios.get(
+        `${process.env.REACT_APP_SERVER_URL}/user/${userId}/follower?tokenType=${tokenType}`,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setFollowerInfo(data.data.data);
+      setFollowerModal(true);
+    } catch (err) {}
   };
 
   return (

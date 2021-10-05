@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { RootState } from "reducers";
 import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import Profile from "components/Profile/Comment/Profile";
 import CheckExpired from "utils/CheckExpired";
-import { reissueAccessToken } from "actions/Accesstoken";
+import { reissueAccessToken, removeAccessToken } from "actions/Accesstoken";
 import {
   UserProfile,
   ProfileImage,
@@ -22,6 +22,7 @@ import {
   LikeContainer,
   LikeText,
 } from "./styles";
+import { useHistory } from "react-router-dom";
 
 interface Props {
   comment: any;
@@ -29,6 +30,7 @@ interface Props {
 }
 
 const DRModalContent = ({ comment, setCommentData }: Props) => {
+  const history = useHistory();
   const dispatch = useDispatch();
   const serverUrl = process.env.REACT_APP_SERVER_URL;
   const S3Url = process.env.REACT_APP_S3_IMG_URL;
@@ -47,7 +49,6 @@ const DRModalContent = ({ comment, setCommentData }: Props) => {
   const loginState = useSelector(
     (state: RootState) => state.AccesstokenReducer
   );
-
   useEffect(() => {
     setTime(changeTime(comment.updatedAt));
     setEditCommentInput(comment.content);
@@ -77,37 +78,45 @@ const DRModalContent = ({ comment, setCommentData }: Props) => {
   };
 
   const handleDeleteComment = async () => {
-    try {
-      if (accessToken) {
-        const newToken = await CheckExpired(accessToken, tokenType, myId);
-        if (newToken) {
-          dispatch(reissueAccessToken(newToken));
-        }
+    let newToken = null;
+    if (accessToken) {
+      newToken = await CheckExpired(accessToken, tokenType, myId);
+      if (newToken) {
+        dispatch(reissueAccessToken(newToken));
       }
+    }
+    try {
       const data = await axios.delete(
         `${serverUrl}/recipe/${comment.recipeId}/comment/${comment.id}?tokenType=${tokenType}`,
         {
           withCredentials: true,
           headers: {
             "Content-Type": "application/json",
-            authorization: `Bearer ${accessToken}`,
+            authorization: `Bearer ${newToken ? newToken : accessToken}`,
           },
         }
       );
       getData();
     } catch (err) {
+      const error = err as AxiosError;
+      if (error.response) {
+        if (error.response.status === 401) {
+          dispatch(removeAccessToken());
+        }
+      }
       console.log(err);
     }
   };
 
   const handleEditComment = async () => {
-    try {
-      if (accessToken) {
-        const newToken = await CheckExpired(accessToken, tokenType, myId);
-        if (newToken) {
-          dispatch(reissueAccessToken(newToken));
-        }
+    let newToken = null;
+    if (accessToken) {
+      newToken = await CheckExpired(accessToken, tokenType, myId);
+      if (newToken) {
+        dispatch(reissueAccessToken(newToken));
       }
+    }
+    try {
       if (edit) {
         const data = await axios.patch(
           `${serverUrl}/recipe/${comment.recipeId}/comment/${comment.id}?tokenType=${tokenType}`,
@@ -118,7 +127,7 @@ const DRModalContent = ({ comment, setCommentData }: Props) => {
             withCredentials: true,
             headers: {
               "Content-Type": "application/json",
-              authorization: `Bearer ${accessToken}`,
+              authorization: `Bearer ${newToken ? newToken : accessToken}`,
             },
           }
         );
@@ -128,6 +137,12 @@ const DRModalContent = ({ comment, setCommentData }: Props) => {
         setEdit(true);
       }
     } catch (err) {
+      const error = err as AxiosError;
+      if (error.response) {
+        if (error.response.status === 401) {
+          dispatch(removeAccessToken());
+        }
+      }
       console.log(err);
     }
   };
