@@ -29,7 +29,6 @@ interface FixProps {
 
 const Card = ({ index, fix, postData, setDeleteRecipeModal,setSelectedRecipe }: FixProps) => {
   let history = useHistory();
-
   return (
     <CardContainer
       onClick={() =>

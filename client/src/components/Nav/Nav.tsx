@@ -20,6 +20,7 @@ import {
   ModalBtnNo,
   ResponsiveNavEtcList,
   BobPagoIcon,
+  NavEtcListNotLogin,
 } from "./styles";
 import { Link } from "react-router-dom";
 import SignIn from "pages/SignUpAndSignIn/SignIn";
@@ -129,7 +130,7 @@ const Nav = ({ opac }: { opac: boolean }) => {
             </NavEtcUl>
           ) : (
             <NavEtcUl>
-              <NavEtcList>
+              <NavEtcListNotLogin>
                 <LoginLogout
                   onClick={() => {
                     dispatch(showSignIn());
@@ -140,7 +141,7 @@ const Nav = ({ opac }: { opac: boolean }) => {
                 >
                   로그인
                 </LoginLogout>
-              </NavEtcList>
+              </NavEtcListNotLogin>
             </NavEtcUl>
           )}
         </NavEtcContainer>

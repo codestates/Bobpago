@@ -118,6 +118,12 @@ export const MatchTextContainer = styled.div`
 export const MatchTopContainer = styled.div`
   display: flex;
   position: relative;
+  @media only screen and (max-width: 768px) {
+    margin-top: 5em;
+  }
+  @media only screen and (max-width: 480px) {
+    margin-top: 6em;
+  }
 `;
 
 export const MatchText = styled.div`
@@ -130,6 +136,9 @@ export const MatchText = styled.div`
 
   @media only screen and (max-width: 768px) {
     font-size: ${main.middleFont};
+  }
+  @media only screen and (max-width: 480px) {
+    font-size: 2.5em;
   }
 `;
 

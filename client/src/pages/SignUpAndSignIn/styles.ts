@@ -12,10 +12,6 @@ export const WholeContainer = styled.div`
   left: 0;
   right: 0;
   z-index: 100000;
-  @media only screen and (max-width: 480px) {
-    width: 100%;
-    height: 100%;
-  }
 `;
 export const EmailIcon = styled(Email)`
   transform: translate(-0.2em, -0.1em);
@@ -41,6 +37,7 @@ export const Container = styled.div`
   @media only screen and (max-width: "480px") {
     height: 100%;
   }
+  box-shadow: 2px 2px 10px 2px #bdbdbd;
 `;
 
 export const Background = styled.div`
@@ -69,11 +66,6 @@ export const Logo = styled.img`
   margin: 0 auto;
   font-size: ${main.smallestFont};
   margin-top: -0.5em;
-  @media only screen and (max-width: 480px) {
-    width: 12em;
-    margin-top: 0em;
-    margin-bottom: 1em;
-  }
 `;
 export const Placeholder = styled.label`
   text-align: left;
@@ -108,7 +100,7 @@ export const InputWrapper = styled.input`
   border: 1.5px solid #c2c2c2;
   height: 2.3em;
   width: 100%;
-  font-size: 1em;
+  font-size: 20px;
   margin-top: 0.4em;
   margin-bottom: 0.4em;
   padding-left: 1em;
@@ -116,9 +108,6 @@ export const InputWrapper = styled.input`
   background-color: #fafafa;
   &:focus {
     outline: none;
-  }
-  @media only screen and (max-width: 480px) {
-    height: 3em;
   }
 `;
 const shake = keyframes`
@@ -249,10 +238,6 @@ export const EyeIcon = styled.div`
   margin-top: 0.55em;
   margin-bottom: 0.55em;
   cursor: pointer;
-  @media only screen and (max-width: 480px) {
-    right: 3em;
-    transform: translateY(-2.7em);
-  }
 `;
 
 export const ButtonWrapper = styled.button`
@@ -274,9 +259,6 @@ export const ButtonWrapper = styled.button`
   overflow: hidden;
   z-index: 0;
   background-color: #f5f5f5;
-  @media only screen and (max-width: 480px) {
-    height: 3em;
-  }
   &:after {
     z-index: 0;
     position: absolute;
@@ -348,7 +330,7 @@ export const SignInBackground = styled.div`
   width: 100%;
   height: 100%;
   position: fixed;
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.35);
   backdrop-filter: blur(2px);
 `;
 

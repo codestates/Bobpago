@@ -32,6 +32,7 @@ const AuthLoading = () => {
     dispatch(showNothing());
     setTimeout(() => {
       history.go(-1);
+
     }, 1000);
   }, []);
   return (
