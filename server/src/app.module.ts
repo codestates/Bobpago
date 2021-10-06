@@ -18,6 +18,7 @@ import { AuthCheckerMiddleware } from './middleware/auth-checker.middleware';
 import { LoggerMiddleware } from './middleware/logger.middleware';
 import { JwtModule } from '@nestjs/jwt';
 import { User } from './entities/user.entity';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { User } from './entities/user.entity';
       },
     }),
   ],
+  controllers: [AppController],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
@@ -64,6 +66,7 @@ export class AppModule implements NestModule {
         { path: 'ingredient/basic', method: RequestMethod.GET },
         { path: 'user/:userId', method: RequestMethod.GET },
         { path: 'api', method: RequestMethod.GET },
+        { path: '', method: RequestMethod.GET },
       )
       .forRoutes('*');
   }
