@@ -235,7 +235,7 @@ export const NextPageBtn = styled(NavigateNext)`
   }
   @media screen and (max-width: 480px) {
     right: auto;
-    bottom: 5.5em;
+    bottom: 15%;
     transform: rotate(90deg);
   }
 `;
@@ -252,7 +252,7 @@ export const PrevPageBtn = styled(NavigateNext)`
   }
   @media screen and (max-width: 480px) {
     left: auto;
-    top: 3.5em;
+    top: 10%;
     transform: rotate(-90deg);
   }
 `;

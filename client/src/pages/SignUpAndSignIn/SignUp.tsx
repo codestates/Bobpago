@@ -13,6 +13,7 @@ import {
   EyeIcon,
   Ask,
   Logo,
+  SignInBackground,
 } from "./styles";
 import gsap from "gsap";
 import Eye from "../../components/Eye/Eye";
@@ -65,9 +66,7 @@ const SignUp = () => {
   useEffect((): any => {
     if (signUpDisplay) {
       gsap.to(signUpRef.current, { display: "" });
-      window.innerWidth > 480
-        ? gsap.to(signUpRef.current, { top: "20%" })
-        : gsap.to(signUpRef.current, { top: "0%" });
+      gsap.to(signUpRef.current, { top: "20%" });
     } else {
       signUpRef.current.style.top = "100%";
       signUpRef.current.style.display = "none";
@@ -213,6 +212,7 @@ const SignUp = () => {
           <BackgroundImg src="/img/loginWallpaper.png" alt="배경" />
         </Background>
       </Container>
+      <SignInBackground />
     </WholeContainer>
   );
 };

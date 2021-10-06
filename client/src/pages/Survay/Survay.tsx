@@ -216,22 +216,17 @@ const Survay = () => {
             <ArrowLeft onClick={handleAreUGood} ref={badLeftBtnRef} />
             <BadCookerContainer ref={badCookerRef}>
               {/* <RightTitleContainer> */}
-              <BadCookerTitleContainer>
-                간단한 재료들로 구성해보세요 🍳
-              </BadCookerTitleContainer>
-              <RightTooltipContainer>
-                <RightQuestionIcons
-                  onMouseEnter={() => {
-                    tooltipRightRef.current.style.opacity = "1";
-                  }}
-                  onMouseLeave={() => {
-                    tooltipRightRef.current.style.opacity = "0";
-                  }}
-                />
-                <RightSurvayTooltip ref={tooltipRightRef}>
+              <LeftTooltipContainer>
+                <BadCookerTitleContainer>
+                  간단한 재료들로 구성해보세요 🍳
+                </BadCookerTitleContainer>
+                {/* <RightTooltipContainer> */}
+                <RightQuestionIcons />
+                <RightSurvayTooltip>
                   최소한 3개의 재료를 선택해야 넘어갈 수 있습니다!
                 </RightSurvayTooltip>
-              </RightTooltipContainer>
+                {/* </RightTooltipContainer> */}
+              </LeftTooltipContainer>
               {/* </RightTitleContainer> */}
               <Ingredient check="Bad" />
               <PostButton onClick={handlePageMove}>레시피 찾기</PostButton>

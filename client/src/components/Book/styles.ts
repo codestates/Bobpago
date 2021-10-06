@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { NavigateNext } from "@styled-icons/material-rounded/NavigateNext/NavigateNext";
 import { Upload } from "@styled-icons/bootstrap/Upload/Upload";
+import { LineHeight } from "@styled-icons/remix-editor";
 
 export const UploadImg = styled.img`
   cursor: pointer;
@@ -131,7 +132,7 @@ export const BackgroundImg = styled.img`
   position: absolute;
   opacity: 0.2;
   transform: translateX(-96%);
-  right : -67%;
+  right: -67%;
   top: 2%;
   width: 80%;
   height: 95%;
@@ -259,12 +260,13 @@ export const DescriptionText = styled.textarea<LineHeightProps>`
   z-index: 3;
   padding-top: 0.5em;
   font-size: 2.5em;
-  line-height: 1.3em;
+  line-height: ${(props) =>
+    props.lineHeight ? props.lineHeight + "em" : "1.3em"};
   resize: none;
   @media screen and (max-width: 480px) {
-    transform: translate(-20%, 50%) rotate(-90deg);
+    transform: translate(-25%, 50%) rotate(-90deg);
     width: 200%;
-    height: 50%;
+    height: 40%;
     padding-top: 0em;
   }
 `;

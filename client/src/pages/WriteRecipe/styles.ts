@@ -209,7 +209,7 @@ export const TimeRadioButton = styled.input.attrs({
     color: #fff;
   }
   &:hover + span {
-    transform: translate(-5.19em, 1.4em) scale(1.1);
+    transform: translate(-4.8em, 1.4em) scale(1.1);
   }
   &:checked {
     color: #fff;
@@ -224,7 +224,7 @@ export const TimeRadioButton = styled.input.attrs({
 `;
 export const LabelText = styled.span`
   &:hover {
-    transform: translate(-5.19em, 1.4em) scale(1.1);
+    transform: translate(-4.8em, 1.4em) scale(1.1);
   }
 `;
 
