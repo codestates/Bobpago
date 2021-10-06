@@ -32,7 +32,7 @@ const GoogleLoading = () => {
     handleGoogle();
     dispatch(showNothing());
     setTimeout(() => {
-      history.push({ pathname: "/" });
+      history.go(-2);
     }, 1000);
   }, []);
 
