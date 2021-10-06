@@ -22,6 +22,14 @@ const LandingSectionFour = styled.section`
     position: absolute;
     content: "";
     transform: rotateZ(-45deg);
+    transition: 1s;
+  }
+  @media screen and (max-width: 768px) {
+    ::before {
+      width: 300%;
+      background-color: #ffe0c3;
+      transition: 1s;
+    }
   }
 `;
 
@@ -32,11 +40,14 @@ const LandingFourContainer = styled.div<ScrollProps>`
   transition: 1.5s;
   position: absolute;
   opacity: ${(props) => {
-    return props.position > 3650 ? "1" : "0";
+    return props.position < 200 ? "1" : "0";
   }};
   bottom: ${(props) => {
-    return props.position > 3650 ? "5%" : "-50%";
+    return props.position < 200 ? "5%" : "-20%";
   }};
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 const LandingFourLeftContainer = styled.div`
@@ -45,6 +56,9 @@ const LandingFourLeftContainer = styled.div`
   justify-content: center;
   align-items: center;
   margin-left: 3em;
+  @media screen and (max-width: 768px) {
+    margin-left: 0;
+  }
 `;
 
 const LandingFourLeftGif = styled.img`
@@ -52,15 +66,25 @@ const LandingFourLeftGif = styled.img`
   height: 55%;
   border-radius: 15px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
+  @media screen and (max-width: 768px) {
+    width: 90%;
+    height: 90%;
+    padding-left: 0;
+    align-items: center;
+  }
 `;
 
 const LandingFourRightContainer = styled.div`
   flex: 1;
   display: flex;
   justify-content: center;
-  /* align-items: center; */
+
   flex-direction: column;
   padding-left: 5em;
+  @media screen and (max-width: 768px) {
+    padding-left: 0;
+    align-items: center;
+  }
 `;
 
 const LandingFourRightTitle = styled.div`
@@ -69,20 +93,39 @@ const LandingFourRightTitle = styled.div`
   color: #f75f4e;
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
     1px 1px 0 #000;
+  @media screen and (max-width: 768px) {
+    font-size: 84px;
+  }
+  @media screen and (max-width: 600px) {
+    font-size: 56px;
+  }
 `;
 
 const LandingFourRightContent = styled.div`
   font-size: 32px;
+  @media screen and (max-width: 768px) {
+    font-size: 32px;
+    transition: 1s;
+  }
+  @media screen and (max-width: 600px) {
+    font-size: 24px;
+    transition: 1s;
+    /* margin-right: 1em; */
+  }
 `;
 
 interface LandSection3Props {
   scrollPosition: number;
+  position5: number;
 }
 
-const LandSection3: React.FC<LandSection3Props> = ({ scrollPosition }) => {
+const LandSection3: React.FC<LandSection3Props> = ({
+  scrollPosition,
+  position5,
+}) => {
   return (
-    <LandingSectionFour>
-      <LandingFourContainer position={scrollPosition}>
+    <LandingSectionFour id="section3">
+      <LandingFourContainer position={position5}>
         <LandingFourLeftContainer>
           <LandingFourLeftGif src="/img/LandingGif5.gif" />
         </LandingFourLeftContainer>

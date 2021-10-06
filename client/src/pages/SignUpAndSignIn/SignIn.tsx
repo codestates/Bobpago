@@ -187,9 +187,7 @@ const SignIn = () => {
             </ButtonWrapper>
             <Ask>
               아직 회원이 아니신가요?{" "}
-              <a href="#" onClick={() => dispatch(showSignUp())}>
-                회원가입
-              </a>
+              <a onClick={() => dispatch(showSignUp())}>회원가입</a>
             </Ask>
             <OAuthContainer>
               <p>소셜계정으로 간편 로그인</p>
