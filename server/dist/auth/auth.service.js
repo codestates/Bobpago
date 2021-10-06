@@ -244,8 +244,10 @@ let AuthService = class AuthService {
             },
             withCredentials: true,
         });
-        const email = userData.data.kakao_account.email;
+        const temp = userData.data.kakao_account.email;
         const nickname = userData.data.properties.nickname;
+        const decoratorIdx = temp.indexOf('@');
+        const email = temp.slice(0, decoratorIdx + 1) + 'kakao.com';
         try {
             const user = await this.usersRepository.findOne({ email });
             await this.usersRepository.update(user.id, { refreshToken });
