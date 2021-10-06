@@ -51,8 +51,11 @@ export class AuthCheckerMiddleware implements NestMiddleware {
             },
             withCredentials: true,
           });
+          const temp = result.data.kakao_account.email;
+          const decoratorIdx = temp.indexOf('@');
+          const email = temp.slice(0, decoratorIdx + 1) + 'kakao.com';
           const user = await this.usersRepository.findOne({
-            email: result.data.kakao_account.email,
+            email,
           });
           delete user.password;
           delete user.refreshToken;

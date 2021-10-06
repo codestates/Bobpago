@@ -411,10 +411,15 @@ const DetailRecipe = () => {
   };
 
   const handleNotification = () => {
-    notifyRef.current.style.bottom = "5%";
-    setTimeout(() => {
-      notifyRef.current.style.bottom = "-20%";
-    }, 5000);
+    if (notifyRef.current !== null) {
+      notifyRef.current.style.bottom = "5%";
+      setTimeout(() => {
+        if (notifyRef.current === null) {
+          return;
+        }
+        notifyRef.current.style.bottom = "-20%";
+      }, 5000);
+    }
   };
 
   return loading === false ? (
@@ -568,7 +573,7 @@ const DetailRecipe = () => {
           <NotifiMainTitle>주재료 : </NotifiMainTitle>
           <NotifiMainIngredient>
             {recipeData.ingredients.main.map((item: any) => {
-              return <span>{item.name}</span>;
+              return <span key={item.id}>{item.name}</span>;
             })}
           </NotifiMainIngredient>
         </NotifiMainContainer>
@@ -576,7 +581,7 @@ const DetailRecipe = () => {
           <NotifiSubTitle>부재료 : </NotifiSubTitle>
           <NotifiSubIngredient>
             {recipeData.ingredients.sub.map((item: any) => {
-              return <span>{item.name}</span>;
+              return <span key={item.id}>{item.name}</span>;
             })}
           </NotifiSubIngredient>
         </NotifiSubContainer>
