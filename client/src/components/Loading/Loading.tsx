@@ -6,7 +6,7 @@ const Container = styled.div`
   height: 100vh;
   width: 100vw;
   text-align: center;
-  justify-contents: center;
+  justify-content: center;
   background: #ffefe6;
   svg {
     position: absolute;

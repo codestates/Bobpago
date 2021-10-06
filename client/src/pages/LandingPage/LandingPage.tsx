@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { main } from "theme";
+import Loading from "components/Loading/Loading";
 import LandSection1 from "components/Landing/LandSection1";
 import LandSection2 from "components/Landing/LandSection2";
 import LandSection3 from "components/Landing/LandSection3";
@@ -23,7 +24,10 @@ const LandingContainer = styled.section`
     background-color: #feefe6;
     transition: 1.5s;
     top: 0;
-    z-index: 1000000;
+    z-index: 900;
+  }
+  .landHiddenActive {
+    left: 0;
   }
 `;
 
@@ -86,8 +90,13 @@ const NavLogo = styled.div`
     background-color: #000000;
   }
   @media screen and (max-width: 768px) {
-    font-size: 48px;
-    margin-right: 1em;
+    font-size: 42px;
+    margin-right: 0.5em;
+  }
+
+  @media screen and (max-width: 600px) {
+    font-size: 24px;
+    /* margin-right: 1em; */
   }
 `;
 
@@ -119,6 +128,9 @@ const NavLi = styled.li`
       width: 100%;
     }
   }
+  @media screen and (max-width: 600px) {
+    font-size: 18px;
+  }
 `;
 
 const LandingSectionThree = styled.section`
@@ -127,10 +139,30 @@ const LandingSectionThree = styled.section`
   background-color: #feefe6;
 `;
 
+export const HiddenContainer = styled.div`
+  width: 100%;
+  height: 200vh;
+  transform: scale(1.5);
+  position: fixed;
+  top: 0;
+  background-color: #ffc69b;
+  z-index: 10000000;
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  transition: 2s;
+  left: 150%;
+`;
+
 const LandingPage = () => {
   const [scrollPosition, setScrollPosition] = useState<number>(0);
 
   const history = useHistory();
+  const [position1, setPosition1] = useState<number>(0);
+  const [position2, setPosition2] = useState<number>(0);
+  const [position3, setPosition3] = useState<number>(0);
+  const [position4, setPosition4] = useState<number>(0);
+  const [position5, setPosition5] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [onOff, setOnOff] = useState<boolean>(false);
 
   const NavRef = useRef<any>(null);
   const NavlogoRef = useRef<any>(null);
@@ -138,9 +170,43 @@ const LandingPage = () => {
 
   let positionEx: number = 0;
 
+  const handlePosition1 = () => {
+    const sectionTwo1 = document.querySelector(".section2-1") as HTMLElement;
+    return scrollPosition + sectionTwo1.getBoundingClientRect().top;
+  };
+
+  const handlePosition2 = () => {
+    const sectionTwo2 = document.querySelector(".section2-2") as HTMLElement;
+    return scrollPosition + sectionTwo2.getBoundingClientRect().top - 50;
+  };
+
+  const handlePosition3 = () => {
+    const sectionTwo3 = document.querySelector(".section2-3") as HTMLElement;
+    return scrollPosition + sectionTwo3.getBoundingClientRect().top - 100;
+  };
+
+  const handlePosition4 = () => {
+    const sectionTwo4 = document.querySelector(".section2-4") as HTMLElement;
+    return scrollPosition + sectionTwo4.getBoundingClientRect().top - 150;
+  };
+
+  const handlePosition5 = () => {
+    const sectionThree1 = document.querySelector("#section3") as HTMLElement;
+    return scrollPosition + sectionThree1.getBoundingClientRect().top;
+  };
+
+  const handlePageTransition = () => {
+    setOnOff(!onOff);
+  };
+
   const onScroll = useCallback((): void => {
     positionEx = window.pageYOffset;
-    // console.log(positionEx, "land");
+    setPosition1(handlePosition1);
+    setPosition2(handlePosition2);
+    setPosition3(handlePosition3);
+    setPosition4(handlePosition4);
+    setPosition5(handlePosition5);
+
     if (NavRef.current && NavlogoRef.current && NavlistRef.current) {
       if (positionEx > 10000) {
         NavRef.current.style.backgroundColor = "#feefe6ce";
@@ -160,6 +226,11 @@ const LandingPage = () => {
   }, []);
 
   useEffect(() => {
+    if (!loading) {
+      setTimeout(() => {
+        setLoading(true);
+      }, 2000);
+    }
     window.addEventListener("scroll", onScroll);
 
     return () => {
@@ -167,8 +238,13 @@ const LandingPage = () => {
     };
   }, []);
 
-  return (
+  return !loading ? (
+    <Loading></Loading>
+  ) : (
     <LandingContainer>
+      <HiddenContainer
+        className={onOff ? "landHiddenActive" : "landHiddenBasic"}
+      />
       <Tobbar />
       <LandingNav ref={NavRef}>
         <NavLogo
@@ -213,11 +289,20 @@ const LandingPage = () => {
           </NavLi>
         </NavUl>
       </LandingNav>
-      <LandSection1 />
-      <LandSection2 scrollPosition={scrollPosition} />
+      <LandSection1 handlePageTransition={handlePageTransition} />
+      <LandSection2
+        position1={position1}
+        position2={position2}
+        position3={position3}
+        position4={position4}
+        scrollPosition={scrollPosition}
+      />
       <LandingSectionThree></LandingSectionThree>
-      <LandSection3 scrollPosition={scrollPosition} />
-      <LandSection4 position={scrollPosition} />
+      <LandSection3 position5={position5} scrollPosition={scrollPosition} />
+      <LandSection4
+        handlePageTransition={handlePageTransition}
+        position={scrollPosition}
+      />
     </LandingContainer>
   );
 };

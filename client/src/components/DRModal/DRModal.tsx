@@ -33,11 +33,15 @@ const DRModal: React.FC<DRModalProps> = ({ handleModalClose, recipeId }) => {
   const { accessToken, tokenType, userId } = useSelector(
     (state: RootState) => state.AccesstokenReducer
   );
+  const signInState = useSelector(
+    (state: RootState) => state.SignUpAndSignInReducer
+  );
   const serverUrl = process.env.REACT_APP_SERVER_URL;
   const [commentData, setCommentData] = useState<any>([]);
   const [commentInput, setCommentInput] = useState<string>("");
   const [imgInput, setImgInput] = useState<any>("");
   const inputImgRef = useRef<any>(null);
+  const modalRef = useRef<any>(null);
   const history = useHistory();
 
   async function getData() {
@@ -56,7 +60,10 @@ const DRModal: React.FC<DRModalProps> = ({ handleModalClose, recipeId }) => {
 
   //댓글 누를 때 토큰 없으면 로그인 화면 띄움
   const handleShowLogin = () => {
-    if (!accessToken) dispatch(showSignIn());
+    if (!accessToken) {
+      modalRef.current.style.zIndex = "95";
+      dispatch(showSignIn());
+    }
   };
 
   // 댓글 작성
@@ -119,8 +126,17 @@ const DRModal: React.FC<DRModalProps> = ({ handleModalClose, recipeId }) => {
     setImgInput(e.target.files[0]);
   };
 
+  useEffect(() => {
+    if (
+      signInState.loginDisplay === false &&
+      signInState.signUpDisplay === false
+    ) {
+      modalRef.current.style.zIndex = "100";
+    }
+  }, [handleShowLogin]);
+
   return (
-    <CommentModal>
+    <CommentModal ref={modalRef}>
       <TotalSudoContainer onClick={handleModalClose} />
       <CommentContainer>
         <CloseIcon onClick={handleModalClose} />

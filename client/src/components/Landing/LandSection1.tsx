@@ -13,6 +13,10 @@ interface SectionTextOne {
   queryTop?: string;
 }
 
+interface Section1Props {
+  handlePageTransition: () => void;
+}
+
 const LandingSectionOne = styled.section`
   width: 100%;
   height: 100vh;
@@ -124,50 +128,51 @@ const SectionOneTitle = styled.div<SectionTextOne>`
     text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
       1px 1px 0 #000;
 
-    ::before {
-      width: 0;
-      height: 3px;
-      background-color: #fa1d04;
-      content: "";
-      position: absolute;
-      top: 94%;
-      left: ${(props) => {
-        return props.lineLeft ? props.lineLeft : "0";
-      }};
-      border-radius: 20%;
-      transition: 0.5s;
-    }
     :hover {
-      width: ${(props) => {
+      /* width: ${(props) => {
         return props.width ? props.width : "100%";
-      }};
+      }}; */
       color: rgb(207, 36, 17);
-      ::before {
-        width: ${(props) => {
-          return props.width ? props.width : "100%";
-        }};
-      }
     }
   }
   @media screen and (max-width: 768px) {
     font-size: 52px;
-    max-width: 95%;
+    width: 100%;
     top: ${(props) => {
       return props.queryTop ? props.queryTop : "32%";
     }};
-    left: 4%;
+    left: 8%;
+
     span {
       color: rgb(248, 88, 14);
       margin-left: 0.1em;
       margin-right: 0.1em;
       font-size: 84px;
-      ::before {
-        display: none;
-      }
     }
     .recipeBot {
       margin-left: 0.15em;
       font-size: 90px;
+    }
+  }
+  @media screen and (max-width: 600px) {
+    font-size: 32px;
+    width: 100%;
+    top: ${(props) => {
+      return props.queryTop ? props.queryTop : "32%";
+    }};
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    span {
+      color: rgb(248, 88, 14);
+      margin-left: 0.1em;
+      margin-right: 0.1em;
+      font-size: 56px;
+    }
+    .recipeBot {
+      margin-left: 0.15em;
+      font-size: 55px;
     }
   }
 `;
@@ -215,10 +220,13 @@ const SectionOneButton = styled.button`
   }
 `;
 
-const LandSection1 = () => {
+const LandSection1: React.FC<Section1Props> = ({ handlePageTransition }) => {
   const history = useHistory();
   const handlePageMove = () => {
-    history.push("/survey");
+    handlePageTransition();
+    setTimeout(() => {
+      history.push("/survey");
+    }, 2000);
   };
 
   return (

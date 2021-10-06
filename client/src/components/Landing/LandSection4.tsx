@@ -56,6 +56,12 @@ const LandingFiveText1 = styled.div<Landing5Props>`
   align-items: center;
   transition: 2s;
   font-size: 72px;
+  @media screen and (max-width: 768px) {
+    font-size: 32px;
+  }
+  @media screen and (max-width: 600px) {
+    font-size: 18px;
+  }
 `;
 
 const LandingFiveText2 = styled.div<Landing5Props>`
@@ -67,6 +73,12 @@ const LandingFiveText2 = styled.div<Landing5Props>`
   align-items: center;
   transition: 2s;
   font-size: 72px;
+  @media screen and (max-width: 768px) {
+    font-size: 36px;
+    span {
+      font-size: 36px;
+    }
+  }
   span {
     ::before {
       content: "";
@@ -79,6 +91,16 @@ const LandingFiveText2 = styled.div<Landing5Props>`
       background-color: #f01d1d;
       bottom: 45%;
       border-radius: 20px;
+    }
+  }
+  @media screen and (max-width: 600px) {
+    font-size: 18px;
+    span {
+      font-size: 18px;
+      ::before {
+        bottom: 48%;
+        height: 0.2%;
+      }
     }
   }
 `;
@@ -130,6 +152,12 @@ const PageMoveButton = styled.button`
       opacity: 1;
     }
   }
+  @media screen and (max-width: 768px) {
+    top: 55%;
+  }
+  @media screen and (max-width: 600px) {
+    font-size: 12px;
+  }
 `;
 
 const ToTopContainer = styled.div`
@@ -151,14 +179,24 @@ const ToTopContainer = styled.div`
   &:hover {
     transform: scale(1.2);
   }
+  @media screen and (max-width: 768px) {
+    width: 3em;
+    height: 3em;
+  }
 `;
 
 const ToTopIcon = styled(ArrowToTop)`
   width: 40px;
+  @media screen and (max-width: 768px) {
+    width: 20px;
+  }
 `;
 
 const ToTopText = styled.div`
   font-size: 24px;
+  @media screen and (max-width: 600px) {
+    font-size: 12px;
+  }
 `;
 
 const Footer = styled.div`
@@ -197,6 +235,15 @@ const FooterTopLeftContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin: 1em;
+  @media screen and (max-width: 768px) {
+    margin: 0;
+    margin-left: 1em;
+    margin-top: 0.5em;
+    font-size: 24px;
+  }
+  @media screen and (max-width: 600px) {
+    display: none;
+  }
 `;
 
 const FooterTopLeftBox = styled.div`
@@ -212,6 +259,9 @@ const BobpagoLogo = styled.img`
 const BobpagoLogoText = styled.div`
   font-size: 32px;
   color: #5eb6d1;
+  @media screen and (max-width: 768px) {
+    font-size: 24px;
+  }
 `;
 
 const LeftLocationText = styled.div`
@@ -220,10 +270,16 @@ const LeftLocationText = styled.div`
 
 const FooterTopCenterContainer = styled.div`
   margin: 1em;
+  @media screen and (max-width: 768px) {
+    margin: 1em;
+  }
 `;
 
 const FooterTopCenterTitle = styled.div`
   font-size: 32px;
+  @media screen and (max-width: 768px) {
+    font-size: 18px;
+  }
 `;
 
 const FooterTopCenterUl = styled.ul``;
@@ -256,14 +312,23 @@ const FooterTopCenterA = styled.a`
       width: 98%;
     }
   }
+  @media screen and (max-width: 768px) {
+    font-size: 8px;
+  }
 `;
 
 const FooterTopRightContainer = styled.div`
   margin: 1em;
+  @media screen and (max-width: 768px) {
+    margin: 1em;
+  }
 `;
 
 const FooterTopRightTitle = styled.div`
   font-size: 32px;
+  @media screen and (max-width: 768px) {
+    font-size: 18px;
+  }
 `;
 
 const FooterTopRightUl = styled.ul``;
@@ -296,6 +361,9 @@ const FooterTopRightA = styled.a`
       width: 98%;
     }
   }
+  @media screen and (max-width: 768px) {
+    font-size: 8px;
+  }
 `;
 
 const FooterBottomContainer = styled.div`
@@ -316,9 +384,13 @@ const FooterBottomCopyright = styled.div`
 
 interface Landing5Props {
   position: number;
+  handlePageTransition?: any;
 }
 
-const LandSection4: React.FC<Landing5Props> = ({ position }) => {
+const LandSection4: React.FC<Landing5Props> = ({
+  position,
+  handlePageTransition,
+}) => {
   const history = useHistory();
 
   const [bounding, setBounding] = useState<number>(0);
@@ -337,12 +409,13 @@ const LandSection4: React.FC<Landing5Props> = ({ position }) => {
   };
 
   const handlePageMove = () => {
-    history.push("/survey");
+    handlePageTransition();
+    setTimeout(() => {
+      history.push("/survey");
+    }, 2000);
   };
 
   useEffect(() => {
-    console.log(bounding);
-
     if (containerRef) {
       setBounding(containerRef.current.getBoundingClientRect().top);
     }
@@ -395,7 +468,6 @@ const LandSection4: React.FC<Landing5Props> = ({ position }) => {
           className={bounding < -171 ? "active" : "basic"}
           ref={paperRef}
           position={position}
-          // boundingRect={paperRef.current.getBoundingClientRect().top}
         >
           <LandingFiveText1 ref={text1Ref} position={position}>
             너의 냉장고에서 재료만 골라줘!
