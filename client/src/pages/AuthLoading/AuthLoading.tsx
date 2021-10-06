@@ -31,7 +31,7 @@ const AuthLoading = () => {
     handleKakao();
     dispatch(showNothing());
     setTimeout(() => {
-      history.push({ pathname: "/" });
+      history.go(-1);
     }, 1000);
   }, []);
   return (

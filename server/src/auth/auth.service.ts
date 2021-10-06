@@ -320,8 +320,10 @@ export class AuthService {
       },
       withCredentials: true,
     });
-    const email = userData.data.kakao_account.email;
+    const temp = userData.data.kakao_account.email;
     const nickname = userData.data.properties.nickname;
+    const decoratorIdx = temp.indexOf('@');
+    const email = temp.slice(0, decoratorIdx + 1) + 'kakao.com';
 
     // 3. 리프레쉬 토큰 db 저장, 4. 회원가입 여부 판단 및 데이터 반환
     try {

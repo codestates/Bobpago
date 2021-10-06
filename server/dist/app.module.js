@@ -22,12 +22,13 @@ const auth_checker_middleware_1 = require("./middleware/auth-checker.middleware"
 const logger_middleware_1 = require("./middleware/logger.middleware");
 const jwt_1 = require("@nestjs/jwt");
 const user_entity_1 = require("./entities/user.entity");
+const app_controller_1 = require("./app.controller");
 let AppModule = class AppModule {
     configure(consumer) {
         consumer.apply(logger_middleware_1.LoggerMiddleware).forRoutes('*');
         consumer
             .apply(auth_checker_middleware_1.AuthCheckerMiddleware)
-            .exclude({ path: 'signup', method: common_1.RequestMethod.POST }, { path: 'restore', method: common_1.RequestMethod.POST }, { path: 'auth/signin', method: common_1.RequestMethod.POST }, { path: 'auth/:userId/tokenRequest', method: common_1.RequestMethod.GET }, { path: 'auth/kakao', method: common_1.RequestMethod.GET }, { path: 'auth/naver', method: common_1.RequestMethod.GET }, { path: 'auth/google', method: common_1.RequestMethod.GET }, { path: 'recipe/:recipeId', method: common_1.RequestMethod.GET }, { path: 'recipe/match', method: common_1.RequestMethod.POST }, { path: 'recipe/:recipeId/comment', method: common_1.RequestMethod.GET }, { path: 'ingredient', method: common_1.RequestMethod.GET }, { path: 'ingredient/main', method: common_1.RequestMethod.GET }, { path: 'ingredient/basic', method: common_1.RequestMethod.GET }, { path: 'user/:userId', method: common_1.RequestMethod.GET }, { path: 'api', method: common_1.RequestMethod.GET })
+            .exclude({ path: 'signup', method: common_1.RequestMethod.POST }, { path: 'restore', method: common_1.RequestMethod.POST }, { path: 'auth/signin', method: common_1.RequestMethod.POST }, { path: 'auth/:userId/tokenRequest', method: common_1.RequestMethod.GET }, { path: 'auth/kakao', method: common_1.RequestMethod.GET }, { path: 'auth/naver', method: common_1.RequestMethod.GET }, { path: 'auth/google', method: common_1.RequestMethod.GET }, { path: 'recipe/:recipeId', method: common_1.RequestMethod.GET }, { path: 'recipe/match', method: common_1.RequestMethod.POST }, { path: 'recipe/:recipeId/comment', method: common_1.RequestMethod.GET }, { path: 'ingredient', method: common_1.RequestMethod.GET }, { path: 'ingredient/main', method: common_1.RequestMethod.GET }, { path: 'ingredient/basic', method: common_1.RequestMethod.GET }, { path: 'user/:userId', method: common_1.RequestMethod.GET }, { path: 'api', method: common_1.RequestMethod.GET }, { path: '', method: common_1.RequestMethod.GET })
             .forRoutes('*');
     }
 };
@@ -55,6 +56,7 @@ AppModule = __decorate([
                 },
             }),
         ],
+        controllers: [app_controller_1.AppController],
     })
 ], AppModule);
 exports.AppModule = AppModule;
