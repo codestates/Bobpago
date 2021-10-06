@@ -411,10 +411,15 @@ const DetailRecipe = () => {
   };
 
   const handleNotification = () => {
-    notifyRef.current.style.bottom = "5%";
-    setTimeout(() => {
-      notifyRef.current.style.bottom = "-20%";
-    }, 5000);
+    if (notifyRef.current !== null) {
+      notifyRef.current.style.bottom = "5%";
+      setTimeout(() => {
+        if (notifyRef.current === null) {
+          return;
+        }
+        notifyRef.current.style.bottom = "-20%";
+      }, 5000);
+    }
   };
 
   return loading === false ? (

@@ -161,6 +161,7 @@ export const Ask = styled(InputTitle)`
   a {
     text-decoration: none;
     color: #094fbd;
+    cursor: pointer;
   }
 `;
 export const Ask2 = styled(Ask)``;

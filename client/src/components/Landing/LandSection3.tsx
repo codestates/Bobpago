@@ -40,10 +40,10 @@ const LandingFourContainer = styled.div<ScrollProps>`
   transition: 1.5s;
   position: absolute;
   opacity: ${(props) => {
-    return props.position > 3650 ? "1" : "0";
+    return props.position < 200 ? "1" : "0";
   }};
   bottom: ${(props) => {
-    return props.position > 3650 ? "5%" : "-50%";
+    return props.position < 200 ? "5%" : "-20%";
   }};
   @media screen and (max-width: 768px) {
     flex-direction: column;
@@ -96,23 +96,36 @@ const LandingFourRightTitle = styled.div`
   @media screen and (max-width: 768px) {
     font-size: 84px;
   }
+  @media screen and (max-width: 600px) {
+    font-size: 56px;
+  }
 `;
 
 const LandingFourRightContent = styled.div`
   font-size: 32px;
   @media screen and (max-width: 768px) {
     font-size: 32px;
+    transition: 1s;
+  }
+  @media screen and (max-width: 600px) {
+    font-size: 24px;
+    transition: 1s;
+    /* margin-right: 1em; */
   }
 `;
 
 interface LandSection3Props {
   scrollPosition: number;
+  position5: number;
 }
 
-const LandSection3: React.FC<LandSection3Props> = ({ scrollPosition }) => {
+const LandSection3: React.FC<LandSection3Props> = ({
+  scrollPosition,
+  position5,
+}) => {
   return (
     <LandingSectionFour id="section3">
-      <LandingFourContainer position={scrollPosition}>
+      <LandingFourContainer position={position5}>
         <LandingFourLeftContainer>
           <LandingFourLeftGif src="/img/LandingGif5.gif" />
         </LandingFourLeftContainer>
