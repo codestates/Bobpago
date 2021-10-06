@@ -57,6 +57,7 @@ import {
   CheckEditBtn,
 } from "./styles";
 import { E } from "styled-icons/simple-icons";
+import {ModalBtn, ModalBtnNo, ModalContainer, ModalTitle} from "../EditRecipe/styles";
 
 interface Post {
   amount: number;
@@ -93,6 +94,7 @@ const MyPage = () => {
   const [followerModal, setFollowerModal] = useState<boolean>(false);
   const [editInfoModal, setEditInfoModal] = useState<boolean>(false);
   const [checkWithDrawModal, setCheckWithDrawModal] = useState<boolean>(false);
+  const [deleteRecipeModal, setDeleteRecipeModal] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
   const [passwordWithDraw, setPasswordWithDraw] = useState<string>("");
   const [editNickName, setEditNickName] = useState<string>("");
@@ -107,6 +109,10 @@ const MyPage = () => {
   const [followerInfo, setFollowerInfo] = useState<any>([]);
   const [temporaryImg, setTemporaryImg] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [selectedRecipe, setSelectedRecipe] = useState<any>({
+    id: null,
+    index: null,
+  });
   const { accessToken, tokenType, userId } = useSelector(
     (state: RootState) => state.AccesstokenReducer
   );
@@ -434,7 +440,7 @@ const MyPage = () => {
       const copiedData = myPostData.slice();
       copiedData.splice(i, 1);
       setMyPostData(copiedData);
-      const data = await axios.delete(
+      await axios.delete(
         `${process.env.REACT_APP_SERVER_URL}/recipe/${id}?tokenType=${tokenType}`,
         {
           withCredentials: true,
@@ -579,14 +585,29 @@ const MyPage = () => {
                         .slice(0, myPostNum)
                         .map((el: any, i: number) => (
                           <Card
-                            removeMyPost={removeMyPost}
                             index={i}
                             key={i}
                             postData={el}
                             fix={myPostFix}
+                            setDeleteRecipeModal={setDeleteRecipeModal}
+                            setSelectedRecipe={setSelectedRecipe}
                           />
                         ))}
                     </GridContainer>
+                    {deleteRecipeModal && (
+                        <>
+                          <ModalBackground2 onClick={() => setDeleteRecipeModal(false)} />
+                          <ModalContainer>
+                            <ModalTitle>레시피를 정말 삭제하시겠습니까?</ModalTitle>
+                            <ModalBtn onClick={async () =>{
+                              await removeMyPost(selectedRecipe.index, selectedRecipe.id)
+                                  .then(()=> setDeleteRecipeModal(false))
+                            }}>네</ModalBtn>
+                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                            <ModalBtnNo onClick={() => setDeleteRecipeModal(false)}>아니요</ModalBtnNo>
+                          </ModalContainer>
+                        </>
+                    )}
                     <IconContainer>
                       {myPostNum > standardNum &&
                         myPostData.length > standardNum && (
