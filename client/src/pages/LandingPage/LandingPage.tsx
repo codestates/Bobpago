@@ -172,22 +172,22 @@ const LandingPage = () => {
 
   const handlePosition1 = () => {
     const sectionTwo1 = document.querySelector(".section2-1") as HTMLElement;
-    return scrollPosition + sectionTwo1.getBoundingClientRect().top;
+    return scrollPosition + sectionTwo1.getBoundingClientRect().top - 300;
   };
 
   const handlePosition2 = () => {
     const sectionTwo2 = document.querySelector(".section2-2") as HTMLElement;
-    return scrollPosition + sectionTwo2.getBoundingClientRect().top - 50;
+    return scrollPosition + sectionTwo2.getBoundingClientRect().top - 400;
   };
 
   const handlePosition3 = () => {
     const sectionTwo3 = document.querySelector(".section2-3") as HTMLElement;
-    return scrollPosition + sectionTwo3.getBoundingClientRect().top - 100;
+    return scrollPosition + sectionTwo3.getBoundingClientRect().top - 500;
   };
 
   const handlePosition4 = () => {
     const sectionTwo4 = document.querySelector(".section2-4") as HTMLElement;
-    return scrollPosition + sectionTwo4.getBoundingClientRect().top - 150;
+    return scrollPosition + sectionTwo4.getBoundingClientRect().top - 500;
   };
 
   const handlePosition5 = () => {
@@ -263,7 +263,7 @@ const LandingPage = () => {
               ) as HTMLElement;
               const section2Position: number =
                 section2.getBoundingClientRect().top + window.scrollY;
-              window.scrollTo(0, section2Position + 200);
+              window.scrollTo(0, section2Position);
             }}
           >
             나만의 레시피
