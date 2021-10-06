@@ -37,10 +37,19 @@ export const NavLogoContainer = styled.div`
   @media screen and (max-width: 768px) {
     margin-left: 3em;
   }
+  @media screen and (max-width: 768px) {
+    margin-left: 2em;
+  }
 `;
 
 export const NavEtcContainer = styled.div`
   margin-right: 4em;
+  @media screen and (max-width: 768px) {
+    margin-right: 3em;
+  }
+  @media screen and (max-width: 768px) {
+    margin-right: 1.5em;
+  }
 `;
 
 export const NavEtcUl = styled.ul`
@@ -55,6 +64,12 @@ export const NavEtcList = styled.li`
   margin-left: 1.5em;
   @media screen and (max-width: 768px) {
     display: none;
+  }
+`;
+
+export const NavEtcListNotLogin = styled(NavEtcList)`
+  @media screen and (max-width: 768px) {
+    display: block;
   }
 `;
 
@@ -166,4 +181,12 @@ export const BobPagoIcon = styled.img`
   width: 12em;
   height: 3.5em;
   object-fit: contain;
+  @media screen and (max-width: 768px) {
+    width: 10em;
+    height: 3em;
+  }
+  @media screen and (max-width: 480px) {
+    width: 8em;
+    height: 2.5em;
+  }
 `;

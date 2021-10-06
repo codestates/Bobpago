@@ -545,12 +545,14 @@ const DetailRecipe = () => {
         time={pagoTimeMaker()}
         src={handlePagoHead()}
       />
-      <BookMarkIcon
-        className="default"
-        bookmark={bookmark}
-        ref={bookmarkRef}
-        onClick={handleBookmark}
-      />
+      {loginState.accessToken && (
+        <BookMarkIcon
+          className="default"
+          bookmark={bookmark}
+          ref={bookmarkRef}
+          onClick={handleBookmark}
+        />
+      )}
       {recipeData.user.id === loginState.userId && (
         <EditIcon onClick={() => handleEditRecipe()} />
       )}

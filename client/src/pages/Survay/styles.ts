@@ -162,18 +162,24 @@ export const BadCookerContainer = styled.div`
 `;
 
 export const BadCookerTitleContainer = styled.div`
-  flex: 1;
   z-index: 10;
-  display: flex;
   align-items: center;
   padding-left: 0.3em;
   font-size: 48px;
   font-weight: 700;
+  width: auto;
+  margin-right: 0.5em;
+  @media only screen and (max-width: 768px) {
+    font-size: 35px;
+  }
+  @media only screen and (max-width: 480px) {
+    font-size: 30px;
+  }
 `;
 
 export const PostButton = styled.button`
   position: absolute;
-  bottom: 13%;
+  bottom: 4.5em;
   right: 0;
   width: 8em;
   height: 2em;
@@ -232,12 +238,14 @@ export const GoodCookerSearchForm = styled.div`
   height: 3.5em;
   width: 20em;
   // margin-right: 1em;
+  margin-top: 1em;
   margin-left: auto;
   display: flex;
   right: 0;
   align-items: center;
   position: relative;
   @media only screen and (max-width: 768px) {
+    margin-top: 0.2em;
     margin-right: auto;
     margin-left: 0;
   }
@@ -355,9 +363,8 @@ export const LeftSurvayTooltip = styled.div`
 `;
 
 export const LeftTooltipContainer = styled.div`
-  display: inline-block;
+  margin-top: 0.5em;
   display: flex;
-  // margin-right: 30%;
 `;
 
 export const LeftQuestionIcons = styled(QuestionCircle)`
@@ -377,48 +384,41 @@ export const LeftQuestionIcons = styled(QuestionCircle)`
 `;
 
 export const RightTooltipContainer = styled.div`
-  position: absolute;
-  top: 1%;
-  left: 47%;
+  // position: absolute;
+  // top: 1%;
+  // left: 47%;
+  display: inline-block;
   width: 100%;
   z-index: 100;
 `;
 
-export const RightSurvayTooltip = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  padding: 1em;
-  width: 25%;
-  height: 200%;
-  text-align: center;
-  background-color: #ffffff;
-  border: 1px solid black;
-  position: absolute;
-  border-radius: 10px;
-  opacity: 0;
-  transition: 0.3s;
-  top: -70%;
-  left: 3.5%;
-  z-index: 100;
+export const RightSurvayTooltip = styled(LeftSurvayTooltip)`
+  height: 2.5em;
+  line-height: 2.5em;
+  width: auto;
+  padding: 0 0.8em;
+  transform: translate(33em, 0.7em);
+  z-index: 150;
+  @media only screen and (max-width: 768px) {
+    transform: translate(25em, -0.7em);
+    line-height: 1.5em;
+    height: 5em;
+    width: 8em;
+  }
+  @media only screen and (max-width: 480px) {
+    transform: translate(21em, -1.5em);
+    line-height: 1.5em;
+    height: 6em;
+    width: 6em;
+  }
   span {
-    font-size: 12px;
-    font-weight: 700;
-    margin-top: 1em;
-    color: #aa0000;
   }
   ::before {
-    content: "";
-    width: 10px;
-    height: 10px;
-    border-left: 1px solid black;
-    border-bottom: 1px solid black;
-    position: absolute;
-    top: 40%;
-    left: -2.15%;
-    background-color: #ffffff;
-    transform: rotateZ(45deg);
+    @media only screen and (max-width: 768px) {
+      transform: translate(-0.1em, 0em) rotateZ(45deg);
+    }
+  }
+  &:hover {
   }
 `;
 
@@ -428,9 +428,13 @@ export const RightQuestionIcons = styled(QuestionCircle)`
   left: 75%;
   color: black;
   animation: ${QuestionMove} 2s infinite;
-
+  margin-right: auto;
   &:hover {
     animation: normal;
+    & + div {
+      display: block;
+      opacity: 1;
+    }
   }
 `;
 
@@ -464,6 +468,12 @@ export const ArrowRight = styled.div`
     border-right: 5px solid #00aa00;
     border-top: 5px solid #00aa00;
   }
+  @media only screen and (max-width: 768px) {
+    left: 30.2%;
+  }
+  @media only screen and (max-width: 480px) {
+    left: 29.5%;
+  }
 `;
 
 export const ArrowLeft = styled.div`
@@ -482,5 +492,11 @@ export const ArrowLeft = styled.div`
   &:hover {
     border-left: 5px solid #00aa00;
     border-bottom: 5px solid #00aa00;
+  }
+  @media only screen and (max-width: 768px) {
+    right: 30.2%;
+  }
+  @media only screen and (max-width: 480px) {
+    right: 29.5%;
   }
 `;

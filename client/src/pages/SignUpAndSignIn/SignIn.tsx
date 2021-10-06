@@ -17,7 +17,6 @@ import {
   Ask,
   Logo,
   SignInBackground,
-  SignInBackground2,
 } from "./styles";
 import gsap from "gsap";
 import Loading from "components/Loading/LoginLoading";
@@ -52,9 +51,7 @@ const SignIn = () => {
     if (loginDisplay) {
       gsap.to(LoginRef.current, { display: "" });
       ContainerRef.current.style.display = "block";
-      window.innerWidth > 480
-        ? gsap.to(LoginRef.current, { top: "70%" })
-        : gsap.to(LoginRef.current, { top: "0%" });
+      gsap.to(LoginRef.current, { top: "70%" });
     } else {
       LoginRef.current.style.display = "none";
       gsap.to(LoginRef.current, { top: "130%" });
@@ -65,7 +62,6 @@ const SignIn = () => {
   const handleLogin = async (e: any) => {
     e.preventDefault();
     try {
-      setLoading(true);
       const signIn = await axios.post(
         `${process.env.REACT_APP_SERVER_URL}/auth/signin`,
         {
@@ -81,10 +77,11 @@ const SignIn = () => {
       );
       const { accessToken, tokenType, id } = signIn.data.data;
       dispatch(setAccessToken(accessToken, tokenType, id));
+      setLoading(true);
       dispatch(showNothing());
       setTimeout(() => {
         setLoading(false);
-      }, 1500);
+      }, 1000);
     } catch (err) {
       emailError.current.style.display = "inline-block";
       passwordError.current.style.display = "inline-block";
@@ -96,39 +93,25 @@ const SignIn = () => {
   };
 
   const handleEmailPlaceholderActive = () => {
-    emailPlaceholderRef.current.style.fontSize = "15px";
+    emailPlaceholderRef.current.style.fontSize = "22px";
     emailPlaceholderRef.current.style.backgroundColor = "transparent";
-    window.innerWidth > 480
-      ? (emailPlaceholderRef.current.style.transform = "translate(0.1em,1.3em)")
-      : (emailPlaceholderRef.current.style.transform =
-          "translate(1.5em,1.4em)");
+    emailPlaceholderRef.current.style.transform = "translate(-0.5em,0.7em)";
   };
 
   const handleEmailPlaceholderNotActive = () => {
-    emailPlaceholderRef.current.style.fontSize = "8px";
-    window.innerWidth > 480
-      ? (emailPlaceholderRef.current.style.transform = "translate(2.8em,0.8em)")
-      : (emailPlaceholderRef.current.style.transform =
-          "translate(3.5em,0.8em)");
+    emailPlaceholderRef.current.style.fontSize = "12px";
+    emailPlaceholderRef.current.style.transform = "translate(2.5em,0.8em)";
   };
 
   const handlePasswordPlaceholderActive = () => {
-    passwordlPlaceholderRef.current.style.fontSize = "15px";
-    window.innerWidth > 480
-      ? (passwordlPlaceholderRef.current.style.transform =
-          "translate(0.1em,1.3em)")
-      : (passwordlPlaceholderRef.current.style.transform =
-          "translate(1.5em,1.4em)");
+    passwordlPlaceholderRef.current.style.fontSize = "22px";
+    passwordlPlaceholderRef.current.style.transform = "translate(-0.5em,0.7em)";
     passwordlPlaceholderRef.current.style.backgroundColor = "transparent";
   };
 
   const handlePasswordPlaceholderNotActive = () => {
-    passwordlPlaceholderRef.current.style.fontSize = "8px";
-    window.innerWidth > 480
-      ? (passwordlPlaceholderRef.current.style.transform =
-          "translate(2.8em,0.8em)")
-      : (passwordlPlaceholderRef.current.style.transform =
-          "translate(4em,0.8em)");
+    passwordlPlaceholderRef.current.style.fontSize = "12px";
+    passwordlPlaceholderRef.current.style.transform = "translate(2.5em,0.8em)";
   };
 
   useEffect(() => {
@@ -233,7 +216,7 @@ const SignIn = () => {
             <BackgroundImg src="/img/loginWallpaper.png" alt="배경" />
           </Background>
         </Container>
-        <SignInBackground2 />
+        {/* <SignInBackground2 /> */}
         <SignInBackground />
       </WholeContainer>
       {loading && <Loading />}
