@@ -66,6 +66,15 @@ const GifContainer = styled.div<GifContainerProps>`
       width: 80%;
     }
   }
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20%;
+    ::before {
+      display: none;
+    }
+  }
 `;
 
 const GifImageContainer = styled.div`
@@ -73,6 +82,12 @@ const GifImageContainer = styled.div`
   background-color: transparent;
   padding: 1em;
   margin-right: 6em;
+  @media screen and (max-width: 768px) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+  }
 `;
 
 const GifImage = styled.img`
@@ -81,6 +96,9 @@ const GifImage = styled.img`
   background-color: transparent;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  @media screen and (max-width: 768px) {
+    width: 90%;
+  }
 `;
 
 const GifTextContainer = styled.div<GifTextProps>`
@@ -95,6 +113,15 @@ const GifTextContainer = styled.div<GifTextProps>`
   border-radius: 10%;
   padding: 5em 5em;
   padding-right: 0;
+  @media screen and (max-width: 768px) {
+    background-color: transparent;
+    backdrop-filter: none;
+    padding: 0 5em;
+    margin-right: 0;
+    justify-content: center;
+    align-items: center;
+    /* margin-left: 2em; */
+  }
 `;
 
 const GifTextTitle = styled.div`
@@ -107,6 +134,9 @@ const GifTextTitle = styled.div`
   color: #f75f4e;
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
     1px 1px 0 #000;
+  @media screen and (max-width: 768px) {
+    font-size: 72px;
+  }
 `;
 
 const GifTextContent = styled.div`
@@ -114,6 +144,9 @@ const GifTextContent = styled.div`
   flex: 3;
   font-size: 36px;
   max-width: 100%;
+  @media screen and (max-width: 768px) {
+    font-size: 24px;
+  }
 `;
 
 const LandingNecktie = styled.div`
@@ -148,7 +181,7 @@ interface LandSect2Props {
 
 const LandSection2: React.FC<LandSect2Props> = ({ scrollPosition }) => {
   return (
-    <LandingSectionTwo>
+    <LandingSectionTwo id="section2">
       <GifContainer scrollPosition={scrollPosition} position={740} left="left">
         <GifImageContainer>
           <GifImage src="/img/LandingGif1.gif"></GifImage>

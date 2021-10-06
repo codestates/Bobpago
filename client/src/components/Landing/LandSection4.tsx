@@ -20,7 +20,7 @@ const LandingFiveContainer = styled.div<Landing5Props>`
   .active {
     background-color: #ffffff;
     position: fixed;
-    top: 13%;
+    top: 16%;
     transition: 2s;
     transform: ${(props) => {
       if (props.position < 5700) {
@@ -164,7 +164,7 @@ const ToTopText = styled.div`
 const Footer = styled.div`
   position: fixed;
   width: 100%;
-  height: 40%;
+  height: 45%;
   background-color: black;
   bottom: 0;
   left: 0;
@@ -321,6 +321,9 @@ interface Landing5Props {
 const LandSection4: React.FC<Landing5Props> = ({ position }) => {
   const history = useHistory();
 
+  const [bounding, setBounding] = useState<number>(0);
+
+  const containerRef = useRef<any>(null);
   const text1Ref = useRef<any>(null);
   const text2Ref = useRef<any>(null);
   const paperRef = useRef<any>(null);
@@ -338,7 +341,11 @@ const LandSection4: React.FC<Landing5Props> = ({ position }) => {
   };
 
   useEffect(() => {
-    console.dir(paperRef);
+    console.log(bounding);
+
+    if (containerRef) {
+      setBounding(containerRef.current.getBoundingClientRect().top);
+    }
 
     if (position < 5000) {
       text1Ref.current.style.opacity = "0";
@@ -383,11 +390,12 @@ const LandSection4: React.FC<Landing5Props> = ({ position }) => {
 
   return (
     <LandingSectionFive>
-      <LandingFiveContainer position={position}>
+      <LandingFiveContainer ref={containerRef} position={position}>
         <LandingFivePaper
-          className={position > 5300 ? "active" : "basic"}
+          className={bounding < -171 ? "active" : "basic"}
           ref={paperRef}
           position={position}
+          // boundingRect={paperRef.current.getBoundingClientRect().top}
         >
           <LandingFiveText1 ref={text1Ref} position={position}>
             너의 냉장고에서 재료만 골라줘!
@@ -397,7 +405,7 @@ const LandSection4: React.FC<Landing5Props> = ({ position }) => {
           </LandingFiveText2>
           <BobpagoHorizental ref={BobpagoRef} src="/img/BobpagoRow.png" />
           <PageMoveButton onClick={handlePageMove} ref={ButtonRef}>
-            시작하기.
+            지금 시작하기.
           </PageMoveButton>
           <Footer ref={FooterRef}>
             <FooterTopContainer>

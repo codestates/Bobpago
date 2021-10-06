@@ -160,7 +160,9 @@ const DetailRecipe = () => {
             withCredentials: true,
             headers: {
               "Content-Type": "application/json",
-              authorization: `Bearer ${newToken ? newToken : loginState.accessToken}`,
+              authorization: `Bearer ${
+                newToken ? newToken : loginState.accessToken
+              }`,
             },
           }
         );
@@ -173,7 +175,9 @@ const DetailRecipe = () => {
             withCredentials: true,
             headers: {
               "Content-Type": "application/json",
-              authorization: `Bearer ${newToken ? newToken : loginState.accessToken}`,
+              authorization: `Bearer ${
+                newToken ? newToken : loginState.accessToken
+              }`,
             },
           }
         );
@@ -266,8 +270,8 @@ const DetailRecipe = () => {
     let newToken = null;
     if (loginState.accessToken) {
       newToken = await CheckExpired(
-        loginState.accessToken, 
-        loginState.tokenType, 
+        loginState.accessToken,
+        loginState.tokenType,
         loginState.userId
       );
       if (newToken) {
@@ -281,7 +285,9 @@ const DetailRecipe = () => {
           withCredentials: true,
           headers: {
             "Content-Type": "application/json",
-            authorization: `Bearer ${newToken ? newToken : loginState.accessToken}`,
+            authorization: `Bearer ${
+              newToken ? newToken : loginState.accessToken
+            }`,
           },
         }
       );
@@ -374,7 +380,9 @@ const DetailRecipe = () => {
         {
           withCredentials: true,
           headers: {
-            authorization: `Bearer ${newToken ? newToken : loginState.accessToken}`,
+            authorization: `Bearer ${
+              newToken ? newToken : loginState.accessToken
+            }`,
           },
         }
       );
@@ -558,7 +566,7 @@ const DetailRecipe = () => {
           <NotifiMainTitle>주재료 : </NotifiMainTitle>
           <NotifiMainIngredient>
             {recipeData.ingredients.main.map((item: any) => {
-              return <span>{item.name}</span>;
+              return <span key={item.id}>{item.name}</span>;
             })}
           </NotifiMainIngredient>
         </NotifiMainContainer>
@@ -566,7 +574,7 @@ const DetailRecipe = () => {
           <NotifiSubTitle>부재료 : </NotifiSubTitle>
           <NotifiSubIngredient>
             {recipeData.ingredients.sub.map((item: any) => {
-              return <span>{item.name}</span>;
+              return <span key={item.id}>{item.name}</span>;
             })}
           </NotifiSubIngredient>
         </NotifiSubContainer>
