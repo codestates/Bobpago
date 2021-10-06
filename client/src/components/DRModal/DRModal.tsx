@@ -6,7 +6,7 @@ import CheckExpired from "utils/CheckExpired";
 import { reissueAccessToken, removeAccessToken } from "actions/Accesstoken";
 import { RootState } from "reducers";
 import React, { useState, useEffect, useRef } from "react";
-import { showSignUp } from "actions/SignUpAndSignIn";
+import { showSignIn } from "actions/SignUpAndSignIn";
 import {
   CommentModal,
   CommentContainer,
@@ -56,7 +56,7 @@ const DRModal: React.FC<DRModalProps> = ({ handleModalClose, recipeId }) => {
 
   //댓글 누를 때 토큰 없으면 로그인 화면 띄움
   const handleShowLogin = () => {
-    if (!accessToken) dispatch(showSignUp());
+    if (!accessToken) dispatch(showSignIn());
   };
 
   // 댓글 작성
@@ -125,19 +125,21 @@ const DRModal: React.FC<DRModalProps> = ({ handleModalClose, recipeId }) => {
       <CommentContainer>
         <CloseIcon onClick={handleModalClose} />
         <SudoContainer>
-          {
-            commentData.length !==0
-            ? commentData.map((el: any, i: number) => (
-                <DRModalContent
-                  setCommentData={setCommentData}
-                  key={i}
-                  comment={el}
-                />
-              ))
-            : <NoCommentContainer>
-                  <NoCommentText>레시피에 대한 의견과 후기 사진을 공유하세요🍳</NoCommentText>
+          {commentData.length !== 0 ? (
+            commentData.map((el: any, i: number) => (
+              <DRModalContent
+                setCommentData={setCommentData}
+                key={i}
+                comment={el}
+              />
+            ))
+          ) : (
+            <NoCommentContainer>
+              <NoCommentText>
+                레시피에 대한 의견과 후기 사진을 공유하세요🍳
+              </NoCommentText>
             </NoCommentContainer>
-          }
+          )}
         </SudoContainer>
         <PostCommentContainer>
           <PostCommentInput

@@ -5,6 +5,7 @@ import LandSection1 from "components/Landing/LandSection1";
 import LandSection2 from "components/Landing/LandSection2";
 import LandSection3 from "components/Landing/LandSection3";
 import LandSection4 from "components/Landing/LandSection4";
+import { useHistory } from "react-router";
 
 interface LandingFour {
   opac?: boolean;
@@ -49,6 +50,11 @@ const LandingNav = styled.div`
     font-size: 18px;
     transition: 1.5s;
   }
+  @media screen and (max-width: 768px) {
+    padding: 2em;
+    padding-top: 4em;
+    padding-bottom: 4em;
+  }
 `;
 
 const Tobbar = styled.div`
@@ -58,6 +64,10 @@ const Tobbar = styled.div`
   /* position: fixed; */
   top: 0;
   z-index: 150;
+  @media screen and (max-width: 768px) {
+    position: absolute;
+    background-color: #f75f4e77;
+  }
 `;
 
 const NavLogo = styled.div`
@@ -65,6 +75,7 @@ const NavLogo = styled.div`
   margin-left: 1em;
   font-size: ${main.bigFont};
   position: relative;
+  cursor: pointer;
   ::before {
     width: 2px;
     height: 40%;
@@ -73,6 +84,10 @@ const NavLogo = styled.div`
     left: -0.1em;
     top: 0.38em;
     background-color: #000000;
+  }
+  @media screen and (max-width: 768px) {
+    font-size: 48px;
+    margin-right: 1em;
   }
 `;
 
@@ -85,6 +100,25 @@ const NavUl = styled.ul`
 const NavLi = styled.li`
   list-style: none;
   margin-right: 2em;
+  cursor: pointer;
+  position: relative;
+  ::before {
+    width: 0%;
+    position: absolute;
+    content: "";
+    height: 2px;
+    background-color: red;
+    border-radius: 10px;
+    bottom: 0;
+    left: 0;
+    transition: 0.4s;
+  }
+
+  &:hover {
+    ::before {
+      width: 100%;
+    }
+  }
 `;
 
 const LandingSectionThree = styled.section`
@@ -95,6 +129,9 @@ const LandingSectionThree = styled.section`
 
 const LandingPage = () => {
   const [scrollPosition, setScrollPosition] = useState<number>(0);
+
+  const history = useHistory();
+
   const NavRef = useRef<any>(null);
   const NavlogoRef = useRef<any>(null);
   const NavlistRef = useRef<any>(null);
@@ -134,11 +171,46 @@ const LandingPage = () => {
     <LandingContainer>
       <Tobbar />
       <LandingNav ref={NavRef}>
-        <NavLogo ref={NavlogoRef}>Bobpago</NavLogo>
+        <NavLogo
+          ref={NavlogoRef}
+          onClick={() => {
+            window.scrollTo(0, 0);
+          }}
+        >
+          Bobpago
+        </NavLogo>
         <NavUl ref={NavlistRef}>
-          <NavLi>나만의 레시피</NavLi>
-          <NavLi>뭐라할까</NavLi>
-          <NavLi>시작하기</NavLi>
+          <NavLi
+            onClick={() => {
+              const section2 = document.querySelector(
+                "#section2"
+              ) as HTMLElement;
+              const section2Position: number =
+                section2.getBoundingClientRect().top + window.scrollY;
+              window.scrollTo(0, section2Position + 200);
+            }}
+          >
+            나만의 레시피
+          </NavLi>
+          <NavLi
+            onClick={() => {
+              const section3 = document.querySelector(
+                "#section3"
+              ) as HTMLElement;
+              const section3Position: number =
+                section3.getBoundingClientRect().top + window.scrollY;
+              window.scrollTo(0, section3Position);
+            }}
+          >
+            상세한 설명
+          </NavLi>
+          <NavLi
+            onClick={() => {
+              history.push("/survey");
+            }}
+          >
+            시작하기
+          </NavLi>
         </NavUl>
       </LandingNav>
       <LandSection1 />

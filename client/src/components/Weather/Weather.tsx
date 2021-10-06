@@ -13,6 +13,8 @@ interface WeatherProps {
 }
 
 const Weather: React.FC<WeatherProps> = ({ rotateMaker }) => {
+  console.log(rotateMaker);
+
   const windDirection = rotateMaker;
   return (
     <WeatherContainer>

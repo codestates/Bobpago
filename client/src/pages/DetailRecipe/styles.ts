@@ -378,7 +378,7 @@ export const MainIngredientContainer = styled.div`
   border-bottom: none;
   border-left: 2px solid #2d325b;
   /* border-top-right-radius: 15px; */
-  z-index: 900;
+  z-index: 90;
   @media screen and (max-width: 768px) {
     display: none;
   }
