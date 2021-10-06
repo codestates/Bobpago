@@ -57,6 +57,7 @@ import {
   CheckEditBtn,
 } from "./styles";
 import { E } from "styled-icons/simple-icons";
+import {ModalBtn, ModalBtnNo, ModalContainer, ModalTitle} from "../EditRecipe/styles";
 
 interface Post {
   amount: number;
@@ -93,6 +94,7 @@ const MyPage = () => {
   const [followerModal, setFollowerModal] = useState<boolean>(false);
   const [editInfoModal, setEditInfoModal] = useState<boolean>(false);
   const [checkWithDrawModal, setCheckWithDrawModal] = useState<boolean>(false);
+  const [deleteRecipeModal, setDeleteRecipeModal] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
   const [passwordWithDraw, setPasswordWithDraw] = useState<string>("");
   const [editNickName, setEditNickName] = useState<string>("");
@@ -434,7 +436,7 @@ const MyPage = () => {
       const copiedData = myPostData.slice();
       copiedData.splice(i, 1);
       setMyPostData(copiedData);
-      const data = await axios.delete(
+      await axios.delete(
         `${process.env.REACT_APP_SERVER_URL}/recipe/${id}?tokenType=${tokenType}`,
         {
           withCredentials: true,
@@ -443,7 +445,7 @@ const MyPage = () => {
             authorization: `Bearer ${newToken ? newToken : accessToken}`,
           },
         }
-      );
+      ).then(()=> setDeleteRecipeModal(false));
     } catch (err) {
       const error = err as AxiosError;
       if (error.response) {
@@ -584,6 +586,8 @@ const MyPage = () => {
                             key={i}
                             postData={el}
                             fix={myPostFix}
+                            setDeleteRecipeModal={setDeleteRecipeModal}
+                            deleteRecipeModal={deleteRecipeModal}
                           />
                         ))}
                     </GridContainer>

@@ -336,7 +336,6 @@ export const ModalContainer = styled.div`
   margin: 0 auto;
   left: 0;
   right: 0;
-  float: center;
   z-index: 10000;
 `;
 
