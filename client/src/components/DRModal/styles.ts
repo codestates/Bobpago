@@ -11,7 +11,7 @@ export const CommentModal = styled.div`
   position: fixed;
   width: 100%;
   height: 100%;
-  z-index: 2000;
+  z-index: 100;
   left: 0;
   top: 0;
   background-color: rgba(0, 0, 0, 0.5);
@@ -39,19 +39,17 @@ export const SudoContainer = styled.div`
   font-size: 1.5em;
 `;
 export const NoCommentContainer = styled.div`
-  
   display: flex;
   justify-content: center;
   align-content: center;
-`
+`;
 export const NoCommentText = styled.span`
   position: relative;
   text-align: center;
   font-size: ${main.smallestFont};
   color: dimgrey;
   top: 4em;
-  
-`
+`;
 
 export const PostCommentContainer = styled.div`
   position: absolute;

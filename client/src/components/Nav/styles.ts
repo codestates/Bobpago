@@ -20,14 +20,15 @@ export const NavContainer = styled.div<NavProps>`
     return opac ? "black" : "#ffffff";
   }};
   align-items: center;
-  z-index: 110;
   font-size: 18px;
   box-shadow: 0 0px 15px rgba(0, 0, 0, 0.2);
+  z-index: 96;
 `;
 
 export const NavLogoContainer = styled.div`
   padding: 1.2em;
   margin-left: 5em;
+  z-index: 10;
   a {
     display: flex;
     text-decoration: none;

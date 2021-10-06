@@ -117,9 +117,13 @@ export const DRTotalContainer = styled.div`
 export const TotalPageMap = styled.div`
   position: fixed;
   width: 100%;
+  height: 100vh;
   left: 2%;
-  top: 37%;
-  z-index: 100;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  transition: 1s;
   @media screen and (max-width: 768px) {
     z-index: 1;
     top: 95%;
@@ -160,6 +164,7 @@ export const TotalPageMapContent = styled.div`
   align-items: center;
   min-height: 10px;
   max-width: 10px;
+  min-width: 10px;
   background-color: #ffffff;
   /* border: 1px solid black; */
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.9);
@@ -378,7 +383,7 @@ export const MainIngredientContainer = styled.div`
   border-bottom: none;
   border-left: 2px solid #2d325b;
   /* border-top-right-radius: 15px; */
-  z-index: 900;
+  z-index: 90;
   @media screen and (max-width: 768px) {
     display: none;
   }
@@ -510,7 +515,7 @@ export const BookMarkIcon = styled(BookmarkFill)<BookmarkProps>`
   width: 25px;
   top: 23.5%;
   right: 5.5%;
-  z-index: 100;
+  z-index: 80;
   transition: 0.1s;
   color: ${({ bookmark }) => {
     return bookmark ? "orangered" : "orange";
@@ -544,7 +549,7 @@ export const ViewContainer = styled.div`
   width: 65px;
   top: 32.5%;
   right: 5.5%;
-  z-index: 100;
+  z-index: 80;
   transition: 0.1s;
   display: flex;
   flex-direction: row;
