@@ -1,1 +1,0 @@
-{"version":3,"file":"update-image.dto.js","sourceRoot":"","sources":["../../../src/image/dto/update-image.dto.ts"],"names":[],"mappings":";;;;;;;;;;;;AAAA,6CAA8C;AAC9C,4DAAsD;AAEtD,MAAa,eAAgB,SAAQ,0BAAW;CAU/C;AANC;IAHC,IAAA,qBAAW,EAAC;QACX,OAAO,EAAE,EAAE,QAAQ,EAAE,uBAAuB,EAAE;KAC/C,CAAC;;6CACQ;AAKV;IAHC,IAAA,qBAAW,EAAC;QACX,OAAO,EAAE,sBAAsB;KAChC,CAAC;;gDACc;AATlB,0CAUC"}
