@@ -26,6 +26,7 @@ interface FixProps {
 
 const Card = ({ index, fix, postData, removeMyPost }: FixProps) => {
   let history = useHistory();
+  console.log(postData, index);
   return (
     <CardContainer
       onClick={() =>

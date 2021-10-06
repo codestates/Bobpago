@@ -160,7 +160,9 @@ const DetailRecipe = () => {
             withCredentials: true,
             headers: {
               "Content-Type": "application/json",
-              authorization: `Bearer ${newToken ? newToken : loginState.accessToken}`,
+              authorization: `Bearer ${
+                newToken ? newToken : loginState.accessToken
+              }`,
             },
           }
         );
@@ -173,7 +175,9 @@ const DetailRecipe = () => {
             withCredentials: true,
             headers: {
               "Content-Type": "application/json",
-              authorization: `Bearer ${newToken ? newToken : loginState.accessToken}`,
+              authorization: `Bearer ${
+                newToken ? newToken : loginState.accessToken
+              }`,
             },
           }
         );
@@ -266,8 +270,8 @@ const DetailRecipe = () => {
     let newToken = null;
     if (loginState.accessToken) {
       newToken = await CheckExpired(
-        loginState.accessToken, 
-        loginState.tokenType, 
+        loginState.accessToken,
+        loginState.tokenType,
         loginState.userId
       );
       if (newToken) {
@@ -281,7 +285,9 @@ const DetailRecipe = () => {
           withCredentials: true,
           headers: {
             "Content-Type": "application/json",
-            authorization: `Bearer ${newToken ? newToken : loginState.accessToken}`,
+            authorization: `Bearer ${
+              newToken ? newToken : loginState.accessToken
+            }`,
           },
         }
       );
@@ -374,7 +380,9 @@ const DetailRecipe = () => {
         {
           withCredentials: true,
           headers: {
-            authorization: `Bearer ${newToken ? newToken : loginState.accessToken}`,
+            authorization: `Bearer ${
+              newToken ? newToken : loginState.accessToken
+            }`,
           },
         }
       );
@@ -532,12 +540,14 @@ const DetailRecipe = () => {
         time={pagoTimeMaker()}
         src={handlePagoHead()}
       />
-      <BookMarkIcon
-        className="default"
-        bookmark={bookmark}
-        ref={bookmarkRef}
-        onClick={handleBookmark}
-      />
+      {loginState.accessToken && (
+        <BookMarkIcon
+          className="default"
+          bookmark={bookmark}
+          ref={bookmarkRef}
+          onClick={handleBookmark}
+        />
+      )}
       {recipeData.user.id === loginState.userId && (
         <EditIcon onClick={() => handleEditRecipe()} />
       )}

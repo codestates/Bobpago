@@ -43,7 +43,7 @@ const Page = ({
       inputFileRef.current.click();
     }
   };
-
+  console.log(Number(window.innerHeight * 0.0016 - 0.08));
   return (
     <Flip ref={pageRef}>
       <Back>
@@ -71,7 +71,7 @@ const Page = ({
       <Front>
         <DescriptionText
           value={text}
-          lineHeight={window.innerHeight * 0.0033}
+          lineHeight={window.innerHeight / 600 - 0.0733}
           onChange={(e) => handleChangeDescription(selfPage, e.target.value)}
           placeholder={
             "→ " + orderArr[selfPage - 1] + "번째 순서를 작성해주세요"

@@ -64,6 +64,11 @@ export const MatchCardBox = styled.div<MatchCardProps>`
     height: 14em;
     margin-right: 1em;
   }
+  @media only screen and (max-width: 480px) {
+    min-width: 10em;
+    height: 14em;
+    margin-right: 1em;
+  }
   &:hover {
     animation: none;
     transform: rotateZ(0deg) scale(1.05);
@@ -79,9 +84,12 @@ export const CardTitle = styled.div`
   color: white;
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
     1px 1px 0 #000;
-
   @media only screen and (max-width: 768px) {
     font-size: ${main.smallestFont};
+    margin-top: 1.5em;
+  }
+  @media only screen and (max-width: 768px) {
+    font-size: 1.2em;
     margin-top: 1.5em;
   }
 `;
@@ -231,6 +239,12 @@ export const HiddenTitle = styled.div`
   font-size: ${main.middleFont};
   font-weight: 700;
   margin-right: 0.2em;
+  @media only screen and (max-width: 1024px) {
+    font-size: 2.5em;
+  }
+  @media only screen and (max-width: 768px) {
+    font-size: 2em;
+  }
 `;
 
 export const HiddenAmount = styled.div`
@@ -240,6 +254,12 @@ export const HiddenAmount = styled.div`
 export const HiddenMainIngredient = styled.div`
   display: flex;
   margin-top: 2em;
+  @media only screen and (max-width: 1024px) {
+    margin-top: 1.2em;
+  }
+  @media only screen and (max-width: 768px) {
+    margin-top: 1em;
+  }
 `;
 
 export const MainIngredientContainer = styled.ul`
@@ -257,15 +277,20 @@ export const MainIngredientText = styled.div`
 export const MainIngredient = styled.li`
   font-size: ${main.smallFont};
   margin-left: 0.6em;
-  
+
   list-style: none;
-  
 `;
 
 export const HiddenSubIngredient = styled.div`
   display: flex;
   flex-wrap: wrap;
   margin-top: 2em;
+  @media only screen and (max-width: 1024px) {
+    margin-top: 1.2em;
+  }
+  @media only screen and (max-width: 768px) {
+    margin-top: 1em;
+  }
 `;
 
 export const SubIngredientContainer = styled.ul`
@@ -277,7 +302,7 @@ export const SubIngredientContainer = styled.ul`
 
 export const SubIngredientText = styled.div`
   font-size: ${main.smallFont};
-  color: black
+  color: black;
 `;
 
 export const SubIngredient = styled.li`
@@ -289,6 +314,12 @@ export const HiddenCookingTimeContainer = styled.div`
   display: flex;
   margin-top: 2em;
   align-items: center;
+  @media only screen and (max-width: 1024px) {
+    margin-top: 1.2em;
+  }
+  @media only screen and (max-width: 768px) {
+    margin-top: 1em;
+  }
 `;
 
 export const HiddenCookingTimeText = styled.div`
@@ -304,6 +335,12 @@ export const HiddenDifficultyContainer = styled.div`
   display: flex;
   margin-top: 2em;
   align-items: center;
+  @media only screen and (max-width: 1024px) {
+    margin-top: 1.2em;
+  }
+  @media only screen and (max-width: 768px) {
+    margin-top: 1em;
+  }
 `;
 
 export const HiddenDifficultyText = styled.div`
@@ -343,7 +380,6 @@ export const HiddenPageMoveButton = styled.button`
   cursor: pointer;
   border-radius: 10px;
   font-size: ${main.smallFont};
-
 
   &:hover {
     background-color: red;
