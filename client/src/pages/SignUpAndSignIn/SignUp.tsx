@@ -195,9 +195,7 @@ const SignUp = () => {
           </ButtonWrapper>
           <Ask>
             계정이 이미 있으신가요?{" "}
-            <a href="#" onClick={() => dispatch(showSignIn())}>
-              로그인
-            </a>
+            <a onClick={() => dispatch(showSignIn())}>로그인</a>
           </Ask>
         </InputContainer>
         <IconClose

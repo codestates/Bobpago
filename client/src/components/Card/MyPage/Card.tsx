@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import StarRating from "components/StarRating/StarRating";
 import { useHistory } from "react-router-dom";
 import {
@@ -16,17 +16,19 @@ import {
   RemoveIcon,
   LikeNum,
 } from "../styles";
+import {ModalBackground2} from "../../../pages/MyOrUserPage/styles";
+import {ModalBtn, ModalBtnNo, ModalContainer, ModalTitle} from "../../../pages/EditRecipe/styles";
 
 interface FixProps {
   fix?: boolean;
   index?: number;
   postData?: any;
-  removeMyPost?: any;
+  setDeleteRecipeModal?: any;
+  setSelectedRecipe?: any;
 }
 
-const Card = ({ index, fix, postData, removeMyPost }: FixProps) => {
+const Card = ({ index, fix, postData, setDeleteRecipeModal,setSelectedRecipe }: FixProps) => {
   let history = useHistory();
-  console.log(postData, index);
   return (
     <CardContainer
       onClick={() =>
@@ -39,9 +41,13 @@ const Card = ({ index, fix, postData, removeMyPost }: FixProps) => {
     >
       <RemoveIcon
         src="/img/minus.png"
-        onClick={() => removeMyPost(index, postData.id)}
+        onClick={ () => {
+          setSelectedRecipe({id: postData.id, index:index})
+          setDeleteRecipeModal(true)
+        }}
         fix={fix}
       />
+
       <CardImage
         className="card__image"
         src={

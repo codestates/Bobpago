@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 
 interface GifTextProps {
@@ -24,11 +24,11 @@ const GifContainer = styled.div<GifContainerProps>`
   height: 70%;
   position: relative;
   top: 40%;
-  left: ${({ scrollPosition, position, left, right }: any) => {
+  left: ${({ position, left, right }: any) => {
     if (left !== undefined) {
-      return scrollPosition > position ? "7%" : "-10%";
+      return position < 200 ? "7%" : "-10%";
     } else if (right !== undefined) {
-      return scrollPosition > position ? "7%" : "40%";
+      return position < 200 ? "7%" : "40%";
     }
   }};
   z-index: 1000;
@@ -38,11 +38,11 @@ const GifContainer = styled.div<GifContainerProps>`
   margin-bottom: 10%;
   z-index: 10000;
   transition: 1.2s;
-  opacity: ${({ scrollPosition, position, left, right }: any) => {
+  opacity: ${({ position, left, right }: any) => {
     if (left !== undefined) {
-      return scrollPosition > position ? "1" : "0";
+      return position < 200 ? "1" : "0";
     } else if (right !== undefined) {
-      return scrollPosition > position ? "1" : "0";
+      return position < 200 ? "1" : "0";
     }
   }};
   ::before {
@@ -66,6 +66,16 @@ const GifContainer = styled.div<GifContainerProps>`
       width: 80%;
     }
   }
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20%;
+    ::before {
+      display: none;
+    }
+    /* opacity: 1; */
+  }
 `;
 
 const GifImageContainer = styled.div`
@@ -73,6 +83,12 @@ const GifImageContainer = styled.div`
   background-color: transparent;
   padding: 1em;
   margin-right: 6em;
+  @media screen and (max-width: 768px) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+  }
 `;
 
 const GifImage = styled.img`
@@ -81,6 +97,9 @@ const GifImage = styled.img`
   background-color: transparent;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  @media screen and (max-width: 768px) {
+    width: 90%;
+  }
 `;
 
 const GifTextContainer = styled.div<GifTextProps>`
@@ -95,6 +114,15 @@ const GifTextContainer = styled.div<GifTextProps>`
   border-radius: 10%;
   padding: 5em 5em;
   padding-right: 0;
+  @media screen and (max-width: 768px) {
+    background-color: transparent;
+    backdrop-filter: none;
+    padding: 0 5em;
+    margin-right: 0;
+    justify-content: center;
+    align-items: center;
+    /* margin-left: 2em; */
+  }
 `;
 
 const GifTextTitle = styled.div`
@@ -107,6 +135,13 @@ const GifTextTitle = styled.div`
   color: #f75f4e;
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
     1px 1px 0 #000;
+  @media screen and (max-width: 768px) {
+    font-size: 72px;
+  }
+  @media screen and (max-width: 600px) {
+    font-size: 56px;
+    /* margin-right: 1em; */
+  }
 `;
 
 const GifTextContent = styled.div`
@@ -114,6 +149,13 @@ const GifTextContent = styled.div`
   flex: 3;
   font-size: 36px;
   max-width: 100%;
+  @media screen and (max-width: 768px) {
+    font-size: 24px;
+  }
+  @media screen and (max-width: 600px) {
+    font-size: 20px;
+    /* margin-right: 1em; */
+  }
 `;
 
 const LandingNecktie = styled.div`
@@ -144,12 +186,27 @@ const LandingNecktie = styled.div`
 
 interface LandSect2Props {
   scrollPosition: number;
+  position1: number;
+  position2: number;
+  position3: number;
+  position4: number;
 }
 
-const LandSection2: React.FC<LandSect2Props> = ({ scrollPosition }) => {
+const LandSection2: React.FC<LandSect2Props> = ({
+  position1,
+  position2,
+  position3,
+  position4,
+  scrollPosition,
+}) => {
   return (
-    <LandingSectionTwo>
-      <GifContainer scrollPosition={scrollPosition} position={740} left="left">
+    <LandingSectionTwo id="section2">
+      <GifContainer
+        className="section2-1"
+        scrollPosition={scrollPosition}
+        position={position1}
+        left="left"
+      >
         <GifImageContainer>
           <GifImage src="/img/LandingGif1.gif"></GifImage>
         </GifImageContainer>
@@ -167,8 +224,9 @@ const LandSection2: React.FC<LandSect2Props> = ({ scrollPosition }) => {
         </GifTextContainer>
       </GifContainer>
       <GifContainer
+        className="section2-2"
         scrollPosition={scrollPosition}
-        position={1300}
+        position={position2}
         right="right"
       >
         <GifTextContainer>
@@ -188,7 +246,12 @@ const LandSection2: React.FC<LandSect2Props> = ({ scrollPosition }) => {
           <GifImage src="/img/LandingGif2.gif"></GifImage>
         </GifImageContainer>
       </GifContainer>
-      <GifContainer scrollPosition={scrollPosition} position={2100} left="left">
+      <GifContainer
+        className="section2-3"
+        scrollPosition={scrollPosition}
+        position={position3}
+        left="left"
+      >
         <GifImageContainer>
           <GifImage src="/img/LandingGif3.gif"></GifImage>
         </GifImageContainer>
@@ -206,8 +269,9 @@ const LandSection2: React.FC<LandSect2Props> = ({ scrollPosition }) => {
         </GifTextContainer>
       </GifContainer>
       <GifContainer
+        className="section2-4"
         scrollPosition={scrollPosition}
-        position={2650}
+        position={position4}
         right="right"
       >
         <GifTextContainer>

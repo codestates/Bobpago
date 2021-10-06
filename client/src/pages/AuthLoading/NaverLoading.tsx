@@ -30,9 +30,7 @@ const NaverLoading = () => {
     handleNaver();
     dispatch(showNothing());
     setTimeout(() => {
-      // history.push({ pathname: "/" });
-      history.goBack();
-      history.goBack();
+      history.go(-1);
     }, 1000);
   }, []);
 
