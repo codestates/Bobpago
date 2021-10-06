@@ -199,6 +199,8 @@ const LandSection2: React.FC<LandSect2Props> = ({
   position4,
   scrollPosition,
 }) => {
+  console.log(position2);
+
   return (
     <LandingSectionTwo id="section2">
       <GifContainer
