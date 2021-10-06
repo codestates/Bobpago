@@ -23,21 +23,13 @@ interface FixProps {
   fix?: boolean;
   index?: number;
   postData?: any;
-  removeMyPost?: any;
-  deleteRecipeModal?: any;
   setDeleteRecipeModal?: any;
+  setSelectedRecipe?: any;
 }
 
-const Card = ({ index, fix, postData, removeMyPost,deleteRecipeModal, setDeleteRecipeModal }: FixProps) => {
+const Card = ({ index, fix, postData, setDeleteRecipeModal,setSelectedRecipe }: FixProps) => {
   let history = useHistory();
-  const [postId, setPostId] = useState(null)
-  const [postIndex, setPostIndex] = useState(null)
 
-  console.log(index, postData.id);
-  async function handleState() {
-    await setPostId(postData.id)
-    await setPostIndex(index)
-  }
   return (
     <CardContainer
       onClick={() =>
@@ -50,28 +42,13 @@ const Card = ({ index, fix, postData, removeMyPost,deleteRecipeModal, setDeleteR
     >
       <RemoveIcon
         src="/img/minus.png"
-        onClick={async () => {
-         // removeMyPost(index, postData.id)
-         // console.log(index, postData.id)
-          await handleState()
+        onClick={ () => {
+          setSelectedRecipe({id: postData.id, index:index})
           setDeleteRecipeModal(true)
         }}
         fix={fix}
       />
-      {deleteRecipeModal && (
-          <>
-            <ModalBackground2 onClick={() => setDeleteRecipeModal(false)} />
-            <ModalContainer>
-              <ModalTitle>레시피를 정말 삭제하시겠습니까?</ModalTitle>
-              <ModalBtn onClick={() =>{
-                console.log('✅',postId, postIndex);
-               //removeMyPost(index, postData.id)
-              }}>네</ModalBtn>
-              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-              <ModalBtnNo onClick={() => setDeleteRecipeModal(false)}>아니요</ModalBtnNo>
-            </ModalContainer>
-          </>
-      )}
+
       <CardImage
         className="card__image"
         src={

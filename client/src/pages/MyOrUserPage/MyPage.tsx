@@ -109,6 +109,10 @@ const MyPage = () => {
   const [followerInfo, setFollowerInfo] = useState<any>([]);
   const [temporaryImg, setTemporaryImg] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [selectedRecipe, setSelectedRecipe] = useState<any>({
+    id: null,
+    index: null,
+  });
   const { accessToken, tokenType, userId } = useSelector(
     (state: RootState) => state.AccesstokenReducer
   );
@@ -445,7 +449,7 @@ const MyPage = () => {
             authorization: `Bearer ${newToken ? newToken : accessToken}`,
           },
         }
-      ).then(()=> setDeleteRecipeModal(false));
+      );
     } catch (err) {
       const error = err as AxiosError;
       if (error.response) {
@@ -581,16 +585,29 @@ const MyPage = () => {
                         .slice(0, myPostNum)
                         .map((el: any, i: number) => (
                           <Card
-                            removeMyPost={removeMyPost}
                             index={i}
                             key={i}
                             postData={el}
                             fix={myPostFix}
                             setDeleteRecipeModal={setDeleteRecipeModal}
-                            deleteRecipeModal={deleteRecipeModal}
+                            setSelectedRecipe={setSelectedRecipe}
                           />
                         ))}
                     </GridContainer>
+                    {deleteRecipeModal && (
+                        <>
+                          <ModalBackground2 onClick={() => setDeleteRecipeModal(false)} />
+                          <ModalContainer>
+                            <ModalTitle>레시피를 정말 삭제하시겠습니까?</ModalTitle>
+                            <ModalBtn onClick={async () =>{
+                              await removeMyPost(selectedRecipe.index, selectedRecipe.id)
+                                  .then(()=> setDeleteRecipeModal(false))
+                            }}>네</ModalBtn>
+                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                            <ModalBtnNo onClick={() => setDeleteRecipeModal(false)}>아니요</ModalBtnNo>
+                          </ModalContainer>
+                        </>
+                    )}
                     <IconContainer>
                       {myPostNum > standardNum &&
                         myPostData.length > standardNum && (
