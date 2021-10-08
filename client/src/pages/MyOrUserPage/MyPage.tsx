@@ -57,7 +57,12 @@ import {
   CheckEditBtn,
 } from "./styles";
 import { E } from "styled-icons/simple-icons";
-import {ModalBtn, ModalBtnNo, ModalContainer, ModalTitle} from "../EditRecipe/styles";
+import {
+  ModalBtn,
+  ModalBtnNo,
+  ModalContainer,
+  ModalTitle,
+} from "../EditRecipe/styles";
 
 interface Post {
   amount: number;
@@ -290,14 +295,16 @@ const MyPage = () => {
         setProfileImg(`${process.env.REACT_APP_S3_IMG_URL}${url}`);
       }
       const editedInfo: EditInfo = {};
-      if (editPassword !== password) editedInfo.password = editPassword;
-      else editedInfo.password = password;
+      if (tokenType === "jwt") {
+        if (editPassword !== password) editedInfo.password = editPassword;
+        else editedInfo.password = password;
+      }
       if (editNickName !== nickname) editedInfo.nickname = editNickName;
       else editedInfo.nickname = nickname;
       if (editIntroduce !== introduce) editedInfo.profile = editIntroduce;
       else editedInfo.profile = introduce;
       if (Object.keys(editedInfo).length !== 0) {
-        await axios.patch(
+        const data = await axios.patch(
           `${process.env.REACT_APP_SERVER_URL}/me?tokenType=${tokenType}`,
           editedInfo,
           {
@@ -308,6 +315,7 @@ const MyPage = () => {
             },
           }
         );
+
         getData();
         setEditInfoModal(false);
       } else if (temporaryImg) {
@@ -595,18 +603,32 @@ const MyPage = () => {
                         ))}
                     </GridContainer>
                     {deleteRecipeModal && (
-                        <>
-                          <ModalBackground2 onClick={() => setDeleteRecipeModal(false)} />
-                          <ModalContainer>
-                            <ModalTitle>레시피를 정말 삭제하시겠습니까?</ModalTitle>
-                            <ModalBtn onClick={async () =>{
-                              await removeMyPost(selectedRecipe.index, selectedRecipe.id)
-                                  .then(()=> setDeleteRecipeModal(false))
-                            }}>네</ModalBtn>
-                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                            <ModalBtnNo onClick={() => setDeleteRecipeModal(false)}>아니요</ModalBtnNo>
-                          </ModalContainer>
-                        </>
+                      <>
+                        <ModalBackground2
+                          onClick={() => setDeleteRecipeModal(false)}
+                        />
+                        <ModalContainer>
+                          <ModalTitle>
+                            레시피를 정말 삭제하시겠습니까?
+                          </ModalTitle>
+                          <ModalBtn
+                            onClick={async () => {
+                              await removeMyPost(
+                                selectedRecipe.index,
+                                selectedRecipe.id
+                              ).then(() => setDeleteRecipeModal(false));
+                            }}
+                          >
+                            네
+                          </ModalBtn>
+                          &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                          <ModalBtnNo
+                            onClick={() => setDeleteRecipeModal(false)}
+                          >
+                            아니요
+                          </ModalBtnNo>
+                        </ModalContainer>
+                      </>
                     )}
                     <IconContainer>
                       {myPostNum > standardNum &&
