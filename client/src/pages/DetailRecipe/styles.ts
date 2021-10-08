@@ -126,19 +126,19 @@ export const TotalPageMap = styled.div`
   transition: 1s;
   @media screen and (max-width: 768px) {
     z-index: 1;
-    top: 95%;
+    top: 46%;
     display: flex;
     justify-content: center;
   }
   @media screen and (max-width: 600px) {
     z-index: 1;
-    top: 95%;
+    top: 46%;
     display: flex;
     justify-content: center;
   }
   @media screen and (max-width: 500px) {
     z-index: 1;
-    top: 95%;
+    top: 46%;
     display: flex;
     justify-content: center;
   }

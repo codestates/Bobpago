@@ -37,7 +37,7 @@ const GifContainer = styled.div<GifContainerProps>`
   align-items: center;
   margin-bottom: 10%;
   z-index: 10000;
-  transition: 1.2s;
+  transition: 0.7s;
   opacity: ${({ position, left, right }: any) => {
     if (left !== undefined) {
       return position < 200 ? "1" : "0";

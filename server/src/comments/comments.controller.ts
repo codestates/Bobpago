@@ -229,8 +229,7 @@ export class CommentsController {
   async updateReaction(
     @GetUser('id') userId: number,
     @Param('commentId') commentId: string,
-    @Query('reaction') reaction: string,
   ): Promise<CreateCommentReactionResDto> {
-    return this.commentsService.updateReaction(userId, +commentId, +reaction);
+    return this.commentsService.updateReaction(userId, +commentId);
   }
 }

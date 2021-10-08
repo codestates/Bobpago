@@ -12,7 +12,7 @@ export const RightContent = styled.div`
   display: flex;
   flex-direction: column;
   border-radius: 10px;
-  z-index: 0;
+  z-index: 2;
   /* z-index: 1000; */
   @media screen and (max-width: 768px) {
     width: 102%;

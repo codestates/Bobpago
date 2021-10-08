@@ -27,6 +27,10 @@ export const CommentContainer = styled.div`
   z-index: 100;
   padding: 3em 3em 2em 2em;
   border-radius: 15px;
+  @media screen and (max-width: 768px) {
+    width: 95%;
+    left: 2.5%;
+  }
 `;
 
 export const SudoContainer = styled.div`

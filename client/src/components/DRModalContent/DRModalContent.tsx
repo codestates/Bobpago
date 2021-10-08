@@ -22,7 +22,6 @@ import {
   LikeContainer,
   LikeText,
 } from "./styles";
-import { useHistory } from "react-router-dom";
 
 interface Props {
   comment: any;
@@ -30,7 +29,6 @@ interface Props {
 }
 
 const DRModalContent = ({ comment, setCommentData }: Props) => {
-  const history = useHistory();
   const dispatch = useDispatch();
   const serverUrl = process.env.REACT_APP_SERVER_URL;
   const S3Url = process.env.REACT_APP_S3_IMG_URL;
@@ -42,7 +40,6 @@ const DRModalContent = ({ comment, setCommentData }: Props) => {
   const [time, setTime] = useState("2021-01-01[월]");
   const [editCommentInput, setEditCommentInput] = useState<string>("");
   const [edit, setEdit] = useState<boolean>(false);
-  const [reaction, setReaction] = useState<any>([]);
 
   const likeRef = useRef<any>(null);
 
@@ -172,22 +169,19 @@ const DRModalContent = ({ comment, setCommentData }: Props) => {
         (item: any) => comment.id === item.id
       );
 
-      let nextReaction: number = 0;
       const isLiked =
         newData[0].commentReactions.filter(
           (item: { userId: number }) => item.userId === loginState.userId
         ).length >= 1;
 
       if (isLiked === true) {
-        nextReaction = 0;
         likeRef.current.textContent--;
       } else if (isLiked === false) {
-        nextReaction = 1;
         likeRef.current.textContent++;
       }
 
       const postReactionData = await axios.post(
-        `${serverUrl}/recipe/${comment.recipeId}/comment/${comment.id}?reaction=${nextReaction}&tokenType=${loginState.tokenType}`,
+        `${serverUrl}/recipe/${comment.recipeId}/comment/${comment.id}?tokenType=${loginState.tokenType}`,
         {},
         {
           withCredentials: true,
