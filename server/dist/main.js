@@ -18,19 +18,24 @@ async function bootstrap() {
         forbidNonWhitelisted: true,
         transform: true,
     }));
-    app.use(['/api', '/api-json'], expressBasicAuth({
+    app.use(['/dev', '/dev-json'], expressBasicAuth({
         challenge: true,
         users: {
             [process.env.SWAGGER_USER]: process.env.SWAGGER_PASSWORD,
         },
     }));
-    const config = new swagger_1.DocumentBuilder()
-        .setTitle('Bobpago API')
-        .setDescription('Bobpago 개발을 위한 API 문서')
-        .setVersion('1.0.0')
+    const devConfig = new swagger_1.DocumentBuilder()
+        .setTitle('Bobpago API Test Tool')
+        .setDescription('Bobpago API 테스트 도구')
+        .setVersion('1.0.1')
         .build();
-    const apiEnable = swagger_1.SwaggerModule.createDocument(app, config);
-    swagger_1.SwaggerModule.setup('api', app, apiEnable);
+    const testTool = swagger_1.SwaggerModule.createDocument(app, devConfig);
+    swagger_1.SwaggerModule.setup('dev', app, testTool);
+    const config = new swagger_1.DocumentBuilder()
+        .setTitle('Bobpago API Docs')
+        .setDescription('Bobpago API 문서')
+        .setVersion('1.0.1')
+        .build();
     const document = swagger_1.SwaggerModule.createDocument(app, config);
     swagger_1.SwaggerModule.setup('docs', app, document, {
         swaggerOptions: {

@@ -1,0 +1,1 @@
+{"version":3,"file":"delete-recipe.res.dto.js","sourceRoot":"","sources":["../../../../src/recipes/dto/response-dto/delete-recipe.res.dto.ts"],"names":[],"mappings":";;;;;;;;;;;;AAAA,6CAA8C;AAC9C,+DAAsD;AAEtD,MAAa,kBAAmB,SAAQ,0BAAW;CAUlD;AANC;IAHC,IAAA,qBAAW,EAAC;QACX,OAAO,EAAE,IAAI;KACd,CAAC;;gDACQ;AAKV;IAHC,IAAA,qBAAW,EAAC;QACX,OAAO,EAAE,kBAAkB;KAC5B,CAAC;;mDACc;AATlB,gDAUC"}
