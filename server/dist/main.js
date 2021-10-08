@@ -29,8 +29,14 @@ async function bootstrap() {
         .setDescription('Bobpago 개발을 위한 API 문서')
         .setVersion('1.0.0')
         .build();
+    const apiEnable = swagger_1.SwaggerModule.createDocument(app, config);
+    swagger_1.SwaggerModule.setup('api', app, apiEnable);
     const document = swagger_1.SwaggerModule.createDocument(app, config);
-    swagger_1.SwaggerModule.setup('api', app, document);
+    swagger_1.SwaggerModule.setup('docs', app, document, {
+        swaggerOptions: {
+            supportedSubmitMethods: [],
+        },
+    });
     await app.listen(process.env.PORT);
 }
 bootstrap();
