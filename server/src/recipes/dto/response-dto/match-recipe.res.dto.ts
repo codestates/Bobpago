@@ -19,8 +19,7 @@ export class MatchRecipeResDto extends ResponseDto {
           views: 395,
           createdAt: '2021-09-26T05:14:53.807Z',
           updatedAt: '2021-10-03T00:56:09.000Z',
-          recipe_reaction_state: 0,
-          recipe_reaciton_count: 0,
+          recipe_reaction_count: 0,
           bookmark_state: false,
         },
         ingredients: {
@@ -162,8 +161,7 @@ export class MatchRecipeResDto extends ResponseDto {
           views: 238,
           createdAt: '2021-09-30T20:14:59.385Z',
           updatedAt: '2021-09-30T20:15:49.823Z',
-          recipe_reaction_state: 0,
-          recipe_reaciton_count: 0,
+          recipe_reaction_count: 0,
           bookmark_state: false,
         },
         ingredients: {

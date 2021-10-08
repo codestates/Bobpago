@@ -336,7 +336,6 @@ export class RecipesService {
           user: { ...temp },
           recipe: {
             ...el,
-            recipe_reaction_state: reactions.length ? 1 : 0,
             recipe_reaciton_count: reactions.length,
             bookmark_state: false,
           },
