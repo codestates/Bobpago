@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, Length, Matches } from 'class-validator';
+import { IsOptional, IsString, Length, Matches } from 'class-validator';
 
 export class CreateUserReqDto {
   @ApiProperty({
@@ -16,6 +16,7 @@ export class CreateUserReqDto {
     description: '비밀번호',
     required: true,
   })
+  @IsOptional()
   @IsString()
   @Length(4, 20)
   @Matches(/^[a-zA-Z0-9]*$/, {
