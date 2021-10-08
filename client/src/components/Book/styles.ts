@@ -99,7 +99,7 @@ export const Back = styled.div`
   left: 0;
   z-index: 99;
   transform: rotateY(180deg);
-  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
+  // box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   background-color: #f3f3f3;
