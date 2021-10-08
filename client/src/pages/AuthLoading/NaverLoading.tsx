@@ -30,7 +30,7 @@ const NaverLoading = () => {
     handleNaver();
     dispatch(showNothing());
     setTimeout(() => {
-      history.go(-1);
+      history.push('/survey');
     }, 1000);
   }, []);
 

@@ -79,6 +79,11 @@ export class RecipesController {
     description: '레시피 id',
     required: true,
   })
+  @ApiQuery({
+    name: 'userId',
+    description: '유저 id',
+    required: true,
+  })
   @ApiResponse({
     status: 200,
     description: '레시피 조회 성공',
@@ -190,11 +195,6 @@ export class RecipesController {
   @ApiQuery({
     name: 'tokenType',
     description: '엑세스 토큰의 타입',
-    required: true,
-  })
-  @ApiQuery({
-    name: 'reaction',
-    description: '리액션 상태',
     required: true,
   })
   @ApiHeader({

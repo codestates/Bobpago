@@ -189,11 +189,6 @@ export class CommentsController {
     description: '엑세스 토큰의 타입',
     required: true,
   })
-  @ApiQuery({
-    name: 'reaction',
-    description: '리액션 상태',
-    required: true,
-  })
   @ApiHeader({
     name: 'Authorization',
     description: 'Bearer + 엑세스 토큰',
