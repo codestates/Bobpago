@@ -55,7 +55,7 @@ export const UploadIcon = styled(Upload)`
 
 export const BookContainer = styled.div`
   position: absolute;
-  top: 4.5em;
+  top: 6em;
   margin: 0 auto;
   left: 0;
   right: 0;

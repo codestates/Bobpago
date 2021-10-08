@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import Nav from "components/Nav/Nav";
 import Title from "./TitleEdit";
 import Time from "./TimeEdit";
@@ -51,32 +51,40 @@ const EditRecipe = () => {
   }, [page]);
 
   async function getData() {
-    setLoading(true);
-    const response = await axios.get(`${serverUrl}/recipe/${locationProps}`, {
-      withCredentials: true,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = response.data.data;
-    if (userId !== data.user.id) {
-      history.push("/");
-      return;
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `${serverUrl}/recipe/${locationProps}?userId=${userId}`,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = response.data.data;
+      if (userId !== data.user.id) {
+        history.push("/");
+        return;
+      }
+      const mainIngredients = data.ingredients.main.map((el: any) => el.id);
+      const subIngredients = data.ingredients.sub.map((el: any) => el.id);
+      const ingredients = [...mainIngredients, ...subIngredients];
+      dispatch(editTitle(data.recipe.title));
+      dispatch(editDifficulty(data.recipe.level));
+      dispatch(editIngredient(ingredients));
+      dispatch(editServing(data.recipe.amount));
+      dispatch(editTime(data.recipe.estTime));
+      dispatch(editDescription(data.recipe.descriptions));
+      dispatch(editImage(data.recipe.imageUrls));
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
+      // dispatch(editImage(data.recipe.imageUrls));
+    } catch (err) {
+      const error = err as AxiosError;
+      console.log(error.response);
     }
-    const mainIngredients = data.ingredients.main.map((el: any) => el.id);
-    const subIngredients = data.ingredients.sub.map((el: any) => el.id);
-    const ingredients = [...mainIngredients, ...subIngredients];
-    dispatch(editTitle(data.recipe.title));
-    dispatch(editDifficulty(data.recipe.level));
-    dispatch(editIngredient(ingredients));
-    dispatch(editServing(data.recipe.amount));
-    dispatch(editTime(data.recipe.estTime));
-    dispatch(editDescription(data.recipe.descriptions));
-    dispatch(editImage(data.recipe.imageUrls));
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-    // dispatch(editImage(data.recipe.imageUrls));
   }
   useEffect(() => {
     dispatch(resetEditPageEdit());
