@@ -150,7 +150,6 @@ const Description = ({
         }
       );
       const recipeId = data.data.data.recipeId;
-      // console.log(data);
 
       // const ImgData = imgFiles.map((el: any, i: number) => {
       //   if (typeof imgFiles[i] === "object") {
@@ -161,7 +160,7 @@ const Description = ({
       //     return S3Url + imgFiles[i];
       //   }
       // });
-      // console.log(ImgData);
+
       // const uploadImg = await axios.post(
       //   `${process.env.REACT_APP_SERVER_URL}/image/${recipeId}?tokenType=${tokenType}&path=recipe`,
       //   ImgData,

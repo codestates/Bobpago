@@ -326,7 +326,6 @@ const DetailRecipe = () => {
 
   useEffect(() => {
     if (recipeData !== null) {
-      console.log(recipeData.recipe);
       setTotalLength(recipeData.recipe.descriptions.length);
       setLoading(false);
       return () => {};
@@ -392,7 +391,6 @@ const DetailRecipe = () => {
           },
         }
       );
-      console.log(data);
     } catch (err) {
       const error = err as AxiosError;
       if (error.response) {
