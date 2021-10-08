@@ -61,9 +61,8 @@ const UserPage = () => {
   let { userId } = useParams<{ userId: string | undefined }>();
 
   async function getData() {
-
-    try{
-          setLoading(true);
+    try {
+      setLoading(true);
       const response = await axios.get(
         `${process.env.REACT_APP_SERVER_URL}/user/${userId}?tokenType=${tokenType}`,
         {
@@ -181,9 +180,9 @@ const UserPage = () => {
   };
 
   const handleFolloweeModalOn = async () => {
-    try{
+    try {
       const data = await axios.get(
-        `${process.env.REACT_APP_SERVER_URL}/user/${userId}/followee?tokenType=${tokenType}`,
+        `${process.env.REACT_APP_SERVER_URL}/user/${userId}/followee`,
         {
           withCredentials: true,
           headers: {
@@ -199,7 +198,7 @@ const UserPage = () => {
   const handleFollowerModalOn = async () => {
     try {
       const data = await axios.get(
-        `${process.env.REACT_APP_SERVER_URL}/user/${userId}/follower?tokenType=${tokenType}`,
+        `${process.env.REACT_APP_SERVER_URL}/user/${userId}/follower`,
         {
           withCredentials: true,
           headers: {
