@@ -11,18 +11,29 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppController = void 0;
 const common_1 = require("@nestjs/common");
+const swagger_1 = require("@nestjs/swagger");
+const access_bobpago_dto_1 = require("./access-bobpago.dto");
 let AppController = class AppController {
     home() {
-        return 'Welcome to Bobpago API!';
+        return {
+            statusCode: 304,
+            message: '밥파고 API에 오신 걸 환영합니다.',
+        };
     }
 };
 __decorate([
+    (0, swagger_1.ApiResponse)({
+        status: 304,
+        description: '밥파고 API 접속 성공',
+        type: access_bobpago_dto_1.AccessBobpagoResDto,
+    }),
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", access_bobpago_dto_1.AccessBobpagoResDto)
 ], AppController.prototype, "home", null);
 AppController = __decorate([
+    (0, swagger_1.ApiTags)('WELCOME'),
     (0, common_1.Controller)('')
 ], AppController);
 exports.AppController = AppController;
