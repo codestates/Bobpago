@@ -15,7 +15,6 @@ const AuthLoading = () => {
     const kakaoAuth = await axios.get(
       `${process.env.REACT_APP_SERVER_URL}/auth/kakao?code=${kakao}`
     );
-    console.log(kakaoAuth);
 
     dispatch({
       type: SET_ACCESSTOKEN,
@@ -31,7 +30,7 @@ const AuthLoading = () => {
     handleKakao();
     dispatch(showNothing());
     setTimeout(() => {
-      history.push('/survey');
+      history.push("/survey");
     }, 1000);
   }, []);
   return (
