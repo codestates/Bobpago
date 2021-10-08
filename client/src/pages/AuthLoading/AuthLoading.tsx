@@ -31,8 +31,7 @@ const AuthLoading = () => {
     handleKakao();
     dispatch(showNothing());
     setTimeout(() => {
-      history.go(-1);
-
+      history.push('/survey');
     }, 1000);
   }, []);
   return (

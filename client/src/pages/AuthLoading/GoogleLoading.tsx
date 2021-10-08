@@ -32,7 +32,7 @@ const GoogleLoading = () => {
     handleGoogle();
     dispatch(showNothing());
     setTimeout(() => {
-      history.go(-2);
+      history.push('/survey');
     }, 1000);
   }, []);
 
