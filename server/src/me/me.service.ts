@@ -98,6 +98,7 @@ export class MeService {
     updateUserDto: UpdateUserReqDto,
   ): Promise<UpdateUserResDto> {
     const { password, nickname, profile } = updateUserDto;
+
     try {
       await this.usersRepository.update(user.id, updateUserDto);
       const newUser = await this.usersRepository.findOne({ id: user.id });

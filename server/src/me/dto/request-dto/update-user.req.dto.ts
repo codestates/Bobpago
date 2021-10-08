@@ -1,6 +1,12 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateUserReqDto } from './create-user.req.dto';
-import { IsEmpty, IsString, Length, Matches } from 'class-validator';
+import {
+  IsEmpty,
+  IsOptional,
+  IsString,
+  Length,
+  Matches,
+} from 'class-validator';
 import { ApiProperty, PickType } from '@nestjs/swagger';
 
 export class UpdateUserReqDto extends PickType(CreateUserReqDto, [
