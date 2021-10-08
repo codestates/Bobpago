@@ -79,6 +79,11 @@ export class RecipesController {
     description: '레시피 id',
     required: true,
   })
+  @ApiQuery({
+    name: 'userId',
+    description: '유저 id',
+    required: true,
+  })
   @ApiResponse({
     status: 200,
     description: '레시피 조회 성공',
@@ -91,8 +96,9 @@ export class RecipesController {
   @Get(':recipeId')
   async findOneRecipe(
     @Param('recipeId') recipeId: string,
+    @Query('userId') reactionUserId: string,
   ): Promise<SeeRecipeResDto> {
-    return this.recipesService.seeRecipe(+recipeId);
+    return this.recipesService.seeRecipe(+recipeId, +reactionUserId);
   }
 
   @ApiOperation({ summary: '레시피 카드 수정' })
@@ -191,11 +197,6 @@ export class RecipesController {
     description: '엑세스 토큰의 타입',
     required: true,
   })
-  @ApiQuery({
-    name: 'reaction',
-    description: '리액션 상태',
-    required: true,
-  })
   @ApiHeader({
     name: 'Authorization',
     description: 'Bearer + 엑세스 토큰',
@@ -228,8 +229,7 @@ export class RecipesController {
   async updateReaction(
     @GetUser('id') userId: number,
     @Param('recipeId') recipeId: string,
-    @Query('reaction') reaction: string,
   ): Promise<CreateRecipeReactionResDto> {
-    return this.recipesService.updateReaction(userId, +recipeId, +reaction);
+    return this.recipesService.updateReaction(userId, +recipeId);
   }
 }

@@ -20,7 +20,7 @@ async function bootstrap() {
     }),
   );
   app.use(
-    ['/api', '/api-json'],
+    ['/dev', '/dev-json'],
     expressBasicAuth({
       challenge: true,
       users: {
@@ -28,13 +28,19 @@ async function bootstrap() {
       },
     }),
   );
-  const config = new DocumentBuilder()
-    .setTitle('Bobpago API')
-    .setDescription('Bobpago 개발을 위한 API 문서')
-    .setVersion('1.0.0')
+  const devConfig = new DocumentBuilder()
+    .setTitle('Bobpago API Test Tool')
+    .setDescription('Bobpago API 테스트 도구')
+    .setVersion('1.0.1')
     .build();
-  const apiEnable: OpenAPIObject = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, apiEnable);
+  const testTool: OpenAPIObject = SwaggerModule.createDocument(app, devConfig);
+  SwaggerModule.setup('dev', app, testTool);
+
+  const config = new DocumentBuilder()
+    .setTitle('Bobpago API Docs')
+    .setDescription('Bobpago API 문서')
+    .setVersion('1.0.1')
+    .build();
   const document: OpenAPIObject = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document, {
     swaggerOptions: {

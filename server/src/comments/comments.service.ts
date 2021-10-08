@@ -118,49 +118,32 @@ export class CommentsService {
   async updateReaction(
     userId: number,
     commentId: number,
-    reaction: number,
   ): Promise<CreateCommentReactionResDto> {
-    if (reaction === 1) {
-      try {
-        await this.commentReactionRepository.save({ userId, commentId });
-        return {
-          data: {
-            reaction_state: 1,
-          },
-          statusCode: 200,
-          message: '댓글 좋아요가 추가되었습니다.',
-        };
-      } catch (e) {
-        return {
-          data: {
-            reaction_state: 1,
-          },
-          statusCode: 200,
-          message: '댓글 좋아요가 이미 추가되었습니다.',
-        };
-      }
-    } else if (reaction === 0) {
-      const result = await this.commentReactionRepository.delete({
+    const reactionData = await this.commentReactionRepository.findOne({
+      userId,
+      commentId,
+    });
+    if (!reactionData) {
+      await this.commentReactionRepository.save({ userId, commentId });
+      return {
+        data: {
+          reaction_state: 1,
+        },
+        statusCode: 200,
+        message: '댓글 좋아요가 추가되었습니다.',
+      };
+    } else if (reactionData) {
+      await this.commentReactionRepository.delete({
         userId,
         commentId,
       });
-      if (result.affected) {
-        return {
-          data: {
-            reaction_state: 0,
-          },
-          statusCode: 200,
-          message: '댓글 좋아요가 삭제되었습니다.',
-        };
-      } else {
-        return {
-          data: {
-            reaction_state: 0,
-          },
-          statusCode: 200,
-          message: '댓글 좋아요가 이미 삭제되었습니다.',
-        };
-      }
+      return {
+        data: {
+          reaction_state: 0,
+        },
+        statusCode: 200,
+        message: '댓글 좋아요가 삭제되었습니다.',
+      };
     } else {
       throw new BadRequestException('댓글 좋아요 업데이트에 실패하였습니다.');
     }
