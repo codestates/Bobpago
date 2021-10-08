@@ -91,8 +91,9 @@ export class RecipesController {
   @Get(':recipeId')
   async findOneRecipe(
     @Param('recipeId') recipeId: string,
+    @Query('userId') reactionUserId: string,
   ): Promise<SeeRecipeResDto> {
-    return this.recipesService.seeRecipe(+recipeId);
+    return this.recipesService.seeRecipe(+recipeId, +reactionUserId);
   }
 
   @ApiOperation({ summary: '레시피 카드 수정' })
@@ -228,8 +229,7 @@ export class RecipesController {
   async updateReaction(
     @GetUser('id') userId: number,
     @Param('recipeId') recipeId: string,
-    @Query('reaction') reaction: string,
   ): Promise<CreateRecipeReactionResDto> {
-    return this.recipesService.updateReaction(userId, +recipeId, +reaction);
+    return this.recipesService.updateReaction(userId, +recipeId);
   }
 }

@@ -175,7 +175,10 @@ export class RecipesService {
     }
   }
 
-  async seeRecipe(recipeId: number): Promise<SeeRecipeResDto> {
+  async seeRecipe(
+    recipeId: number,
+    reactionUserId: number,
+  ): Promise<SeeRecipeResDto> {
     try {
       const recipeData = await this.recipeRepository.findOne({
         relations: ['user', 'recipeImages', 'recipeReactions'],
@@ -203,13 +206,25 @@ export class RecipesService {
         return el.ingredient;
       });
 
+      const reactionData = await this.recipeReactionRepository.findOne({
+        recipeId,
+        userId: reactionUserId,
+      });
+
+      let reactionState;
+      if (reactionData) {
+        reactionState = 1;
+      } else {
+        reactionState = 0;
+      }
+
       const result = {
         user: { id: user.id, nickname: user.nickname },
         recipe: {
           ...recipe,
           imageUrls,
           descriptions,
-          recipe_reaction_state: recipeReactions.length ? 1 : 0,
+          recipe_reaction_state: reactionState,
           recipe_reaciton_count: recipeReactions.length,
           bookmark_state: false,
         },
@@ -351,49 +366,35 @@ export class RecipesService {
   async updateReaction(
     userId: number,
     recipeId: number,
-    reaction: number,
   ): Promise<CreateRecipeReactionResDto> {
-    if (reaction === 1) {
-      try {
-        await this.recipeReactionRepository.save({
-          userId,
-          recipeId,
-        });
-        return {
-          data: {
-            reaction_state: 1,
-          },
-          statusCode: 200,
-          message: '레시피 좋아요가 추가되었습니다.',
-        };
-      } catch (err) {
-        return {
-          data: {
-            reaction_state: 1,
-          },
-          statusCode: 200,
-          message: '레시피 좋아요가 이미 추가되었습니다.',
-        };
-      }
-    } else if (reaction === 0) {
-      const result = await this.recipeReactionRepository.delete({
+    const reactionData = await this.recipeReactionRepository.findOne({
+      recipeId,
+      userId,
+    });
+
+    if (!reactionData) {
+      await this.recipeReactionRepository.save({
         userId,
         recipeId,
       });
-
-      let message;
-      if (result.affected === 1) {
-        message = '레시피 좋아요가 삭제되었습니다.';
-      } else {
-        message = '레시피 좋아요가 이미 삭제되었습니다.';
-      }
-
+      return {
+        data: {
+          reaction_state: 1,
+        },
+        statusCode: 200,
+        message: '레시피 좋아요가 추가되었습니다.',
+      };
+    } else if (reactionData) {
+      await this.recipeReactionRepository.delete({
+        userId,
+        recipeId,
+      });
       return {
         data: {
           reaction_state: 0,
         },
         statusCode: 200,
-        message,
+        message: '레시피 좋아요가 삭제되었습니다.',
       };
     } else {
       throw new BadRequestException('레시피 업데이트에 실패하였습니다.');

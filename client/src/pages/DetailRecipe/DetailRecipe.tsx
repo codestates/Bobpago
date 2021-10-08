@@ -244,12 +244,17 @@ const DetailRecipe = () => {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handlePageData = async () => {
-    const data = await axios.get(`${serverUrl}/recipe/${locationProps}`, {
-      withCredentials: true,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const data = await axios.get(
+      `${serverUrl}/recipe/${locationProps}?userId=${
+        loginState.userId ? loginState.userId : 0
+      }`,
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     const descriptions = data.data.data.recipe.descriptions;
     let dummyData: number[] = [];
@@ -321,6 +326,7 @@ const DetailRecipe = () => {
 
   useEffect(() => {
     if (recipeData !== null) {
+      console.log(recipeData.recipe);
       setTotalLength(recipeData.recipe.descriptions.length);
       setLoading(false);
       return () => {};
@@ -375,7 +381,7 @@ const DetailRecipe = () => {
 
       const nextReaction = recipeData.recipe.recipe_reaction_state;
       const data = await axios.post(
-        `${serverUrl}/recipe/${locationProps}?reaction=${nextReaction}&tokenType=${loginState.tokenType}`,
+        `${serverUrl}/recipe/${locationProps}?tokenType=${loginState.tokenType}`,
         {},
         {
           withCredentials: true,
