@@ -30,6 +30,7 @@ __decorate([
         description: '비밀번호',
         required: true,
     }),
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.Length)(4, 20),
     (0, class_validator_1.Matches)(/^[a-zA-Z0-9]*$/, {
