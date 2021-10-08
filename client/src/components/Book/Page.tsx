@@ -43,7 +43,7 @@ const Page = ({
       inputFileRef.current.click();
     }
   };
-  console.log(Number(window.innerHeight * 0.0016 - 0.08));
+
   return (
     <Flip ref={pageRef}>
       <Back>

@@ -106,7 +106,7 @@ const Ingredient = ({
   //바깥부분을 클릭하면 없어지는 함수
   const handleClickOutside = (event: any): void => {
     const { current: wrap } = wrapperRef;
-    // console.log(wrap && !wrap.contains(event.target));
+
     if (!wrap.contains(event.target)) {
       setDisplay(false);
     }

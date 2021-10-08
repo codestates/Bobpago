@@ -119,7 +119,6 @@ const MatchingRecipe = () => {
   };
 
   const handlePageBack = () => {
-    console.log("handle page back");
     cardRef.current.style.transform = "translateY(120%)";
     setTimeout(() => {
       hiddenRef1.current.classList.add("leftmove1");
