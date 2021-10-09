@@ -24,6 +24,10 @@ export const MenuBtn = styled.div`
     z-index: 300;
     transform: rotate(-45deg);
   }
+  @media screen and (max-width: 480px) {
+    width: 35px;
+    transform: translateX(1em);
+  }
 `;
 
 export const MenuBtnBurger = styled.div`

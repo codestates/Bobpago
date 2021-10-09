@@ -252,6 +252,17 @@ export const MatchCardContainer = styled.div`
       transform: rotateZ(45deg);
     }
   }
+  @media only screen and (max-width: 768px) {
+    .active {
+      top: 20%;
+      height: 30em;
+    }
+  }
+  @media only screen and (max-width: 480px) {
+    .active {
+      flex-direction: column;
+    }
+  }
 `;
 
 export const HiddenPage = styled.div`
@@ -331,6 +342,14 @@ export const NoMatchingText = styled.div`
   &:hover {
     transition: 1s;
     /* transform: scale(1.2); */
+  }
+
+  @media screen and (max-width: 768px) {
+    height: 20%;
+    font-size: 2em;
+  }
+  @media screen and (max-width: 480px) {
+    font-size: 1.5em;
   }
 `;
 
