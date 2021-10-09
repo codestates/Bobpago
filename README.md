@@ -28,13 +28,16 @@
 
 ![](https://cdn.discordapp.com/attachments/879193189527994424/885409218000191519/2021-09-09_3.19.46.png)
 
-<br>
-
 ## 🔨 Architecture
 
 ### [⭐️ Client-Side flow chart](https://github.com/codestates/Bobpago/wiki/Flow-charts)
 
+![Client flowchart(1)](https://cdn.discordapp.com/attachments/879193189527994424/885413484081332264/Client_Flowchart1.png)
+![Client flowchart(2)](https://cdn.discordapp.com/attachments/879193189527994424/885412080390389790/2021-09-09_3.31.07.png)
+
 ### [💎 Server-Side flow chart](https://github.com/codestates/Bobpago/wiki/Flow-charts)
+
+![Server flowchart](https://cdn.discordapp.com/attachments/879193189527994424/896317320568373268/2021-10-09_5.43.47.png)
 
 ## 🗣 우리를 소개합니다.
 
