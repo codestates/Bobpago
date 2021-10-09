@@ -3,8 +3,6 @@
 ![](https://cdn.discordapp.com/attachments/879193189527994424/885873654854991952/stack_Copy_of_Untitled_1.png)
 <br>
 <br>
-<br>
-<br>
 
 ## 🙋🏻‍♂️서비스 기획 의도 ?
 
@@ -15,38 +13,28 @@
 > 재료만 알려줘, 밥파고가 해결해줄께 😉<br />
 
 <br>
-<br>
 
 ## 랜딩 페이지
 
 ![](https://cdn.discordapp.com/attachments/879193189527994424/896312428743258142/dca35b5b6508b226.gif)
 
 <br>
-<br>
 
 ## 📎배포링크
 
 ### <https://www.bobpago.com>
-
-<br>
-<br>
 
 ## 👨‍⚕️ 어떤 기술이 사용되었나요?
 
 ![](https://cdn.discordapp.com/attachments/879193189527994424/885409218000191519/2021-09-09_3.19.46.png)
 
 <br>
-<br>
 
 ## 🔨 Architecture
 
 ### [⭐️ Client-Side flow chart](https://github.com/codestates/Bobpago/wiki/Flow-charts)
 
-<br>
-
 ### [💎 Server-Side flow chart](https://github.com/codestates/Bobpago/wiki/Flow-charts)
-
-<br>
 
 ## 🗣 우리를 소개합니다.
 
