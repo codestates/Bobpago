@@ -24,13 +24,9 @@
 
 ## 🔨 Architecture
 
-### Client-Side flow chart
+### [⭐️ Client-Side flow chart](https://github.com/codestates/Bobpago/wiki/Flow-charts)
 
-- ![Frontend flowchart](https://github.com/codestates/Bobpago/wiki/Flow-charts)
-
-### Server-Side flow chart
-
-- ![Server flowchart](https://github.com/codestates/Bobpago/wiki/Flow-charts)
+### [💎 Server-Side flow chart](https://github.com/codestates/Bobpago/wiki/Flow-charts)
 
 ## 🗣 우리를 소개합니다.
 
