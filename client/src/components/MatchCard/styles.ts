@@ -216,6 +216,11 @@ export const HiddenLeftImage = styled.img`
   object-fit: cover;
   border-radius: 15px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+  @media only screen and (max-width: 480px) {
+    width: 70%;
+    height: 70%;
+    left: 15%;
+  }
 `;
 
 export const HiddenRightContainer = styled.div`
@@ -228,6 +233,11 @@ export const HiddenRightContainer = styled.div`
 export const HiddenTextContainer = styled.div`
   position: absolute;
   top: 10%;
+  @media only screen and (max-width: 480px) {
+    top: 0;
+    width: 90%;
+    margin: 0 5%;
+  }
 `;
 
 export const HiddenTopContainer = styled.div`
@@ -245,10 +255,20 @@ export const HiddenTitle = styled.div`
   @media only screen and (max-width: 768px) {
     font-size: 2em;
   }
+  @media only screen and (max-width: 480px) {
+    font-size: 1.3em;
+  }
 `;
 
 export const HiddenAmount = styled.div`
   font-size: ${main.smallFont};
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
+  @media only screen and (max-width: 480px) {
+    display: block;
+    font-size: 1.3em;
+  }
 `;
 
 export const HiddenMainIngredient = styled.div`
@@ -260,6 +280,9 @@ export const HiddenMainIngredient = styled.div`
   @media only screen and (max-width: 768px) {
     margin-top: 1em;
   }
+  @media only screen and (max-width: 480px) {
+    margin-top: 0.5em;
+  }
 `;
 
 export const MainIngredientContainer = styled.ul`
@@ -267,18 +290,36 @@ export const MainIngredientContainer = styled.ul`
   flex-wrap: wrap;
   display: flex;
   flex-direction: column;
+  @media only screen and (max-width: 768px) {
+    max-height: 4.5em;
+  }
+  @media only screen and (max-width: 480px) {
+    max-height: 1.5em;
+  }
 `;
 
 export const MainIngredientText = styled.div`
   font-size: ${main.smallFont};
   color: black;
+  @media only screen and (max-width: 768px) {
+    font-size: 1.7em;
+  }
+  @media only screen and (max-width: 480px) {
+    font-size: 1.3em;
+  }
 `;
 
 export const MainIngredient = styled.li`
   font-size: ${main.smallFont};
   margin-left: 0.6em;
-
   list-style: none;
+  @media only screen and (max-width: 768px) {
+    font-size: 1.7em;
+    margin-left: 0.3em;
+  }
+  @media only screen and (max-width: 480px) {
+    font-size: 1.3em;
+  }
 `;
 
 export const HiddenSubIngredient = styled.div`
@@ -298,16 +339,31 @@ export const SubIngredientContainer = styled.ul`
   flex-wrap: wrap;
   display: flex;
   flex-direction: column;
+  @media only screen and (max-width: 768px) {
+    max-height: 4.5em;
+  }
+  @media only screen and (max-width: 480px) {
+    max-height: 1.5em;
+  }
 `;
 
 export const SubIngredientText = styled.div`
   font-size: ${main.smallFont};
   color: black;
+  @media only screen and (max-width: 768px) {
+    font-size: 1.7em;
+  }
+  @media only screen and (max-width: 480px) {
+    font-size: 1.3em;
+  }
 `;
 
 export const SubIngredient = styled.li`
   font-size: ${main.smallFont};
   margin-left: 2em;
+  @media only screen and (max-width: 768px) {
+    font-size: 1.7em;
+  }
 `;
 
 export const HiddenCookingTimeContainer = styled.div`
@@ -325,10 +381,22 @@ export const HiddenCookingTimeContainer = styled.div`
 export const HiddenCookingTimeText = styled.div`
   font-size: ${main.smallFont};
   margin-right: 0.3em;
+  @media only screen and (max-width: 768px) {
+    font-size: 1.7em;
+  }
+  @media only screen and (max-width: 480px) {
+    font-size: 1.3em;
+  }
 `;
 
 export const HiddenCookingTime = styled.div`
   font-size: ${main.smallFont};
+  @media only screen and (max-width: 768px) {
+    font-size: 1.7em;
+  }
+  @media only screen and (max-width: 480px) {
+    font-size: 1.3em;
+  }
 `;
 
 export const HiddenDifficultyContainer = styled.div`
@@ -346,11 +414,23 @@ export const HiddenDifficultyContainer = styled.div`
 export const HiddenDifficultyText = styled.div`
   font-size: ${main.smallFont};
   margin-right: 0.3em;
+  @media only screen and (max-width: 768px) {
+    font-size: 1.7em;
+  }
+  @media only screen and (max-width: 480px) {
+    font-size: 1.3em;
+  }
 `;
 
 export const HiddenDifficulty = styled.div`
   font-size: ${main.middleFont};
   color: orange;
+  @media only screen and (max-width: 768px) {
+    font-size: 1.7em;
+  }
+  @media only screen and (max-width: 480px) {
+    font-size: 1.3em;
+  }
 `;
 
 export const HiddenBackButton = styled(ArrowLeft)`
@@ -362,6 +442,9 @@ export const HiddenBackButton = styled(ArrowLeft)`
   transition: 0.5s;
   &:hover {
     transform: scale(1.2);
+  }
+  @media only screen and (max-width: 480px) {
+    width: 30px;
   }
 `;
 
@@ -384,5 +467,15 @@ export const HiddenPageMoveButton = styled.button`
   &:hover {
     background-color: red;
     transform: scale(1.1);
+  }
+  @media only screen and (max-width: 768px) {
+    font-size: 1.5em;
+    width: 6em;
+    height: 2em;
+  }
+  @media only screen and (max-width: 480px) {
+    font-size: 1.3em;
+    width: 5.5em;
+    height: 1.7em;
   }
 `;
