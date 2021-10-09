@@ -10,6 +10,10 @@
 > 가지고있는 재료만 알려주신다면, 밥파고가 해결해줍니다<br />
 > 재료만 알려줘, 밥파고가 해결해줄께 😉<br />
 
+## 랜딩 페이지
+
+![](https://cdn.discordapp.com/attachments/879193189527994424/896312428743258142/dca35b5b6508b226.gif)
+
 ## 📎배포링크
 
 ### <https://www.bobpago.com>
@@ -22,13 +26,11 @@
 
 ### Client-Side flow chart
 
-- Frontend flowchart
-  ![]()
+- ![Frontend flowchart](https://github.com/codestates/Bobpago/wiki/Flow-charts)
 
 ### Server-Side flow chart
 
-- Server flowchart
-  ![]()
+- ![Server flowchart](https://github.com/codestates/Bobpago/wiki/Flow-charts)
 
 ## 🗣 우리를 소개합니다.
 
