@@ -31,11 +31,20 @@ export const UserProfileContainer = styled.div`
   min-height: 5em;
   height: 15em;
   width: 100%;
+  @media screen and (max-width: 480px) {
+    flex-direction: column;
+    height: 20em;
+  }
 `;
 
 export const ProfileImgContainer = styled.div`
   width: 15em;
   padding: 3.5em 1em 3em 3em;
+  @media screen and (max-width: 480px) {
+    padding: 3em 1em 0em 0em;
+    margin: 0 auto;
+    text-align: center;
+  }
 `;
 
 export const ProfileContentsContainer = styled.div`
@@ -44,6 +53,10 @@ export const ProfileContentsContainer = styled.div`
   @media screen and (max-width: 768px) {
     padding-top: 3.5em;
   }
+  @media screen and (max-width: 480px) {
+    padding-top: 1em;
+    padding-bottom: 1em;
+  }
 `;
 
 export const ProfileName = styled.p`
@@ -51,12 +64,18 @@ export const ProfileName = styled.p`
   font-size: ${main.middleFont};
   font-weight: 350;
   margin-bottom: 0.2em;
+  @media screen and (max-width: 480px) {
+    font-size: 2.3em;
+  }
 `;
 
 export const ProfileIntroduce = styled.div`
   width: 20em;
   font-size: 1.5em;
   word-break: keep-all;
+  @media screen and (max-width: 480px) {
+    font-size: 1.3em;
+  }
 `;
 
 export const ProfileRecommend = styled.div`
@@ -68,8 +87,6 @@ export const ProfileRecommend = styled.div`
   font-size: 1.5em;
   word-break: keep-all;
 `;
-
-
 
 export const FollowContainer = styled.div`
   min-height: 5em;
@@ -167,15 +184,13 @@ export const GridContainer = styled.div`
 export const NoPostContainer = styled.div`
   display: flex;
   justify-content: center;
-  
-`
+`;
 export const NoPostText = styled.span`
   margin-top: 3em;
   margin-bottom: 3em;
   font-size: 2em;
   color: dimgrey;
-`
-
+`;
 
 export const PlusIcon = styled(PlusLg)`
   width: 7em;
@@ -202,16 +217,16 @@ export const DotsIcon = styled(ThreeDotsVertical)`
 `;
 
 const fadeInRight = keyframes`
-   0%{
-        opacity:0.5;
-        height: 1em;
-        // transform: translateX(-1.5em);
-    }
-    100%{
-        opacity:1;
-      height: 4.2em;
-        // transform: translateX(-3em);
-    }
+  0%{
+    opacity:0.5;
+    height: 1em;
+    // transform: translateX(-1.5em);
+  }
+  100%{
+    opacity:1;
+    height: 4.2em;
+    // transform: translateX(-3em);
+  }
 `;
 
 export const DropDownContainer = styled.div`
@@ -222,6 +237,10 @@ export const DropDownContainer = styled.div`
     display: block;
     width: 7em;
     opacity: 1;
+  }
+  @media screen and (max-width: 480px) {
+    top: 3em;
+    right: 0em;
   }
 `;
 
