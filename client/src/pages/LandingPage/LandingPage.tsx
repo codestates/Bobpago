@@ -157,10 +157,6 @@ const LandingPage = () => {
 
   const history = useHistory();
   const [position1, setPosition1] = useState<number>(0);
-  const [position2, setPosition2] = useState<number>(0);
-  const [position3, setPosition3] = useState<number>(0);
-  const [position4, setPosition4] = useState<number>(0);
-  const [position5, setPosition5] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const [onOff, setOnOff] = useState<boolean>(false);
 
@@ -175,47 +171,26 @@ const LandingPage = () => {
     return scrollPosition + sectionTwo1.getBoundingClientRect().top - 300;
   };
 
-  const handlePosition2 = () => {
-    const sectionTwo2 = document.querySelector(".section2-2") as HTMLElement;
-    return scrollPosition + sectionTwo2.getBoundingClientRect().top - 400;
-  };
-
-  const handlePosition3 = () => {
-    const sectionTwo3 = document.querySelector(".section2-3") as HTMLElement;
-    return scrollPosition + sectionTwo3.getBoundingClientRect().top - 500;
-  };
-
-  const handlePosition4 = () => {
-    const sectionTwo4 = document.querySelector(".section2-4") as HTMLElement;
-    return scrollPosition + sectionTwo4.getBoundingClientRect().top - 500;
-  };
-
-  const handlePosition5 = () => {
-    const sectionThree1 = document.querySelector("#section3") as HTMLElement;
-    return scrollPosition + sectionThree1.getBoundingClientRect().top;
-  };
-
   const handlePageTransition = () => {
     setOnOff(!onOff);
   };
 
   const onScroll = useCallback((): void => {
+    const scrollDown = document.querySelector(".scrollDown") as HTMLElement;
     positionEx = window.pageYOffset;
     setPosition1(handlePosition1);
-    setPosition2(handlePosition2);
-    setPosition3(handlePosition3);
-    setPosition4(handlePosition4);
-    setPosition5(handlePosition5);
 
     if (NavRef.current && NavlogoRef.current && NavlistRef.current) {
       if (positionEx > 10000) {
         NavRef.current.style.backgroundColor = "#feefe6ce";
       }
       if (positionEx > 0) {
+        scrollDown.style.opacity = "0";
         NavRef.current.classList.add("navActive");
         NavlogoRef.current.classList.add("logoActive");
         NavlistRef.current.classList.add("listActive");
       } else {
+        scrollDown.style.opacity = "1";
         NavRef.current.classList.remove("navActive");
         NavlogoRef.current.classList.remove("logoActive");
         NavlistRef.current.classList.remove("listActive");
@@ -282,7 +257,10 @@ const LandingPage = () => {
           </NavLi>
           <NavLi
             onClick={() => {
-              history.push("/survey");
+              handlePageTransition();
+              setTimeout(() => {
+                history.push("/survey");
+              }, 2000);
             }}
           >
             시작하기
@@ -292,13 +270,12 @@ const LandingPage = () => {
       <LandSection1 handlePageTransition={handlePageTransition} />
       <LandSection2
         position1={position1}
-        position2={position2}
-        position3={position3}
-        position4={position4}
-        scrollPosition={scrollPosition}
+        position2={position1 + 500}
+        position3={position1 + 1200}
+        position4={position1 + 1900}
       />
       <LandingSectionThree></LandingSectionThree>
-      <LandSection3 position5={position5} scrollPosition={scrollPosition} />
+      <LandSection3 position5={position1 + 2700} />
       <LandSection4
         handlePageTransition={handlePageTransition}
         position={scrollPosition}
