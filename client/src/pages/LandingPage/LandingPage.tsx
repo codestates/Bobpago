@@ -199,7 +199,7 @@ const LandingPage = () => {
     }
 
     setScrollPosition(window.pageYOffset);
-  }, []);
+  }, [loading]);
 
   useEffect(() => {
     if (!loading) {
