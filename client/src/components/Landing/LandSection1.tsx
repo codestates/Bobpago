@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import Ball from "components/Svg/Ball/Ball";
 import { useHistory } from "react-router";
 
@@ -16,6 +16,28 @@ interface SectionTextOne {
 interface Section1Props {
   handlePageTransition: () => void;
 }
+
+const ScrollDownAnimation = keyframes`
+  0% {
+    bottom: 5%;
+    left: 50%;
+  }
+
+  50% {
+    bottom: 7%;
+    left: 50%;
+    width: 2.8em;
+    height: 2.8em;
+    transform : rotateZ(45deg) skew(-5deg, -5deg);
+  }
+
+  100% {
+    bottom: 5%;
+    left: 50%;
+    width: 2.5em;
+    height:2.5em;
+  }
+`;
 
 const LandingSectionOne = styled.section`
   width: 100%;
@@ -220,6 +242,39 @@ const SectionOneButton = styled.button`
   }
 `;
 
+const ScrollDownContainer = styled.div`
+  width: 10em;
+  height: 5em;
+  bottom: 3%;
+  left: 45%;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  transition: 1.3s;
+  @media screen and (max-width: 768px) {
+    left: 40%;
+  }
+  @media screen and (max-width: 500px) {
+    left: 35%;
+  }
+`;
+
+const ScrollDownIcon = styled.div`
+  width: 2.5em;
+  height: 2.5em;
+  background-color: transparent;
+  border-bottom: 5px solid rgb(129, 43, 3);
+  border-right: 5px solid rgb(129, 43, 6);
+  transform: rotateZ(45deg);
+  animation: ${ScrollDownAnimation} 2s infinite;
+`;
+
+const ScrollDownText = styled.div`
+  margin-top: 1em;
+`;
+
 const LandSection1: React.FC<Section1Props> = ({ handlePageTransition }) => {
   const history = useHistory();
   const handlePageMove = () => {
@@ -269,14 +324,10 @@ const LandSection1: React.FC<Section1Props> = ({ handlePageTransition }) => {
       <SectionOneButton onClick={handlePageMove}>
         지금 바로 시작하기.
       </SectionOneButton>
-      {/* <Ball
-        width={"80%"}
-        height={"80%"}
-        fill={"#f75f4e4b"}
-        top={30}
-        left={-20}
-        opac={true}
-      /> */}
+      <ScrollDownContainer className="scrollDown">
+        <ScrollDownIcon></ScrollDownIcon>
+        <ScrollDownText>아래로 스크롤 해보세요!</ScrollDownText>
+      </ScrollDownContainer>
     </LandingSectionOne>
   );
 };
