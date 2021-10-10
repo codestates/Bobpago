@@ -179,7 +179,6 @@ const LandingPage = () => {
     const scrollDown = document.querySelector(".scrollDown") as HTMLElement;
     positionEx = window.pageYOffset;
     setPosition1(handlePosition1);
-    console.log(handlePosition1());
 
     if (NavRef.current && NavlogoRef.current && NavlistRef.current) {
       if (positionEx > 10000) {
