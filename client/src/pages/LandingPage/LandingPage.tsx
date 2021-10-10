@@ -179,6 +179,7 @@ const LandingPage = () => {
     const scrollDown = document.querySelector(".scrollDown") as HTMLElement;
     positionEx = window.pageYOffset;
     setPosition1(handlePosition1);
+    console.log(handlePosition1());
 
     if (NavRef.current && NavlogoRef.current && NavlistRef.current) {
       if (positionEx > 10000) {
@@ -270,9 +271,9 @@ const LandingPage = () => {
       <LandSection1 handlePageTransition={handlePageTransition} />
       <LandSection2
         position1={position1}
-        position2={position1 + 500}
-        position3={position1 + 1200}
-        position4={position1 + 1900}
+        position2={position1 + 720}
+        position3={position1 + 1480}
+        position4={position1 + 2220}
       />
       <LandingSectionThree></LandingSectionThree>
       <LandSection3 position5={position1 + 2700} />
