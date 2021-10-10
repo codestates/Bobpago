@@ -198,7 +198,7 @@ const LandingPage = () => {
     }
 
     setScrollPosition(window.pageYOffset);
-  }, []);
+  }, [loading]);
 
   useEffect(() => {
     if (!loading) {
@@ -270,9 +270,9 @@ const LandingPage = () => {
       <LandSection1 handlePageTransition={handlePageTransition} />
       <LandSection2
         position1={position1}
-        position2={position1 + 500}
-        position3={position1 + 1200}
-        position4={position1 + 1900}
+        position2={position1 + 720}
+        position3={position1 + 1480}
+        position4={position1 + 2220}
       />
       <LandingSectionThree></LandingSectionThree>
       <LandSection3 position5={position1 + 2700} />
