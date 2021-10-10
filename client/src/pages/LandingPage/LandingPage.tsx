@@ -275,7 +275,7 @@ const LandingPage = () => {
         position4={position1 + 2220}
       />
       <LandingSectionThree></LandingSectionThree>
-      <LandSection3 position5={position1 + 2700} />
+      <LandSection3 position5={position1 + 3100} />
       <LandSection4
         handlePageTransition={handlePageTransition}
         position={scrollPosition}
