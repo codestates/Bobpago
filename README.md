@@ -23,6 +23,7 @@
 ## 📎배포링크
 
 ### <https://www.bobpago.com>
+### <https://bobpago.com>
 
 ## 👨‍⚕️ 어떤 기술이 사용되었나요?
 
