@@ -31,10 +31,6 @@
 
 ![](https://cdn.discordapp.com/attachments/879193189527994424/885409218000191519/2021-09-09_3.19.46.png)
 
-<br>
-<br>
-<br>
-
 ## FRONT END
 <p>
 <img src="https://img.shields.io/badge/FRONT-TYPESCRIPT-%233178C6?style=for-the-badge&logo=typescript" alt="TYPESCRIPT">
