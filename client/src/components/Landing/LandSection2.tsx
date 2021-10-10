@@ -6,10 +6,9 @@ interface GifTextProps {
 }
 
 interface GifContainerProps {
-  scrollPosition?: number;
   left?: string;
   right?: string;
-  position: number;
+  position?: number;
 }
 
 const LandingSectionTwo = styled.section`
@@ -185,11 +184,10 @@ const LandingNecktie = styled.div`
 `;
 
 interface LandSect2Props {
-  scrollPosition: number;
-  position1: number;
-  position2: number;
-  position3: number;
-  position4: number;
+  position1?: number;
+  position2?: number;
+  position3?: number;
+  position4?: number;
 }
 
 const LandSection2: React.FC<LandSect2Props> = ({
@@ -197,18 +195,12 @@ const LandSection2: React.FC<LandSect2Props> = ({
   position2,
   position3,
   position4,
-  scrollPosition,
 }) => {
   return (
     <LandingSectionTwo id="section2">
-      <GifContainer
-        className="section2-1"
-        scrollPosition={scrollPosition}
-        position={position1}
-        left="left"
-      >
+      <GifContainer className="section2-1" position={position1} left="left">
         <GifImageContainer>
-          <GifImage src="/img/LandingGif1.gif"></GifImage>
+          <GifImage src="/img/GifSurvey.gif"></GifImage>
         </GifImageContainer>
         <GifTextContainer>
           <GifTextTitle>오늘 뭐 해먹지..?</GifTextTitle>
@@ -223,12 +215,7 @@ const LandSection2: React.FC<LandSect2Props> = ({
           </GifTextContent>
         </GifTextContainer>
       </GifContainer>
-      <GifContainer
-        className="section2-2"
-        scrollPosition={scrollPosition}
-        position={position2}
-        right="right"
-      >
+      <GifContainer className="section2-2" position={position2} right="right">
         <GifTextContainer>
           <GifTextTitle>다양한 레시피</GifTextTitle>
           <GifTextContent>
@@ -243,17 +230,12 @@ const LandSection2: React.FC<LandSect2Props> = ({
           <GifTextContent>요리 과정을 상세하게 볼 수 있습니다</GifTextContent>
         </GifTextContainer>
         <GifImageContainer>
-          <GifImage src="/img/LandingGif2.gif"></GifImage>
+          <GifImage src="/img/GifMatching.gif"></GifImage>
         </GifImageContainer>
       </GifContainer>
-      <GifContainer
-        className="section2-3"
-        scrollPosition={scrollPosition}
-        position={position3}
-        left="left"
-      >
+      <GifContainer className="section2-3" position={position3} left="left">
         <GifImageContainer>
-          <GifImage src="/img/LandingGif3.gif"></GifImage>
+          <GifImage src="/img/GifPosting.gif"></GifImage>
         </GifImageContainer>
         <GifTextContainer>
           <GifTextTitle>레시피 포스팅</GifTextTitle>
@@ -268,12 +250,7 @@ const LandSection2: React.FC<LandSect2Props> = ({
           </GifTextContent>
         </GifTextContainer>
       </GifContainer>
-      <GifContainer
-        className="section2-4"
-        scrollPosition={scrollPosition}
-        position={position4}
-        right="right"
-      >
+      <GifContainer className="section2-4" position={position4} right="right">
         <GifTextContainer>
           <GifTextTitle>내가 쓴 글과 북마크</GifTextTitle>
           <GifTextContent>

@@ -110,24 +110,19 @@ const LandingFourRightContent = styled.div`
   @media screen and (max-width: 600px) {
     font-size: 24px;
     transition: 1s;
-    /* margin-right: 1em; */
   }
 `;
 
 interface LandSection3Props {
-  scrollPosition: number;
   position5: number;
 }
 
-const LandSection3: React.FC<LandSection3Props> = ({
-  scrollPosition,
-  position5,
-}) => {
+const LandSection3: React.FC<LandSection3Props> = ({ position5 }) => {
   return (
     <LandingSectionFour id="section3">
       <LandingFourContainer position={position5}>
         <LandingFourLeftContainer>
-          <LandingFourLeftGif src="/img/LandingGif5.gif" />
+          <LandingFourLeftGif src="/img/landingMedia.gif" />
         </LandingFourLeftContainer>
         <LandingFourRightContainer>
           <LandingFourRightTitle>모바일 기기 지원</LandingFourRightTitle>
