@@ -29,6 +29,8 @@
 
 [📚 Bobpago Wiki](https://github.com/codestates/Bobpago/wiki)
 
+<br>
+
 ## 🍱 서비스 미리보기
 
 전체 시연영상은 더 자세하게 안내되어있습니다. [Wiki(Final Web View)](https://github.com/codestates/Bobpago/wiki/Final-Product)에서 확인해보세요!
@@ -66,6 +68,7 @@
   <img src="https://cdn.discordapp.com/attachments/879193189527994424/896994575804141648/f0ce44de41fd5198.gif" />
 </details>
 
+<br>
 
 ## 👨‍⚕️ 어떤 기술이 사용되었나요?
 
