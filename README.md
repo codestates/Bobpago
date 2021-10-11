@@ -27,7 +27,9 @@
   <summary>랜딩 페이지 기능</summary>
   <details>
     <summary>랜딩</summary>
+    ㅁㄴㅇㄹ
     <summary>반응형</summary>
+    ㅁㄴㅇㄹ
   </details>
 </details>
 
