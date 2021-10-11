@@ -16,7 +16,7 @@
 
 ### 💎 랜딩 페이지
 
-![](https://cdn.discordapp.com/attachments/879193189527994424/896312428743258142/dca35b5b6508b226.gif)
+![랜딩 최종](https://user-images.githubusercontent.com/83815628/136743633-756886d4-1d5f-48a5-a0cb-b5e7348f9db4.gif)
 
 <br>
 
