@@ -53,7 +53,7 @@
 </details>
 <details>
   <summary>유저간 팔로우 기능</summary>
-  <img src="https://cdn.discordapp.com/attachments/879193189527994424/896994055727231016/2.gif" />
+  <img src="https://cdn.discordapp.com/attachments/879193189527994424/896994575804141648/f0ce44de41fd5198.gif" />
 </details>
 
 ## 📎 배포링크
