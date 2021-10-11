@@ -22,9 +22,13 @@
 
 ## 🍱 서비스 미리보기
 
+
 <details>
-  <summary>서비스 소개</summary>
-  <img src="https://www.notion.so/17-EDGE-Bobpago-9ca448aacfda431dbaed9baa2477dd90#b22e3385bb894b85ab6566fd3fccbc19.gif" />
+  <summary>랜딩 페이지 기능</summary>
+  <details>
+    <summary>랜딩</summary>
+    <summary>반응형</summary>
+  </details>
 </details>
 
 ## 📎 배포링크
