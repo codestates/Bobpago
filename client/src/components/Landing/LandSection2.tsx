@@ -264,7 +264,7 @@ const LandSection2: React.FC<LandSect2Props> = ({
           </GifTextContent>
         </GifTextContainer>
         <GifImageContainer>
-          <GifImage src="/img/LandingGif4.gif"></GifImage>
+          <GifImage src="/img/GifMypage.gif"></GifImage>
         </GifImageContainer>
       </GifContainer>
       <LandingNecktie></LandingNecktie>
