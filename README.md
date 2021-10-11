@@ -30,6 +30,7 @@
 
 ## 🍱 서비스 미리보기
 
+전체 시연영상은 더 자세하게 안내되어있습니다. [Wiki(Final Web View)](https://github.com/codestates/Bobpago/wiki/Final-Product)에서 확인해보세요!
 
 <details>
   <summary>서비스 소개</summary>
