@@ -25,7 +25,7 @@
 
 <details>
   <summary>서비스 소개</summary>
-  <img src="https://cdn.discordapp.com/attachments/879193189527994424/896950935912316948/d186eea22b62d266.gif" />
+  <img src="https://cdn.discordapp.com/attachments/879193189527994424/896993441236545576/0f6a7d426fb5766d.gif" />
 </details>
 <details>
   <summary>재료 선택</summary>
@@ -33,7 +33,27 @@
 </details>
 <details>
   <summary>매칭된 다양한 레시피</summary>
-  <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/fed9a38b-c4bb-462e-a8e0-1ad36831ce90/%E1%84%86%E1%85%A2%E1%84%8E%E1%85%B5%E1%86%BC_%E1%84%91%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%8C%E1%85%B5.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20211011%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20211011T024945Z&X-Amz-Expires=86400&X-Amz-Signature=d6fada39e1df991a479c394098928a73b9f84c42b641cf3004c40442b4a29ac3&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22%25E1%2584%2586%25E1%2585%25A2%25E1%2584%258E%25E1%2585%25B5%25E1%2586%25BC%2520%25E1%2584%2591%25E1%2585%25A6%25E1%2584%258B%25E1%2585%25B5%25E1%2584%258C%25E1%2585%25B5.gif" />
+  <img src="https://github.com/VVSOGI/gifRepo/blob/main/%E1%84%86%E1%85%A2%E1%84%8E%E1%85%B5%E1%86%BC%E1%84%91%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%8C%E1%85%B5%E1%84%8E%E1%85%AC%E1%84%8C%E1%85%A9%E1%86%BC.gif?raw=true" />
+</details>
+<details>
+  <summary>상세한 레시피 조회</summary>
+  <img src="https://github.com/VVSOGI/gifRepo/blob/main/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%A9%E1%86%AF%E1%84%8B%E1%85%A2%E1%84%82%E1%85%B5%E1%84%86%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%A7%E1%86%AB%E1%84%8C%E1%85%A9%E1%87%82%E1%84%8B%E1%85%A1%E1%84%8B%E1%85%AD%E1%84%8E%E1%85%AE%E1%84%80%E1%85%A1%E1%84%89%E1%85%A1%E1%86%A8%E1%84%8C%E1%85%A6.gif?raw=true" />
+</details>
+<details>
+  <summary>댓글을 통한 소통</summary>
+  <img src="https://cdn.discordapp.com/attachments/879193189527994424/896960192116322304/d774eef4013345f4.gif" />
+</details>
+<details>
+  <summary>레시피 직접 작성해보기</summary>
+  <img src="https://cdn.discordapp.com/attachments/879193189527994424/896959390182174770/db8b1fb2d8719c45.gif" />
+</details>
+<details>
+  <summary>나만의 마이페이지</summary>
+  <img src="https://cdn.discordapp.com/attachments/879193189527994424/896993303994703912/80dbef1f39823619.gif" />
+</details>
+<details>
+  <summary>유저간 팔로우 기능</summary>
+  <img src="https://cdn.discordapp.com/attachments/879193189527994424/896994055727231016/2.gif" />
 </details>
 
 ## 📎 배포링크
