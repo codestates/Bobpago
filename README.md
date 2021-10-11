@@ -14,13 +14,19 @@
 
 <br>
 
-## 랜딩 페이지
+## 💎 랜딩 페이지
 
 ![](https://cdn.discordapp.com/attachments/879193189527994424/896312428743258142/dca35b5b6508b226.gif)
 
 <br>
 
-## 📎배포링크
+## 🍱 서비스 미리보기
+
+<details>
+  <summary>서비스 소개</summary>
+  <img src="https://www.notion.so/17-EDGE-Bobpago-9ca448aacfda431dbaed9baa2477dd90#b22e3385bb894b85ab6566fd3fccbc19" />
+</details>
+## 📎 배포링크
 
 ### <https://www.bobpago.com>
 
