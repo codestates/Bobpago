@@ -24,8 +24,9 @@
 
 <details>
   <summary>서비스 소개</summary>
-  <img src="https://www.notion.so/17-EDGE-Bobpago-9ca448aacfda431dbaed9baa2477dd90#b22e3385bb894b85ab6566fd3fccbc19" />
+  <img src="https://www.notion.so/17-EDGE-Bobpago-9ca448aacfda431dbaed9baa2477dd90#b22e3385bb894b85ab6566fd3fccbc19.gif" />
 </details>
+
 ## 📎 배포링크
 
 ### <https://www.bobpago.com>
