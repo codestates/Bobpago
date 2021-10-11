@@ -14,11 +14,19 @@
 
 <br>
 
-## 💎 랜딩 페이지
+### 💎 랜딩 페이지
 
 ![](https://cdn.discordapp.com/attachments/879193189527994424/896312428743258142/dca35b5b6508b226.gif)
 
 <br>
+
+## 📚 더 자세히 알아보기
+
+[🍖 밥파고 배포 링크](https://www.bobpago.com)
+
+[🔎 프로젝트 소개 문서](https://www.notion.so/17-EDGE-Bobpago-9ca448aacfda431dbaed9baa2477dd90)
+
+[📚 Bobpago Wiki](https://github.com/codestates/Bobpago/wiki)
 
 ## 🍱 서비스 미리보기
 
@@ -55,10 +63,6 @@
   <summary>유저간 팔로우 기능</summary>
   <img src="https://cdn.discordapp.com/attachments/879193189527994424/896994575804141648/f0ce44de41fd5198.gif" />
 </details>
-
-## 📎 배포링크
-
-### <https://www.bobpago.com>
 
 ## 👨‍⚕️ 어떤 기술이 사용되었나요?
 
