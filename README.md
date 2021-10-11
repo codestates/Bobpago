@@ -29,7 +29,7 @@
 </details>
 <details>
   <summary>재료 선택</summary>
-  <img src="https://cdn.discordapp.com/attachments/879193189527994424/896951500650188830/0d7fd1f0a52517b9.gif" />
+  <img src="https://github.com/VVSOGI/gifRepo/blob/main/%E1%84%89%E1%85%A5%E1%86%AF%E1%84%86%E1%85%AE%E1%86%AB%E1%84%8C%E1%85%A9%E1%84%89%E1%85%A1%E1%84%87%E1%85%A5%E1%84%80%E1%85%B3%E1%84%8B%E1%85%A5%E1%86%B9%E1%84%8B%E1%85%B5.gif?raw=true" />
 </details>
 <details>
   <summary>매칭된 다양한 레시피</summary>
