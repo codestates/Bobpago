@@ -24,7 +24,7 @@
 
 [🍖 밥파고 배포 링크](https://www.bobpago.com)
 
-[🔎 프로젝트 소개 문서](https://www.notion.so/17-EDGE-Bobpago-9ca448aacfda431dbaed9baa2477dd90)
+[🔎 프로젝트 소개 문서(Notion)](https://www.notion.so/17-EDGE-Bobpago-9ca448aacfda431dbaed9baa2477dd90)
 
 [📚 Bobpago Wiki](https://github.com/codestates/Bobpago/wiki)
 
