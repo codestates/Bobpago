@@ -31,8 +31,10 @@ export class AuthService {
   async signIn(checkSignInDto: CheckSignInReqDto): Promise<CheckSignInResDto> {
     const { email, password } = checkSignInDto;
     const user = await this.usersRepository.findOne({ email });
+    const oldUser = await this.usersRepository.findOne({ email, password });
 
-    if (user) {
+    const checkPassword = await bcrypt.compare(password, user.password);
+    if (checkPassword || oldUser) {
       const payload = { email };
       // refresh 토큰은 생성해서 db에 저장
       const refreshToken = await this.jwtService.sign(payload, {
