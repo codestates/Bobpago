@@ -46,7 +46,7 @@ const SignUp = () => {
         `${process.env.REACT_APP_SERVER_URL}/signup`,
         {
           email: email,
-          newPassword: password,
+          password: password,
           nickname: nickName,
         },
         {
