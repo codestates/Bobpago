@@ -4,7 +4,7 @@ import { CreateUserReqDto } from 'src/me/dto/request-dto/create-user.req.dto';
 
 export class CheckSignInReqDto extends PickType(CreateUserReqDto, [
   'email',
-  'password',
+  'newPassword',
 ] as const) {
   @IsNotEmpty()
   @IsString()

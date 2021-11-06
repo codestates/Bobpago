@@ -10,7 +10,7 @@ import {
 import { ApiProperty, PickType } from '@nestjs/swagger';
 
 export class UpdateUserReqDto extends PickType(CreateUserReqDto, [
-  'password',
+  'newPassword',
   'nickname',
 ] as const) {
   @ApiProperty({
