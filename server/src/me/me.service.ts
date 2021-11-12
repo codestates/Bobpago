@@ -224,11 +224,17 @@ export class MeService {
     user: User,
     checkInfoUserDto: CheckInfoUserReqDto,
   ): Promise<CheckInfoUserResDto> {
+    const { email } = user;
+    const { newPassword } = checkInfoUserDto;
     try {
-      const { newPassword } = checkInfoUserDto;
+      const oldUser = await this.usersRepository.findOne({
+        email,
+        password: newPassword,
+      });
+      const user = await this.usersRepository.findOne({ email });
+
       const checkPassword = await bcrypt.compare(newPassword, user.password);
-      console.log('✅', checkPassword);
-      if (checkPassword) {
+      if (checkPassword || oldUser) {
         return {
           data: null,
           statusCode: 200,

@@ -197,7 +197,7 @@ const MyPage = () => {
       const data = await axios.post(
         `${process.env.REACT_APP_SERVER_URL}/checkMyInfo?tokenType=${tokenType}`,
         {
-          password: password,
+          newPassword: password,
         },
         {
           withCredentials: true,
@@ -238,7 +238,7 @@ const MyPage = () => {
       const data = await axios.post(
         `${process.env.REACT_APP_SERVER_URL}/checkMyInfo?tokenType=${tokenType}`,
         {
-          password: passwordWithDraw,
+          newPassword: passwordWithDraw,
         },
         {
           withCredentials: true,
