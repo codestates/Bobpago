@@ -17,8 +17,8 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const user_entity_1 = require("../entities/user.entity");
 const typeorm_2 = require("typeorm");
+const bcrypt = require("bcryptjs");
 const jwt_1 = require("@nestjs/jwt");
-const response_dto_1 = require("../common/response.dto");
 const axios_1 = require("axios");
 let AuthService = class AuthService {
     constructor(usersRepository, jwtService) {
@@ -28,7 +28,9 @@ let AuthService = class AuthService {
     async signIn(checkSignInDto) {
         const { email, password } = checkSignInDto;
         const user = await this.usersRepository.findOne({ email });
-        if (user) {
+        const oldUser = await this.usersRepository.findOne({ email, password });
+        const checkPassword = await bcrypt.compare(password, user.password);
+        if (checkPassword || oldUser) {
             const payload = { email };
             const refreshToken = await this.jwtService.sign(payload, {
                 secret: process.env.REFRESH_TOKEN_SECRET,
@@ -36,13 +38,8 @@ let AuthService = class AuthService {
             });
             await this.usersRepository.update(user.id, { refreshToken });
             const newUser = await this.usersRepository.findOne({ email });
-            delete newUser.refreshToken;
             delete newUser.password;
-            delete newUser.recipes;
-            delete newUser.bookmarks;
-            delete newUser.recipeReactions;
-            delete newUser.followees;
-            delete newUser.followers;
+            delete newUser.refreshToken;
             const accessToken = await this.jwtService.sign(payload);
             return {
                 data: Object.assign({ tokenType: 'jwt', accessToken }, newUser),
@@ -253,10 +250,6 @@ let AuthService = class AuthService {
             await this.usersRepository.update(user.id, { refreshToken });
             delete user.password;
             delete user.refreshToken;
-            delete user.recipes;
-            delete user.bookmarks;
-            delete user.followees;
-            delete user.followers;
             return {
                 data: Object.assign({ tokenType: 'kakao', accessToken }, user),
                 statusCode: 200,
@@ -273,10 +266,6 @@ let AuthService = class AuthService {
             const newUser = await this.usersRepository.findOne({ email });
             delete newUser.password;
             delete newUser.refreshToken;
-            delete newUser.recipes;
-            delete newUser.bookmarks;
-            delete newUser.followees;
-            delete newUser.followers;
             return {
                 data: Object.assign({ tokenType: 'kakao', accessToken }, newUser),
                 statusCode: 200,
@@ -317,10 +306,6 @@ let AuthService = class AuthService {
             await this.usersRepository.update(user.id, { refreshToken });
             delete user.password;
             delete user.refreshToken;
-            delete user.recipes;
-            delete user.bookmarks;
-            delete user.followees;
-            delete user.followers;
             return {
                 data: Object.assign({ tokenType: 'naver', accessToken }, user),
                 statusCode: 200,
@@ -337,10 +322,6 @@ let AuthService = class AuthService {
             const newUser = await this.usersRepository.findOne({ email });
             delete newUser.password;
             delete newUser.refreshToken;
-            delete newUser.recipes;
-            delete newUser.bookmarks;
-            delete newUser.followees;
-            delete newUser.followers;
             return {
                 data: Object.assign({ tokenType: 'naver', accessToken }, newUser),
                 statusCode: 200,
@@ -377,10 +358,6 @@ let AuthService = class AuthService {
             });
             delete user.password;
             delete user.refreshToken;
-            delete user.recipes;
-            delete user.bookmarks;
-            delete user.followees;
-            delete user.followers;
             return {
                 data: Object.assign({ tokenType: 'google', accessToken: access_token }, user),
                 statusCode: 200,
@@ -397,10 +374,6 @@ let AuthService = class AuthService {
             const newUser = await this.usersRepository.findOne({ email });
             delete newUser.password;
             delete newUser.refreshToken;
-            delete newUser.recipes;
-            delete newUser.bookmarks;
-            delete newUser.followees;
-            delete newUser.followers;
             return {
                 data: Object.assign({ tokenType: 'google', accessToken: access_token }, newUser),
                 statusCode: 200,

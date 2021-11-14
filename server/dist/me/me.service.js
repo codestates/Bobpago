@@ -17,11 +17,10 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const user_entity_1 = require("../entities/user.entity");
 const typeorm_2 = require("typeorm");
-const response_dto_1 = require("../common/response.dto");
+const bcrypt = require("bcryptjs");
 const axios_1 = require("axios");
 const bookmark_entity_1 = require("../entities/bookmark.entity");
 const recipe_entity_1 = require("../entities/recipe.entity");
-const http_exception_dto_1 = require("../common/http-exception.dto");
 let MeService = class MeService {
     constructor(usersRepository, bookmarkRepository, recipeRepository) {
         this.usersRepository = usersRepository;
@@ -29,7 +28,9 @@ let MeService = class MeService {
         this.recipeRepository = recipeRepository;
     }
     async signUp(createUserDto) {
-        const { email, password, nickname } = createUserDto;
+        const { email, newPassword, nickname } = createUserDto;
+        const salt = await bcrypt.genSalt();
+        const password = await bcrypt.hash(newPassword, salt);
         const newUser = this.usersRepository.create({
             email,
             password,
@@ -53,9 +54,15 @@ let MeService = class MeService {
         }
     }
     async getMyInfo(user) {
-        const followees = user.followees.length;
-        const followers = user.followers.length;
-        const recipeIds = user.bookmarks.map((el) => {
+        const newUser = await this.usersRepository.findOne({
+            where: {
+                email: user.email,
+            },
+            relations: ['followees', 'followers', 'bookmarks', 'recipes'],
+        });
+        const followees = newUser.followees.length;
+        const followers = newUser.followers.length;
+        const recipeIds = newUser.bookmarks.map((el) => {
             return { id: el.recipeId };
         });
         try {
@@ -65,12 +72,11 @@ let MeService = class MeService {
                 })
                 : [];
             bookmarks.reverse();
-            user.recipes.reverse();
-            delete user.bookmarks;
-            delete user.followees;
-            delete user.followers;
+            newUser.recipes.reverse();
+            delete newUser.password;
+            delete newUser.refreshToken;
             return {
-                data: Object.assign(Object.assign({}, user), { bookmarks, followees, followers }),
+                data: Object.assign(Object.assign({}, newUser), { bookmarks, followees, followers }),
                 statusCode: 200,
                 message: `내 정보 조회에 성공하였습니다.`,
             };
@@ -80,7 +86,6 @@ let MeService = class MeService {
         }
     }
     async updateMyAccount(user, updateUserDto) {
-        const { password, nickname, profile } = updateUserDto;
         try {
             await this.usersRepository.update(user.id, updateUserDto);
             const newUser = await this.usersRepository.findOne({ id: user.id });
@@ -179,12 +184,16 @@ let MeService = class MeService {
         }
     }
     async checkMyInfo(user, checkInfoUserDto) {
+        const { email } = user;
+        const { newPassword } = checkInfoUserDto;
         try {
-            const userInfo = await this.usersRepository.findOne({
-                id: user.id,
-                password: checkInfoUserDto.password,
+            const oldUser = await this.usersRepository.findOne({
+                email,
+                password: newPassword,
             });
-            if (userInfo) {
+            const newUser = await this.usersRepository.findOne({ email });
+            const checkPassword = await bcrypt.compare(newPassword, newUser.password);
+            if (checkPassword || oldUser) {
                 return {
                     data: null,
                     statusCode: 200,

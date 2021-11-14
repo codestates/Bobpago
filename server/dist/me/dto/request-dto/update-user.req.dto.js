@@ -14,7 +14,7 @@ const create_user_req_dto_1 = require("./create-user.req.dto");
 const class_validator_1 = require("class-validator");
 const swagger_1 = require("@nestjs/swagger");
 class UpdateUserReqDto extends (0, swagger_1.PickType)(create_user_req_dto_1.CreateUserReqDto, [
-    'password',
+    'newPassword',
     'nickname',
 ]) {
 }

@@ -28,7 +28,6 @@ import {
   NotFoundErrorRes,
   UnauthorizedErrorRes,
 } from 'src/common/http-exception.dto';
-import { ResponseDto } from 'src/common/response.dto';
 import { User } from 'src/entities/user.entity';
 import { AuthService } from './auth.service';
 import { CheckSignInReqDto } from './dto/request-dto/check-signin.req.dto';

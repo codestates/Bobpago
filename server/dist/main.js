@@ -9,7 +9,11 @@ const expressBasicAuth = require("express-basic-auth");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.enableCors({
-        origin: [`${process.env.CLIENT_URL}`, 'https://www.bobpago.com'],
+        origin: [
+            `${process.env.CLIENT_URL}`,
+            'https://www.bobpago.com',
+            'http://localhost:3001',
+        ],
         credentials: true,
     });
     app.use(cookieParser());

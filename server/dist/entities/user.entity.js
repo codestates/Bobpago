@@ -60,7 +60,7 @@ __decorate([
     __metadata("design:type", Date)
 ], User.prototype, "deletedAt", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => recipe_entity_1.Recipe, (recipe) => recipe.user, { eager: true }),
+    (0, typeorm_1.OneToMany)(() => recipe_entity_1.Recipe, (recipe) => recipe.user),
     __metadata("design:type", Array)
 ], User.prototype, "recipes", void 0);
 __decorate([
@@ -76,15 +76,15 @@ __decorate([
     __metadata("design:type", Array)
 ], User.prototype, "commentReactions", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => bookmark_entity_1.Bookmark, (bookmark) => bookmark.user, { eager: true }),
+    (0, typeorm_1.OneToMany)(() => bookmark_entity_1.Bookmark, (bookmark) => bookmark.user),
     __metadata("design:type", Array)
 ], User.prototype, "bookmarks", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => follow_entity_1.Follow, (follow) => follow.follower, { eager: true }),
+    (0, typeorm_1.OneToMany)(() => follow_entity_1.Follow, (follow) => follow.follower),
     __metadata("design:type", Array)
 ], User.prototype, "followees", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => follow_entity_1.Follow, (follow) => follow.followee, { eager: true }),
+    (0, typeorm_1.OneToMany)(() => follow_entity_1.Follow, (follow) => follow.followee),
     __metadata("design:type", Array)
 ], User.prototype, "followers", void 0);
 User = __decorate([
