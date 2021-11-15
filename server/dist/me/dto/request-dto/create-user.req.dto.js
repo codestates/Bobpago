@@ -37,7 +37,7 @@ __decorate([
         message: '비밀번호는 영문과 숫자만 가능합니다.',
     }),
     __metadata("design:type", String)
-], CreateUserReqDto.prototype, "password", void 0);
+], CreateUserReqDto.prototype, "newPassword", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: '김씨네증축하숙집',

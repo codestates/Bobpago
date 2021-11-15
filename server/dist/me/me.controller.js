@@ -16,7 +16,6 @@ exports.MeController = void 0;
 const common_1 = require("@nestjs/common");
 const me_service_1 = require("./me.service");
 const create_user_req_dto_1 = require("./dto/request-dto/create-user.req.dto");
-const response_dto_1 = require("../common/response.dto");
 const decorator_dto_1 = require("../common/decorator.dto");
 const user_entity_1 = require("../entities/user.entity");
 const update_user_req_dto_1 = require("./dto/request-dto/update-user.req.dto");

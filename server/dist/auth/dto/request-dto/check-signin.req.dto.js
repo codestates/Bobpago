@@ -15,7 +15,7 @@ const class_validator_1 = require("class-validator");
 const create_user_req_dto_1 = require("../../../me/dto/request-dto/create-user.req.dto");
 class CheckSignInReqDto extends (0, swagger_1.PickType)(create_user_req_dto_1.CreateUserReqDto, [
     'email',
-    'password',
+    'newPassword',
 ]) {
 }
 __decorate([

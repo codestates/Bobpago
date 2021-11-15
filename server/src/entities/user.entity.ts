@@ -50,7 +50,7 @@ export class User extends BaseEntity {
   @DeleteDateColumn()
   deletedAt: Date;
 
-  @OneToMany(() => Recipe, (recipe) => recipe.user, { eager: true })
+  @OneToMany(() => Recipe, (recipe) => recipe.user)
   recipes: Recipe[];
 
   @OneToMany(() => Comment, (comment) => comment.user)
@@ -62,12 +62,12 @@ export class User extends BaseEntity {
   @OneToMany(() => CommentReaction, (commentReaction) => commentReaction.user)
   commentReactions: CommentReaction[];
 
-  @OneToMany(() => Bookmark, (bookmark) => bookmark.user, { eager: true })
+  @OneToMany(() => Bookmark, (bookmark) => bookmark.user)
   bookmarks: Bookmark[];
 
-  @OneToMany(() => Follow, (follow) => follow.follower, { eager: true })
+  @OneToMany(() => Follow, (follow) => follow.follower)
   followees: Follow[];
 
-  @OneToMany(() => Follow, (follow) => follow.followee, { eager: true })
+  @OneToMany(() => Follow, (follow) => follow.followee)
   followers: Follow[];
 }

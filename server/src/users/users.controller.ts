@@ -1,14 +1,5 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Param, Delete } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { ResponseDto } from 'src/common/response.dto';
 import { GetUser } from 'src/common/decorator.dto';
 import { User } from 'src/entities/user.entity';
 import {

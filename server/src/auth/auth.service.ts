@@ -10,8 +10,6 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { CheckSignInReqDto } from './dto/request-dto/check-signin.req.dto';
-import { Response } from 'express';
-import { ResponseDto } from 'src/common/response.dto';
 import axios from 'axios';
 import { CheckSignInResDto } from './dto/response-dto/check-signin.res.dto';
 import { CheckSignOutResDto } from './dto/response-dto/check-signout.res.dto';
@@ -44,13 +42,9 @@ export class AuthService {
 
       await this.usersRepository.update(user.id, { refreshToken });
       const newUser = await this.usersRepository.findOne({ email });
-      delete newUser.refreshToken;
       delete newUser.password;
-      delete newUser.recipes;
-      delete newUser.bookmarks;
-      delete newUser.recipeReactions;
-      delete newUser.followees;
-      delete newUser.followers;
+      delete newUser.refreshToken;
+
       // access 토큰은 생성해서 반환
       const accessToken = await this.jwtService.sign(payload);
       return {
@@ -65,14 +59,8 @@ export class AuthService {
     } else {
       throw new NotFoundException('로그인에 실패하였습니다.');
     }
-    // if (user && (await bcrypt.compare(password, user.password))) {
-    //   const payload = { email };
-    //   const accessToken = await this.jwtService.sign(payload);
-    //   return { accessToken };
-    // } else {
-    //   throw new UnauthorizedException('login failed');
-    // }
   }
+
   async signOut(
     user: User,
     tokenType: string,
@@ -333,10 +321,7 @@ export class AuthService {
       await this.usersRepository.update(user.id, { refreshToken });
       delete user.password;
       delete user.refreshToken;
-      delete user.recipes;
-      delete user.bookmarks;
-      delete user.followees;
-      delete user.followers;
+
       return {
         data: {
           tokenType: 'kakao',
@@ -353,14 +338,10 @@ export class AuthService {
         refreshToken,
       });
       await this.usersRepository.save(userInfo);
-
       const newUser = await this.usersRepository.findOne({ email });
       delete newUser.password;
       delete newUser.refreshToken;
-      delete newUser.recipes;
-      delete newUser.bookmarks;
-      delete newUser.followees;
-      delete newUser.followers;
+
       return {
         data: {
           tokenType: 'kakao',
@@ -417,10 +398,6 @@ export class AuthService {
       await this.usersRepository.update(user.id, { refreshToken });
       delete user.password;
       delete user.refreshToken;
-      delete user.recipes;
-      delete user.bookmarks;
-      delete user.followees;
-      delete user.followers;
 
       return {
         data: {
@@ -441,10 +418,7 @@ export class AuthService {
       const newUser = await this.usersRepository.findOne({ email });
       delete newUser.password;
       delete newUser.refreshToken;
-      delete newUser.recipes;
-      delete newUser.bookmarks;
-      delete newUser.followees;
-      delete newUser.followers;
+
       return {
         data: {
           tokenType: 'naver',
@@ -495,10 +469,6 @@ export class AuthService {
       });
       delete user.password;
       delete user.refreshToken;
-      delete user.recipes;
-      delete user.bookmarks;
-      delete user.followees;
-      delete user.followers;
 
       return {
         data: {
@@ -519,10 +489,7 @@ export class AuthService {
       const newUser = await this.usersRepository.findOne({ email });
       delete newUser.password;
       delete newUser.refreshToken;
-      delete newUser.recipes;
-      delete newUser.bookmarks;
-      delete newUser.followees;
-      delete newUser.followers;
+
       return {
         data: {
           tokenType: 'google',
