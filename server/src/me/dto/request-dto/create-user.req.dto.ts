@@ -22,7 +22,7 @@ export class CreateUserReqDto {
   @Matches(/^[a-zA-Z0-9]*$/, {
     message: '비밀번호는 영문과 숫자만 가능합니다.',
   })
-  readonly newPassword: string;
+  readonly password: string;
 
   @ApiProperty({
     example: '김씨네증축하숙집',

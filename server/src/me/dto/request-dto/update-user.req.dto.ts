@@ -10,6 +10,7 @@ import {
 import { ApiProperty, PickType } from '@nestjs/swagger';
 
 export class UpdateUserReqDto {
+
   @ApiProperty({
     example: '220101',
     required: false,
