@@ -87,6 +87,11 @@ let MeService = class MeService {
     }
     async updateMyAccount(user, updateUserDto) {
         try {
+            const salt = await bcrypt.genSalt();
+            const { password } = updateUserDto;
+            if (password) {
+                updateUserDto.password = await bcrypt.hash(password, salt);
+            }
             await this.usersRepository.update(user.id, updateUserDto);
             const newUser = await this.usersRepository.findOne({ id: user.id });
             delete newUser.password;

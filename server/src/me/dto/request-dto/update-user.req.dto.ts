@@ -9,21 +9,21 @@ import {
 } from 'class-validator';
 import { ApiProperty, PickType } from '@nestjs/swagger';
 
-export class UpdateUserReqDto extends PickType(CreateUserReqDto, [
-  'newPassword',
-  'nickname',
-] as const) {
+export class UpdateUserReqDto {
   @ApiProperty({
     example: '220101',
     required: false,
   })
-  readonly password: string;
+  @IsString()
+  @IsOptional()
+  password: string;
 
   @ApiProperty({
     example: '김씨네증축하숙집',
     required: false,
   })
   @IsString()
+  @IsOptional()
   readonly nickname: string;
 
   @ApiProperty({
@@ -32,5 +32,6 @@ export class UpdateUserReqDto extends PickType(CreateUserReqDto, [
     required: false,
   })
   @IsString()
+  @IsOptional()
   readonly profile: string;
 }
