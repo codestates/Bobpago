@@ -8,13 +8,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserReqDto } from './dto/request-dto/create-user.req.dto';
 import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
-import * as bcrypt from 'bcryptjs';
+import { ResponseDto } from 'src/common/response.dto';
 import axios from 'axios';
 import { UpdateUserReqDto } from './dto/request-dto/update-user.req.dto';
 import { Bookmark } from '../entities/bookmark.entity';
 import { Recipe } from 'src/entities/recipe.entity';
 import { RestoreUserReqDto } from './dto/request-dto/restore-user.req.dto';
 import { CheckInfoUserReqDto } from './dto/request-dto/checkInfo-user.req.dto';
+import { InternalServerErrorRes } from 'src/common/http-exception.dto';
 import { SeeUserResDto } from './dto/response-dto/see-user.res.dto';
 import { CreateUserResDto } from './dto/response-dto/create-user.res.dto';
 import { UpdateUserResDto } from './dto/response-dto/update-user.res.dto';
@@ -36,9 +37,9 @@ export class MeService {
   ) {}
 
   async signUp(createUserDto: CreateUserReqDto): Promise<CreateUserResDto> {
-    const { email, newPassword, nickname } = createUserDto;
-    const salt = await bcrypt.genSalt();
-    const password = await bcrypt.hash(newPassword, salt);
+    const { email, password, nickname } = createUserDto;
+    // const salt = await bcrypt.genSalt();
+    // const hashedPassword = await bcrypt.hash(password, salt);
     const newUser = this.usersRepository.create({
       email,
       password,
@@ -100,6 +101,8 @@ export class MeService {
     user: User,
     updateUserDto: UpdateUserReqDto,
   ): Promise<UpdateUserResDto> {
+    const { password, nickname, profile } = updateUserDto;
+
     try {
       const salt = await bcrypt.genSalt();
       const { password } = updateUserDto;
