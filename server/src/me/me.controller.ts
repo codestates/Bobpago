@@ -312,6 +312,6 @@ export class MeController {
   async deleteBookmark(
     @Param('recipeId') recipeId: string,
   ): Promise<DeleteBookmarkResDto> {
-    return this.meService.deleteBookamark(recipeId);
+    return this.meService.deleteBookmark(recipeId);
   }
 }

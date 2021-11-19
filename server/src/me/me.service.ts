@@ -287,7 +287,7 @@ export class MeService {
     }
   }
 
-  async deleteBookamark(recipeId): Promise<DeleteBookmarkResDto> {
+  async deleteBookmark(recipeId): Promise<DeleteBookmarkResDto> {
     await this.bookmarkRepository.delete({ recipeId: +recipeId });
     return {
       data: null,
