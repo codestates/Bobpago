@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
-const response_dto_1 = require("../common/response.dto");
 const follow_entity_1 = require("../entities/follow.entity");
 const recipe_entity_1 = require("../entities/recipe.entity");
 const user_entity_1 = require("../entities/user.entity");
@@ -27,14 +26,14 @@ let UsersService = class UsersService {
         this.recipeRepository = recipeRepository;
     }
     async getUserInfo(userId) {
-        const user = await this.usersRepository.findOne({ id: +userId });
+        const user = await this.usersRepository.findOne({
+            where: { id: +userId },
+            relations: ['recipes', 'followees', 'followers'],
+        });
         const followees = user.followees.length;
         const followers = user.followers.length;
-        delete user.bookmarks;
         delete user.password;
         delete user.refreshToken;
-        delete user.followees;
-        delete user.followers;
         if (user) {
             return {
                 data: Object.assign(Object.assign({}, user), { followees,
@@ -50,16 +49,12 @@ let UsersService = class UsersService {
     async getFollowers(userId) {
         const followeeId = +userId;
         const followers = await this.followRepository.find({
-            relations: ['follower'],
             where: { followeeId },
+            relations: ['follower'],
         });
         const resultData = followers.map((el) => {
             delete el.follower.password;
             delete el.follower.refreshToken;
-            delete el.follower.recipes;
-            delete el.follower.followees;
-            delete el.follower.followers;
-            delete el.follower.bookmarks;
             return el.follower;
         });
         if (resultData.length) {
@@ -76,16 +71,12 @@ let UsersService = class UsersService {
     async getFollowees(userId) {
         const followerId = +userId;
         const followees = await this.followRepository.find({
-            relations: ['followee'],
             where: { followerId },
+            relations: ['followee'],
         });
         const resultData = followees.map((el) => {
             delete el.followee.password;
             delete el.followee.refreshToken;
-            delete el.followee.recipes;
-            delete el.followee.followees;
-            delete el.followee.followers;
-            delete el.followee.bookmarks;
             return el.followee;
         });
         if (resultData.length) {

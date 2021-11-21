@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   ConflictException,
   Injectable,
   InternalServerErrorException,
@@ -64,10 +63,16 @@ export class MeService {
   }
   //
   async getMyInfo(user: User): Promise<SeeUserResDto> {
-    const followees = user.followees.length;
-    const followers = user.followers.length;
+    const newUser = await this.usersRepository.findOne({
+      where: {
+        email: user.email,
+      },
+      relations: ['followees', 'followers', 'bookmarks', 'recipes'],
+    });
+    const followees = newUser.followees.length;
+    const followers = newUser.followers.length;
 
-    const recipeIds = user.bookmarks.map((el) => {
+    const recipeIds = newUser.bookmarks.map((el) => {
       return { id: el.recipeId };
     });
 
@@ -79,12 +84,11 @@ export class MeService {
             })
           : [];
       bookmarks.reverse();
-      user.recipes.reverse();
-      delete user.bookmarks;
-      delete user.followees;
-      delete user.followers;
+      newUser.recipes.reverse();
+      delete newUser.password;
+      delete newUser.refreshToken;
       return {
-        data: { ...user, bookmarks, followees, followers },
+        data: { ...newUser, bookmarks, followees, followers },
         statusCode: 200,
         message: `내 정보 조회에 성공하였습니다.`,
       };
@@ -100,6 +104,12 @@ export class MeService {
     const { password, nickname, profile } = updateUserDto;
 
     try {
+      const salt = await bcrypt.genSalt();
+      const { password } = updateUserDto;
+      if (password) {
+        updateUserDto.password = await bcrypt.hash(password, salt);
+      }
+
       await this.usersRepository.update(user.id, updateUserDto);
       const newUser = await this.usersRepository.findOne({ id: user.id });
       delete newUser.password;
@@ -227,12 +237,17 @@ export class MeService {
     user: User,
     checkInfoUserDto: CheckInfoUserReqDto,
   ): Promise<CheckInfoUserResDto> {
+    const { email } = user;
+    const { newPassword } = checkInfoUserDto;
     try {
-      const userInfo = await this.usersRepository.findOne({
-        id: user.id,
-        password: checkInfoUserDto.password,
+      const oldUser = await this.usersRepository.findOne({
+        email,
+        password: newPassword,
       });
-      if (userInfo) {
+      const newUser = await this.usersRepository.findOne({ email });
+
+      const checkPassword = await bcrypt.compare(newPassword, newUser.password);
+      if (checkPassword || oldUser) {
         return {
           data: null,
           statusCode: 200,

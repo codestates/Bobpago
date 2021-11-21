@@ -10,19 +10,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateUserReqDto = void 0;
-const create_user_req_dto_1 = require("./create-user.req.dto");
 const class_validator_1 = require("class-validator");
 const swagger_1 = require("@nestjs/swagger");
-class UpdateUserReqDto extends (0, swagger_1.PickType)(create_user_req_dto_1.CreateUserReqDto, [
-    'password',
-    'nickname',
-]) {
+class UpdateUserReqDto {
 }
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: '220101',
         required: false,
     }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], UpdateUserReqDto.prototype, "password", void 0);
 __decorate([
@@ -31,6 +29,7 @@ __decorate([
         required: false,
     }),
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], UpdateUserReqDto.prototype, "nickname", void 0);
 __decorate([
@@ -40,6 +39,7 @@ __decorate([
         required: false,
     }),
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], UpdateUserReqDto.prototype, "profile", void 0);
 exports.UpdateUserReqDto = UpdateUserReqDto;

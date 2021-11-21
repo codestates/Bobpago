@@ -130,7 +130,7 @@ const MyPage = () => {
     if (accessToken) {
       newToken = await CheckExpired(accessToken, tokenType, userId);
       if (newToken) {
-        await dispatch(reissueAccessToken(newToken));
+        dispatch(reissueAccessToken(newToken));
       }
     }
     try {
@@ -190,14 +190,14 @@ const MyPage = () => {
     if (accessToken) {
       newToken = await CheckExpired(accessToken, tokenType, userId);
       if (newToken) {
-        dispatch(reissueAccessToken(newToken));
+        dispatch(reissueAccessToken(newToken))
       }
     }
     try {
       const data = await axios.post(
         `${process.env.REACT_APP_SERVER_URL}/checkMyInfo?tokenType=${tokenType}`,
         {
-          password: password,
+          newPassword: password,
         },
         {
           withCredentials: true,
@@ -238,7 +238,7 @@ const MyPage = () => {
       const data = await axios.post(
         `${process.env.REACT_APP_SERVER_URL}/checkMyInfo?tokenType=${tokenType}`,
         {
-          password: passwordWithDraw,
+          newPassword: passwordWithDraw,
         },
         {
           withCredentials: true,
@@ -295,16 +295,18 @@ const MyPage = () => {
         setProfileImg(`${process.env.REACT_APP_S3_IMG_URL}${url}`);
       }
       const editedInfo: EditInfo = {};
-      if (tokenType === "jwt") {
-        if (editPassword !== password) editedInfo.password = editPassword;
-        else editedInfo.password = password;
+
+      if (tokenType === "jwt" && editPassword !== password) {
+        editedInfo.password = editPassword;
       }
-      if (editNickName !== nickname) editedInfo.nickname = editNickName;
-      else editedInfo.nickname = nickname;
-      if (editIntroduce !== introduce) editedInfo.profile = editIntroduce;
-      else editedInfo.profile = introduce;
+      if (editNickName !== nickname) {
+        editedInfo.nickname = editNickName;
+      }
+      if (editIntroduce !== introduce) {
+        editedInfo.profile = editIntroduce;
+      }
       if (Object.keys(editedInfo).length !== 0) {
-        const data = await axios.patch(
+        await axios.patch(
           `${process.env.REACT_APP_SERVER_URL}/me?tokenType=${tokenType}`,
           editedInfo,
           {
@@ -523,7 +525,6 @@ const MyPage = () => {
   };
   useEffect(() => {
     if (!passwordModalEdit || !passwordModalWithDraw) {
-      setPassword("");
       setPasswordWithDraw("");
     }
   }, [passwordModalEdit, passwordModalWithDraw]);
@@ -730,8 +731,9 @@ const MyPage = () => {
           <CheckPassword>
             <CheckPasswordText>비밀번호 확인</CheckPasswordText>
             <CheckPasswordInput
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
             />
             <CheckPasswordBtn onClick={() => passwordCheckEdit()}>
               확인
@@ -745,8 +747,9 @@ const MyPage = () => {
           <CheckPassword>
             <CheckPasswordText>비밀번호 확인</CheckPasswordText>
             <CheckPasswordInput
-              value={passwordWithDraw}
-              onChange={(e) => setPasswordWithDraw(e.target.value)}
+                type="password"
+                value={passwordWithDraw}
+                onChange={(e) => setPasswordWithDraw(e.target.value)}
             />
             <CheckPasswordBtn onClick={() => passwordCheckWithDraw()}>
               확인
@@ -804,7 +807,7 @@ const MyPage = () => {
               <InputTitle>소개글</InputTitle>
               <EditInput
                 value={editIntroduce}
-                type="text-area"
+                type="textarea"
                 onChange={(e) => setEditIntroduce(e.target.value)}
               />
             </InputContainer>

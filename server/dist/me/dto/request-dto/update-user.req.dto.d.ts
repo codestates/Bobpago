@@ -1,8 +1,5 @@
-import { CreateUserReqDto } from './create-user.req.dto';
-declare const UpdateUserReqDto_base: import("@nestjs/common").Type<Pick<CreateUserReqDto, "password" | "nickname">>;
-export declare class UpdateUserReqDto extends UpdateUserReqDto_base {
-    readonly password: string;
+export declare class UpdateUserReqDto {
+    password: string;
     readonly nickname: string;
     readonly profile: string;
 }
-export {};

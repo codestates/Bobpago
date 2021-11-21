@@ -13,7 +13,6 @@ import {
 } from '@nestjs/common';
 import { MeService } from './me.service';
 import { CreateUserReqDto } from './dto/request-dto/create-user.req.dto';
-import { ResponseDto } from 'src/common/response.dto';
 import { GetUser } from 'src/common/decorator.dto';
 import { User } from 'src/entities/user.entity';
 import { UpdateUserReqDto } from './dto/request-dto/update-user.req.dto';
