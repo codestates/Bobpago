@@ -7,20 +7,14 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserReqDto } from './dto/request-dto/create-user.req.dto';
 import { User } from 'src/entities/user.entity';
-<<<<<<< HEAD:server/src/me/me.service.ts
-import { Repository } from 'typeorm';
-import { ResponseDto } from 'src/common/response.dto';
-=======
 import { getConnection, Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
->>>>>>> aeb67d37a56264225801f872070ad21e1eacc4e9:server/src/modules/me/me.service.ts
 import axios from 'axios';
 import { UpdateUserReqDto } from './dto/request-dto/update-user.req.dto';
 import { Bookmark } from '../../entities/bookmark.entity';
 import { Recipe } from 'src/entities/recipe.entity';
 import { RestoreUserReqDto } from './dto/request-dto/restore-user.req.dto';
 import { CheckInfoUserReqDto } from './dto/request-dto/checkInfo-user.req.dto';
-import { InternalServerErrorRes } from 'src/common/http-exception.dto';
 import { SeeUserResDto } from './dto/response-dto/see-user.res.dto';
 import { CreateUserResDto } from './dto/response-dto/create-user.res.dto';
 import { UpdateUserResDto } from './dto/response-dto/update-user.res.dto';
@@ -42,19 +36,8 @@ export class MeService {
   ) {}
 
   async signUp(createUserDto: CreateUserReqDto): Promise<CreateUserResDto> {
-<<<<<<< HEAD:server/src/me/me.service.ts
-    const { email, password, nickname } = createUserDto;
-    // const salt = await bcrypt.genSalt();
-    // const hashedPassword = await bcrypt.hash(password, salt);
-    const newUser = this.usersRepository.create({
-      email,
-      password,
-      nickname,
-    });
-=======
     const queryRunner = await getConnection().createQueryRunner();
     await queryRunner.startTransaction();
->>>>>>> aeb67d37a56264225801f872070ad21e1eacc4e9:server/src/modules/me/me.service.ts
     try {
       const { email, password, nickname } = createUserDto;
       const salt = await bcrypt.genSalt();
@@ -123,7 +106,6 @@ export class MeService {
 
     try {
       const salt = await bcrypt.genSalt();
-      const { password } = updateUserDto;
       if (password) {
         updateUserDto.password = await bcrypt.hash(password, salt);
       }
