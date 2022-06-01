@@ -4,8 +4,11 @@ import * as cookieParser from 'cookie-parser';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 import * as expressBasicAuth from 'express-basic-auth';
+import { HttpExceptionFilter } from './common/exceptions/http-excepotion.filter';
+import { initializeTransactionalContext } from 'typeorm-transactional-cls-hooked';
 
 async function bootstrap() {
+  initializeTransactionalContext();
   const app = await NestFactory.create(AppModule);
   app.enableCors({
     origin: [
@@ -21,8 +24,13 @@ async function bootstrap() {
       whitelist: true, // decorator(@)가 없는 속성이 들어오면 해당 속성은 제거하고 받아들인다.
       forbidNonWhitelisted: true, // DTO에 정의되지 않은 값이 넘어오면 request자체를 막는다.
       transform: true, // 클라이언트에서 값을 받자마자 타임을 정의한대로 자동 형변환을 한다.
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
     }),
   );
+  app.useGlobalFilters(new HttpExceptionFilter());
+
   app.use(
     ['/dev', '/dev-json'],
     expressBasicAuth({
@@ -36,6 +44,17 @@ async function bootstrap() {
     .setTitle('Bobpago API Test Tool')
     .setDescription('Bobpago API 테스트 도구')
     .setVersion('1.0.1')
+    .addBearerAuth(
+      {
+        description: 'Please enter token in following format: Bearer <JWT>',
+        name: 'Authorization',
+        bearerFormat: 'JWT',
+        type: 'http',
+        scheme: 'Bearer',
+        in: 'Header',
+      },
+      'AccessToken',
+    )
     .build();
   const testTool: OpenAPIObject = SwaggerModule.createDocument(app, devConfig);
   SwaggerModule.setup('dev', app, testTool);

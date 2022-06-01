@@ -1,12 +1,9 @@
-import { BaseEntity } from 'typeorm';
+import { Common } from 'src/common/common.entity';
 import { Ingredient } from './ingredient.entity';
 import { Recipe } from './recipe.entity';
-export declare class RecipeIngredient extends BaseEntity {
-    id: number;
+export declare class RecipeIngredient extends Common {
     recipeId: number;
     ingredientId: number;
-    createdAt: Date;
-    updatedAt: Date;
     recipe: Recipe;
     ingredient: Ingredient;
 }

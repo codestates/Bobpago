@@ -10,14 +10,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Ingredient = void 0;
+const common_entity_1 = require("../common/common.entity");
 const typeorm_1 = require("typeorm");
 const recipe_ingredient_entity_1 = require("./recipe-ingredient.entity");
-let Ingredient = class Ingredient extends typeorm_1.BaseEntity {
+let Ingredient = class Ingredient extends common_entity_1.Common {
 };
-__decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], Ingredient.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
@@ -35,15 +32,7 @@ __decorate([
     __metadata("design:type", Boolean)
 ], Ingredient.prototype, "basic", void 0);
 __decorate([
-    (0, typeorm_1.CreateDateColumn)(),
-    __metadata("design:type", Date)
-], Ingredient.prototype, "createdAt", void 0);
-__decorate([
-    (0, typeorm_1.UpdateDateColumn)(),
-    __metadata("design:type", Date)
-], Ingredient.prototype, "updatedAt", void 0);
-__decorate([
-    (0, typeorm_1.OneToMany)(() => recipe_ingredient_entity_1.RecipeIngredient, (recipeIngredient) => recipeIngredient.ingredient),
+    (0, typeorm_1.OneToMany)(() => recipe_ingredient_entity_1.RecipeIngredient, (recipeIngredient) => recipeIngredient.ingredient, { lazy: true }),
     __metadata("design:type", Array)
 ], Ingredient.prototype, "recipeIngredients", void 0);
 Ingredient = __decorate([

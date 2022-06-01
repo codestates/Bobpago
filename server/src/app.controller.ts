@@ -5,11 +5,7 @@ import { AccessBobpagoResDto } from './access-bobpago.dto';
 @ApiTags('WELCOME')
 @Controller('')
 export class AppController {
-  @ApiResponse({
-    status: 304,
-    description: '밥파고 API 접속 성공',
-    type: AccessBobpagoResDto,
-  })
+  @ApiResponse({ status: 304, type: AccessBobpagoResDto })
   @Get()
   home(): AccessBobpagoResDto {
     return {

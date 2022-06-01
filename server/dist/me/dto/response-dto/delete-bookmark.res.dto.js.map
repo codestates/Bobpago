@@ -1,1 +1,0 @@
-{"version":3,"file":"delete-bookmark.res.dto.js","sourceRoot":"","sources":["../../../../src/me/dto/response-dto/delete-bookmark.res.dto.ts"],"names":[],"mappings":";;;;;;;;;;;;AAAA,6CAA8C;AAC9C,+DAAsD;AAEtD,MAAa,oBAAqB,SAAQ,0BAAW;CAUpD;AANC;IAHC,IAAA,qBAAW,EAAC;QACX,OAAO,EAAE,IAAI;KACd,CAAC;;kDACQ;AAKV;IAHC,IAAA,qBAAW,EAAC;QACX,OAAO,EAAE,eAAe;KACzB,CAAC;;qDACc;AATlB,oDAUC"}

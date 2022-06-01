@@ -1,36 +1,18 @@
-import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  RelationId,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Common } from 'src/common/common.entity';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { User } from './user.entity';
 
 @Entity()
-export class Follow extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class Follow extends Common {
   @Column()
   followerId: number;
 
   @Column()
   followeeId: number;
 
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
-
-  @ManyToOne(() => User, (user) => user.followers)
+  @ManyToOne(() => User, (user) => user.followers, { lazy: true })
   follower: User;
 
-  @ManyToOne(() => User, (user) => user.followees)
+  @ManyToOne(() => User, (user) => user.followees, { lazy: true })
   followee: User;
 }

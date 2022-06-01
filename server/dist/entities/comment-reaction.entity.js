@@ -10,15 +10,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CommentReaction = void 0;
+const common_entity_1 = require("../common/common.entity");
 const typeorm_1 = require("typeorm");
 const comment_entity_1 = require("./comment.entity");
 const user_entity_1 = require("./user.entity");
-let CommentReaction = class CommentReaction extends typeorm_1.BaseEntity {
+let CommentReaction = class CommentReaction extends common_entity_1.Common {
 };
-__decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], CommentReaction.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
@@ -28,22 +25,16 @@ __decorate([
     __metadata("design:type", Number)
 ], CommentReaction.prototype, "commentId", void 0);
 __decorate([
-    (0, typeorm_1.CreateDateColumn)(),
-    __metadata("design:type", Date)
-], CommentReaction.prototype, "createdAt", void 0);
-__decorate([
-    (0, typeorm_1.UpdateDateColumn)(),
-    __metadata("design:type", Date)
-], CommentReaction.prototype, "updatedAt", void 0);
-__decorate([
     (0, typeorm_1.ManyToOne)(() => comment_entity_1.Comment, (comment) => comment.commentReactions, {
         onDelete: 'CASCADE',
+        lazy: true,
     }),
     __metadata("design:type", comment_entity_1.Comment)
 ], CommentReaction.prototype, "comment", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => user_entity_1.User, (user) => user.commentReactions, {
         onDelete: 'CASCADE',
+        lazy: true,
     }),
     __metadata("design:type", user_entity_1.User)
 ], CommentReaction.prototype, "user", void 0);

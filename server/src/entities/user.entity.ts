@@ -1,15 +1,5 @@
-import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  OneToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
-  Unique,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Common } from 'src/common/common.entity';
+import { Column, DeleteDateColumn, Entity, OneToMany, Unique } from 'typeorm';
 import { Bookmark } from './bookmark.entity';
 import { CommentReaction } from './comment-reaction.entity';
 import { Comment } from './comment.entity';
@@ -17,12 +7,9 @@ import { Follow } from './follow.entity';
 import { RecipeReaction } from './recipe-reaction.entity';
 import { Recipe } from './recipe.entity';
 
-@Entity()
+@Entity({ name: 'user' })
 @Unique(['email'])
-export class User extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class User extends Common {
   @Column()
   email: string;
 
@@ -41,33 +28,33 @@ export class User extends BaseEntity {
   @Column({ length: 1234, nullable: true })
   refreshToken: string;
 
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
-
-  @DeleteDateColumn()
+  @DeleteDateColumn({
+    type: 'timestamp',
+  })
   deletedAt: Date;
 
-  @OneToMany(() => Recipe, (recipe) => recipe.user)
+  @OneToMany(() => Recipe, (recipe) => recipe.user, { lazy: true })
   recipes: Recipe[];
 
-  @OneToMany(() => Comment, (comment) => comment.user)
+  @OneToMany(() => Comment, (comment) => comment.user, { lazy: true })
   comments: Comment[];
 
-  @OneToMany(() => RecipeReaction, (recipeReaction) => recipeReaction.user)
+  @OneToMany(() => RecipeReaction, (recipeReaction) => recipeReaction.user, {
+    lazy: true,
+  })
   recipeReactions: RecipeReaction[];
 
-  @OneToMany(() => CommentReaction, (commentReaction) => commentReaction.user)
+  @OneToMany(() => CommentReaction, (commentReaction) => commentReaction.user, {
+    lazy: true,
+  })
   commentReactions: CommentReaction[];
 
-  @OneToMany(() => Bookmark, (bookmark) => bookmark.user)
+  @OneToMany(() => Bookmark, (bookmark) => bookmark.user, { lazy: true })
   bookmarks: Bookmark[];
 
-  @OneToMany(() => Follow, (follow) => follow.follower)
+  @OneToMany(() => Follow, (follow) => follow.follower, { lazy: true })
   followees: Follow[];
 
-  @OneToMany(() => Follow, (follow) => follow.followee)
+  @OneToMany(() => Follow, (follow) => follow.followee, { lazy: true })
   followers: Follow[];
 }

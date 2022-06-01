@@ -1,3 +1,4 @@
+import { Common } from 'src/common/common.entity';
 import {
   BaseEntity,
   Column,
@@ -13,10 +14,7 @@ import { Recipe } from './recipe.entity';
 import { User } from './user.entity';
 
 @Entity()
-export class Comment extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class Comment extends Common {
   @Column()
   imageUrl: string;
 
@@ -29,22 +27,22 @@ export class Comment extends BaseEntity {
   @Column()
   recipeId: number;
 
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
-
-  @ManyToOne(() => Recipe, (recipe) => recipe.comments, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Recipe, (recipe) => recipe.comments, {
+    onDelete: 'CASCADE',
+    lazy: true,
+  })
   recipe: Recipe;
 
-  @ManyToOne(() => User, (user) => user.comments, { onDelete: 'CASCADE' })
+  @ManyToOne(() => User, (user) => user.comments, {
+    onDelete: 'CASCADE',
+    lazy: true,
+  })
   user: User;
 
   @OneToMany(
     () => CommentReaction,
     (commentReaction) => commentReaction.comment,
-    { eager: true },
+    { lazy: true },
   )
   commentReactions: CommentReaction[];
 }

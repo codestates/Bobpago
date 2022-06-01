@@ -10,15 +10,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RecipeReaction = void 0;
+const common_entity_1 = require("../common/common.entity");
 const typeorm_1 = require("typeorm");
 const recipe_entity_1 = require("./recipe.entity");
 const user_entity_1 = require("./user.entity");
-let RecipeReaction = class RecipeReaction extends typeorm_1.BaseEntity {
+let RecipeReaction = class RecipeReaction extends common_entity_1.Common {
 };
-__decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], RecipeReaction.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
@@ -28,22 +25,16 @@ __decorate([
     __metadata("design:type", Number)
 ], RecipeReaction.prototype, "recipeId", void 0);
 __decorate([
-    (0, typeorm_1.CreateDateColumn)(),
-    __metadata("design:type", Date)
-], RecipeReaction.prototype, "createdAt", void 0);
-__decorate([
-    (0, typeorm_1.UpdateDateColumn)(),
-    __metadata("design:type", Date)
-], RecipeReaction.prototype, "updatedAt", void 0);
-__decorate([
     (0, typeorm_1.ManyToOne)(() => recipe_entity_1.Recipe, (recipe) => recipe.recipeReactions, {
         onDelete: 'CASCADE',
+        lazy: true,
     }),
     __metadata("design:type", recipe_entity_1.Recipe)
 ], RecipeReaction.prototype, "recipe", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => user_entity_1.User, (user) => user.recipeReactions, {
         onDelete: 'CASCADE',
+        lazy: true,
     }),
     __metadata("design:type", user_entity_1.User)
 ], RecipeReaction.prototype, "user", void 0);

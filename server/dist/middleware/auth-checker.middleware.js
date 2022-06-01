@@ -17,7 +17,9 @@ const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const typeorm_1 = require("@nestjs/typeorm");
 const axios_1 = require("axios");
+const utils_1 = require("../common/utils");
 const user_entity_1 = require("../entities/user.entity");
+const user_dto_1 = require("../modules/auth/dto/user.dto");
 const typeorm_2 = require("typeorm");
 let AuthCheckerMiddleware = class AuthCheckerMiddleware {
     constructor(usersRepository, jwtService) {
@@ -27,27 +29,17 @@ let AuthCheckerMiddleware = class AuthCheckerMiddleware {
     async use(req, res, next) {
         const { tokenType } = req.query;
         const accessToken = req.headers.authorization.split(' ')[1];
-        switch (tokenType) {
-            case 'jwt':
-                try {
-                    const result = await this.jwtService.verify(accessToken, {
+        let result, email;
+        try {
+            switch (tokenType) {
+                case 'jwt':
+                    result = await this.jwtService.verify(accessToken, {
                         secret: process.env.ACCESS_TOKEN_SECRET,
                     });
-                    const user = await this.usersRepository.findOne({
-                        email: result.email,
-                    });
-                    delete user.password;
-                    delete user.refreshToken;
-                    req.user = user;
-                    next();
-                }
-                catch (err) {
-                    throw new common_1.UnauthorizedException();
-                }
-                break;
-            case 'kakao':
-                try {
-                    const result = await axios_1.default.get('https://kapi.kakao.com/v2/user/me', {
+                    email = result.email;
+                    break;
+                case 'kakao':
+                    result = await axios_1.default.get('https://kapi.kakao.com/v2/user/me', {
                         headers: {
                             Authorization: `Bearer ${accessToken}`,
                         },
@@ -55,50 +47,31 @@ let AuthCheckerMiddleware = class AuthCheckerMiddleware {
                     });
                     const temp = result.data.kakao_account.email;
                     const decoratorIdx = temp.indexOf('@');
-                    const email = temp.slice(0, decoratorIdx + 1) + 'kakao.com';
-                    const user = await this.usersRepository.findOne({
-                        email,
-                    });
-                    delete user.password;
-                    delete user.refreshToken;
-                    req.user = user;
-                    next();
-                }
-                catch (err) {
-                    throw new common_1.UnauthorizedException();
-                }
-                break;
-            case 'naver':
-                try {
-                    const result = await axios_1.default.get('https://openapi.naver.com/v1/nid/me', {
+                    email = temp.slice(0, decoratorIdx + 1) + 'kakao.com';
+                    break;
+                case 'naver':
+                    result = await axios_1.default.get('https://openapi.naver.com/v1/nid/me', {
                         headers: {
                             Authorization: `Bearer ${accessToken}`,
                         },
                         withCredentials: true,
                     });
-                    const user = await this.usersRepository.findOne({
-                        email: result.data.response.email,
-                    });
-                    delete user.password;
-                    delete user.refreshToken;
-                    req.user = user;
-                    next();
-                }
-                catch (err) {
-                    throw new common_1.UnauthorizedException();
-                }
-                break;
-            case 'google':
-                const data = await axios_1.default.get(`https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${accessToken}`);
-                const { email } = data.data;
-                const user = await this.usersRepository.findOne({ email });
-                delete user.password;
-                delete user.refreshToken;
-                req.user = user;
-                next();
-                break;
-            default:
-                throw new common_1.BadRequestException();
+                    email = result.data.response.email;
+                    break;
+                case 'google':
+                    result = await axios_1.default.get(`https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${accessToken}`);
+                    email = result.data.email;
+                    break;
+                default:
+                    throw 403;
+            }
+            const user = await this.usersRepository.findOne({ email });
+            const userDto = new user_dto_1.UserDto(user);
+            req.user = userDto;
+            next();
+        }
+        catch (err) {
+            throw new utils_1.errorHandler[utils_1.errorHandler[err] ? err : 401]();
         }
     }
 };
