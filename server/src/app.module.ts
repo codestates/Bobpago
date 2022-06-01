@@ -4,16 +4,16 @@ import {
   NestModule,
   RequestMethod,
 } from '@nestjs/common';
-import { MeModule } from './me/me.module';
-import { AuthModule } from './auth/auth.module';
-import { CommentsModule } from './comments/comments.module';
-import { RecipesModule } from './recipes/recipes.module';
-import { IngredientsModule } from './ingredients/ingredients.module';
-import { UsersModule } from './users/users.module';
+import { MeModule } from './modules/me/me.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { CommentsModule } from './modules/comments/comments.module';
+import { RecipesModule } from './modules/recipes/recipes.module';
+import { IngredientsModule } from './modules/ingredients/ingredients.module';
+import { UsersModule } from './modules/users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { typeORMConfig } from './config/typeorm.config';
-import { ImageModule } from './image/image.module';
+import { ImageModule } from './modules/image/image.module';
 import { AuthCheckerMiddleware } from './middleware/auth-checker.middleware';
 import { LoggerMiddleware } from './middleware/logger.middleware';
 import { JwtModule } from '@nestjs/jwt';

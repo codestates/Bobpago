@@ -22,11 +22,7 @@ let AppController = class AppController {
     }
 };
 __decorate([
-    (0, swagger_1.ApiResponse)({
-        status: 304,
-        description: '밥파고 API 접속 성공',
-        type: access_bobpago_dto_1.AccessBobpagoResDto,
-    }),
+    (0, swagger_1.ApiResponse)({ status: 304, type: access_bobpago_dto_1.AccessBobpagoResDto }),
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),

@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
+const common_entity_1 = require("../common/common.entity");
 const typeorm_1 = require("typeorm");
 const bookmark_entity_1 = require("./bookmark.entity");
 const comment_reaction_entity_1 = require("./comment-reaction.entity");
@@ -17,12 +18,8 @@ const comment_entity_1 = require("./comment.entity");
 const follow_entity_1 = require("./follow.entity");
 const recipe_reaction_entity_1 = require("./recipe-reaction.entity");
 const recipe_entity_1 = require("./recipe.entity");
-let User = class User extends typeorm_1.BaseEntity {
+let User = class User extends common_entity_1.Common {
 };
-__decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], User.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
@@ -48,47 +45,45 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "refreshToken", void 0);
 __decorate([
-    (0, typeorm_1.CreateDateColumn)(),
-    __metadata("design:type", Date)
-], User.prototype, "createdAt", void 0);
-__decorate([
-    (0, typeorm_1.UpdateDateColumn)(),
-    __metadata("design:type", Date)
-], User.prototype, "updatedAt", void 0);
-__decorate([
-    (0, typeorm_1.DeleteDateColumn)(),
+    (0, typeorm_1.DeleteDateColumn)({
+        type: 'timestamp',
+    }),
     __metadata("design:type", Date)
 ], User.prototype, "deletedAt", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => recipe_entity_1.Recipe, (recipe) => recipe.user),
+    (0, typeorm_1.OneToMany)(() => recipe_entity_1.Recipe, (recipe) => recipe.user, { lazy: true }),
     __metadata("design:type", Array)
 ], User.prototype, "recipes", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => comment_entity_1.Comment, (comment) => comment.user),
+    (0, typeorm_1.OneToMany)(() => comment_entity_1.Comment, (comment) => comment.user, { lazy: true }),
     __metadata("design:type", Array)
 ], User.prototype, "comments", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => recipe_reaction_entity_1.RecipeReaction, (recipeReaction) => recipeReaction.user),
+    (0, typeorm_1.OneToMany)(() => recipe_reaction_entity_1.RecipeReaction, (recipeReaction) => recipeReaction.user, {
+        lazy: true,
+    }),
     __metadata("design:type", Array)
 ], User.prototype, "recipeReactions", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => comment_reaction_entity_1.CommentReaction, (commentReaction) => commentReaction.user),
+    (0, typeorm_1.OneToMany)(() => comment_reaction_entity_1.CommentReaction, (commentReaction) => commentReaction.user, {
+        lazy: true,
+    }),
     __metadata("design:type", Array)
 ], User.prototype, "commentReactions", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => bookmark_entity_1.Bookmark, (bookmark) => bookmark.user),
+    (0, typeorm_1.OneToMany)(() => bookmark_entity_1.Bookmark, (bookmark) => bookmark.user, { lazy: true }),
     __metadata("design:type", Array)
 ], User.prototype, "bookmarks", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => follow_entity_1.Follow, (follow) => follow.follower),
+    (0, typeorm_1.OneToMany)(() => follow_entity_1.Follow, (follow) => follow.follower, { lazy: true }),
     __metadata("design:type", Array)
 ], User.prototype, "followees", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => follow_entity_1.Follow, (follow) => follow.followee),
+    (0, typeorm_1.OneToMany)(() => follow_entity_1.Follow, (follow) => follow.followee, { lazy: true }),
     __metadata("design:type", Array)
 ], User.prototype, "followers", void 0);
 User = __decorate([
-    (0, typeorm_1.Entity)(),
+    (0, typeorm_1.Entity)({ name: 'user' }),
     (0, typeorm_1.Unique)(['email'])
 ], User);
 exports.User = User;

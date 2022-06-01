@@ -1,3 +1,4 @@
+import { Common } from 'src/common/common.entity';
 import {
   BaseEntity,
   Column,
@@ -10,10 +11,7 @@ import {
 import { RecipeIngredient } from './recipe-ingredient.entity';
 
 @Entity()
-export class Ingredient extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class Ingredient extends Common {
   @Column()
   name: string;
 
@@ -26,15 +24,10 @@ export class Ingredient extends BaseEntity {
   @Column({ default: false })
   basic: boolean;
 
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
-
   @OneToMany(
     () => RecipeIngredient,
     (recipeIngredient) => recipeIngredient.ingredient,
+    { lazy: true },
   )
   recipeIngredients: RecipeIngredient[];
 }

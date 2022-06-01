@@ -1,0 +1,1 @@
+{"version":3,"file":"generate-token.res.dto.js","sourceRoot":"","sources":["../../../../../src/modules/auth/dto/response-dto/generate-token.res.dto.ts"],"names":[],"mappings":";;;;;;;;;;;;AAAA,6CAA8C;AAC9C,sEAAkE;AAElE,MAAa,oBAAqB,SAAQ,kCAAmB;CAS5D;AADC;IAPC,IAAA,qBAAW,EAAC;QACX,OAAO,EAAE;YACP,SAAS,EAAE,KAAK;YAChB,WAAW,EACT,0KAA0K;SAC7K;KACF,CAAC;;kDACQ;AARZ,oDASC"}

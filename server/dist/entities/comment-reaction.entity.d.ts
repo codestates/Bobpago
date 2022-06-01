@@ -1,12 +1,9 @@
-import { BaseEntity } from 'typeorm';
+import { Common } from 'src/common/common.entity';
 import { Comment } from './comment.entity';
 import { User } from './user.entity';
-export declare class CommentReaction extends BaseEntity {
-    id: number;
+export declare class CommentReaction extends Common {
     userId: number;
     commentId: number;
-    createdAt: Date;
-    updatedAt: Date;
     comment: Comment;
     user: User;
 }

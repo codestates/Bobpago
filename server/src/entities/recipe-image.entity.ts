@@ -1,19 +1,9 @@
-import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  Entity,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Common } from 'src/common/common.entity';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { Recipe } from './recipe.entity';
 
 @Entity()
-export class RecipeImage extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class RecipeImage extends Common {
   @Column()
   imageUrl: string;
 
@@ -23,14 +13,9 @@ export class RecipeImage extends BaseEntity {
   @Column()
   recipeId: number;
 
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
-
   @ManyToOne(() => Recipe, (recipe) => recipe.recipeImages, {
     onDelete: 'CASCADE',
+    lazy: true,
   })
   recipe: Recipe;
 }

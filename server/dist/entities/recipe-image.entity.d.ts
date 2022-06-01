@@ -1,11 +1,8 @@
-import { BaseEntity } from 'typeorm';
+import { Common } from 'src/common/common.entity';
 import { Recipe } from './recipe.entity';
-export declare class RecipeImage extends BaseEntity {
-    id: number;
+export declare class RecipeImage extends Common {
     imageUrl: string;
     description: string;
     recipeId: number;
-    createdAt: Date;
-    updatedAt: Date;
     recipe: Recipe;
 }

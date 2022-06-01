@@ -10,15 +10,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RecipeIngredient = void 0;
+const common_entity_1 = require("../common/common.entity");
 const typeorm_1 = require("typeorm");
 const ingredient_entity_1 = require("./ingredient.entity");
 const recipe_entity_1 = require("./recipe.entity");
-let RecipeIngredient = class RecipeIngredient extends typeorm_1.BaseEntity {
+let RecipeIngredient = class RecipeIngredient extends common_entity_1.Common {
 };
-__decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], RecipeIngredient.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
@@ -28,22 +25,16 @@ __decorate([
     __metadata("design:type", Number)
 ], RecipeIngredient.prototype, "ingredientId", void 0);
 __decorate([
-    (0, typeorm_1.CreateDateColumn)(),
-    __metadata("design:type", Date)
-], RecipeIngredient.prototype, "createdAt", void 0);
-__decorate([
-    (0, typeorm_1.UpdateDateColumn)(),
-    __metadata("design:type", Date)
-], RecipeIngredient.prototype, "updatedAt", void 0);
-__decorate([
     (0, typeorm_1.ManyToOne)(() => recipe_entity_1.Recipe, (recipe) => recipe.recipeIngredients, {
         onDelete: 'CASCADE',
+        lazy: true,
     }),
     __metadata("design:type", recipe_entity_1.Recipe)
 ], RecipeIngredient.prototype, "recipe", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => ingredient_entity_1.Ingredient, (ingredient) => ingredient.recipeIngredients, {
         onDelete: 'CASCADE',
+        lazy: true,
     }),
     __metadata("design:type", ingredient_entity_1.Ingredient)
 ], RecipeIngredient.prototype, "ingredient", void 0);

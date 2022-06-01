@@ -1,12 +1,11 @@
-import { BaseEntity } from 'typeorm';
+import { Common } from 'src/common/common.entity';
 import { Bookmark } from './bookmark.entity';
 import { Comment } from './comment.entity';
 import { RecipeImage } from './recipe-image.entity';
 import { RecipeIngredient } from './recipe-ingredient.entity';
 import { RecipeReaction } from './recipe-reaction.entity';
 import { User } from './user.entity';
-export declare class Recipe extends BaseEntity {
-    id: number;
+export declare class Recipe extends Common {
     userId: number;
     title: string;
     level: number;
@@ -14,8 +13,6 @@ export declare class Recipe extends BaseEntity {
     thumbnail: string;
     estTime: number;
     views: number;
-    createdAt: Date;
-    updatedAt: Date;
     user: User;
     comments: Comment[];
     recipeIngredients: RecipeIngredient[];

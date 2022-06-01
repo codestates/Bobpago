@@ -6,7 +6,10 @@ const cookieParser = require("cookie-parser");
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 const expressBasicAuth = require("express-basic-auth");
+const http_excepotion_filter_1 = require("./common/exceptions/http-excepotion.filter");
+const typeorm_transactional_cls_hooked_1 = require("typeorm-transactional-cls-hooked");
 async function bootstrap() {
+    (0, typeorm_transactional_cls_hooked_1.initializeTransactionalContext)();
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.enableCors({
         origin: [
@@ -21,7 +24,11 @@ async function bootstrap() {
         whitelist: true,
         forbidNonWhitelisted: true,
         transform: true,
+        transformOptions: {
+            enableImplicitConversion: true,
+        },
     }));
+    app.useGlobalFilters(new http_excepotion_filter_1.HttpExceptionFilter());
     app.use(['/dev', '/dev-json'], expressBasicAuth({
         challenge: true,
         users: {
@@ -32,6 +39,14 @@ async function bootstrap() {
         .setTitle('Bobpago API Test Tool')
         .setDescription('Bobpago API 테스트 도구')
         .setVersion('1.0.1')
+        .addBearerAuth({
+        description: 'Please enter token in following format: Bearer <JWT>',
+        name: 'Authorization',
+        bearerFormat: 'JWT',
+        type: 'http',
+        scheme: 'Bearer',
+        in: 'Header',
+    }, 'AccessToken')
         .build();
     const testTool = swagger_1.SwaggerModule.createDocument(app, devConfig);
     swagger_1.SwaggerModule.setup('dev', app, testTool);

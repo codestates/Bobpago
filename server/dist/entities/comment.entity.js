@@ -10,16 +10,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Comment = void 0;
+const common_entity_1 = require("../common/common.entity");
 const typeorm_1 = require("typeorm");
 const comment_reaction_entity_1 = require("./comment-reaction.entity");
 const recipe_entity_1 = require("./recipe.entity");
 const user_entity_1 = require("./user.entity");
-let Comment = class Comment extends typeorm_1.BaseEntity {
+let Comment = class Comment extends common_entity_1.Common {
 };
-__decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], Comment.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
@@ -37,23 +34,21 @@ __decorate([
     __metadata("design:type", Number)
 ], Comment.prototype, "recipeId", void 0);
 __decorate([
-    (0, typeorm_1.CreateDateColumn)(),
-    __metadata("design:type", Date)
-], Comment.prototype, "createdAt", void 0);
-__decorate([
-    (0, typeorm_1.UpdateDateColumn)(),
-    __metadata("design:type", Date)
-], Comment.prototype, "updatedAt", void 0);
-__decorate([
-    (0, typeorm_1.ManyToOne)(() => recipe_entity_1.Recipe, (recipe) => recipe.comments, { onDelete: 'CASCADE' }),
+    (0, typeorm_1.ManyToOne)(() => recipe_entity_1.Recipe, (recipe) => recipe.comments, {
+        onDelete: 'CASCADE',
+        lazy: true,
+    }),
     __metadata("design:type", recipe_entity_1.Recipe)
 ], Comment.prototype, "recipe", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => user_entity_1.User, (user) => user.comments, { onDelete: 'CASCADE' }),
+    (0, typeorm_1.ManyToOne)(() => user_entity_1.User, (user) => user.comments, {
+        onDelete: 'CASCADE',
+        lazy: true,
+    }),
     __metadata("design:type", user_entity_1.User)
 ], Comment.prototype, "user", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => comment_reaction_entity_1.CommentReaction, (commentReaction) => commentReaction.comment, { eager: true }),
+    (0, typeorm_1.OneToMany)(() => comment_reaction_entity_1.CommentReaction, (commentReaction) => commentReaction.comment, { lazy: true }),
     __metadata("design:type", Array)
 ], Comment.prototype, "commentReactions", void 0);
 Comment = __decorate([

@@ -1,0 +1,1 @@
+{"version":3,"file":"delete-follow-res.dto.js","sourceRoot":"","sources":["../../../../src/modules/users/dto/delete-follow-res.dto.ts"],"names":[],"mappings":";;;;;;;;;;;;AAAA,6CAA8C;AAC9C,mEAA0D;AAE1D,MAAa,kBAAmB,SAAQ,0BAAW;CAUlD;AANC;IAHC,IAAA,qBAAW,EAAC;QACX,OAAO,EAAE,IAAI;KACd,CAAC;;gDACQ;AAKV;IAHC,IAAA,qBAAW,EAAC;QACX,OAAO,EAAE,oBAAoB;KAC9B,CAAC;;mDACc;AATlB,gDAUC"}

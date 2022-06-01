@@ -1,13 +1,5 @@
-import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  Entity,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Common } from 'src/common/common.entity';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { Bookmark } from './bookmark.entity';
 import { Comment } from './comment.entity';
 import { RecipeImage } from './recipe-image.entity';
@@ -16,10 +8,7 @@ import { RecipeReaction } from './recipe-reaction.entity';
 import { User } from './user.entity';
 
 @Entity()
-export class Recipe extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class Recipe extends Common {
   @Column()
   userId: number;
 
@@ -41,32 +30,32 @@ export class Recipe extends BaseEntity {
   @Column()
   views: number;
 
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
-
   @ManyToOne(() => User, (user) => user.recipes, {
     onDelete: 'CASCADE',
+    lazy: true,
   })
   user: User;
 
-  @OneToMany(() => Comment, (comment) => comment.recipe)
+  @OneToMany(() => Comment, (comment) => comment.recipe, { lazy: true })
   comments: Comment[];
 
   @OneToMany(
     () => RecipeIngredient,
     (recipeIngredient) => recipeIngredient.recipe,
+    { lazy: true },
   )
   recipeIngredients: RecipeIngredient[];
 
-  @OneToMany(() => RecipeImage, (recipeImage) => recipeImage.recipe)
+  @OneToMany(() => RecipeImage, (recipeImage) => recipeImage.recipe, {
+    lazy: true,
+  })
   recipeImages: RecipeImage[];
 
-  @OneToMany(() => RecipeReaction, (RecipeReaction) => RecipeReaction.recipe)
+  @OneToMany(() => RecipeReaction, (RecipeReaction) => RecipeReaction.recipe, {
+    lazy: true,
+  })
   recipeReactions: RecipeReaction[];
 
-  @OneToMany(() => Bookmark, (bookmark) => bookmark.recipe)
+  @OneToMany(() => Bookmark, (bookmark) => bookmark.recipe, { lazy: true })
   bookmarks: Bookmark[];
 }

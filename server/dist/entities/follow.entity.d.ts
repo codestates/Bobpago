@@ -1,11 +1,8 @@
-import { BaseEntity } from 'typeorm';
+import { Common } from 'src/common/common.entity';
 import { User } from './user.entity';
-export declare class Follow extends BaseEntity {
-    id: number;
+export declare class Follow extends Common {
     followerId: number;
     followeeId: number;
-    createdAt: Date;
-    updatedAt: Date;
     follower: User;
     followee: User;
 }
