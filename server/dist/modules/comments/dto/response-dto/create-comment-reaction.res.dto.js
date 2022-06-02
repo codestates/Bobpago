@@ -9,10 +9,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateCommentReactionResDto = void 0;
+exports.CommentReactionResDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const response_dto_1 = require("../../../../common/dto/response.dto");
-class CreateCommentReactionResDto extends response_dto_1.ResponseDto {
+class CommentReactionResDto extends response_dto_1.ResponseDto {
 }
 __decorate([
     (0, swagger_1.ApiProperty)({
@@ -21,18 +21,6 @@ __decorate([
         },
     }),
     __metadata("design:type", Object)
-], CreateCommentReactionResDto.prototype, "data", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        example: 201,
-    }),
-    __metadata("design:type", Number)
-], CreateCommentReactionResDto.prototype, "statusCode", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        example: '댓글 리액션이 추가되었습니다.',
-    }),
-    __metadata("design:type", String)
-], CreateCommentReactionResDto.prototype, "message", void 0);
-exports.CreateCommentReactionResDto = CreateCommentReactionResDto;
+], CommentReactionResDto.prototype, "data", void 0);
+exports.CommentReactionResDto = CommentReactionResDto;
 //# sourceMappingURL=create-comment-reaction.res.dto.js.map

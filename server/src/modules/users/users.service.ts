@@ -34,7 +34,6 @@ export class UsersService {
     const followers = user.followers.length;
 
     delete user.password;
-    delete user.refreshToken;
     if (user) {
       return {
         data: {
@@ -57,9 +56,8 @@ export class UsersService {
       relations: ['follower'],
     });
 
-    const resultData = followers.map((el) => {
-      delete el.follower.password;
-      delete el.follower.refreshToken;
+    const resultData = followers.map(async (el) => {
+      delete (await el.follower).password;
       return el.follower;
     });
 
@@ -81,9 +79,8 @@ export class UsersService {
       relations: ['followee'],
     });
 
-    const resultData = followees.map((el) => {
-      delete el.followee.password;
-      delete el.followee.refreshToken;
+    const resultData = followees.map(async (el) => {
+      delete (await el.followee).password;
       return el.followee;
     });
 

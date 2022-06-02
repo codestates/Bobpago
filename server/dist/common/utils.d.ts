@@ -22,3 +22,4 @@ export declare const errorHandler: {
     900: typeof NotImplementedException;
 };
 export declare const formUrlEncoded: (data: any) => string;
+export declare const convertToHashPassword: (password: string) => string;

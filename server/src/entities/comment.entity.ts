@@ -1,14 +1,5 @@
 import { Common } from 'src/common/common.entity';
-import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  Entity,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { CommentReaction } from './comment-reaction.entity';
 import { Recipe } from './recipe.entity';
 import { User } from './user.entity';

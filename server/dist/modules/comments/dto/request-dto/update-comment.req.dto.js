@@ -12,8 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateCommentReqDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
-const create_comment_req_dto_1 = require("./create-comment.req.dto");
-class UpdateCommentReqDto extends create_comment_req_dto_1.CreateCommentReqDto {
+class UpdateCommentReqDto {
 }
 __decorate([
     (0, swagger_1.ApiProperty)({
@@ -22,5 +21,10 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], UpdateCommentReqDto.prototype, "content", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 1 }),
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], UpdateCommentReqDto.prototype, "commentId", void 0);
 exports.UpdateCommentReqDto = UpdateCommentReqDto;
 //# sourceMappingURL=update-comment.req.dto.js.map

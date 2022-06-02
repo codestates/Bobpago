@@ -5,7 +5,7 @@ import axios from 'axios';
 import { NextFunction, Request, Response } from 'express';
 import { errorHandler } from 'src/common/utils';
 import { User } from 'src/entities/user.entity';
-import { UserDto } from 'src/modules/auth/dto/user.dto';
+import { UserDto } from 'src/common/dto/user.dto';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -60,10 +60,11 @@ export class AuthCheckerMiddleware implements NestMiddleware {
           email = result.data.email;
           break;
         default:
-          throw 403;
+          throw 400;
       }
 
       const user = await this.usersRepository.findOne({ email });
+      if (!user) throw 404;
       const userDto = new UserDto(user); // 필요한 필드만 필터
       req.user = userDto;
       next();

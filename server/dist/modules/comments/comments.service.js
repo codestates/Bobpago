@@ -19,122 +19,120 @@ const typeorm_2 = require("typeorm");
 const comment_entity_1 = require("../../entities/comment.entity");
 const comment_reaction_entity_1 = require("../../entities/comment-reaction.entity");
 const image_service_1 = require("../image/image.service");
+const utils_1 = require("../../common/utils");
+const comments_dto_1 = require("./dto/comments.dto");
+const response_dto_1 = require("../../common/dto/response.dto");
 let CommentsService = class CommentsService {
     constructor(commentRepository, commentReactionRepository, imageService) {
         this.commentRepository = commentRepository;
         this.commentReactionRepository = commentReactionRepository;
         this.imageService = imageService;
     }
-    async create(createCommentReqDto, recipeId, userId) {
+    async create(content, recipeId, userId) {
         try {
             const comment = await this.commentRepository.create({
-                content: createCommentReqDto.content,
+                content,
                 userId,
                 recipeId,
             });
-            const newComment = await this.commentRepository.save(comment);
+            await this.commentRepository.save(comment);
             return {
-                data: newComment,
+                data: null,
                 statusCode: 201,
-                message: '댓글 작성을 완료했습니다',
+                message: utils_1.statusMessage[201],
             };
         }
         catch (err) {
-            throw new common_1.BadRequestException('댓글 작성에 실패하였습니다.');
+            throw new utils_1.errorHandler[utils_1.errorHandler[err] ? err : 500]();
         }
     }
     async findAll(recipeId) {
         try {
             const comment = await this.commentRepository.find({
-                relations: ['user'],
+                relations: ['user', 'commentReactions'],
                 where: { recipeId },
             });
+            if (!comment.length)
+                throw 404;
             const newComment = comment.map((el) => {
-                const user = {
-                    id: el.user.id,
-                    nickname: el.user.nickname,
-                    imageUrl: el.user.imageUrl,
-                };
-                delete el.userId;
-                delete el.user;
-                return Object.assign(Object.assign({}, el), { user });
+                const result = new comments_dto_1.CommentsDto(el, el.__user__, el.__commentReactions__);
+                return result;
             });
             return {
                 data: newComment,
                 statusCode: 200,
-                message: '댓글 조회 완료했습니다',
+                message: utils_1.statusMessage[200],
             };
         }
         catch (err) {
-            throw new common_1.NotFoundException('댓글 조회에 실패하였습니다.');
+            throw new utils_1.errorHandler[utils_1.errorHandler[err] ? err : 500]();
         }
     }
-    async update(commentId, updateCommentReqDto) {
+    async update(commentId, content) {
         try {
-            const comment = await this.commentRepository.findOne({ id: commentId });
-            comment.content = updateCommentReqDto.content;
-            await this.commentRepository.save(comment);
+            const result = await this.commentRepository.update(commentId, {
+                content,
+            });
+            if (!result.affected)
+                throw 404;
             return {
-                data: comment,
+                data: null,
                 statusCode: 200,
-                message: '댓글 수정을 완료했습니다',
+                message: utils_1.statusMessage[200],
             };
         }
         catch (err) {
-            throw new common_1.NotFoundException('댓글 수정에 실패하였습니다.');
+            throw new utils_1.errorHandler[utils_1.errorHandler[err] ? err : 500]();
         }
     }
     async delete(commentId) {
-        let message;
         try {
             await this.imageService.deleteById(commentId, 'comment');
             const result = await this.commentRepository.delete(commentId);
-            if (result.affected) {
-                message = '댓글을 삭제 하였습니다.';
-            }
-            else {
-                message = '이미 삭제되었습니다.';
-            }
+            if (!result.affected)
+                throw 404;
+            return {
+                data: null,
+                statusCode: 200,
+                message: utils_1.statusMessage[200],
+            };
         }
-        catch (e) {
-            throw new common_1.BadRequestException('댓글 삭제에 실패하였습니다.');
+        catch (err) {
+            throw new utils_1.errorHandler[utils_1.errorHandler[err] ? err : 500]();
         }
-        return {
-            data: null,
-            statusCode: 200,
-            message,
-        };
     }
     async updateReaction(userId, commentId) {
         const reactionData = await this.commentReactionRepository.findOne({
             userId,
             commentId,
         });
-        if (!reactionData) {
-            await this.commentReactionRepository.save({ userId, commentId });
-            return {
-                data: {
-                    reaction_state: 1,
-                },
-                statusCode: 200,
-                message: '댓글 좋아요가 추가되었습니다.',
-            };
+        try {
+            if (!reactionData) {
+                await this.commentReactionRepository.save({ userId, commentId });
+                return {
+                    data: {
+                        reaction_state: 1,
+                    },
+                    statusCode: 200,
+                    message: utils_1.statusMessage[200],
+                };
+            }
+            else {
+                await this.commentReactionRepository.delete({
+                    userId,
+                    commentId,
+                });
+                return {
+                    data: {
+                        reaction_state: 0,
+                    },
+                    statusCode: 200,
+                    message: utils_1.statusMessage[200],
+                };
+            }
         }
-        else if (reactionData) {
-            await this.commentReactionRepository.delete({
-                userId,
-                commentId,
-            });
-            return {
-                data: {
-                    reaction_state: 0,
-                },
-                statusCode: 200,
-                message: '댓글 좋아요가 삭제되었습니다.',
-            };
-        }
-        else {
-            throw new common_1.BadRequestException('댓글 좋아요 업데이트에 실패하였습니다.');
+        catch (err) {
+            throw new utils_1.errorHandler[utils_1.errorHandler[err] ? err : 500]();
         }
     }
 };

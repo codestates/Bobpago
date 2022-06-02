@@ -1,4 +1,4 @@
-import { ApiProperty, PickType } from '@nestjs/swagger';
+import { PickType } from '@nestjs/swagger';
 import { CreateUserReqDto } from './create-user.req.dto';
 
 export class RestoreUserReqDto extends PickType(CreateUserReqDto, [

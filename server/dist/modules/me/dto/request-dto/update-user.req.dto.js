@@ -12,6 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateUserReqDto = void 0;
 const class_validator_1 = require("class-validator");
 const swagger_1 = require("@nestjs/swagger");
+const class_transformer_1 = require("class-transformer");
+const utils_1 = require("../../../../common/utils");
 class UpdateUserReqDto {
 }
 __decorate([
@@ -19,8 +21,9 @@ __decorate([
         example: '220101',
         required: false,
     }),
-    (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
+    (0, class_transformer_1.Transform)((property) => (0, utils_1.convertToHashPassword)(property.obj.password)),
+    (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], UpdateUserReqDto.prototype, "password", void 0);
 __decorate([

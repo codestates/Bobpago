@@ -65,11 +65,5 @@ __decorate([
     }),
     __metadata("design:type", Object)
 ], SeeCommentResDto.prototype, "data", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        example: '댓글 조회가 완료되었습니다.',
-    }),
-    __metadata("design:type", String)
-], SeeCommentResDto.prototype, "message", void 0);
 exports.SeeCommentResDto = SeeCommentResDto;
 //# sourceMappingURL=see-comment.res.dto.js.map

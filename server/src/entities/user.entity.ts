@@ -25,9 +25,6 @@ export class User extends Common {
   @Column({ nullable: true })
   imageUrl: string;
 
-  @Column({ length: 1234, nullable: true })
-  refreshToken: string;
-
   @DeleteDateColumn({
     type: 'timestamp',
   })
@@ -57,4 +54,9 @@ export class User extends Common {
 
   @OneToMany(() => Follow, (follow) => follow.followee, { lazy: true })
   followers: Follow[];
+
+  constructor(id) {
+    super();
+    this.id = id;
+  }
 }

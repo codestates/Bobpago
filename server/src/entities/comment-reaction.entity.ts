@@ -1,12 +1,5 @@
 import { Common } from 'src/common/common.entity';
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { Comment } from './comment.entity';
 import { User } from './user.entity';
 

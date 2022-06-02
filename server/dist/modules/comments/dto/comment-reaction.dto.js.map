@@ -1,0 +1,1 @@
+{"version":3,"file":"comment-reaction.dto.js","sourceRoot":"","sources":["../../../../src/modules/comments/dto/comment-reaction.dto.ts"],"names":[],"mappings":";;;AAAA,uFAAuE;AAEvE,MAAa,kBAAkB;IAK7B,YAAY,MAAuB;QACjC,IAAI,CAAC,EAAE,GAAG,MAAM,CAAC,EAAE,CAAC;QACpB,IAAI,CAAC,MAAM,GAAG,MAAM,CAAC,MAAM,CAAC;QAC5B,IAAI,CAAC,SAAS,GAAG,MAAM,CAAC,SAAS,CAAC;IACpC,CAAC;CACF;AAVD,gDAUC"}

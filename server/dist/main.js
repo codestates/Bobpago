@@ -61,7 +61,7 @@ async function bootstrap() {
             supportedSubmitMethods: [],
         },
     });
-    await app.listen(process.env.PORT);
+    await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
 //# sourceMappingURL=main.js.map

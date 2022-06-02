@@ -21,7 +21,8 @@ const bcrypt = require("bcryptjs");
 const jwt_1 = require("@nestjs/jwt");
 const axios_1 = require("axios");
 const utils_1 = require("../../common/utils");
-const user_dto_1 = require("./dto/user.dto");
+const user_dto_1 = require("../../common/dto/user.dto");
+const response_dto_1 = require("../../common/dto/response.dto");
 let AuthService = class AuthService {
     constructor(usersRepository, jwtService) {
         this.usersRepository = usersRepository;
@@ -76,7 +77,7 @@ let AuthService = class AuthService {
             throw new utils_1.errorHandler[utils_1.errorHandler[err] ? err : 500]();
         }
     }
-    async newGenerateToken(userId, tokenType, req) {
+    async newGenerateToken(tokenType, req) {
         const refreshToken = req.cookies['refreshToken'];
         let result, accessToken;
         try {
@@ -187,7 +188,7 @@ let AuthService = class AuthService {
             };
         }
         catch (err) {
-            throw new utils_1.errorHandler[utils_1.errorHandler[err] ? err : 406]();
+            throw new utils_1.errorHandler[utils_1.errorHandler[err] ? err : 401]();
         }
     }
     async naverSignIn(code, state, res) {
@@ -232,7 +233,7 @@ let AuthService = class AuthService {
             };
         }
         catch (err) {
-            throw new utils_1.errorHandler[utils_1.errorHandler[err] ? err : 406]();
+            throw new utils_1.errorHandler[utils_1.errorHandler[err] ? err : 401]();
         }
     }
     async googleSignIn(code, scope, res) {
@@ -271,7 +272,7 @@ let AuthService = class AuthService {
             };
         }
         catch (err) {
-            throw new utils_1.errorHandler[utils_1.errorHandler[err] ? err : 406]();
+            throw new utils_1.errorHandler[utils_1.errorHandler[err] ? err : 401]();
         }
     }
 };

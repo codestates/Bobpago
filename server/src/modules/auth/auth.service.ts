@@ -7,15 +7,14 @@ import { JwtService } from '@nestjs/jwt';
 import { CheckSignInReqDto } from './dto/request-dto/check-signin.req.dto';
 import axios from 'axios';
 import { CheckSignInResDto } from './dto/response-dto/check-signin.res.dto';
-import { CheckSignOutResDto } from './dto/response-dto/check-signout.res.dto';
 import { GenereateTokenResDto } from './dto/response-dto/generate-token.res.dto';
 import { CheckGoogleResDto } from './dto/response-dto/check-google.res.dto';
 import { CheckNaverResDto } from './dto/response-dto/check-naver.res.dto';
 import { CheckKakaoResDto } from './dto/response-dto/check-kakao.res.dto';
 import { errorHandler, formUrlEncoded, statusMessage } from 'src/common/utils';
-import { Transactional } from 'typeorm-transactional-cls-hooked';
-import { UserDto } from './dto/user.dto';
+import { UserDto } from '../../common/dto/user.dto';
 import { Request, Response } from 'express';
+import { ResponseDto } from 'src/common/dto/response.dto';
 
 @Injectable()
 export class AuthService {
@@ -73,7 +72,7 @@ export class AuthService {
     tokenType: string,
     accessToken: string,
     res: Response,
-  ): Promise<CheckSignOutResDto> {
+  ): Promise<ResponseDto> {
     try {
       if (tokenType === 'kakao') {
         await axios.post(
@@ -100,7 +99,6 @@ export class AuthService {
   }
 
   async newGenerateToken(
-    userId: number,
     tokenType: string,
     req: Request,
   ): Promise<GenereateTokenResDto> {
@@ -241,7 +239,7 @@ export class AuthService {
         message: statusMessage[200],
       };
     } catch (err) {
-      throw new errorHandler[errorHandler[err] ? err : 406]();
+      throw new errorHandler[errorHandler[err] ? err : 401]();
     }
   }
 
@@ -305,7 +303,7 @@ export class AuthService {
         message: statusMessage[200],
       };
     } catch (err) {
-      throw new errorHandler[errorHandler[err] ? err : 406]();
+      throw new errorHandler[errorHandler[err] ? err : 401]();
     }
   }
 
@@ -365,7 +363,7 @@ export class AuthService {
         message: statusMessage[200],
       };
     } catch (err) {
-      throw new errorHandler[errorHandler[err] ? err : 406]();
+      throw new errorHandler[errorHandler[err] ? err : 401]();
     }
   }
 }

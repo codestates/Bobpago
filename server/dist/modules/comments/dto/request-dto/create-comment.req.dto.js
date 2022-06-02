@@ -15,13 +15,14 @@ const class_validator_1 = require("class-validator");
 class CreateCommentReqDto {
 }
 __decorate([
-    (0, swagger_1.ApiProperty)({
-        example: '최고의 레시피입니다. 추천합니다!',
-        description: '댓글 내용',
-        required: true,
-    }),
+    (0, swagger_1.ApiProperty)({ example: '최고의 레시피입니다. 추천합니다!' }),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateCommentReqDto.prototype, "content", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 1 }),
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], CreateCommentReqDto.prototype, "recipeId", void 0);
 exports.CreateCommentReqDto = CreateCommentReqDto;
 //# sourceMappingURL=create-comment.req.dto.js.map

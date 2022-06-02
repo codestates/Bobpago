@@ -51,9 +51,4 @@ export class SeeCommentResDto extends ResponseDto {
     ],
   })
   data: any;
-
-  @ApiProperty({
-    example: '댓글 조회가 완료되었습니다.',
-  })
-  message: string;
 }

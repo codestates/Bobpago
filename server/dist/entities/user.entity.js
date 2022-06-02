@@ -19,6 +19,10 @@ const follow_entity_1 = require("./follow.entity");
 const recipe_reaction_entity_1 = require("./recipe-reaction.entity");
 const recipe_entity_1 = require("./recipe.entity");
 let User = class User extends common_entity_1.Common {
+    constructor(id) {
+        super();
+        this.id = id;
+    }
 };
 __decorate([
     (0, typeorm_1.Column)(),
@@ -40,10 +44,6 @@ __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], User.prototype, "imageUrl", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ length: 1234, nullable: true }),
-    __metadata("design:type", String)
-], User.prototype, "refreshToken", void 0);
 __decorate([
     (0, typeorm_1.DeleteDateColumn)({
         type: 'timestamp',
@@ -84,7 +84,8 @@ __decorate([
 ], User.prototype, "followers", void 0);
 User = __decorate([
     (0, typeorm_1.Entity)({ name: 'user' }),
-    (0, typeorm_1.Unique)(['email'])
+    (0, typeorm_1.Unique)(['email']),
+    __metadata("design:paramtypes", [Object])
 ], User);
 exports.User = User;
 //# sourceMappingURL=user.entity.js.map

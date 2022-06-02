@@ -1,22 +1,17 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateUserReqDto } from './create-user.req.dto';
-import {
-  IsEmpty,
-  IsOptional,
-  IsString,
-  Length,
-  Matches,
-} from 'class-validator';
-import { ApiProperty, PickType } from '@nestjs/swagger';
+import { IsOptional, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
+import { convertToHashPassword } from 'src/common/utils';
 
 export class UpdateUserReqDto {
   @ApiProperty({
     example: '220101',
     required: false,
   })
-  @IsString()
   @IsOptional()
-  password: string;
+  @Transform((property) => convertToHashPassword(property.obj.password))
+  @IsString()
+  readonly password: string;
 
   @ApiProperty({
     example: '김씨네증축하숙집',
