@@ -118,6 +118,7 @@ const DRModalContent = ({ comment, setCommentData }: Props) => {
           `${serverUrl}/recipe/${comment.recipeId}/comment/${comment.id}?tokenType=${tokenType}`,
           {
             content: editCommentInput,
+            commentId: comment.id,
           },
           {
             withCredentials: true,
@@ -182,7 +183,9 @@ const DRModalContent = ({ comment, setCommentData }: Props) => {
 
       const postReactionData = await axios.post(
         `${serverUrl}/recipe/${comment.recipeId}/comment/${comment.id}?tokenType=${loginState.tokenType}`,
-        {},
+        {
+          commentId: comment.id,
+        },
         {
           withCredentials: true,
           headers: {

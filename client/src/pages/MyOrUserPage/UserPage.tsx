@@ -157,7 +157,9 @@ const UserPage = () => {
       } else {
         const data = await axios.post(
           `${serverUrl}/user/${userId}/follow?tokenType=${tokenType}`,
-          {},
+          {
+            userId,
+          },
           {
             withCredentials: true,
             headers: {

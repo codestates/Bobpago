@@ -134,6 +134,7 @@ const Description = ({
       const data = await axios.patch(
         `${process.env.REACT_APP_SERVER_URL}/recipe/${locationProps}?tokenType=${tokenType}`,
         {
+          recipeId: locationProps,
           title: contents.title,
           amount: contents.serving,
           level: contents.difficulty,

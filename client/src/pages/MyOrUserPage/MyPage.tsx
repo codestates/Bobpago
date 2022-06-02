@@ -190,14 +190,14 @@ const MyPage = () => {
     if (accessToken) {
       newToken = await CheckExpired(accessToken, tokenType, userId);
       if (newToken) {
-        dispatch(reissueAccessToken(newToken))
+        dispatch(reissueAccessToken(newToken));
       }
     }
     try {
       const data = await axios.post(
         `${process.env.REACT_APP_SERVER_URL}/checkMyInfo?tokenType=${tokenType}`,
         {
-          newPassword: password,
+          password,
         },
         {
           withCredentials: true,
@@ -238,7 +238,7 @@ const MyPage = () => {
       const data = await axios.post(
         `${process.env.REACT_APP_SERVER_URL}/checkMyInfo?tokenType=${tokenType}`,
         {
-          newPassword: passwordWithDraw,
+          password: passwordWithDraw,
         },
         {
           withCredentials: true,
@@ -731,9 +731,9 @@ const MyPage = () => {
           <CheckPassword>
             <CheckPasswordText>비밀번호 확인</CheckPasswordText>
             <CheckPasswordInput
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <CheckPasswordBtn onClick={() => passwordCheckEdit()}>
               확인
@@ -747,9 +747,9 @@ const MyPage = () => {
           <CheckPassword>
             <CheckPasswordText>비밀번호 확인</CheckPasswordText>
             <CheckPasswordInput
-                type="password"
-                value={passwordWithDraw}
-                onChange={(e) => setPasswordWithDraw(e.target.value)}
+              type="password"
+              value={passwordWithDraw}
+              onChange={(e) => setPasswordWithDraw(e.target.value)}
             />
             <CheckPasswordBtn onClick={() => passwordCheckWithDraw()}>
               확인
