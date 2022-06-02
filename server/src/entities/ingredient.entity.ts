@@ -1,13 +1,5 @@
 import { Common } from 'src/common/common.entity';
-import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { RecipeIngredient } from './recipe-ingredient.entity';
 
 @Entity()

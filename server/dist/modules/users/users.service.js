@@ -33,7 +33,6 @@ let UsersService = class UsersService {
         const followees = user.followees.length;
         const followers = user.followers.length;
         delete user.password;
-        delete user.refreshToken;
         if (user) {
             return {
                 data: Object.assign(Object.assign({}, user), { followees,
@@ -52,9 +51,8 @@ let UsersService = class UsersService {
             where: { followeeId },
             relations: ['follower'],
         });
-        const resultData = followers.map((el) => {
-            delete el.follower.password;
-            delete el.follower.refreshToken;
+        const resultData = followers.map(async (el) => {
+            delete (await el.follower).password;
             return el.follower;
         });
         if (resultData.length) {
@@ -74,9 +72,8 @@ let UsersService = class UsersService {
             where: { followerId },
             relations: ['followee'],
         });
-        const resultData = followees.map((el) => {
-            delete el.followee.password;
-            delete el.followee.refreshToken;
+        const resultData = followees.map(async (el) => {
+            delete (await el.followee).password;
             return el.followee;
         });
         if (resultData.length) {

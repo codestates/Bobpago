@@ -8,6 +8,7 @@ import {
   NotImplementedException,
   UnauthorizedException,
 } from '@nestjs/common';
+import * as bcrypt from 'bcryptjs';
 
 export const statusMessage = {
   200: 'Your request has been successfully completed.',
@@ -37,4 +38,9 @@ export const formUrlEncoded = (data) => {
   return Object.keys(data).reduce((acc, curr) => {
     return acc + `&${curr}=${encodeURIComponent(data[curr])}`;
   }, '');
+};
+
+export const convertToHashPassword = (password: string): string => {
+  const salt = bcrypt.genSaltSync();
+  return bcrypt.hashSync(password, salt);
 };

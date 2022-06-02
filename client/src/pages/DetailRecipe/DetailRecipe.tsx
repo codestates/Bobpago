@@ -155,7 +155,9 @@ const DetailRecipe = () => {
       if (!bookmark) {
         await axios.post(
           `${serverUrl}/${locationProps}/bookmarks?tokenType=${loginState.tokenType}`,
-          {},
+          {
+            recipeId: locationProps,
+          },
           {
             withCredentials: true,
             headers: {
@@ -381,7 +383,9 @@ const DetailRecipe = () => {
       const nextReaction = recipeData.recipe.recipe_reaction_state;
       const data = await axios.post(
         `${serverUrl}/recipe/${locationProps}?tokenType=${loginState.tokenType}`,
-        {},
+        {
+          recipeId: locationProps,
+        },
         {
           withCredentials: true,
           headers: {

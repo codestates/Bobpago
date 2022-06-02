@@ -79,6 +79,7 @@ const DRModal: React.FC<DRModalProps> = ({ handleModalClose, recipeId }) => {
       const data = await axios.post(
         `${serverUrl}/recipe/${recipeId}/comment?tokenType=${tokenType}`,
         {
+          recipeId,
           content: commentInput,
         },
         {

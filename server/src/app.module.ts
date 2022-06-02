@@ -54,7 +54,7 @@ export class AppModule implements NestModule {
         { path: 'signup', method: RequestMethod.POST },
         { path: 'restore', method: RequestMethod.POST },
         { path: 'auth/signin', method: RequestMethod.POST },
-        { path: 'auth/:userId/tokenRequest', method: RequestMethod.GET },
+        { path: 'auth/tokenRequest', method: RequestMethod.GET },
         { path: 'auth/kakao', method: RequestMethod.GET },
         { path: 'auth/naver', method: RequestMethod.GET },
         { path: 'auth/google', method: RequestMethod.GET },

@@ -1,0 +1,1 @@
+{"version":3,"file":"user-comment-info.dto.js","sourceRoot":"","sources":["../../../src/common/dto/user-comment-info.dto.ts"],"names":[],"mappings":";;;AAAA,4DAAgD;AAEhD,MAAa,cAAc;IAKzB,YAAY,MAAY;QACtB,IAAI,CAAC,EAAE,GAAG,MAAM,CAAC,EAAE,CAAC;QACpB,IAAI,CAAC,QAAQ,GAAG,MAAM,CAAC,QAAQ,CAAC;QAChC,IAAI,CAAC,QAAQ,GAAG,MAAM,CAAC,QAAQ,CAAC;IAClC,CAAC;CACF;AAVD,wCAUC"}

@@ -20,11 +20,5 @@ __decorate([
     }),
     __metadata("design:type", Object)
 ], DeleteCommentResDto.prototype, "data", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        example: '댓글 삭제가 완료되었습니다.',
-    }),
-    __metadata("design:type", String)
-], DeleteCommentResDto.prototype, "message", void 0);
 exports.DeleteCommentResDto = DeleteCommentResDto;
 //# sourceMappingURL=delete-comment.res.dto.js.map

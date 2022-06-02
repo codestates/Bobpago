@@ -1,6 +1,4 @@
-import { ResponseDto } from 'src/common/dto/response.dto';
-export declare class CreateCommentResDto extends ResponseDto {
+import { GenerateResponseDto } from 'src/common/dto/response.dto';
+export declare class CreateCommentResDto extends GenerateResponseDto {
     data: any;
-    statusCode: number;
-    message: string;
 }

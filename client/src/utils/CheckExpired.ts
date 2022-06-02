@@ -20,7 +20,7 @@ async function CheckExpired(
     return accessToken;
   } catch (err) {
     const result = await axios
-      .get(`${serverUrl}/auth/${userId}/tokenRequest?tokenType=${tokenType}`, {
+      .get(`${serverUrl}/auth/tokenRequest?tokenType=${tokenType}`, {
         withCredentials: true,
         headers: {
           "Content-Type": "multipart/form-data",

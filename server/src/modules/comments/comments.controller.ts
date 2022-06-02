@@ -6,13 +6,15 @@ import {
   Patch,
   Param,
   Delete,
-  ValidationPipe,
+  HttpCode,
+  UseFilters,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
   ApiOperation,
-  ApiParam,
   ApiQuery,
   ApiResponse,
   ApiTags,
@@ -21,94 +23,97 @@ import {
 import { GetUser } from 'src/common/dto/decorator.dto';
 import {
   BadRequestErrorRes,
+  InternalServerErrorRes,
   NotFoundErrorRes,
   UnauthorizedErrorRes,
 } from 'src/common/dto/http-exception.dto';
 import { CommentsService } from './comments.service';
 import { CreateCommentReqDto } from './dto/request-dto/create-comment.req.dto';
 import { UpdateCommentReqDto } from './dto/request-dto/update-comment.req.dto';
-import { CreateCommentResDto } from './dto/response-dto/create-comment.res.dto';
-import { DeleteCommentResDto } from './dto/response-dto/delete-comment.res.dto';
 import { SeeCommentResDto } from './dto/response-dto/see-comment.res.dto';
-import { UpdateCommentResDto } from './dto/response-dto/update-comment.res.dto';
-import { CreateCommentReactionResDto } from './dto/response-dto/create-comment-reaction.res.dto';
-import { DeleteCommentReactionResDto } from './dto/response-dto/delete-comment-reaction.res.dto';
-import { ResponseDto } from 'src/common/dto/response.dto';
+import { CommentReactionResDto } from './dto/response-dto/comment-reaction.res.dto';
+import { UserDto } from 'src/common/dto/user.dto';
+import { CheckTokenTypeReqDto } from 'src/common/dto/check-token-type.dto';
+import { CommentAndRecipeIdPathReqDto } from './dto/request-dto/comment-recipe-id-path.req.dto';
+import { RecipeIdPathReqDto } from '../recipes/dto/request-dto/recipe-id-path.req.dto';
+import { CommentReactionReqDto } from './dto/request-dto/comment-reaction.req.dto';
+import { HttpExceptionFilter } from 'src/common/exceptions/http-excepotion.filter';
+import { GenerateResponseDto, ResponseDto } from 'src/common/dto/response.dto';
 
 @ApiTags('Comment')
+@ApiBearerAuth('AccessToken')
 @Controller('recipe')
+@UseFilters(HttpExceptionFilter)
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
   @ApiOperation({ summary: '댓글 작성' })
-  @ApiQuery({ name: 'tokenType', required: true })
-  @ApiParam({ name: 'recipeId' })
-  @ApiResponse({ status: 201, type: CreateCommentResDto })
+  @ApiQuery({ type: CheckTokenTypeReqDto })
+  @ApiResponse({ status: 201, type: GenerateResponseDto })
   @ApiUnauthorizedResponse({ type: UnauthorizedErrorRes })
   @ApiBadRequestResponse({ type: BadRequestErrorRes })
+  @ApiNotFoundResponse({ type: NotFoundErrorRes })
+  @ApiInternalServerErrorResponse({ type: InternalServerErrorRes })
   @Post(':recipeId/comment')
   async create(
-    @Body() createCommentReqDto: CreateCommentReqDto,
-    @Param('recipeId') recipeId: string,
-    @GetUser('id') userId: number,
-  ): Promise<ResponseDto> {
-    return this.commentsService.create(createCommentReqDto, +recipeId, userId);
+    @Body() body: CreateCommentReqDto,
+    @GetUser() user: UserDto,
+  ): Promise<GenerateResponseDto> {
+    return this.commentsService.create(body.content, body.recipeId, user.getId);
   }
 
   @ApiOperation({ summary: '댓글 조회' })
-  @ApiParam({ name: 'recipeId' })
   @ApiResponse({ status: 200, type: SeeCommentResDto })
+  @ApiBadRequestResponse({ type: BadRequestErrorRes })
   @ApiNotFoundResponse({ type: NotFoundErrorRes })
+  @ApiInternalServerErrorResponse({ type: InternalServerErrorRes })
   @Get(':recipeId/comment')
-  async findAll(
-    @Param('recipeId') recipeId: string,
-  ): Promise<SeeCommentResDto> {
-    return this.commentsService.findAll(+recipeId);
+  async findAll(@Param() path: RecipeIdPathReqDto): Promise<SeeCommentResDto> {
+    return this.commentsService.findAll(path.recipeId);
   }
 
   @ApiOperation({ summary: '댓글 수정' })
-  @ApiQuery({ name: 'tokenType', required: true })
-  @ApiParam({ name: 'recipeId' })
-  @ApiParam({ name: 'commentId' })
-  @ApiResponse({ status: 200, type: UpdateCommentResDto })
+  @ApiQuery({ type: CheckTokenTypeReqDto })
+  @ApiResponse({ status: 200, type: ResponseDto })
   @ApiUnauthorizedResponse({ type: UnauthorizedErrorRes })
   @ApiBadRequestResponse({ type: BadRequestErrorRes })
   @ApiNotFoundResponse({ type: NotFoundErrorRes })
+  @ApiInternalServerErrorResponse({ type: InternalServerErrorRes })
   @Patch(':recipeId/comment/:commentId')
   async update(
-    @Param('commentId') commentId: string,
-    @Body() updateCommentReqDto: UpdateCommentReqDto,
-  ): Promise<UpdateCommentResDto> {
-    return this.commentsService.update(+commentId, updateCommentReqDto);
+    @Param() path: CommentAndRecipeIdPathReqDto,
+    @Body() body: UpdateCommentReqDto,
+  ): Promise<ResponseDto> {
+    return this.commentsService.update(body.commentId, body.content);
   }
 
   @ApiOperation({ summary: '댓글 삭제' })
-  @ApiQuery({ name: 'tokenType', required: true })
-  @ApiParam({ name: 'recipeId' })
-  @ApiParam({ name: 'commentId' })
-  @ApiResponse({ status: 200, type: DeleteCommentResDto })
+  @ApiQuery({ type: CheckTokenTypeReqDto })
+  @ApiResponse({ status: 200, type: ResponseDto })
   @ApiUnauthorizedResponse({ type: UnauthorizedErrorRes })
   @ApiBadRequestResponse({ type: BadRequestErrorRes })
+  @ApiNotFoundResponse({ type: NotFoundErrorRes })
+  @ApiInternalServerErrorResponse({ type: InternalServerErrorRes })
   @Delete(':recipeId/comment/:commentId')
   async delete(
-    @Param('commentId') commentId: string,
-  ): Promise<DeleteCommentResDto> {
-    return this.commentsService.delete(+commentId);
+    @Param() path: CommentAndRecipeIdPathReqDto,
+  ): Promise<ResponseDto> {
+    return this.commentsService.delete(path.commentId);
   }
 
   @ApiOperation({ summary: '댓글 반응 추가 및 삭제' })
-  @ApiQuery({ name: 'tokenType', required: true })
-  @ApiParam({ name: 'recipeId' })
-  @ApiParam({ name: 'commentId' })
-  @ApiResponse({ status: 201, type: CreateCommentReactionResDto })
-  @ApiResponse({ status: 200, type: DeleteCommentReactionResDto })
-  @ApiUnauthorizedResponse({ type: UnauthorizedErrorRes })
+  @ApiQuery({ type: CheckTokenTypeReqDto })
+  @ApiResponse({ status: 200, type: CommentReactionResDto })
   @ApiBadRequestResponse({ type: BadRequestErrorRes })
+  @ApiUnauthorizedResponse({ type: UnauthorizedErrorRes })
+  @ApiInternalServerErrorResponse({ type: InternalServerErrorRes })
+  @HttpCode(200)
   @Post(':recipeId/comment/:commentId')
   async updateReaction(
-    @GetUser('id') userId: number,
-    @Param('commentId') commentId: string,
-  ): Promise<CreateCommentReactionResDto> {
-    return this.commentsService.updateReaction(userId, +commentId);
+    @GetUser() user: UserDto,
+    @Param() path: CommentAndRecipeIdPathReqDto,
+    @Body() body: CommentReactionReqDto,
+  ): Promise<CommentReactionResDto> {
+    return this.commentsService.updateReaction(user.getId, body.commentId);
   }
 }

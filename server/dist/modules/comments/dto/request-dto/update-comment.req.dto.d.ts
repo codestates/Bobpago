@@ -1,4 +1,4 @@
-import { CreateCommentReqDto } from './create-comment.req.dto';
-export declare class UpdateCommentReqDto extends CreateCommentReqDto {
+export declare class UpdateCommentReqDto {
     content: string;
+    commentId: number;
 }

@@ -1,28 +1,18 @@
-import {
-  ConflictException,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserReqDto } from './dto/request-dto/create-user.req.dto';
 import { User } from 'src/entities/user.entity';
-import { getConnection, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import axios from 'axios';
 import { UpdateUserReqDto } from './dto/request-dto/update-user.req.dto';
 import { Bookmark } from '../../entities/bookmark.entity';
 import { Recipe } from 'src/entities/recipe.entity';
-import { RestoreUserReqDto } from './dto/request-dto/restore-user.req.dto';
-import { CheckInfoUserReqDto } from './dto/request-dto/checkInfo-user.req.dto';
 import { SeeUserResDto } from './dto/response-dto/see-user.res.dto';
-import { CreateUserResDto } from './dto/response-dto/create-user.res.dto';
-import { UpdateUserResDto } from './dto/response-dto/update-user.res.dto';
-import { DeleteUserResDto } from './dto/response-dto/delete-user.res.dto';
-import { RestoreUserResDto } from './dto/response-dto/restore-user.res.dto';
-import { CheckInfoUserResDto } from './dto/response-dto/checkInfo-user.res.dto';
-import { CreateBookmarkResDto } from './dto/response-dto/create-bookmark.res.dto';
-import { DeleteBookmarkResDto } from './dto/response-dto/delete-bookmark.res.dto';
+import { errorHandler, formUrlEncoded, statusMessage } from 'src/common/utils';
+import { UserDto } from 'src/common/dto/user.dto';
+import { GetMyInfoDto } from './dto/get-myinfo.dto';
+import { GenerateResponseDto, ResponseDto } from 'src/common/dto/response.dto';
 
 @Injectable()
 export class MeService {
@@ -35,11 +25,9 @@ export class MeService {
     private recipeRepository: Repository<Recipe>,
   ) {}
 
-  async signUp(createUserDto: CreateUserReqDto): Promise<CreateUserResDto> {
-    const queryRunner = await getConnection().createQueryRunner();
-    await queryRunner.startTransaction();
+  async signUp(params: CreateUserReqDto): Promise<GenerateResponseDto> {
     try {
-      const { email, password, nickname } = createUserDto;
+      const { email, password, nickname } = params;
       const salt = await bcrypt.genSalt();
       const hashPassword = await bcrypt.hash(password, salt);
       const newUser = this.usersRepository.create({
@@ -51,251 +39,195 @@ export class MeService {
       return {
         data: null,
         statusCode: 201,
-        message: `회원가입이 완료되었습니다.`,
+        message: statusMessage[201],
       };
     } catch (err) {
       if (err.code === 'ER_DUP_ENTRY') {
         // 유니크 조건 통과 안됬을때
-        throw new ConflictException('이미 회원가입이 되어있습니다.');
+        throw new errorHandler[409]();
       } else {
-        throw new InternalServerErrorException();
+        throw new errorHandler[500]();
       }
     }
   }
   //
-  async getMyInfo(user: User): Promise<SeeUserResDto> {
-    const newUser = await this.usersRepository.findOne({
-      where: {
-        email: user.email,
-      },
-      relations: ['followees', 'followers', 'bookmarks', 'recipes'],
-    });
-    const followees = newUser.followees.length;
-    const followers = newUser.followers.length;
-
-    const recipeIds = newUser.bookmarks.map((el) => {
-      return { id: el.recipeId };
-    });
-
+  async getMyInfo(user: UserDto): Promise<SeeUserResDto> {
     try {
-      const bookmarks =
-        recipeIds.length !== 0
-          ? await this.recipeRepository.find({
-              where: recipeIds,
-            })
-          : [];
-      bookmarks.reverse();
-      newUser.recipes.reverse();
-      delete newUser.password;
-      delete newUser.refreshToken;
+      const userInfo = await this.usersRepository
+        .createQueryBuilder('user')
+        .leftJoinAndSelect('user.followees', 'followees')
+        .leftJoinAndSelect('user.followers', 'followers')
+        .leftJoinAndSelect('user.bookmarks', 'bookmarks')
+        .leftJoinAndSelect('user.recipes', 'recipes')
+        .where('user.email = :email', { email: user.getEmail })
+        .orderBy('bookmarks.id', 'DESC')
+        .addOrderBy('recipes.id', 'DESC')
+        .getOne();
+
+      const result = new GetMyInfoDto(userInfo);
+
       return {
-        data: { ...newUser, bookmarks, followees, followers },
+        data: result,
         statusCode: 200,
-        message: `내 정보 조회에 성공하였습니다.`,
+        message: statusMessage[200],
       };
     } catch (err) {
-      throw new NotFoundException('내 정보 조회에 실패하였습니다.');
+      throw new errorHandler[errorHandler[err] ? err : 500]();
     }
   }
 
   async updateMyAccount(
-    user: User,
-    updateUserDto: UpdateUserReqDto,
-  ): Promise<UpdateUserResDto> {
-    const { password, nickname, profile } = updateUserDto;
-
+    user: UserDto,
+    params: UpdateUserReqDto,
+  ): Promise<ResponseDto> {
     try {
-      const salt = await bcrypt.genSalt();
-      if (password) {
-        updateUserDto.password = await bcrypt.hash(password, salt);
-      }
+      const result = await this.usersRepository.update(user.getId, params);
+      if (!result.affected) throw 404;
 
-      await this.usersRepository.update(user.id, updateUserDto);
-      const newUser = await this.usersRepository.findOne({ id: user.id });
-      delete newUser.password;
-      delete newUser.refreshToken;
       return {
-        data: { ...newUser },
+        data: params,
         statusCode: 200,
-        message: `내 정보 수정에 성공하였습니다.`,
+        message: statusMessage[200],
       };
     } catch (err) {
-      throw new NotFoundException('내 정보 수정에 실패하였습니다.');
+      throw new errorHandler[errorHandler[err] ? err : 500]();
     }
   }
 
   async deleteMyAccount(
-    user: User,
+    user: UserDto,
     accessToken: string,
     tokenType: string,
-  ): Promise<DeleteUserResDto> {
+  ): Promise<ResponseDto> {
     // 1. jwt 회원탈퇴 경우
-    if (tokenType === 'jwt') {
-      await this.usersRepository.update(user.id, { refreshToken: null });
-      await this.usersRepository.softDelete({ id: user.id });
-      return {
-        data: null,
-        statusCode: 200,
-        message: `회원탈퇴가 완료되었습니다.`,
-      };
-    }
-
-    // 2. kakao 회원탈퇴 경우
-    else if (tokenType === 'kakao') {
-      await axios.post(
-        'https://kapi.kakao.com/v1/user/unlink',
-        {},
-        {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: accessToken,
-          },
-          withCredentials: true,
-        },
-      );
-      await this.usersRepository.update(user.id, { refreshToken: null });
-      await this.usersRepository.softDelete({ id: user.id });
-      return {
-        data: null,
-        statusCode: 200,
-        message: '회원탈퇴가 완료되었습니다.',
-      };
-    }
-
-    // 3. naver 회원탈퇴 경우
-    else if (tokenType === 'naver') {
-      const formUrlEncoded = (data) => {
-        return Object.keys(data).reduce((acc, curr) => {
-          return acc + `&${curr}=${encodeURIComponent(data[curr])}`;
-        }, '');
-      };
-
-      await axios.post(
-        'https://nid.naver.com/oauth2.0/token',
-        formUrlEncoded({
-          grant_type: 'delete',
-          client_id: process.env.NAVER_CLIENT_ID,
-          client_secret: process.env.NAVER_CLIENT_SECRET,
-          access_token: accessToken.split(' ')[1],
-          service_provider: 'NAVER',
-        }),
-        {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          withCredentials: true,
-        },
-      );
-      await this.usersRepository.update(user.id, { refreshToken: null });
-      await this.usersRepository.softDelete({ id: user.id });
-      return {
-        data: null,
-        statusCode: 200,
-        message: '회원탈퇴가 완료되었습니다.',
-      };
-    }
-
-    // 4. google 회원탈퇴 경우
-    else if (tokenType === 'google') {
-      await axios.post(
-        `https://accounts.google.com/o/oauth2/revoke?token=${accessToken}`,
-        {},
-        {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: accessToken,
-          },
-          withCredentials: true,
-        },
-      );
-      await this.usersRepository.update(user.id, { refreshToken: null });
-      await this.usersRepository.softDelete({ id: user.id });
-      return {
-        data: null,
-        statusCode: 200,
-        message: '회원탈퇴가 완료되었습니다.',
-      };
-    }
-  }
-
-  async restoreMyAccount(
-    restoreUserDto: RestoreUserReqDto,
-  ): Promise<RestoreUserResDto> {
     try {
-      await this.usersRepository.restore({ email: restoreUserDto.email });
+      switch (tokenType) {
+        case 'jwt':
+          break;
+        case 'kakao':
+          await axios.post(
+            'https://kapi.kakao.com/v1/user/unlink',
+            {},
+            {
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                Authorization: accessToken,
+              },
+              withCredentials: true,
+            },
+          );
+          break;
+        case 'naver':
+          await axios.post(
+            'https://nid.naver.com/oauth2.0/token',
+            formUrlEncoded({
+              grant_type: 'delete',
+              client_id: process.env.NAVER_CLIENT_ID,
+              client_secret: process.env.NAVER_CLIENT_SECRET,
+              access_token: accessToken.split(' ')[1],
+              service_provider: 'NAVER',
+            }),
+            {
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+              },
+              withCredentials: true,
+            },
+          );
+          break;
+        case 'google':
+          await axios.post(
+            `https://accounts.google.com/o/oauth2/revoke?token=${accessToken}`,
+            {},
+            {
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                Authorization: accessToken,
+              },
+              withCredentials: true,
+            },
+          );
+          break;
+      }
+
+      await this.usersRepository.softDelete({ id: user.getId });
       return {
         data: null,
         statusCode: 200,
-        message: '계정복구가 완료되었습니다.',
+        message: statusMessage[200],
       };
     } catch (err) {
-      throw new NotFoundException('계정복구에 실패하였습니다.');
+      throw new errorHandler[errorHandler[err] ? err : 500]();
     }
   }
 
-  async checkMyInfo(
-    user: User,
-    checkInfoUserDto: CheckInfoUserReqDto,
-  ): Promise<CheckInfoUserResDto> {
-    const { email } = user;
-    const { password } = checkInfoUserDto;
+  async restoreMyAccount(email: string): Promise<ResponseDto> {
     try {
-      const oldUser = await this.usersRepository.findOne({
+      const result = await this.usersRepository.restore({
         email,
-        password,
       });
-      const newUser = await this.usersRepository.findOne({ email });
+      if (!result.affected) throw 404;
 
-      const checkPassword = await bcrypt.compare(password, newUser.password);
-      if (checkPassword || oldUser) {
-        return {
-          data: null,
-          statusCode: 200,
-          message: '회원정보 수정 권한이 확인되었습니다.',
-        };
-      } else {
-        throw new NotFoundException(
-          '회원정보 수정 권한 확인에 실패하였습니다.',
-        );
-      }
+      return {
+        data: null,
+        statusCode: 200,
+        message: statusMessage[200],
+      };
     } catch (err) {
-      throw new NotFoundException('회원정보 수정 권한 확인에 실패하였습니다.');
+      throw new errorHandler[errorHandler[err] ? err : 500]();
     }
   }
 
-  async addBookmark(
-    recipeId: string,
-    user: User,
-  ): Promise<CreateBookmarkResDto> {
-    const bookmark = await this.bookmarkRepository.findOne({
-      userId: user.id,
-      recipeId: +recipeId,
-    });
-    if (bookmark) {
-      throw new ConflictException('이미 추가된 북마크입니다.');
-    } else {
-      try {
-        await this.bookmarkRepository.save({
-          userId: user.id,
-          recipeId: +recipeId,
-        });
-        return {
-          data: null,
-          statusCode: 201,
-          message: '북마크가 추가되었습니다.',
-        };
-      } catch (err) {
-        throw new InternalServerErrorException();
-      }
+  async checkMyInfo(email: string, password: string): Promise<ResponseDto> {
+    try {
+      const user = await this.usersRepository.findOne({ email });
+
+      const checkPassword =
+        user.password === password
+          ? true
+          : await bcrypt.compare(password, user.password);
+      if (!checkPassword || !user) throw 404;
+
+      return {
+        data: null,
+        statusCode: 200,
+        message: statusMessage[200],
+      };
+    } catch (err) {
+      throw new errorHandler[errorHandler[err] ? err : 500]();
     }
   }
 
-  async deleteBookamark(recipeId): Promise<DeleteBookmarkResDto> {
-    await this.bookmarkRepository.delete({ recipeId: +recipeId });
-    return {
-      data: null,
-      statusCode: 200,
-      message: '북마크가 삭제 되었습니다.',
-    };
+  async addBookmark(recipeId: number, userId: number): Promise<ResponseDto> {
+    try {
+      const bookmark = await this.bookmarkRepository.findOne({
+        userId,
+        recipeId,
+      });
+      if (bookmark) throw 409;
+
+      await this.bookmarkRepository.save({ userId, recipeId });
+      return {
+        data: null,
+        statusCode: 201,
+        message: statusMessage[201],
+      };
+    } catch (err) {
+      throw new errorHandler[errorHandler[err] ? err : 500]();
+    }
+  }
+
+  async deleteBookamark(recipeId: number): Promise<ResponseDto> {
+    try {
+      const result = await this.bookmarkRepository.delete({ recipeId });
+      if (!result.affected) throw 404;
+      return {
+        data: null,
+        statusCode: 200,
+        message: statusMessage[200],
+      };
+    } catch (err) {
+      throw new errorHandler[errorHandler[err] ? err : 500]();
+    }
   }
 }

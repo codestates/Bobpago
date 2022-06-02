@@ -19,7 +19,7 @@ const typeorm_1 = require("@nestjs/typeorm");
 const axios_1 = require("axios");
 const utils_1 = require("../common/utils");
 const user_entity_1 = require("../entities/user.entity");
-const user_dto_1 = require("../modules/auth/dto/user.dto");
+const user_dto_1 = require("../common/dto/user.dto");
 const typeorm_2 = require("typeorm");
 let AuthCheckerMiddleware = class AuthCheckerMiddleware {
     constructor(usersRepository, jwtService) {
@@ -63,9 +63,11 @@ let AuthCheckerMiddleware = class AuthCheckerMiddleware {
                     email = result.data.email;
                     break;
                 default:
-                    throw 403;
+                    throw 400;
             }
             const user = await this.usersRepository.findOne({ email });
+            if (!user)
+                throw 404;
             const userDto = new user_dto_1.UserDto(user);
             req.user = userDto;
             next();

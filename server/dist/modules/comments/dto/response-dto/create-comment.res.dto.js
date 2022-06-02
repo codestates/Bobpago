@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateCommentResDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const response_dto_1 = require("../../../../common/dto/response.dto");
-class CreateCommentResDto extends response_dto_1.ResponseDto {
+class CreateCommentResDto extends response_dto_1.GenerateResponseDto {
 }
 __decorate([
     (0, swagger_1.ApiProperty)({
@@ -27,17 +27,5 @@ __decorate([
     }),
     __metadata("design:type", Object)
 ], CreateCommentResDto.prototype, "data", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        example: 201,
-    }),
-    __metadata("design:type", Number)
-], CreateCommentResDto.prototype, "statusCode", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        example: '댓글 작성이 완료되었습니다.',
-    }),
-    __metadata("design:type", String)
-], CreateCommentResDto.prototype, "message", void 0);
 exports.CreateCommentResDto = CreateCommentResDto;
 //# sourceMappingURL=create-comment.res.dto.js.map

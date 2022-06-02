@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.formUrlEncoded = exports.errorHandler = exports.statusMessage = void 0;
+exports.convertToHashPassword = exports.formUrlEncoded = exports.errorHandler = exports.statusMessage = void 0;
 const common_1 = require("@nestjs/common");
+const bcrypt = require("bcryptjs");
 exports.statusMessage = {
     200: 'Your request has been successfully completed.',
     201: 'Data generation has been completed.',
@@ -30,4 +31,9 @@ const formUrlEncoded = (data) => {
     }, '');
 };
 exports.formUrlEncoded = formUrlEncoded;
+const convertToHashPassword = (password) => {
+    const salt = bcrypt.genSaltSync();
+    return bcrypt.hashSync(password, salt);
+};
+exports.convertToHashPassword = convertToHashPassword;
 //# sourceMappingURL=utils.js.map

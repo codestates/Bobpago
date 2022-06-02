@@ -59,11 +59,5 @@ __decorate([
     }),
     __metadata("design:type", Object)
 ], SeeUserResDto.prototype, "data", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        example: '마이페이지 조회가 완료되었습니다.',
-    }),
-    __metadata("design:type", String)
-], SeeUserResDto.prototype, "message", void 0);
 exports.SeeUserResDto = SeeUserResDto;
 //# sourceMappingURL=see-user.res.dto.js.map
