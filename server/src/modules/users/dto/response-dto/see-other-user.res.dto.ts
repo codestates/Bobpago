@@ -43,9 +43,4 @@ export class SeeOtherUserResDto extends ResponseDto {
     },
   })
   data: any;
-
-  @ApiProperty({
-    example: '사용자페이지 조회가 완료되었습니다.',
-  })
-  message: string;
 }

@@ -41,7 +41,6 @@ import { CheckNaverReqDto } from './dto/request-dto/check-naver.req.dto';
 import { CheckGoogleReqDto } from './dto/request-dto/check-google.req.dto';
 import { CheckTokenTypeReqDto } from 'src/common/dto/check-token-type.dto';
 import { ResponseDto } from 'src/common/dto/response.dto';
-import { UserIdPathReqDto } from './dto/request-dto/user-id-path.req.dto';
 
 @ApiTags('Authentication')
 @Controller('auth')

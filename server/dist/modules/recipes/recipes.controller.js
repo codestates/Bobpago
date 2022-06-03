@@ -17,7 +17,6 @@ const common_1 = require("@nestjs/common");
 const recipes_service_1 = require("./recipes.service");
 const create_recipe_req_dto_1 = require("./dto/request-dto/create-recipe.req.dto");
 const decorator_dto_1 = require("../../common/dto/decorator.dto");
-const user_entity_1 = require("../../entities/user.entity");
 const swagger_1 = require("@nestjs/swagger");
 const update_recipe_req_dto_1 = require("./dto/request-dto/update-recipe.req.dto");
 const http_exception_dto_1 = require("../../common/dto/http-exception.dto");
@@ -29,15 +28,20 @@ const see_recipe_res_dto_1 = require("./dto/response-dto/see-recipe.res.dto");
 const match_recipe_res_dto_1 = require("./dto/response-dto/match-recipe.res.dto");
 const match_recipe_req_dto_1 = require("./dto/request-dto/match-recipe.req.dto");
 const delete_recipe_reaction_res_dto_1 = require("./dto/response-dto/delete-recipe-reaction.res.dto");
+const http_excepotion_filter_1 = require("../../common/exceptions/http-excepotion.filter");
+const check_token_type_dto_1 = require("../../common/dto/check-token-type.dto");
+const user_dto_1 = require("../../common/dto/user.dto");
+const recipe_id_path_req_dto_1 = require("./dto/request-dto/recipe-id-path.req.dto");
+const user_id_path_req_dto_1 = require("../auth/dto/request-dto/user-id-path.req.dto");
 let RecipesController = class RecipesController {
     constructor(recipesService) {
         this.recipesService = recipesService;
     }
-    async create(createRecipeReqDto, user) {
-        return this.recipesService.createRecipe(createRecipeReqDto, user);
+    async create(body, user) {
+        return this.recipesService.createRecipe(body, user);
     }
-    async findOneRecipe(recipeId, reactionUserId) {
-        return this.recipesService.seeRecipe(+recipeId, +reactionUserId);
+    async findOneRecipe(pathParam, query) {
+        return this.recipesService.seeRecipe(pathParam.recipeId, query.userId);
     }
     async update(updateRecipeDto, recipeId) {
         return this.recipesService.updateRecipe(updateRecipeDto, +recipeId);
@@ -54,29 +58,32 @@ let RecipesController = class RecipesController {
 };
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: '레시피 카드 작성' }),
-    (0, swagger_1.ApiQuery)({ name: 'tokenType', required: true }),
+    (0, swagger_1.ApiQuery)({ type: check_token_type_dto_1.CheckTokenTypeReqDto }),
     (0, swagger_1.ApiResponse)({ status: 201, type: create_recipe_res_dto_1.CreateRecipeResDto }),
     (0, swagger_1.ApiUnauthorizedResponse)({ type: http_exception_dto_1.UnauthorizedErrorRes }),
     (0, swagger_1.ApiBadRequestResponse)({ type: http_exception_dto_1.BadRequestErrorRes }),
+    (0, swagger_1.ApiNotFoundResponse)({ type: http_exception_dto_1.NotFoundErrorRes }),
+    (0, swagger_1.ApiInternalServerErrorResponse)({ type: http_exception_dto_1.InternalServerErrorRes }),
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, decorator_dto_1.GetUser)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_recipe_req_dto_1.CreateRecipeReqDto,
-        user_entity_1.User]),
+        user_dto_1.UserDto]),
     __metadata("design:returntype", Promise)
 ], RecipesController.prototype, "create", null);
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: '레시피 카드 조회' }),
-    (0, swagger_1.ApiParam)({ name: 'recipeId', required: true }),
-    (0, swagger_1.ApiQuery)({ name: 'userId', required: true }),
     (0, swagger_1.ApiResponse)({ status: 200, type: see_recipe_res_dto_1.SeeRecipeResDto }),
     (0, swagger_1.ApiBadRequestResponse)({ type: http_exception_dto_1.BadRequestErrorRes }),
+    (0, swagger_1.ApiNotFoundResponse)({ type: http_exception_dto_1.NotFoundErrorRes }),
+    (0, swagger_1.ApiInternalServerErrorResponse)({ type: http_exception_dto_1.InternalServerErrorRes }),
     (0, common_1.Get)(':recipeId'),
-    __param(0, (0, common_1.Param)('recipeId')),
-    __param(1, (0, common_1.Query)('userId')),
+    __param(0, (0, common_1.Param)()),
+    __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:paramtypes", [recipe_id_path_req_dto_1.RecipeIdPathReqDto,
+        user_id_path_req_dto_1.UserIdPathReqDto]),
     __metadata("design:returntype", Promise)
 ], RecipesController.prototype, "findOneRecipe", null);
 __decorate([
@@ -133,7 +140,9 @@ __decorate([
 ], RecipesController.prototype, "updateReaction", null);
 RecipesController = __decorate([
     (0, swagger_1.ApiTags)('Recipe'),
+    (0, swagger_1.ApiBearerAuth)('AccessToken'),
     (0, common_1.Controller)('recipe'),
+    (0, common_1.UseFilters)(http_excepotion_filter_1.HttpExceptionFilter),
     __metadata("design:paramtypes", [recipes_service_1.RecipesService])
 ], RecipesController);
 exports.RecipesController = RecipesController;

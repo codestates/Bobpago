@@ -116,9 +116,4 @@ export class SeeRecipeResDto extends ResponseDto {
     },
   })
   data: any;
-
-  @ApiProperty({
-    example: '레시피 조회가 완료되었습니다.',
-  })
-  message: string;
 }

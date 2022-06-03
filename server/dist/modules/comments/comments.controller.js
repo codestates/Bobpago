@@ -29,6 +29,7 @@ const recipe_id_path_req_dto_1 = require("../recipes/dto/request-dto/recipe-id-p
 const comment_reaction_req_dto_1 = require("./dto/request-dto/comment-reaction.req.dto");
 const http_excepotion_filter_1 = require("../../common/exceptions/http-excepotion.filter");
 const response_dto_1 = require("../../common/dto/response.dto");
+const create_comment_res_dto_1 = require("./dto/response-dto/create-comment-res.dto");
 let CommentsController = class CommentsController {
     constructor(commentsService) {
         this.commentsService = commentsService;
@@ -36,23 +37,23 @@ let CommentsController = class CommentsController {
     async create(body, user) {
         return this.commentsService.create(body.content, body.recipeId, user.getId);
     }
-    async findAll(path) {
-        return this.commentsService.findAll(path.recipeId);
+    async findAll(pathParam) {
+        return this.commentsService.findAll(pathParam.recipeId);
     }
-    async update(path, body) {
+    async update(pathParam, body) {
         return this.commentsService.update(body.commentId, body.content);
     }
-    async delete(path) {
-        return this.commentsService.delete(path.commentId);
+    async delete(pathParam) {
+        return this.commentsService.delete(pathParam.commentId);
     }
-    async updateReaction(user, path, body) {
+    async updateReaction(user, pathParam, body) {
         return this.commentsService.updateReaction(user.getId, body.commentId);
     }
 };
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: '댓글 작성' }),
     (0, swagger_1.ApiQuery)({ type: check_token_type_dto_1.CheckTokenTypeReqDto }),
-    (0, swagger_1.ApiResponse)({ status: 201, type: response_dto_1.GenerateResponseDto }),
+    (0, swagger_1.ApiResponse)({ status: 201, type: create_comment_res_dto_1.CreateCommentResDto }),
     (0, swagger_1.ApiUnauthorizedResponse)({ type: http_exception_dto_1.UnauthorizedErrorRes }),
     (0, swagger_1.ApiBadRequestResponse)({ type: http_exception_dto_1.BadRequestErrorRes }),
     (0, swagger_1.ApiNotFoundResponse)({ type: http_exception_dto_1.NotFoundErrorRes }),

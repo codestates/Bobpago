@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, UseFilters } from '@nestjs/common';
 import { IngredientsService } from './ingredients.service';
 import {
   ApiInternalServerErrorResponse,
@@ -10,9 +10,11 @@ import { SeeAllIngredient } from './dto/see-all-ingredient.dto';
 import { SeeMainIngredient } from './dto/see-main-ingredient.dto';
 import { SeeBasicIngredient } from './dto/see-basic-ingredient.dto';
 import { InternalServerErrorRes } from 'src/common/dto/http-exception.dto';
+import { HttpExceptionFilter } from 'src/common/exceptions/http-excepotion.filter';
 
 @ApiTags('Ingredient')
 @Controller('ingredient')
+@UseFilters(HttpExceptionFilter)
 export class IngredientsController {
   constructor(private readonly ingredientsService: IngredientsService) {}
 

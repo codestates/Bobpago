@@ -8,7 +8,8 @@ import { SeeCommentResDto } from './dto/response-dto/see-comment.res.dto';
 import { CommentReactionResDto } from './dto/response-dto/comment-reaction.res.dto';
 import { errorHandler, statusMessage } from 'src/common/utils';
 import { CommentsDto } from './dto/comments.dto';
-import { GenerateResponseDto, ResponseDto } from 'src/common/dto/response.dto';
+import { CreateCommentResDto } from './dto/response-dto/create-comment-res.dto';
+import { ResponseDto } from 'src/common/dto/response.dto';
 
 @Injectable()
 export class CommentsService {
@@ -23,16 +24,16 @@ export class CommentsService {
     content: string,
     recipeId: number,
     userId: number,
-  ): Promise<GenerateResponseDto> {
+  ): Promise<CreateCommentResDto> {
     try {
       const comment = await this.commentRepository.create({
         content,
         userId,
         recipeId,
       });
-      await this.commentRepository.save(comment);
+      const result = await this.commentRepository.save(comment);
       return {
-        data: null,
+        data: result,
         statusCode: 201,
         message: statusMessage[201],
       };

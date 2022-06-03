@@ -30,6 +30,7 @@ const user_dto_1 = require("../../common/dto/user.dto");
 const response_dto_1 = require("../../common/dto/response.dto");
 const recipe_id_path_req_dto_1 = require("../recipes/dto/request-dto/recipe-id-path.req.dto");
 const create_bookmark_req_dto_1 = require("./dto/request-dto/create-bookmark.req.dto");
+const check_myinfo_res_dto_1 = require("./dto/response-dto/check-myinfo.res.dto");
 let MeController = class MeController {
     constructor(meService) {
         this.meService = meService;
@@ -52,11 +53,11 @@ let MeController = class MeController {
     async checkMyInfo(user, checkInfoUserDto) {
         return this.meService.checkMyInfo(user.getEmail, checkInfoUserDto.password);
     }
-    async addBookmark(path, user, body) {
+    async addBookmark(pathParam, user, body) {
         return this.meService.addBookmark(body.recipeId, user.getId);
     }
-    async deleteBookmark(path) {
-        return this.meService.deleteBookamark(path.recipeId);
+    async deleteBookmark(pathParam) {
+        return this.meService.deleteBookamark(pathParam.recipeId);
     }
 };
 __decorate([
@@ -133,7 +134,7 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: '회원정보수정 자격 확인' }),
     (0, swagger_1.ApiQuery)({ type: check_token_type_dto_1.CheckTokenTypeReqDto }),
-    (0, swagger_1.ApiResponse)({ status: 200, type: response_dto_1.ResponseDto }),
+    (0, swagger_1.ApiResponse)({ status: 200, type: check_myinfo_res_dto_1.CheckMyInfoResDto }),
     (0, swagger_1.ApiUnauthorizedResponse)({ type: http_exception_dto_1.UnauthorizedErrorRes }),
     (0, swagger_1.ApiBadRequestResponse)({ type: http_exception_dto_1.BadRequestErrorRes }),
     (0, swagger_1.ApiNotFoundResponse)({ type: http_exception_dto_1.NotFoundErrorRes }),

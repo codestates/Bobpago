@@ -19,5 +19,4 @@ export declare class User extends Common {
     bookmarks: Bookmark[];
     followees: Follow[];
     followers: Follow[];
-    constructor(id: any);
 }

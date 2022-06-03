@@ -31,17 +31,5 @@ __decorate([
     }),
     __metadata("design:type", Object)
 ], CreateRecipeResDto.prototype, "data", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        example: 201,
-    }),
-    __metadata("design:type", Number)
-], CreateRecipeResDto.prototype, "statusCode", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        example: '레시피 작성이 완료되었습니다.',
-    }),
-    __metadata("design:type", String)
-], CreateRecipeResDto.prototype, "message", void 0);
 exports.CreateRecipeResDto = CreateRecipeResDto;
 //# sourceMappingURL=create-recipe.res.dto.js.map

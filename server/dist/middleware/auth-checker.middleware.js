@@ -27,10 +27,10 @@ let AuthCheckerMiddleware = class AuthCheckerMiddleware {
         this.jwtService = jwtService;
     }
     async use(req, res, next) {
-        const { tokenType } = req.query;
-        const accessToken = req.headers.authorization.split(' ')[1];
-        let result, email;
         try {
+            const { tokenType } = req.query;
+            const accessToken = req.headers.authorization.split(' ')[1];
+            let result, email;
             switch (tokenType) {
                 case 'jwt':
                     result = await this.jwtService.verify(accessToken, {
@@ -68,8 +68,7 @@ let AuthCheckerMiddleware = class AuthCheckerMiddleware {
             const user = await this.usersRepository.findOne({ email });
             if (!user)
                 throw 404;
-            const userDto = new user_dto_1.UserDto(user);
-            req.user = userDto;
+            req.user = new user_dto_1.UserDto(user);
             next();
         }
         catch (err) {

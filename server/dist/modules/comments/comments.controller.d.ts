@@ -7,13 +7,14 @@ import { UserDto } from 'src/common/dto/user.dto';
 import { CommentAndRecipeIdPathReqDto } from './dto/request-dto/comment-recipe-id-path.req.dto';
 import { RecipeIdPathReqDto } from '../recipes/dto/request-dto/recipe-id-path.req.dto';
 import { CommentReactionReqDto } from './dto/request-dto/comment-reaction.req.dto';
-import { GenerateResponseDto, ResponseDto } from 'src/common/dto/response.dto';
+import { ResponseDto } from 'src/common/dto/response.dto';
+import { CreateCommentResDto } from './dto/response-dto/create-comment-res.dto';
 export declare class CommentsController {
     private readonly commentsService;
     constructor(commentsService: CommentsService);
-    create(body: CreateCommentReqDto, user: UserDto): Promise<GenerateResponseDto>;
-    findAll(path: RecipeIdPathReqDto): Promise<SeeCommentResDto>;
-    update(path: CommentAndRecipeIdPathReqDto, body: UpdateCommentReqDto): Promise<ResponseDto>;
-    delete(path: CommentAndRecipeIdPathReqDto): Promise<ResponseDto>;
-    updateReaction(user: UserDto, path: CommentAndRecipeIdPathReqDto, body: CommentReactionReqDto): Promise<CommentReactionResDto>;
+    create(body: CreateCommentReqDto, user: UserDto): Promise<CreateCommentResDto>;
+    findAll(pathParam: RecipeIdPathReqDto): Promise<SeeCommentResDto>;
+    update(pathParam: CommentAndRecipeIdPathReqDto, body: UpdateCommentReqDto): Promise<ResponseDto>;
+    delete(pathParam: CommentAndRecipeIdPathReqDto): Promise<ResponseDto>;
+    updateReaction(user: UserDto, pathParam: CommentAndRecipeIdPathReqDto, body: CommentReactionReqDto): Promise<CommentReactionResDto>;
 }

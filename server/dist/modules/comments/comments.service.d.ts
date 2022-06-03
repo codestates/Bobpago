@@ -4,13 +4,14 @@ import { CommentReaction } from '../../entities/comment-reaction.entity';
 import { ImageService } from '../image/image.service';
 import { SeeCommentResDto } from './dto/response-dto/see-comment.res.dto';
 import { CommentReactionResDto } from './dto/response-dto/comment-reaction.res.dto';
-import { GenerateResponseDto, ResponseDto } from 'src/common/dto/response.dto';
+import { CreateCommentResDto } from './dto/response-dto/create-comment-res.dto';
+import { ResponseDto } from 'src/common/dto/response.dto';
 export declare class CommentsService {
     private commentRepository;
     private commentReactionRepository;
     private readonly imageService;
     constructor(commentRepository: Repository<Comment>, commentReactionRepository: Repository<CommentReaction>, imageService: ImageService);
-    create(content: string, recipeId: number, userId: number): Promise<GenerateResponseDto>;
+    create(content: string, recipeId: number, userId: number): Promise<CreateCommentResDto>;
     findAll(recipeId: number): Promise<SeeCommentResDto>;
     update(commentId: number, content: string): Promise<ResponseDto>;
     delete(commentId: number): Promise<ResponseDto>;

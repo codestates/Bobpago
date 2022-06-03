@@ -4,8 +4,8 @@ import { RecipeImage } from '../../entities/recipe-image.entity';
 import { Recipe } from '../../entities/recipe.entity';
 import { Comment } from '../../entities/comment.entity';
 import { User } from '../../entities/user.entity';
-import { UploadImageResDto } from './dto/upload-image.res.dto';
-import { UpdateImageResDto } from './dto/update-image.res.dto';
+import { UploadImageResDto } from './dto/response-dto/upload-image.res.dto';
+import { UpdateImageResDto } from './dto/response-dto/update-image.res.dto';
 export declare class ImageService {
     private recipeImageRepository;
     private recipeRepository;

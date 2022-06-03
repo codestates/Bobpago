@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.IngredientsService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
+const utils_1 = require("../../common/utils");
 const ingredient_entity_1 = require("../../entities/ingredient.entity");
 const typeorm_2 = require("typeorm");
 let IngredientsService = class IngredientsService {
@@ -26,7 +27,7 @@ let IngredientsService = class IngredientsService {
         return {
             data: ingredients,
             statusCode: 200,
-            message: '모든 재료 조회가 완료되었습니다.',
+            message: utils_1.statusMessage[200],
         };
     }
     async getMainIngredient() {
@@ -34,7 +35,7 @@ let IngredientsService = class IngredientsService {
         return {
             data: ingredients,
             statusCode: 200,
-            message: '모든 주재료 조회가 완료되었습니다.',
+            message: utils_1.statusMessage[200],
         };
     }
     async getBasicIngredient() {
@@ -42,7 +43,7 @@ let IngredientsService = class IngredientsService {
         return {
             data: ingredients,
             statusCode: 200,
-            message: '모든 기본재료 조회가 완료되었습니다.',
+            message: utils_1.statusMessage[200],
         };
     }
 };

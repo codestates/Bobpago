@@ -17,6 +17,7 @@ const see_all_ingredient_dto_1 = require("./dto/see-all-ingredient.dto");
 const see_main_ingredient_dto_1 = require("./dto/see-main-ingredient.dto");
 const see_basic_ingredient_dto_1 = require("./dto/see-basic-ingredient.dto");
 const http_exception_dto_1 = require("../../common/dto/http-exception.dto");
+const http_excepotion_filter_1 = require("../../common/exceptions/http-excepotion.filter");
 let IngredientsController = class IngredientsController {
     constructor(ingredientsService) {
         this.ingredientsService = ingredientsService;
@@ -61,6 +62,7 @@ __decorate([
 IngredientsController = __decorate([
     (0, swagger_1.ApiTags)('Ingredient'),
     (0, common_1.Controller)('ingredient'),
+    (0, common_1.UseFilters)(http_excepotion_filter_1.HttpExceptionFilter),
     __metadata("design:paramtypes", [ingredients_service_1.IngredientsService])
 ], IngredientsController);
 exports.IngredientsController = IngredientsController;

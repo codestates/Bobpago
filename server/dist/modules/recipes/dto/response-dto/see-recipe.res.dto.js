@@ -130,11 +130,5 @@ __decorate([
     }),
     __metadata("design:type", Object)
 ], SeeRecipeResDto.prototype, "data", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        example: '레시피 조회가 완료되었습니다.',
-    }),
-    __metadata("design:type", String)
-], SeeRecipeResDto.prototype, "message", void 0);
 exports.SeeRecipeResDto = SeeRecipeResDto;
 //# sourceMappingURL=see-recipe.res.dto.js.map
