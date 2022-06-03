@@ -189,7 +189,7 @@ export class MeService {
       if (!checkPassword || !user) throw 404;
 
       return {
-        data: null,
+        data: new UserDto(user),
         statusCode: 200,
         message: statusMessage[200],
       };

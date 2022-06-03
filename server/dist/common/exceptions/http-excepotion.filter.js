@@ -16,7 +16,7 @@ let HttpExceptionFilter = class HttpExceptionFilter {
         const request = ctx.getRequest();
         const status = exception.getStatus();
         const error = exception.getResponse();
-        if (typeof error.message === 'string') {
+        if (!error.error) {
             error.error = error.message;
             error.message = utils_1.statusMessage[error.statusCode];
         }

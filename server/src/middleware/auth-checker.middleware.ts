@@ -17,11 +17,11 @@ export class AuthCheckerMiddleware implements NestMiddleware {
   ) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
-    const { tokenType } = req.query;
-    const accessToken = req.headers.authorization.split(' ')[1];
-    let result, email;
-
     try {
+      const { tokenType } = req.query;
+      const accessToken = req.headers.authorization.split(' ')[1];
+      let result, email;
+
       switch (tokenType) {
         // 1. jwt 토큰인 경우
         case 'jwt':
@@ -30,6 +30,7 @@ export class AuthCheckerMiddleware implements NestMiddleware {
           });
           email = result.email;
           break;
+
         // 2. kakao 토큰인 경우
         case 'kakao':
           result = await axios.get('https://kapi.kakao.com/v2/user/me', {
@@ -42,6 +43,7 @@ export class AuthCheckerMiddleware implements NestMiddleware {
           const decoratorIdx = temp.indexOf('@');
           email = temp.slice(0, decoratorIdx + 1) + 'kakao.com';
           break;
+
         // 3. naver 토큰인 경우
         case 'naver':
           result = await axios.get('https://openapi.naver.com/v1/nid/me', {
@@ -65,8 +67,7 @@ export class AuthCheckerMiddleware implements NestMiddleware {
 
       const user = await this.usersRepository.findOne({ email });
       if (!user) throw 404;
-      const userDto = new UserDto(user); // 필요한 필드만 필터
-      req.user = userDto;
+      req.user = new UserDto(user); // 필요한 필드만 필터
       next();
     } catch (err) {
       throw new errorHandler[errorHandler[err] ? err : 401]();

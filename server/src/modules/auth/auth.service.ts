@@ -44,12 +44,6 @@ export class AuthService {
         expiresIn: process.env.REFRESH_TOKEN_EXPIRATION_TIME,
       });
 
-      // const result = await getConnection()
-      //   .createQueryBuilder()
-      //   .update(User)
-      //   .set({ refreshToken })
-      //   .where('id = :id', { id: user.id })
-      //   .execute();
       res.cookie('refreshToken', refreshToken);
       const result = new UserDto(user); // 필요한 필드만 필터
       const accessToken = await this.jwtService.sign(payload); // access 토큰은 생성해서 반환

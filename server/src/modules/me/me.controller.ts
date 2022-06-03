@@ -44,6 +44,7 @@ import { UserDto } from 'src/common/dto/user.dto';
 import { GenerateResponseDto, ResponseDto } from 'src/common/dto/response.dto';
 import { RecipeIdPathReqDto } from '../recipes/dto/request-dto/recipe-id-path.req.dto';
 import { CreateBookmarkReqDto } from './dto/request-dto/create-bookmark.req.dto';
+import { CheckMyInfoResDto } from './dto/response-dto/check-myinfo.res.dto';
 
 @ApiTags('Me')
 @ApiBearerAuth('AccessToken')
@@ -120,7 +121,7 @@ export class MeController {
 
   @ApiOperation({ summary: '회원정보수정 자격 확인' })
   @ApiQuery({ type: CheckTokenTypeReqDto })
-  @ApiResponse({ status: 200, type: ResponseDto })
+  @ApiResponse({ status: 200, type: CheckMyInfoResDto })
   @ApiUnauthorizedResponse({ type: UnauthorizedErrorRes })
   @ApiBadRequestResponse({ type: BadRequestErrorRes })
   @ApiNotFoundResponse({ type: NotFoundErrorRes })
@@ -130,7 +131,7 @@ export class MeController {
   async checkMyInfo(
     @GetUser() user: UserDto,
     @Body() checkInfoUserDto: CheckInfoUserReqDto,
-  ): Promise<ResponseDto> {
+  ): Promise<CheckMyInfoResDto> {
     return this.meService.checkMyInfo(user.getEmail, checkInfoUserDto.password);
   }
 
@@ -144,7 +145,7 @@ export class MeController {
   @ApiInternalServerErrorResponse({ type: InternalServerErrorRes })
   @Post(':recipeId/bookmarks')
   async addBookmark(
-    @Param() path: RecipeIdPathReqDto,
+    @Param() pathParam: RecipeIdPathReqDto,
     @GetUser() user: UserDto,
     @Body() body: CreateBookmarkReqDto,
   ): Promise<ResponseDto> {
@@ -160,8 +161,8 @@ export class MeController {
   @ApiInternalServerErrorResponse({ type: InternalServerErrorRes })
   @Delete(':recipeId/bookmarks')
   async deleteBookmark(
-    @Param() path: RecipeIdPathReqDto,
+    @Param() pathParam: RecipeIdPathReqDto,
   ): Promise<ResponseDto> {
-    return this.meService.deleteBookamark(path.recipeId);
+    return this.meService.deleteBookamark(pathParam.recipeId);
   }
 }

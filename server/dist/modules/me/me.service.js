@@ -170,7 +170,7 @@ let MeService = class MeService {
             if (!checkPassword || !user)
                 throw 404;
             return {
-                data: null,
+                data: new user_dto_1.UserDto(user),
                 statusCode: 200,
                 message: utils_1.statusMessage[200],
             };

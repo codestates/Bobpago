@@ -1,18 +1,16 @@
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { GenerateResponseDto, ResponseDto } from 'src/common/dto/response.dto';
+import { UserDto } from 'src/common/dto/user.dto';
+import { errorHandler, statusMessage } from 'src/common/utils';
 import { Follow } from 'src/entities/follow.entity';
 import { Recipe } from 'src/entities/recipe.entity';
 import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
-import { CreateFollowResDto } from './dto/create-follow-res.dto';
-import { DeleteFollowResDto } from './dto/delete-follow-res.dto';
-import { SeeFolloweeResDto } from './dto/see-followee-res.dto';
-import { SeeFollowerResDto } from './dto/see-follower-res.dto';
-import { SeeOtherUserResDto } from './dto/see-other-user.res.dto';
+import { GetUserInfoDto } from './dto/get-userinfo.dto';
+import { SeeFolloweeResDto } from './dto/response-dto/see-followee-res.dto';
+import { SeeFollowerResDto } from './dto/response-dto/see-follower-res.dto';
+import { SeeOtherUserResDto } from './dto/response-dto/see-other-user.res.dto';
 
 @Injectable()
 export class UsersService {
@@ -25,119 +23,110 @@ export class UsersService {
     private recipeRepository: Repository<Recipe>,
   ) {}
 
-  async getUserInfo(userId: string): Promise<SeeOtherUserResDto> {
-    const user = await this.usersRepository.findOne({
-      where: { id: +userId },
-      relations: ['recipes', 'followees', 'followers'],
-    });
-    const followees = user.followees.length;
-    const followers = user.followers.length;
+  async getUserInfo(userId: number): Promise<SeeOtherUserResDto> {
+    try {
+      const user = await this.usersRepository
+        .createQueryBuilder('user')
+        .leftJoinAndSelect('user.recipes', 'recipes')
+        .leftJoinAndSelect('user.followees', 'followees')
+        .leftJoinAndSelect('user.followers', 'followers')
+        .where('user.id = :id', { id: userId })
+        .getOne();
+      if (!user) throw 404;
 
-    delete user.password;
-    if (user) {
+      const result = new GetUserInfoDto(user);
       return {
-        data: {
-          ...user,
-          followees,
-          followers,
-        },
+        data: result,
         statusCode: 200,
-        message: '유저 정보 조회가 완료되었습니다.',
+        message: statusMessage[200],
       };
-    } else {
-      throw new NotFoundException('존재하지 않는 유저입니다.');
+    } catch (err) {
+      throw new errorHandler[errorHandler[err] ? err : 500]();
     }
   }
 
-  async getFollowers(userId): Promise<SeeFollowerResDto> {
-    const followeeId = +userId;
-    const followers = await this.followRepository.find({
-      where: { followeeId },
-      relations: ['follower'],
-    });
+  async getFollowers(followeeId: number): Promise<SeeFollowerResDto> {
+    try {
+      const followers = await this.followRepository.find({
+        where: { followeeId },
+        relations: ['follower'],
+        select: ['follower'],
+      });
+      if (!followers.length) throw 404;
 
-    const resultData = followers.map(async (el) => {
-      delete (await el.follower).password;
-      return el.follower;
-    });
+      const result = followers.map((el: any) => {
+        return new UserDto(el.__follower__);
+      });
 
-    if (resultData.length) {
       return {
-        data: resultData,
+        data: result,
         statusCode: 200,
-        message: '팔로워 조회가 완료되었습니다.',
+        message: statusMessage[200],
       };
-    } else {
-      throw new NotFoundException('팔로워가 존재하지 않습니다.');
+    } catch (err) {
+      throw new errorHandler[errorHandler[err] ? err : 500]();
     }
   }
 
-  async getFollowees(userId): Promise<SeeFolloweeResDto> {
-    const followerId = +userId;
-    const followees = await this.followRepository.find({
-      where: { followerId },
-      relations: ['followee'],
-    });
+  async getFollowees(followerId: number): Promise<SeeFolloweeResDto> {
+    try {
+      const followees = await this.followRepository.find({
+        where: { followerId },
+        relations: ['followee'],
+        select: ['followee'],
+      });
+      if (!followees.length) throw 404;
 
-    const resultData = followees.map(async (el) => {
-      delete (await el.followee).password;
-      return el.followee;
-    });
+      const result = followees.map((el: any) => {
+        return new UserDto(el.__followee__);
+      });
 
-    if (resultData.length) {
       return {
-        data: resultData,
+        data: result,
         statusCode: 200,
-        message: '팔로이 조회가 완료되었습니다.',
+        message: statusMessage[200],
       };
-    } else {
-      throw new NotFoundException('팔로이가 존재하지 않습니다.');
+    } catch (err) {
+      throw new errorHandler[errorHandler[err] ? err : 500]();
     }
   }
 
   async followUser(
-    follower: User,
-    userId: string,
-  ): Promise<CreateFollowResDto> {
-    const followerId = +follower.id;
-    const followeeId = +userId;
-    if (followerId === followeeId) {
-      throw new ConflictException('스스로를 팔로우 할 수 없습니다.');
-    }
-
-    const follow = this.followRepository.create({
-      followerId,
-      followeeId,
-    });
-
+    followerId: number,
+    followeeId: number,
+  ): Promise<GenerateResponseDto> {
     try {
+      if (followerId === followeeId) throw 409;
+
+      const follow = this.followRepository.create({
+        followerId,
+        followeeId,
+      });
       await this.followRepository.save(follow);
+
       return {
         data: null,
         statusCode: 200,
-        message: '유저 팔로우에 성공하였습니다.',
+        message: statusMessage[200],
       };
     } catch (err) {
-      throw new NotFoundException('팔로우 유저가 존재하지 않습니다.');
+      throw new errorHandler[errorHandler[err] ? err : 500]();
     }
   }
 
   async unFollowUser(
-    follower: User,
-    userId: string,
-  ): Promise<DeleteFollowResDto> {
-    const followerId = +follower.id;
-    const followeeId = +userId;
-    if (followerId === followeeId) {
-      throw new ConflictException('스스로를 언팔로우 할 수 없습니다.');
-    }
+    followerId: number,
+    followeeId: number,
+  ): Promise<ResponseDto> {
+    try {
+      if (followerId === followeeId) throw 409;
 
-    const unFollow = await this.followRepository.findOne({
-      followerId,
-      followeeId,
-    });
+      const unFollow = await this.followRepository.findOne({
+        followerId,
+        followeeId,
+      });
+      if (!unFollow) throw 404;
 
-    if (unFollow) {
       await this.followRepository.delete({
         followerId,
         followeeId,
@@ -145,10 +134,10 @@ export class UsersService {
       return {
         data: null,
         statusCode: 200,
-        message: '유저 언팔로우에 성공하였습니다.',
+        message: statusMessage[200],
       };
-    } else {
-      throw new NotFoundException('언팔로우 유저가 존재하지 않습니다.');
+    } catch (err) {
+      throw new errorHandler[errorHandler[err] ? err : 500]();
     }
   }
 }

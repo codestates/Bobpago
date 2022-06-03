@@ -67,9 +67,4 @@ export class SeeFolloweeResDto extends ResponseDto {
     ],
   })
   data: any;
-
-  @ApiProperty({
-    example: '팔로이 조회가 완료되었습니다.',
-  })
-  message: string;
 }

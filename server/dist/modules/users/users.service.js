@@ -15,10 +15,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
+const response_dto_1 = require("../../common/dto/response.dto");
+const user_dto_1 = require("../../common/dto/user.dto");
+const utils_1 = require("../../common/utils");
 const follow_entity_1 = require("../../entities/follow.entity");
 const recipe_entity_1 = require("../../entities/recipe.entity");
 const user_entity_1 = require("../../entities/user.entity");
 const typeorm_2 = require("typeorm");
+const get_userinfo_dto_1 = require("./dto/get-userinfo.dto");
 let UsersService = class UsersService {
     constructor(usersRepository, followRepository, recipeRepository) {
         this.usersRepository = usersRepository;
@@ -26,100 +30,100 @@ let UsersService = class UsersService {
         this.recipeRepository = recipeRepository;
     }
     async getUserInfo(userId) {
-        const user = await this.usersRepository.findOne({
-            where: { id: +userId },
-            relations: ['recipes', 'followees', 'followers'],
-        });
-        const followees = user.followees.length;
-        const followers = user.followers.length;
-        delete user.password;
-        if (user) {
-            return {
-                data: Object.assign(Object.assign({}, user), { followees,
-                    followers }),
-                statusCode: 200,
-                message: '유저 정보 조회가 완료되었습니다.',
-            };
-        }
-        else {
-            throw new common_1.NotFoundException('존재하지 않는 유저입니다.');
-        }
-    }
-    async getFollowers(userId) {
-        const followeeId = +userId;
-        const followers = await this.followRepository.find({
-            where: { followeeId },
-            relations: ['follower'],
-        });
-        const resultData = followers.map(async (el) => {
-            delete (await el.follower).password;
-            return el.follower;
-        });
-        if (resultData.length) {
-            return {
-                data: resultData,
-                statusCode: 200,
-                message: '팔로워 조회가 완료되었습니다.',
-            };
-        }
-        else {
-            throw new common_1.NotFoundException('팔로워가 존재하지 않습니다.');
-        }
-    }
-    async getFollowees(userId) {
-        const followerId = +userId;
-        const followees = await this.followRepository.find({
-            where: { followerId },
-            relations: ['followee'],
-        });
-        const resultData = followees.map(async (el) => {
-            delete (await el.followee).password;
-            return el.followee;
-        });
-        if (resultData.length) {
-            return {
-                data: resultData,
-                statusCode: 200,
-                message: '팔로이 조회가 완료되었습니다.',
-            };
-        }
-        else {
-            throw new common_1.NotFoundException('팔로이가 존재하지 않습니다.');
-        }
-    }
-    async followUser(follower, userId) {
-        const followerId = +follower.id;
-        const followeeId = +userId;
-        if (followerId === followeeId) {
-            throw new common_1.ConflictException('스스로를 팔로우 할 수 없습니다.');
-        }
-        const follow = this.followRepository.create({
-            followerId,
-            followeeId,
-        });
         try {
+            const user = await this.usersRepository
+                .createQueryBuilder('user')
+                .leftJoinAndSelect('user.recipes', 'recipes')
+                .leftJoinAndSelect('user.followees', 'followees')
+                .leftJoinAndSelect('user.followers', 'followers')
+                .where('user.id = :id', { id: userId })
+                .getOne();
+            if (!user)
+                throw 404;
+            const result = new get_userinfo_dto_1.GetUserInfoDto(user);
+            return {
+                data: result,
+                statusCode: 200,
+                message: utils_1.statusMessage[200],
+            };
+        }
+        catch (err) {
+            throw new utils_1.errorHandler[utils_1.errorHandler[err] ? err : 500]();
+        }
+    }
+    async getFollowers(followeeId) {
+        try {
+            const followers = await this.followRepository.find({
+                where: { followeeId },
+                relations: ['follower'],
+                select: ['follower'],
+            });
+            if (!followers.length)
+                throw 404;
+            const result = followers.map((el) => {
+                return new user_dto_1.UserDto(el.__follower__);
+            });
+            return {
+                data: result,
+                statusCode: 200,
+                message: utils_1.statusMessage[200],
+            };
+        }
+        catch (err) {
+            throw new utils_1.errorHandler[utils_1.errorHandler[err] ? err : 500]();
+        }
+    }
+    async getFollowees(followerId) {
+        try {
+            const followees = await this.followRepository.find({
+                where: { followerId },
+                relations: ['followee'],
+                select: ['followee'],
+            });
+            if (!followees.length)
+                throw 404;
+            const result = followees.map((el) => {
+                return new user_dto_1.UserDto(el.__followee__);
+            });
+            return {
+                data: result,
+                statusCode: 200,
+                message: utils_1.statusMessage[200],
+            };
+        }
+        catch (err) {
+            throw new utils_1.errorHandler[utils_1.errorHandler[err] ? err : 500]();
+        }
+    }
+    async followUser(followerId, followeeId) {
+        try {
+            if (followerId === followeeId)
+                throw 409;
+            const follow = this.followRepository.create({
+                followerId,
+                followeeId,
+            });
             await this.followRepository.save(follow);
             return {
                 data: null,
                 statusCode: 200,
-                message: '유저 팔로우에 성공하였습니다.',
+                message: utils_1.statusMessage[200],
             };
         }
         catch (err) {
-            throw new common_1.NotFoundException('팔로우 유저가 존재하지 않습니다.');
+            throw new utils_1.errorHandler[utils_1.errorHandler[err] ? err : 500]();
         }
     }
-    async unFollowUser(follower, userId) {
-        const followerId = +follower.id;
-        const followeeId = +userId;
-        if (followerId === followeeId) {
-            throw new common_1.ConflictException('스스로를 언팔로우 할 수 없습니다.');
-        }
-        const unFollow = await this.followRepository.findOne({
-            followerId,
-            followeeId,
-        });
-        if (unFollow) {
+    async unFollowUser(followerId, followeeId) {
+        try {
+            if (followerId === followeeId)
+                throw 409;
+            const unFollow = await this.followRepository.findOne({
+                followerId,
+                followeeId,
+            });
+            if (!unFollow)
+                throw 404;
             await this.followRepository.delete({
                 followerId,
                 followeeId,
@@ -127,11 +131,11 @@ let UsersService = class UsersService {
             return {
                 data: null,
                 statusCode: 200,
-                message: '유저 언팔로우에 성공하였습니다.',
+                message: utils_1.statusMessage[200],
             };
         }
-        else {
-            throw new common_1.NotFoundException('언팔로우 유저가 존재하지 않습니다.');
+        catch (err) {
+            throw new utils_1.errorHandler[utils_1.errorHandler[err] ? err : 500]();
         }
     }
 };

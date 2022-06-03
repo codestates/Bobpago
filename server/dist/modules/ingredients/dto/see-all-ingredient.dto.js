@@ -50,11 +50,5 @@ __decorate([
     }),
     __metadata("design:type", Object)
 ], SeeAllIngredient.prototype, "data", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        example: '모든 재료 조회가 완료되었습니다.',
-    }),
-    __metadata("design:type", String)
-], SeeAllIngredient.prototype, "message", void 0);
 exports.SeeAllIngredient = SeeAllIngredient;
 //# sourceMappingURL=see-all-ingredient.dto.js.map

@@ -54,9 +54,4 @@ export class User extends Common {
 
   @OneToMany(() => Follow, (follow) => follow.followee, { lazy: true })
   followers: Follow[];
-
-  constructor(id) {
-    super();
-    this.id = id;
-  }
 }

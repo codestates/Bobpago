@@ -1,7 +1,6 @@
 import { CreateRecipeReqDto } from './dto/request-dto/create-recipe.req.dto';
 import { UpdateRecipeReqDto } from './dto/request-dto/update-recipe.req.dto';
 import { Recipe } from '../../entities/recipe.entity';
-import { User } from '../../entities/user.entity';
 import { Repository } from 'typeorm';
 import { RecipeIngredient } from '../../entities/recipe-ingredient.entity';
 import { RecipeImage } from '../../entities/recipe-image.entity';
@@ -16,6 +15,7 @@ import { CreateRecipeReactionResDto } from './dto/response-dto/create-recipe-rea
 import { SeeRecipeResDto } from './dto/response-dto/see-recipe.res.dto';
 import { MatchRecipeResDto } from './dto/response-dto/match-recipe.res.dto';
 import { MatchRecipeReqDto } from './dto/request-dto/match-recipe.req.dto';
+import { UserDto } from 'src/common/dto/user.dto';
 export declare class RecipesService {
     private recipeRepository;
     private recipeIngredientRepository;
@@ -25,14 +25,14 @@ export declare class RecipesService {
     private readonly imageService;
     private readonly commentsService;
     constructor(recipeRepository: Repository<Recipe>, recipeIngredientRepository: Repository<RecipeIngredient>, recipeImageRepository: Repository<RecipeImage>, recipeReactionRepository: Repository<RecipeReaction>, ingredientRepository: Repository<Ingredient>, imageService: ImageService, commentsService: CommentsService);
-    createRecipe(createRecipeReqDto: CreateRecipeReqDto, user: User): Promise<CreateRecipeResDto>;
-    createRecipeIngredientId(ingredientId: any, recipeId: any): Promise<void>;
-    createRecipeDesc(description: any, recipe: any): Promise<void>;
-    updateRecipe(updateRecipeDto: UpdateRecipeReqDto, recipeId: number): Promise<UpdateRecipeResDto>;
-    updateRecipeIngredientId(ingredientId: any, recipeId: any): Promise<void>;
-    updateRecipeDesc(description: any, recipeId: any): Promise<void>;
-    deleteRecipe(recipeId: number): Promise<DeleteRecipeResDto>;
+    createRecipe(params: CreateRecipeReqDto, user: UserDto): Promise<CreateRecipeResDto>;
     seeRecipe(recipeId: number, reactionUserId: number): Promise<SeeRecipeResDto>;
+    updateRecipe(updateRecipeDto: UpdateRecipeReqDto, recipeId: number): Promise<UpdateRecipeResDto>;
+    deleteRecipe(recipeId: number): Promise<DeleteRecipeResDto>;
     matchRecipes(matchRecipeReqDto: MatchRecipeReqDto): Promise<MatchRecipeResDto>;
     updateReaction(userId: number, recipeId: number): Promise<CreateRecipeReactionResDto>;
+    private createRecipeIngredientId;
+    private createRecipeDesc;
+    private updateRecipeIngredientId;
+    private updateRecipeDesc;
 }

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { statusMessage } from 'src/common/utils';
 import { Ingredient } from 'src/entities/ingredient.entity';
 import { Repository } from 'typeorm';
 import { SeeAllIngredient } from './dto/see-all-ingredient.dto';
@@ -18,7 +19,7 @@ export class IngredientsService {
     return {
       data: ingredients,
       statusCode: 200,
-      message: '모든 재료 조회가 완료되었습니다.',
+      message: statusMessage[200],
     };
   }
 
@@ -27,7 +28,7 @@ export class IngredientsService {
     return {
       data: ingredients,
       statusCode: 200,
-      message: '모든 주재료 조회가 완료되었습니다.',
+      message: statusMessage[200],
     };
   }
 
@@ -36,7 +37,7 @@ export class IngredientsService {
     return {
       data: ingredients,
       statusCode: 200,
-      message: '모든 기본재료 조회가 완료되었습니다.',
+      message: statusMessage[200],
     };
   }
 }

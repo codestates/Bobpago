@@ -35,9 +35,9 @@ let CommentsService = class CommentsService {
                 userId,
                 recipeId,
             });
-            await this.commentRepository.save(comment);
+            const result = await this.commentRepository.save(comment);
             return {
-                data: null,
+                data: result,
                 statusCode: 201,
                 message: utils_1.statusMessage[201],
             };

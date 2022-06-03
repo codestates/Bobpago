@@ -36,9 +36,4 @@ export class SeeBasicIngredient extends ResponseDto {
     required: true,
   })
   data: any;
-
-  @ApiProperty({
-    example: '기본 재료 조회가 완료되었습니다.',
-  })
-  message: string;
 }

@@ -39,6 +39,7 @@ import { RecipeIdPathReqDto } from '../recipes/dto/request-dto/recipe-id-path.re
 import { CommentReactionReqDto } from './dto/request-dto/comment-reaction.req.dto';
 import { HttpExceptionFilter } from 'src/common/exceptions/http-excepotion.filter';
 import { GenerateResponseDto, ResponseDto } from 'src/common/dto/response.dto';
+import { CreateCommentResDto } from './dto/response-dto/create-comment-res.dto';
 
 @ApiTags('Comment')
 @ApiBearerAuth('AccessToken')
@@ -49,7 +50,7 @@ export class CommentsController {
 
   @ApiOperation({ summary: '댓글 작성' })
   @ApiQuery({ type: CheckTokenTypeReqDto })
-  @ApiResponse({ status: 201, type: GenerateResponseDto })
+  @ApiResponse({ status: 201, type: CreateCommentResDto })
   @ApiUnauthorizedResponse({ type: UnauthorizedErrorRes })
   @ApiBadRequestResponse({ type: BadRequestErrorRes })
   @ApiNotFoundResponse({ type: NotFoundErrorRes })
@@ -58,7 +59,7 @@ export class CommentsController {
   async create(
     @Body() body: CreateCommentReqDto,
     @GetUser() user: UserDto,
-  ): Promise<GenerateResponseDto> {
+  ): Promise<CreateCommentResDto> {
     return this.commentsService.create(body.content, body.recipeId, user.getId);
   }
 
@@ -68,8 +69,10 @@ export class CommentsController {
   @ApiNotFoundResponse({ type: NotFoundErrorRes })
   @ApiInternalServerErrorResponse({ type: InternalServerErrorRes })
   @Get(':recipeId/comment')
-  async findAll(@Param() path: RecipeIdPathReqDto): Promise<SeeCommentResDto> {
-    return this.commentsService.findAll(path.recipeId);
+  async findAll(
+    @Param() pathParam: RecipeIdPathReqDto,
+  ): Promise<SeeCommentResDto> {
+    return this.commentsService.findAll(pathParam.recipeId);
   }
 
   @ApiOperation({ summary: '댓글 수정' })
@@ -81,7 +84,7 @@ export class CommentsController {
   @ApiInternalServerErrorResponse({ type: InternalServerErrorRes })
   @Patch(':recipeId/comment/:commentId')
   async update(
-    @Param() path: CommentAndRecipeIdPathReqDto,
+    @Param() pathParam: CommentAndRecipeIdPathReqDto,
     @Body() body: UpdateCommentReqDto,
   ): Promise<ResponseDto> {
     return this.commentsService.update(body.commentId, body.content);
@@ -96,9 +99,9 @@ export class CommentsController {
   @ApiInternalServerErrorResponse({ type: InternalServerErrorRes })
   @Delete(':recipeId/comment/:commentId')
   async delete(
-    @Param() path: CommentAndRecipeIdPathReqDto,
+    @Param() pathParam: CommentAndRecipeIdPathReqDto,
   ): Promise<ResponseDto> {
-    return this.commentsService.delete(path.commentId);
+    return this.commentsService.delete(pathParam.commentId);
   }
 
   @ApiOperation({ summary: '댓글 반응 추가 및 삭제' })
@@ -111,7 +114,7 @@ export class CommentsController {
   @Post(':recipeId/comment/:commentId')
   async updateReaction(
     @GetUser() user: UserDto,
-    @Param() path: CommentAndRecipeIdPathReqDto,
+    @Param() pathParam: CommentAndRecipeIdPathReqDto,
     @Body() body: CommentReactionReqDto,
   ): Promise<CommentReactionResDto> {
     return this.commentsService.updateReaction(user.getId, body.commentId);

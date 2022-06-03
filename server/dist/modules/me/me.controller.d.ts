@@ -9,6 +9,7 @@ import { UserDto } from 'src/common/dto/user.dto';
 import { GenerateResponseDto, ResponseDto } from 'src/common/dto/response.dto';
 import { RecipeIdPathReqDto } from '../recipes/dto/request-dto/recipe-id-path.req.dto';
 import { CreateBookmarkReqDto } from './dto/request-dto/create-bookmark.req.dto';
+import { CheckMyInfoResDto } from './dto/response-dto/check-myinfo.res.dto';
 export declare class MeController {
     private readonly meService;
     constructor(meService: MeService);
@@ -17,7 +18,7 @@ export declare class MeController {
     updateMyAccount(user: UserDto, body: UpdateUserReqDto): Promise<ResponseDto>;
     deleteMyAccount(user: UserDto, accessToken: string, query: CheckTokenTypeReqDto): Promise<ResponseDto>;
     restoreMyAccount(restoreUserDto: RestoreUserReqDto): Promise<ResponseDto>;
-    checkMyInfo(user: UserDto, checkInfoUserDto: CheckInfoUserReqDto): Promise<ResponseDto>;
-    addBookmark(path: RecipeIdPathReqDto, user: UserDto, body: CreateBookmarkReqDto): Promise<ResponseDto>;
-    deleteBookmark(path: RecipeIdPathReqDto): Promise<ResponseDto>;
+    checkMyInfo(user: UserDto, checkInfoUserDto: CheckInfoUserReqDto): Promise<CheckMyInfoResDto>;
+    addBookmark(pathParam: RecipeIdPathReqDto, user: UserDto, body: CreateBookmarkReqDto): Promise<ResponseDto>;
+    deleteBookmark(pathParam: RecipeIdPathReqDto): Promise<ResponseDto>;
 }

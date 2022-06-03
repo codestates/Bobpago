@@ -18,6 +18,8 @@ import { CreateRecipeReactionResDto } from './dto/response-dto/create-recipe-rea
 import { SeeRecipeResDto } from './dto/response-dto/see-recipe.res.dto';
 import { MatchRecipeResDto } from './dto/response-dto/match-recipe.res.dto';
 import { MatchRecipeReqDto } from './dto/request-dto/match-recipe.req.dto';
+import { errorHandler, statusMessage } from 'src/common/utils';
+import { UserDto } from 'src/common/dto/user.dto';
 
 @Injectable()
 export class RecipesService {
@@ -37,14 +39,13 @@ export class RecipesService {
   ) {}
 
   async createRecipe(
-    createRecipeReqDto: CreateRecipeReqDto,
-    user: User,
+    params: CreateRecipeReqDto,
+    user: UserDto,
   ): Promise<CreateRecipeResDto> {
-    const { title, amount, level, estTime, description, ingredientId } =
-      createRecipeReqDto;
+    const { title, amount, level, estTime, description, ingredientId } = params;
     // 레시피 저장
     const newRecipe = await this.recipeRepository.create({
-      userId: user.id,
+      userId: user.getId,
       title,
       amount,
       level,
@@ -62,110 +63,10 @@ export class RecipesService {
       return {
         data: { recipe },
         statusCode: 201,
-        message: '레시피 작성이 완료되었습니다.',
+        message: statusMessage[201],
       };
-    } catch (e) {
-      throw new BadRequestException('레시피 작성에 실패하였습니다.');
-    }
-  }
-
-  async createRecipeIngredientId(ingredientId, recipeId) {
-    const recipeIngredientId = ingredientId.map((id) => {
-      return { ingredientId: id, recipeId };
-    });
-    const entities = await this.recipeIngredientRepository.create(
-      recipeIngredientId,
-    );
-    await this.recipeIngredientRepository.save(entities);
-  }
-
-  async createRecipeDesc(description, recipe) {
-    const recipeDesc = description.map((desc) => {
-      return { recipeId: recipe.id, description: desc };
-    });
-    const desc = await this.recipeImageRepository.create(recipeDesc);
-    await this.recipeImageRepository.save(desc);
-  }
-
-  async updateRecipe(
-    updateRecipeDto: UpdateRecipeReqDto,
-    recipeId: number,
-  ): Promise<UpdateRecipeResDto> {
-    const { title, level, amount, estTime, ingredientId, description } =
-      updateRecipeDto;
-
-    const targetRecipe = await this.recipeRepository.findOne({ id: recipeId });
-
-    try {
-      // 레시피 테이블 수정
-      await this.recipeRepository.update(recipeId, {
-        title: title || targetRecipe.title,
-        level: level || targetRecipe.level,
-        amount: amount || targetRecipe.amount,
-        estTime: estTime || targetRecipe.estTime,
-      });
-
-      // 레시피 id에 따른 recipeIngredient 테이블의 재료 id 수정
-      await this.updateRecipeIngredientId(ingredientId, recipeId);
-
-      // 레시피 id에 따른 recipeImage 테이블의 description 수정
-      await this.updateRecipeDesc(description, recipeId);
-
-      return {
-        data: { recipeId },
-        statusCode: 200,
-        message: '레시피 수정이 완료되었습니다.',
-      };
-    } catch (e) {
-      throw new BadRequestException('레시피 수정에 실패하였습니다.');
-    }
-  }
-
-  async updateRecipeIngredientId(ingredientId, recipeId) {
-    const ingredients = await this.recipeIngredientRepository.find({
-      where: { recipeId },
-    });
-    // 기존에 갖고있던 재료 길이와 수정된 재료의 길이가 일치 하지 않는 경우
-    if (ingredients.length !== ingredientId.length) {
-      // 테이블에 있던 기존 데이터는 삭제한다
-      await this.recipeIngredientRepository.delete({ recipeId });
-
-      // 새롭게 재료 id를 레시피 id 기준으로 추가해준다
-      await this.createRecipeIngredientId(ingredientId, recipeId);
-    } else {
-      for (let i = 0; i < ingredients.length; i++) {
-        ingredients[i].ingredientId = ingredientId[i];
-      }
-      await this.recipeIngredientRepository.save(ingredients);
-    }
-  }
-
-  async updateRecipeDesc(description, recipeId) {
-    const descs = await this.recipeImageRepository.find({ recipeId });
-    for (let i = 0; i < description.length; i++) {
-      descs[i].description = description[i];
-    }
-    await this.recipeImageRepository.save(descs);
-  }
-
-  async deleteRecipe(recipeId: number): Promise<DeleteRecipeResDto> {
-    try {
-      // 1. AWS S3에서 이미지 객체 삭제
-      await this.imageService.deleteById(recipeId, 'recipe');
-
-      // 2. 댓글 S3 이미지 삭제
-      await this.imageService.deleteComments(recipeId);
-
-      // 3. 레시피 테이블에서 삭제
-      await this.recipeRepository.delete({ id: recipeId });
-
-      return {
-        data: null,
-        statusCode: 200,
-        message: '레시피 삭제가 완료되었습니다.',
-      };
-    } catch (e) {
-      throw new BadRequestException('레시피 삭제에 실패하였습니다.');
+    } catch (err) {
+      throw new errorHandler[errorHandler[err] ? err : 500]();
     }
   }
 
@@ -174,10 +75,17 @@ export class RecipesService {
     reactionUserId: number,
   ): Promise<SeeRecipeResDto> {
     try {
-      const recipeData = await this.recipeRepository.findOne({
-        relations: ['user', 'recipeImages', 'recipeReactions'],
-        where: { id: recipeId },
-      });
+      const recipeData = await this.recipeRepository
+        .createQueryBuilder('recipe')
+        .leftJoinAndSelect('recipe.user', 'user')
+        .leftJoinAndSelect('recipe.recipeImages', 'recipeImages')
+        .leftJoinAndSelect('recipe.recipeReactions', 'recipeReactions')
+        .where('recipe.id = :id', { id: recipeId })
+        .getOne();
+
+      if (!recipeData) throw 404;
+
+      console.log(recipeData);
 
       const { user, userId, recipeImages, recipeReactions, ...recipe } =
         recipeData;
@@ -231,10 +139,65 @@ export class RecipesService {
       return {
         data: result,
         statusCode: 200,
-        message: '레시피 조회가 완료되었습니다.',
+        message: statusMessage[200],
       };
     } catch (err) {
-      throw new BadRequestException('레시피 조회에 실패하였습니다.');
+      throw new errorHandler[errorHandler[err] ? err : 500]();
+    }
+  }
+
+  async updateRecipe(
+    updateRecipeDto: UpdateRecipeReqDto,
+    recipeId: number,
+  ): Promise<UpdateRecipeResDto> {
+    const { title, level, amount, estTime, ingredientId, description } =
+      updateRecipeDto;
+
+    const targetRecipe = await this.recipeRepository.findOne({ id: recipeId });
+
+    try {
+      // 레시피 테이블 수정
+      await this.recipeRepository.update(recipeId, {
+        title: title || targetRecipe.title,
+        level: level || targetRecipe.level,
+        amount: amount || targetRecipe.amount,
+        estTime: estTime || targetRecipe.estTime,
+      });
+
+      // 레시피 id에 따른 recipeIngredient 테이블의 재료 id 수정
+      await this.updateRecipeIngredientId(ingredientId, recipeId);
+
+      // 레시피 id에 따른 recipeImage 테이블의 description 수정
+      await this.updateRecipeDesc(description, recipeId);
+
+      return {
+        data: { recipeId },
+        statusCode: 200,
+        message: '레시피 수정이 완료되었습니다.',
+      };
+    } catch (e) {
+      throw new BadRequestException('레시피 수정에 실패하였습니다.');
+    }
+  }
+
+  async deleteRecipe(recipeId: number): Promise<DeleteRecipeResDto> {
+    try {
+      // 1. AWS S3에서 이미지 객체 삭제
+      await this.imageService.deleteById(recipeId, 'recipe');
+
+      // 2. 댓글 S3 이미지 삭제
+      await this.imageService.deleteComments(recipeId);
+
+      // 3. 레시피 테이블에서 삭제
+      await this.recipeRepository.delete({ id: recipeId });
+
+      return {
+        data: null,
+        statusCode: 200,
+        message: '레시피 삭제가 완료되었습니다.',
+      };
+    } catch (e) {
+      throw new BadRequestException('레시피 삭제에 실패하였습니다.');
     }
   }
 
@@ -392,5 +355,51 @@ export class RecipesService {
     } else {
       throw new BadRequestException('레시피 업데이트에 실패하였습니다.');
     }
+  }
+
+  // 아래는 해당 서비스에서만 쓰이는 private 함수들
+  private async createRecipeIngredientId(ingredientId, recipeId) {
+    const recipeIngredientId = ingredientId.map((id) => {
+      return { ingredientId: id, recipeId };
+    });
+    const entities = await this.recipeIngredientRepository.create(
+      recipeIngredientId,
+    );
+    await this.recipeIngredientRepository.save(entities);
+  }
+
+  private async createRecipeDesc(description, recipe) {
+    const recipeDesc = description.map((desc) => {
+      return { recipeId: recipe.id, description: desc };
+    });
+    const desc = await this.recipeImageRepository.create(recipeDesc);
+    await this.recipeImageRepository.save(desc);
+  }
+
+  private async updateRecipeIngredientId(ingredientId, recipeId) {
+    const ingredients = await this.recipeIngredientRepository.find({
+      where: { recipeId },
+    });
+    // 기존에 갖고있던 재료 길이와 수정된 재료의 길이가 일치 하지 않는 경우
+    if (ingredients.length !== ingredientId.length) {
+      // 테이블에 있던 기존 데이터는 삭제한다
+      await this.recipeIngredientRepository.delete({ recipeId });
+
+      // 새롭게 재료 id를 레시피 id 기준으로 추가해준다
+      await this.createRecipeIngredientId(ingredientId, recipeId);
+    } else {
+      for (let i = 0; i < ingredients.length; i++) {
+        ingredients[i].ingredientId = ingredientId[i];
+      }
+      await this.recipeIngredientRepository.save(ingredients);
+    }
+  }
+
+  private async updateRecipeDesc(description, recipeId) {
+    const descs = await this.recipeImageRepository.find({ recipeId });
+    for (let i = 0; i < description.length; i++) {
+      descs[i].description = description[i];
+    }
+    await this.recipeImageRepository.save(descs);
   }
 }

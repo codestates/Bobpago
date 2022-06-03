@@ -17,14 +17,4 @@ export class CreateRecipeResDto extends ResponseDto {
     },
   })
   data: any;
-
-  @ApiProperty({
-    example: 201,
-  })
-  statusCode: number;
-
-  @ApiProperty({
-    example: '레시피 작성이 완료되었습니다.',
-  })
-  message: string;
 }
