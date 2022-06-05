@@ -1,36 +1,24 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsNumber, IsString } from 'class-validator';
+import { IsArray, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateRecipeReqDto {
-  @ApiProperty({
-    example: '밥파고 김치볶음밥',
-    description: '레시피 제목',
-    required: true,
-  })
+  @ApiProperty({ example: '밥파고 김치볶음밥' })
+  @IsNotEmpty()
   @IsString()
   readonly title: string;
 
-  @ApiProperty({
-    example: 2,
-    description: '레시피 난이도',
-    required: true,
-  })
+  @ApiProperty({ example: 2 })
+  @IsNotEmpty()
   @IsNumber()
   readonly level: number;
 
-  @ApiProperty({
-    example: 4,
-    description: '레시피 양',
-    required: true,
-  })
+  @ApiProperty({ example: 4 })
+  @IsNotEmpty()
   @IsNumber()
   readonly amount: number;
 
-  @ApiProperty({
-    example: 30,
-    description: '레시피 소요시간',
-    required: true,
-  })
+  @ApiProperty({ example: 30 })
+  @IsNotEmpty()
   @IsNumber()
   readonly estTime: number;
 
@@ -47,17 +35,13 @@ export class CreateRecipeReqDto {
       '중불 이하로 팬을 달구고 계란물을 둘러줍니다. (계란물이 많아 잘 익지 않을 것 같다면 뚜껑을 덮어서 익혀줍니다. 완전히 익히는 것보다 살짝 덜 익혀주는 걸 추천드립니다.)',
       '완성된 김치볶음밥',
     ],
-    description: '레시피 설명',
-    required: true,
   })
+  @IsNotEmpty()
   @IsArray()
   readonly description: string[];
 
-  @ApiProperty({
-    example: [2, 8, 4, 1, 107, 114, 100, 112, 116, 102],
-    description: '재료 id',
-    required: true,
-  })
+  @ApiProperty({ example: [2, 8, 4, 1, 107, 114, 100, 112, 116, 102] })
+  @IsNotEmpty()
   @IsArray()
   readonly ingredientId: number[];
 }

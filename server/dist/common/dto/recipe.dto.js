@@ -14,6 +14,9 @@ class RecipeDto {
         this.createdAt = entity.createdAt;
         this.updatedAt = entity.updatedAt;
     }
+    addViews() {
+        this.views = ++this.views;
+    }
 }
 exports.RecipeDto = RecipeDto;
 //# sourceMappingURL=recipe.dto.js.map

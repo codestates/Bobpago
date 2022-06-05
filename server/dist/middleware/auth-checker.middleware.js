@@ -19,7 +19,7 @@ const typeorm_1 = require("@nestjs/typeorm");
 const axios_1 = require("axios");
 const utils_1 = require("../common/utils");
 const user_entity_1 = require("../entities/user.entity");
-const user_dto_1 = require("../common/dto/user.dto");
+const user_dto_1 = require("../modules/users/dto/user.dto");
 const typeorm_2 = require("typeorm");
 let AuthCheckerMiddleware = class AuthCheckerMiddleware {
     constructor(usersRepository, jwtService) {

@@ -12,7 +12,7 @@ import { CheckGoogleResDto } from './dto/response-dto/check-google.res.dto';
 import { CheckNaverResDto } from './dto/response-dto/check-naver.res.dto';
 import { CheckKakaoResDto } from './dto/response-dto/check-kakao.res.dto';
 import { errorHandler, formUrlEncoded, statusMessage } from 'src/common/utils';
-import { UserDto } from '../../common/dto/user.dto';
+import { UserDto } from '../users/dto/user.dto';
 import { Request, Response } from 'express';
 import { ResponseDto } from 'src/common/dto/response.dto';
 

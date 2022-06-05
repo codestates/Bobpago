@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GenerateResponseDto, ResponseDto } from 'src/common/dto/response.dto';
-import { UserDto } from 'src/common/dto/user.dto';
+import { UserDto } from 'src/modules/users/dto/user.dto';
 import { errorHandler, statusMessage } from 'src/common/utils';
 import { Follow } from 'src/entities/follow.entity';
 import { Recipe } from 'src/entities/recipe.entity';

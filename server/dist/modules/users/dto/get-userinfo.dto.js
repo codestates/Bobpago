@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetUserInfoDto = void 0;
-const recipe_dto_1 = require("../../../common/dto/recipe.dto");
-const user_dto_1 = require("../../../common/dto/user.dto");
+const user_dto_1 = require("./user.dto");
 const user_entity_1 = require("../../../entities/user.entity");
 const recipe_entity_1 = require("../../../entities/recipe.entity");
+const recipe_dto_1 = require("../../recipes/dto/recipe.dto");
 class GetUserInfoDto extends user_dto_1.UserDto {
     constructor(entity) {
         super(entity);

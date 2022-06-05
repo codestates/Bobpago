@@ -1,7 +1,7 @@
-import { RecipeDto } from 'src/common/dto/recipe.dto';
-import { UserDto } from 'src/common/dto/user.dto';
+import { UserDto } from 'src/modules/users/dto/user.dto';
 import { User } from 'src/entities/user.entity';
 import { Recipe } from 'src/entities/recipe.entity';
+import { RecipeDto } from 'src/modules/recipes/dto/recipe.dto';
 
 export class GetUserInfoDto extends UserDto {
   private recipes: RecipeDto[];

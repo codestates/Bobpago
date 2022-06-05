@@ -32,13 +32,13 @@ import { CreateCommentReqDto } from './dto/request-dto/create-comment.req.dto';
 import { UpdateCommentReqDto } from './dto/request-dto/update-comment.req.dto';
 import { SeeCommentResDto } from './dto/response-dto/see-comment.res.dto';
 import { CommentReactionResDto } from './dto/response-dto/comment-reaction.res.dto';
-import { UserDto } from 'src/common/dto/user.dto';
+import { UserDto } from 'src/modules/users/dto/user.dto';
 import { CheckTokenTypeReqDto } from 'src/common/dto/check-token-type.dto';
 import { CommentAndRecipeIdPathReqDto } from './dto/request-dto/comment-recipe-id-path.req.dto';
 import { RecipeIdPathReqDto } from '../recipes/dto/request-dto/recipe-id-path.req.dto';
 import { CommentReactionReqDto } from './dto/request-dto/comment-reaction.req.dto';
 import { HttpExceptionFilter } from 'src/common/exceptions/http-excepotion.filter';
-import { GenerateResponseDto, ResponseDto } from 'src/common/dto/response.dto';
+import { ResponseDto } from 'src/common/dto/response.dto';
 import { CreateCommentResDto } from './dto/response-dto/create-comment-res.dto';
 
 @ApiTags('Comment')

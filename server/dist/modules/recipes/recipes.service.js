@@ -11,20 +11,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RecipesService = void 0;
 const common_1 = require("@nestjs/common");
+const update_recipe_req_dto_1 = require("./dto/request-dto/update-recipe.req.dto");
 const recipe_entity_1 = require("../../entities/recipe.entity");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
@@ -32,19 +22,22 @@ const recipe_ingredient_entity_1 = require("../../entities/recipe-ingredient.ent
 const recipe_image_entity_1 = require("../../entities/recipe-image.entity");
 const recipe_reaction_entity_1 = require("../../entities/recipe-reaction.entity");
 const image_service_1 = require("../image/image.service");
-const comments_service_1 = require("../comments/comments.service");
-const ingredient_entity_1 = require("../../entities/ingredient.entity");
 const utils_1 = require("../../common/utils");
-const user_dto_1 = require("../../common/dto/user.dto");
+const user_dto_1 = require("../users/dto/user.dto");
+const get_recipe_dto_1 = require("./dto/get-recipe.dto");
+const typeorm_transactional_cls_hooked_1 = require("typeorm-transactional-cls-hooked");
+const response_dto_1 = require("../../common/dto/response.dto");
+const recipe_image_dto_1 = require("./dto/recipe-image.dto");
+const get_recipe_match_dto_1 = require("./dto/get-recipe-match.dto");
+const recipe_ingredient_dto_1 = require("./dto/recipe-ingredient.dto");
+const recipe_reaction_dto_1 = require("./dto/recipe-reaction.dto");
 let RecipesService = class RecipesService {
-    constructor(recipeRepository, recipeIngredientRepository, recipeImageRepository, recipeReactionRepository, ingredientRepository, imageService, commentsService) {
+    constructor(recipeRepository, recipeIngredientRepository, recipeImageRepository, recipeReactionRepository, imageService) {
         this.recipeRepository = recipeRepository;
         this.recipeIngredientRepository = recipeIngredientRepository;
         this.recipeImageRepository = recipeImageRepository;
         this.recipeReactionRepository = recipeReactionRepository;
-        this.ingredientRepository = ingredientRepository;
         this.imageService = imageService;
-        this.commentsService = commentsService;
     }
     async createRecipe(params, user) {
         const { title, amount, level, estTime, description, ingredientId } = params;
@@ -76,47 +69,20 @@ let RecipesService = class RecipesService {
                 .leftJoinAndSelect('recipe.user', 'user')
                 .leftJoinAndSelect('recipe.recipeImages', 'recipeImages')
                 .leftJoinAndSelect('recipe.recipeReactions', 'recipeReactions')
+                .leftJoinAndSelect('recipe.recipeIngredients', 'recipeIngredients')
+                .leftJoinAndSelect('recipeIngredients.ingredient', 'ingredients')
                 .where('recipe.id = :id', { id: recipeId })
                 .getOne();
             if (!recipeData)
                 throw 404;
-            console.log(recipeData);
-            const { user, userId, recipeImages, recipeReactions } = recipeData, recipe = __rest(recipeData, ["user", "userId", "recipeImages", "recipeReactions"]);
+            const { __recipeImages__, __recipeIngredients__, __recipeReactions__, } = recipeData;
+            const recipeIngredient = new recipe_ingredient_dto_1.RecipeIngredientDto(__recipeIngredients__);
+            const recipeReaction = new recipe_reaction_dto_1.RecipeReactionDto(__recipeReactions__, reactionUserId);
+            const recipeImage = new recipe_image_dto_1.RecipeImageDto(__recipeImages__);
+            const result = new get_recipe_dto_1.GetRecipeDto(recipeData, recipeIngredient.getIngredients, recipeReaction.getCount, recipeReaction.getState, recipeImage.getImageUrls, recipeImage.getDescriptions);
             await this.recipeRepository.update(recipeId, {
-                views: recipe.views + 1,
+                views: recipeData.views + 1,
             });
-            const [imageUrls, descriptions] = [[], []];
-            recipeImages.forEach((el) => {
-                imageUrls.push(el.imageUrl);
-                descriptions.push(el.description);
-            });
-            const recipeIngredients = await this.recipeIngredientRepository.find({
-                relations: ['ingredient'],
-                where: { recipeId },
-            });
-            const ingredients = recipeIngredients.map((el) => {
-                return el.ingredient;
-            });
-            const reactionData = await this.recipeReactionRepository.findOne({
-                recipeId,
-                userId: reactionUserId,
-            });
-            let reactionState;
-            if (reactionData) {
-                reactionState = 1;
-            }
-            else {
-                reactionState = 0;
-            }
-            const result = {
-                user: { id: user.id, nickname: user.nickname },
-                recipe: Object.assign(Object.assign({}, recipe), { imageUrls,
-                    descriptions, recipe_reaction_state: reactionState, recipe_reaciton_count: recipeReactions.length, bookmark_state: false }),
-                ingredients: {
-                    main: ingredients.filter((el) => el.type === 'main'),
-                    sub: ingredients.filter((el) => el.type === 'sub'),
-                },
-            };
             return {
                 data: result,
                 statusCode: 200,
@@ -127,10 +93,14 @@ let RecipesService = class RecipesService {
             throw new utils_1.errorHandler[utils_1.errorHandler[err] ? err : 500]();
         }
     }
-    async updateRecipe(updateRecipeDto, recipeId) {
-        const { title, level, amount, estTime, ingredientId, description } = updateRecipeDto;
-        const targetRecipe = await this.recipeRepository.findOne({ id: recipeId });
+    async updateRecipe(params) {
+        const { recipeId, title, level, amount, estTime, ingredientId, description, } = params;
         try {
+            const targetRecipe = await this.recipeRepository.findOne({
+                id: recipeId,
+            });
+            if (!targetRecipe)
+                throw 404;
             await this.recipeRepository.update(recipeId, {
                 title: title || targetRecipe.title,
                 level: level || targetRecipe.level,
@@ -140,13 +110,13 @@ let RecipesService = class RecipesService {
             await this.updateRecipeIngredientId(ingredientId, recipeId);
             await this.updateRecipeDesc(description, recipeId);
             return {
-                data: { recipeId },
+                data: null,
                 statusCode: 200,
-                message: '레시피 수정이 완료되었습니다.',
+                message: utils_1.statusMessage[200],
             };
         }
-        catch (e) {
-            throw new common_1.BadRequestException('레시피 수정에 실패하였습니다.');
+        catch (err) {
+            throw new utils_1.errorHandler[utils_1.errorHandler[err] ? err : 500]();
         }
     }
     async deleteRecipe(recipeId) {
@@ -157,125 +127,76 @@ let RecipesService = class RecipesService {
             return {
                 data: null,
                 statusCode: 200,
-                message: '레시피 삭제가 완료되었습니다.',
-            };
-        }
-        catch (e) {
-            throw new common_1.BadRequestException('레시피 삭제에 실패하였습니다.');
-        }
-    }
-    async matchRecipes(matchRecipeReqDto) {
-        try {
-            const ingredientsInfo = await this.ingredientRepository.find({
-                where: matchRecipeReqDto.ingredientId.map((id) => {
-                    return { id };
-                }),
-            });
-            const mainIngredients = ingredientsInfo.filter((el) => el.type === 'main');
-            const recipeIngredients = await this.recipeIngredientRepository.find({
-                relations: ['recipe'],
-                where: mainIngredients.map((el) => {
-                    return { ingredientId: el.id };
-                }),
-            });
-            const recipeInfo = {};
-            recipeIngredients.forEach((el) => {
-                const recipeId = el.recipeId;
-                const views = el.recipe.views;
-                if (recipeInfo[recipeId] === undefined) {
-                    recipeInfo[recipeId] = [1, views];
-                }
-                else {
-                    ++recipeInfo[recipeId][0];
-                }
-            });
-            const recipe_DESC = Object.entries(recipeInfo)
-                .map((el) => [+el[0], el[1][0], el[1][1]])
-                .sort((a, b) => {
-                if (b[1] > a[1]) {
-                    return 1;
-                }
-                else if (b[1] < a[1]) {
-                    return -1;
-                }
-                else if (b[1] === a[1]) {
-                    return b[2] - a[2];
-                }
-            })
-                .map((el) => {
-                return { id: el[0] };
-            });
-            const recipeData = await this.recipeRepository.find({
-                relations: ['user', 'recipeReactions'],
-                where: recipe_DESC,
-            });
-            const recipeIngredientData = await this.recipeIngredientRepository.find({
-                relations: ['ingredient'],
-                where: recipe_DESC.map((el) => {
-                    return { recipeId: el.id };
-                }),
-            });
-            const ingredientInfo = {};
-            recipeIngredientData.forEach((el) => {
-                if (ingredientInfo[el.recipeId] === undefined) {
-                    ingredientInfo[el.recipeId] = [el.ingredient];
-                }
-                else {
-                    ingredientInfo[el.recipeId].push(el.ingredient);
-                }
-            });
-            const result = recipeData.map((el) => {
-                const temp = {
-                    id: el.user ? el.user.id : 0,
-                    nickname: el.user ? el.user.nickname : '탈퇴한 회원',
-                };
-                const reactions = el.recipeReactions;
-                delete el.userId;
-                delete el.user;
-                delete el.recipeReactions;
-                return {
-                    user: Object.assign({}, temp),
-                    recipe: Object.assign(Object.assign({}, el), { recipe_reaciton_count: reactions.length, bookmark_state: false }),
-                    ingredients: {
-                        main: ingredientInfo[el.id].filter((ele) => ele.type === 'main'),
-                        sub: ingredientInfo[el.id].filter((ele) => ele.type === 'sub'),
-                    },
-                };
-            });
-            const resultSort = [];
-            recipe_DESC.forEach((el) => {
-                const recipe = result.find((recipe) => el.id === recipe.recipe.id);
-                resultSort.push(recipe);
-            });
-            return {
-                data: resultSort.filter((el, idx) => idx < 20),
-                statusCode: 200,
-                message: '레시피 매칭이 완료되었습니다.',
+                message: utils_1.statusMessage[200],
             };
         }
         catch (err) {
-            throw new common_1.BadRequestException('레시피 매칭에 실패하였습니다.');
+            throw new utils_1.errorHandler[utils_1.errorHandler[err] ? err : 500]();
+        }
+    }
+    async matchRecipes(ingredientIds) {
+        try {
+            const recipeIngredients = await this.recipeIngredientRepository
+                .createQueryBuilder('recipeIngredients')
+                .leftJoinAndSelect('recipeIngredients.recipe', 'recipe')
+                .leftJoinAndSelect('recipe.user', 'user')
+                .addSelect('COUNT(recipeIngredients.recipeId)', 'recipeIdCount')
+                .groupBy('recipeIngredients.recipeId')
+                .orderBy('recipeIdCount', 'DESC')
+                .addOrderBy('recipe.views', 'DESC')
+                .limit(20)
+                .orWhere(ingredientIds
+                .filter((el) => el < 100)
+                .map((el) => {
+                return { ingredientId: el };
+            }))
+                .getMany();
+            const recipes = await this.recipeRepository
+                .createQueryBuilder('recipe')
+                .leftJoinAndSelect('recipe.recipeIngredients', 'recipeIngredients')
+                .leftJoinAndSelect('recipe.recipeReactions', 'recipeReactions')
+                .leftJoinAndSelect('recipeIngredients.ingredient', 'ingredient')
+                .orWhere(recipeIngredients.map((el) => {
+                return { id: el.recipeId };
+            }))
+                .getMany();
+            const recipeConcatData = recipeIngredients.map((el) => {
+                const idx = recipes.findIndex((el2) => el.recipeId === el2.id);
+                const temp = recipes.splice(idx, 1);
+                el.recipeIngredients = temp[0].__recipeIngredients__;
+                el.recipeReactions = temp[0].__recipeReactions__;
+                return el;
+            });
+            const result = new get_recipe_match_dto_1.GetRecipeMatchDto(recipeConcatData);
+            return {
+                data: result.getRecipes,
+                statusCode: 200,
+                message: utils_1.statusMessage[200],
+            };
+        }
+        catch (err) {
+            throw new utils_1.errorHandler[utils_1.errorHandler[err] ? err : 500]();
         }
     }
     async updateReaction(userId, recipeId) {
-        const reactionData = await this.recipeReactionRepository.findOne({
-            recipeId,
-            userId,
-        });
-        if (!reactionData) {
-            await this.recipeReactionRepository.save({
-                userId,
+        try {
+            const reactionData = await this.recipeReactionRepository.findOne({
                 recipeId,
+                userId,
             });
-            return {
-                data: {
-                    reaction_state: 1,
-                },
-                statusCode: 200,
-                message: '레시피 좋아요가 추가되었습니다.',
-            };
-        }
-        else if (reactionData) {
+            if (!reactionData) {
+                await this.recipeReactionRepository.save({
+                    userId,
+                    recipeId,
+                });
+                return {
+                    data: {
+                        reaction_state: 1,
+                    },
+                    statusCode: 200,
+                    message: utils_1.statusMessage[200],
+                };
+            }
             await this.recipeReactionRepository.delete({
                 userId,
                 recipeId,
@@ -285,15 +206,15 @@ let RecipesService = class RecipesService {
                     reaction_state: 0,
                 },
                 statusCode: 200,
-                message: '레시피 좋아요가 삭제되었습니다.',
+                message: utils_1.statusMessage[200],
             };
         }
-        else {
-            throw new common_1.BadRequestException('레시피 업데이트에 실패하였습니다.');
+        catch (err) {
+            throw new utils_1.errorHandler[utils_1.errorHandler[err] ? err : 500]();
         }
     }
-    async createRecipeIngredientId(ingredientId, recipeId) {
-        const recipeIngredientId = ingredientId.map((id) => {
+    async createRecipeIngredientId(ingredientIds, recipeId) {
+        const recipeIngredientId = ingredientIds.map((id) => {
             return { ingredientId: id, recipeId };
         });
         const entities = await this.recipeIngredientRepository.create(recipeIngredientId);
@@ -306,17 +227,17 @@ let RecipesService = class RecipesService {
         const desc = await this.recipeImageRepository.create(recipeDesc);
         await this.recipeImageRepository.save(desc);
     }
-    async updateRecipeIngredientId(ingredientId, recipeId) {
+    async updateRecipeIngredientId(ingredientIds, recipeId) {
         const ingredients = await this.recipeIngredientRepository.find({
             where: { recipeId },
         });
-        if (ingredients.length !== ingredientId.length) {
+        if (ingredients.length !== ingredientIds.length) {
             await this.recipeIngredientRepository.delete({ recipeId });
-            await this.createRecipeIngredientId(ingredientId, recipeId);
+            await this.createRecipeIngredientId(ingredientIds, recipeId);
         }
         else {
             for (let i = 0; i < ingredients.length; i++) {
-                ingredients[i].ingredientId = ingredientId[i];
+                ingredients[i].ingredientId = ingredientIds[i];
             }
             await this.recipeIngredientRepository.save(ingredients);
         }
@@ -329,20 +250,23 @@ let RecipesService = class RecipesService {
         await this.recipeImageRepository.save(descs);
     }
 };
+__decorate([
+    (0, typeorm_transactional_cls_hooked_1.Transactional)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [update_recipe_req_dto_1.UpdateRecipeReqDto]),
+    __metadata("design:returntype", Promise)
+], RecipesService.prototype, "updateRecipe", null);
 RecipesService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(recipe_entity_1.Recipe)),
     __param(1, (0, typeorm_1.InjectRepository)(recipe_ingredient_entity_1.RecipeIngredient)),
     __param(2, (0, typeorm_1.InjectRepository)(recipe_image_entity_1.RecipeImage)),
     __param(3, (0, typeorm_1.InjectRepository)(recipe_reaction_entity_1.RecipeReaction)),
-    __param(4, (0, typeorm_1.InjectRepository)(ingredient_entity_1.Ingredient)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
         typeorm_2.Repository,
         typeorm_2.Repository,
         typeorm_2.Repository,
-        typeorm_2.Repository,
-        image_service_1.ImageService,
-        comments_service_1.CommentsService])
+        image_service_1.ImageService])
 ], RecipesService);
 exports.RecipesService = RecipesService;
 //# sourceMappingURL=recipes.service.js.map

@@ -16,6 +16,7 @@ class RecipeIdPathReqDto {
 }
 __decorate([
     (0, swagger_1.ApiProperty)(),
+    (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], RecipeIdPathReqDto.prototype, "recipeId", void 0);

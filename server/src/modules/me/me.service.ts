@@ -10,7 +10,7 @@ import { Bookmark } from '../../entities/bookmark.entity';
 import { Recipe } from 'src/entities/recipe.entity';
 import { SeeUserResDto } from './dto/response-dto/see-user.res.dto';
 import { errorHandler, formUrlEncoded, statusMessage } from 'src/common/utils';
-import { UserDto } from 'src/common/dto/user.dto';
+import { UserDto } from 'src/modules/users/dto/user.dto';
 import { GetMyInfoDto } from './dto/get-myinfo.dto';
 import { GenerateResponseDto, ResponseDto } from 'src/common/dto/response.dto';
 

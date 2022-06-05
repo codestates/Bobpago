@@ -7,6 +7,11 @@ export class SeeRecipeResDto extends ResponseDto {
       user: {
         id: 1,
         nickname: '밥파고',
+        profile: null,
+        imageUrl: null,
+        createdAt: '2022-05-31T19:31:12.439Z',
+        updatedAt: '2022-05-31T19:31:12.530Z',
+        deletedAt: null,
       },
       recipe: {
         id: 26,
@@ -42,7 +47,6 @@ export class SeeRecipeResDto extends ResponseDto {
         ],
         recipe_reaction_state: 1,
         recipe_reaciton_count: 3,
-        bookmark_state: false,
       },
       ingredients: {
         main: [
