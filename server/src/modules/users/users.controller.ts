@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { GetUser } from 'src/common/dto/decorator.dto';
-import { User } from 'src/entities/user.entity';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -35,7 +34,7 @@ import { CheckTokenTypeReqDto } from 'src/common/dto/check-token-type.dto';
 import { SeeOtherUserReqDto } from './dto/request-dto/see-other-user.req.dto';
 import { HttpExceptionFilter } from 'src/common/exceptions/http-excepotion.filter';
 import { SeeOtherUserResDto } from './dto/response-dto/see-other-user.res.dto';
-import { UserDto } from 'src/common/dto/user.dto';
+import { UserDto } from 'src/modules/users/dto/user.dto';
 import { FollowUserReqDto } from './dto/request-dto/follow-user.req.dto';
 import { GenerateResponseDto, ResponseDto } from 'src/common/dto/response.dto';
 

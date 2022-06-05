@@ -5,7 +5,7 @@ import { RestoreUserReqDto } from './dto/request-dto/restore-user.req.dto';
 import { CheckInfoUserReqDto } from './dto/request-dto/checkInfo-user.req.dto';
 import { SeeUserResDto } from './dto/response-dto/see-user.res.dto';
 import { CheckTokenTypeReqDto } from 'src/common/dto/check-token-type.dto';
-import { UserDto } from 'src/common/dto/user.dto';
+import { UserDto } from 'src/modules/users/dto/user.dto';
 import { GenerateResponseDto, ResponseDto } from 'src/common/dto/response.dto';
 import { RecipeIdPathReqDto } from '../recipes/dto/request-dto/recipe-id-path.req.dto';
 import { CreateBookmarkReqDto } from './dto/request-dto/create-bookmark.req.dto';

@@ -21,18 +21,17 @@ const swagger_1 = require("@nestjs/swagger");
 const update_recipe_req_dto_1 = require("./dto/request-dto/update-recipe.req.dto");
 const http_exception_dto_1 = require("../../common/dto/http-exception.dto");
 const create_recipe_res_dto_1 = require("./dto/response-dto/create-recipe.res.dto");
-const update_recipe_res_dto_1 = require("./dto/response-dto/update-recipe.res.dto");
-const delete_recipe_res_dto_1 = require("./dto/response-dto/delete-recipe.res.dto");
-const create_recipe_reaction_res_dto_1 = require("./dto/response-dto/create-recipe-reaction.res.dto");
 const see_recipe_res_dto_1 = require("./dto/response-dto/see-recipe.res.dto");
 const match_recipe_res_dto_1 = require("./dto/response-dto/match-recipe.res.dto");
 const match_recipe_req_dto_1 = require("./dto/request-dto/match-recipe.req.dto");
-const delete_recipe_reaction_res_dto_1 = require("./dto/response-dto/delete-recipe-reaction.res.dto");
 const http_excepotion_filter_1 = require("../../common/exceptions/http-excepotion.filter");
 const check_token_type_dto_1 = require("../../common/dto/check-token-type.dto");
-const user_dto_1 = require("../../common/dto/user.dto");
+const user_dto_1 = require("../users/dto/user.dto");
 const recipe_id_path_req_dto_1 = require("./dto/request-dto/recipe-id-path.req.dto");
 const user_id_path_req_dto_1 = require("../auth/dto/request-dto/user-id-path.req.dto");
+const response_dto_1 = require("../../common/dto/response.dto");
+const update_recipe_reaction_req_dto_1 = require("./dto/request-dto/update-recipe-reaction.req.dto");
+const recipe_reaction_res_dto_1 = require("./dto/response-dto/recipe-reaction.res.dto");
 let RecipesController = class RecipesController {
     constructor(recipesService) {
         this.recipesService = recipesService;
@@ -43,17 +42,17 @@ let RecipesController = class RecipesController {
     async findOneRecipe(pathParam, query) {
         return this.recipesService.seeRecipe(pathParam.recipeId, query.userId);
     }
-    async update(updateRecipeDto, recipeId) {
-        return this.recipesService.updateRecipe(updateRecipeDto, +recipeId);
+    async update(body, pathParam) {
+        return this.recipesService.updateRecipe(body);
     }
-    async delete(recipeId) {
-        return this.recipesService.deleteRecipe(+recipeId);
+    async delete(pathParam) {
+        return this.recipesService.deleteRecipe(pathParam.recipeId);
     }
-    async matchRecipes(matchRecipeReqDto) {
-        return this.recipesService.matchRecipes(matchRecipeReqDto);
+    async matchRecipes(body) {
+        return this.recipesService.matchRecipes(body.ingredientId);
     }
-    async updateReaction(userId, recipeId) {
-        return this.recipesService.updateReaction(userId, +recipeId);
+    async updateReaction(user, pathParam, body) {
+        return this.recipesService.updateReaction(user.getId, body.recipeId);
     }
 };
 __decorate([
@@ -88,29 +87,32 @@ __decorate([
 ], RecipesController.prototype, "findOneRecipe", null);
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: '레시피 카드 수정' }),
-    (0, swagger_1.ApiQuery)({ name: 'tokenType', required: true }),
-    (0, swagger_1.ApiParam)({ name: 'recipeId', required: true }),
-    (0, swagger_1.ApiResponse)({ status: 200, type: update_recipe_res_dto_1.UpdateRecipeResDto }),
-    (0, swagger_1.ApiUnauthorizedResponse)({ type: http_exception_dto_1.UnauthorizedErrorRes }),
+    (0, swagger_1.ApiQuery)({ type: check_token_type_dto_1.CheckTokenTypeReqDto }),
+    (0, swagger_1.ApiResponse)({ status: 200, type: response_dto_1.ResponseDto }),
     (0, swagger_1.ApiBadRequestResponse)({ type: http_exception_dto_1.BadRequestErrorRes }),
+    (0, swagger_1.ApiUnauthorizedResponse)({ type: http_exception_dto_1.UnauthorizedErrorRes }),
+    (0, swagger_1.ApiNotFoundResponse)({ type: http_exception_dto_1.NotFoundErrorRes }),
+    (0, swagger_1.ApiInternalServerErrorResponse)({ type: http_exception_dto_1.InternalServerErrorRes }),
     (0, common_1.Patch)(':recipeId'),
     __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Param)('recipeId')),
+    __param(1, (0, common_1.Param)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [update_recipe_req_dto_1.UpdateRecipeReqDto, String]),
+    __metadata("design:paramtypes", [update_recipe_req_dto_1.UpdateRecipeReqDto,
+        recipe_id_path_req_dto_1.RecipeIdPathReqDto]),
     __metadata("design:returntype", Promise)
 ], RecipesController.prototype, "update", null);
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: '레시피 카드 삭제' }),
-    (0, swagger_1.ApiQuery)({ name: 'tokenType', required: true }),
-    (0, swagger_1.ApiParam)({ name: 'recipeId', required: true }),
-    (0, swagger_1.ApiResponse)({ status: 200, type: delete_recipe_res_dto_1.DeleteRecipeResDto }),
-    (0, swagger_1.ApiUnauthorizedResponse)({ type: http_exception_dto_1.UnauthorizedErrorRes }),
+    (0, swagger_1.ApiQuery)({ type: check_token_type_dto_1.CheckTokenTypeReqDto }),
+    (0, swagger_1.ApiResponse)({ status: 200, type: response_dto_1.ResponseDto }),
     (0, swagger_1.ApiBadRequestResponse)({ type: http_exception_dto_1.BadRequestErrorRes }),
+    (0, swagger_1.ApiUnauthorizedResponse)({ type: http_exception_dto_1.UnauthorizedErrorRes }),
+    (0, swagger_1.ApiNotFoundResponse)({ type: http_exception_dto_1.NotFoundErrorRes }),
+    (0, swagger_1.ApiInternalServerErrorResponse)({ type: http_exception_dto_1.InternalServerErrorRes }),
     (0, common_1.Delete)(':recipeId'),
-    __param(0, (0, common_1.Param)('recipeId')),
+    __param(0, (0, common_1.Param)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [recipe_id_path_req_dto_1.RecipeIdPathReqDto]),
     __metadata("design:returntype", Promise)
 ], RecipesController.prototype, "delete", null);
 __decorate([
@@ -125,17 +127,21 @@ __decorate([
 ], RecipesController.prototype, "matchRecipes", null);
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: '레시피 카드 반응 추가 및 삭제' }),
-    (0, swagger_1.ApiQuery)({ name: 'tokenType', required: true }),
-    (0, swagger_1.ApiParam)({ name: 'recipeId', required: true }),
-    (0, swagger_1.ApiResponse)({ status: 201, type: create_recipe_reaction_res_dto_1.CreateRecipeReactionResDto }),
-    (0, swagger_1.ApiResponse)({ status: 200, type: delete_recipe_reaction_res_dto_1.DeleteRecipeReactionResDto }),
-    (0, swagger_1.ApiUnauthorizedResponse)({ type: http_exception_dto_1.UnauthorizedErrorRes }),
+    (0, swagger_1.ApiQuery)({ type: check_token_type_dto_1.CheckTokenTypeReqDto }),
+    (0, swagger_1.ApiResponse)({ status: 200, type: recipe_reaction_res_dto_1.RecipeReactionResDto }),
     (0, swagger_1.ApiBadRequestResponse)({ type: http_exception_dto_1.BadRequestErrorRes }),
+    (0, swagger_1.ApiUnauthorizedResponse)({ type: http_exception_dto_1.UnauthorizedErrorRes }),
+    (0, swagger_1.ApiNotFoundResponse)({ type: http_exception_dto_1.NotFoundErrorRes }),
+    (0, swagger_1.ApiInternalServerErrorResponse)({ type: http_exception_dto_1.InternalServerErrorRes }),
+    (0, common_1.HttpCode)(200),
     (0, common_1.Post)(':recipeId'),
-    __param(0, (0, decorator_dto_1.GetUser)('id')),
-    __param(1, (0, common_1.Param)('recipeId')),
+    __param(0, (0, decorator_dto_1.GetUser)()),
+    __param(1, (0, common_1.Param)()),
+    __param(2, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, String]),
+    __metadata("design:paramtypes", [user_dto_1.UserDto,
+        recipe_id_path_req_dto_1.RecipeIdPathReqDto,
+        update_recipe_reaction_req_dto_1.UpdateRecipeReactionReqDto]),
     __metadata("design:returntype", Promise)
 ], RecipesController.prototype, "updateReaction", null);
 RecipesController = __decorate([

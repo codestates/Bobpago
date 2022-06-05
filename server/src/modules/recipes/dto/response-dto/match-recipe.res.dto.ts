@@ -255,9 +255,4 @@ export class MatchRecipeResDto extends ResponseDto {
     ],
   })
   data: any;
-
-  @ApiProperty({
-    example: '레시피 매칭이 완료되었습니다.',
-  })
-  message: string;
 }

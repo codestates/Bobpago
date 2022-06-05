@@ -5,7 +5,7 @@ import { UpdateUserReqDto } from './dto/request-dto/update-user.req.dto';
 import { Bookmark } from '../../entities/bookmark.entity';
 import { Recipe } from 'src/entities/recipe.entity';
 import { SeeUserResDto } from './dto/response-dto/see-user.res.dto';
-import { UserDto } from 'src/common/dto/user.dto';
+import { UserDto } from 'src/modules/users/dto/user.dto';
 import { GenerateResponseDto, ResponseDto } from 'src/common/dto/response.dto';
 export declare class MeService {
     private usersRepository;

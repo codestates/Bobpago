@@ -14,7 +14,6 @@ import {
 import { MeService } from './me.service';
 import { CreateUserReqDto } from './dto/request-dto/create-user.req.dto';
 import { GetUser } from 'src/common/dto/decorator.dto';
-import { User } from 'src/entities/user.entity';
 import { UpdateUserReqDto } from './dto/request-dto/update-user.req.dto';
 import {
   ApiBadRequestResponse,
@@ -40,7 +39,7 @@ import { CheckInfoUserReqDto } from './dto/request-dto/checkInfo-user.req.dto';
 import { SeeUserResDto } from './dto/response-dto/see-user.res.dto';
 import { CheckTokenTypeReqDto } from 'src/common/dto/check-token-type.dto';
 import { HttpExceptionFilter } from 'src/common/exceptions/http-excepotion.filter';
-import { UserDto } from 'src/common/dto/user.dto';
+import { UserDto } from 'src/modules/users/dto/user.dto';
 import { GenerateResponseDto, ResponseDto } from 'src/common/dto/response.dto';
 import { RecipeIdPathReqDto } from '../recipes/dto/request-dto/recipe-id-path.req.dto';
 import { CreateBookmarkReqDto } from './dto/request-dto/create-bookmark.req.dto';

@@ -21,7 +21,7 @@ const bcrypt = require("bcryptjs");
 const jwt_1 = require("@nestjs/jwt");
 const axios_1 = require("axios");
 const utils_1 = require("../../common/utils");
-const user_dto_1 = require("../../common/dto/user.dto");
+const user_dto_1 = require("../users/dto/user.dto");
 const response_dto_1 = require("../../common/dto/response.dto");
 let AuthService = class AuthService {
     constructor(usersRepository, jwtService) {

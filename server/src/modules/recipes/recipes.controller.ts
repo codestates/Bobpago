@@ -8,6 +8,7 @@ import {
   Query,
   Get,
   UseFilters,
+  HttpCode,
 } from '@nestjs/common';
 import { RecipesService } from './recipes.service';
 import { CreateRecipeReqDto } from './dto/request-dto/create-recipe.req.dto';
@@ -18,7 +19,6 @@ import {
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
   ApiOperation,
-  ApiParam,
   ApiQuery,
   ApiResponse,
   ApiTags,
@@ -32,18 +32,18 @@ import {
   UnauthorizedErrorRes,
 } from 'src/common/dto/http-exception.dto';
 import { CreateRecipeResDto } from './dto/response-dto/create-recipe.res.dto';
-import { UpdateRecipeResDto } from './dto/response-dto/update-recipe.res.dto';
-import { DeleteRecipeResDto } from './dto/response-dto/delete-recipe.res.dto';
-import { CreateRecipeReactionResDto } from './dto/response-dto/create-recipe-reaction.res.dto';
 import { SeeRecipeResDto } from './dto/response-dto/see-recipe.res.dto';
 import { MatchRecipeResDto } from './dto/response-dto/match-recipe.res.dto';
 import { MatchRecipeReqDto } from './dto/request-dto/match-recipe.req.dto';
-import { DeleteRecipeReactionResDto } from './dto/response-dto/delete-recipe-reaction.res.dto';
 import { HttpExceptionFilter } from 'src/common/exceptions/http-excepotion.filter';
 import { CheckTokenTypeReqDto } from 'src/common/dto/check-token-type.dto';
-import { UserDto } from 'src/common/dto/user.dto';
+import { UserDto } from 'src/modules/users/dto/user.dto';
 import { RecipeIdPathReqDto } from './dto/request-dto/recipe-id-path.req.dto';
 import { UserIdPathReqDto } from '../auth/dto/request-dto/user-id-path.req.dto';
+import { ResponseDto } from 'src/common/dto/response.dto';
+import { UpdateRecipeReactionReqDto } from './dto/request-dto/update-recipe-reaction.req.dto';
+import { RecipeReactionResDto } from './dto/response-dto/recipe-reaction.res.dto';
+import { UpdateRecipeResDto } from './dto/response-dto/update-recipe.res.dto';
 
 @ApiTags('Recipe')
 @ApiBearerAuth('AccessToken')
@@ -81,30 +81,30 @@ export class RecipesController {
   }
 
   @ApiOperation({ summary: '레시피 카드 수정' })
-  @ApiQuery({ name: 'tokenType', required: true })
-  @ApiParam({ name: 'recipeId', required: true })
-  @ApiResponse({ status: 200, type: UpdateRecipeResDto })
-  @ApiUnauthorizedResponse({ type: UnauthorizedErrorRes })
+  @ApiQuery({ type: CheckTokenTypeReqDto })
+  @ApiResponse({ status: 200, type: ResponseDto })
   @ApiBadRequestResponse({ type: BadRequestErrorRes })
+  @ApiUnauthorizedResponse({ type: UnauthorizedErrorRes })
+  @ApiNotFoundResponse({ type: NotFoundErrorRes })
+  @ApiInternalServerErrorResponse({ type: InternalServerErrorRes })
   @Patch(':recipeId')
   async update(
-    @Body() updateRecipeDto: UpdateRecipeReqDto,
-    @Param('recipeId') recipeId: string,
+    @Body() body: UpdateRecipeReqDto,
+    @Param() pathParam: RecipeIdPathReqDto,
   ): Promise<UpdateRecipeResDto> {
-    return this.recipesService.updateRecipe(updateRecipeDto, +recipeId);
+    return this.recipesService.updateRecipe(body);
   }
 
   @ApiOperation({ summary: '레시피 카드 삭제' })
-  @ApiQuery({ name: 'tokenType', required: true })
-  @ApiParam({ name: 'recipeId', required: true })
-  @ApiResponse({ status: 200, type: DeleteRecipeResDto })
-  @ApiUnauthorizedResponse({ type: UnauthorizedErrorRes })
+  @ApiQuery({ type: CheckTokenTypeReqDto })
+  @ApiResponse({ status: 200, type: ResponseDto })
   @ApiBadRequestResponse({ type: BadRequestErrorRes })
+  @ApiUnauthorizedResponse({ type: UnauthorizedErrorRes })
+  @ApiNotFoundResponse({ type: NotFoundErrorRes })
+  @ApiInternalServerErrorResponse({ type: InternalServerErrorRes })
   @Delete(':recipeId')
-  async delete(
-    @Param('recipeId') recipeId: string,
-  ): Promise<DeleteRecipeResDto> {
-    return this.recipesService.deleteRecipe(+recipeId);
+  async delete(@Param() pathParam: RecipeIdPathReqDto): Promise<ResponseDto> {
+    return this.recipesService.deleteRecipe(pathParam.recipeId);
   }
 
   @ApiOperation({ summary: '레시피 카드 매칭' })
@@ -112,23 +112,25 @@ export class RecipesController {
   @ApiBadRequestResponse({ type: BadRequestErrorRes })
   @Post('match')
   async matchRecipes(
-    @Body() matchRecipeReqDto: MatchRecipeReqDto,
+    @Body() body: MatchRecipeReqDto,
   ): Promise<MatchRecipeResDto> {
-    return this.recipesService.matchRecipes(matchRecipeReqDto);
+    return this.recipesService.matchRecipes(body.ingredientId);
   }
 
   @ApiOperation({ summary: '레시피 카드 반응 추가 및 삭제' })
-  @ApiQuery({ name: 'tokenType', required: true })
-  @ApiParam({ name: 'recipeId', required: true })
-  @ApiResponse({ status: 201, type: CreateRecipeReactionResDto })
-  @ApiResponse({ status: 200, type: DeleteRecipeReactionResDto })
-  @ApiUnauthorizedResponse({ type: UnauthorizedErrorRes })
+  @ApiQuery({ type: CheckTokenTypeReqDto })
+  @ApiResponse({ status: 200, type: RecipeReactionResDto })
   @ApiBadRequestResponse({ type: BadRequestErrorRes })
+  @ApiUnauthorizedResponse({ type: UnauthorizedErrorRes })
+  @ApiNotFoundResponse({ type: NotFoundErrorRes })
+  @ApiInternalServerErrorResponse({ type: InternalServerErrorRes })
+  @HttpCode(200)
   @Post(':recipeId')
   async updateReaction(
-    @GetUser('id') userId: number,
-    @Param('recipeId') recipeId: string,
-  ): Promise<CreateRecipeReactionResDto> {
-    return this.recipesService.updateReaction(userId, +recipeId);
+    @GetUser() user: UserDto,
+    @Param() pathParam: RecipeIdPathReqDto,
+    @Body() body: UpdateRecipeReactionReqDto,
+  ): Promise<RecipeReactionResDto> {
+    return this.recipesService.updateReaction(user.getId, body.recipeId);
   }
 }

@@ -1,25 +1,27 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateRecipeReqDto } from './dto/request-dto/create-recipe.req.dto';
 import { UpdateRecipeReqDto } from './dto/request-dto/update-recipe.req.dto';
 import { Recipe } from '../../entities/recipe.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../../entities/user.entity';
 import { Repository } from 'typeorm';
 import { RecipeIngredient } from '../../entities/recipe-ingredient.entity';
 import { RecipeImage } from '../../entities/recipe-image.entity';
 import { RecipeReaction } from 'src/entities/recipe-reaction.entity';
 import { ImageService } from '../image/image.service';
-import { CommentsService } from '../comments/comments.service';
-import { Ingredient } from 'src/entities/ingredient.entity';
 import { CreateRecipeResDto } from './dto/response-dto/create-recipe.res.dto';
-import { UpdateRecipeResDto } from './dto/response-dto/update-recipe.res.dto';
-import { DeleteRecipeResDto } from './dto/response-dto/delete-recipe.res.dto';
-import { CreateRecipeReactionResDto } from './dto/response-dto/create-recipe-reaction.res.dto';
+import { RecipeReactionResDto } from './dto/response-dto/recipe-reaction.res.dto';
 import { SeeRecipeResDto } from './dto/response-dto/see-recipe.res.dto';
 import { MatchRecipeResDto } from './dto/response-dto/match-recipe.res.dto';
-import { MatchRecipeReqDto } from './dto/request-dto/match-recipe.req.dto';
 import { errorHandler, statusMessage } from 'src/common/utils';
-import { UserDto } from 'src/common/dto/user.dto';
+import { UserDto } from 'src/modules/users/dto/user.dto';
+import { GetRecipeDto } from './dto/get-recipe.dto';
+import { Transactional } from 'typeorm-transactional-cls-hooked';
+import { ResponseDto } from 'src/common/dto/response.dto';
+import { UpdateRecipeResDto } from './dto/response-dto/update-recipe.res.dto';
+import { RecipeImageDto } from 'src/modules/recipes/dto/recipe-image.dto';
+import { GetRecipeMatchDto } from './dto/get-recipe-match.dto';
+import { RecipeIngredientDto } from './dto/recipe-ingredient.dto';
+import { RecipeReactionDto } from './dto/recipe-reaction.dto';
 
 @Injectable()
 export class RecipesService {
@@ -32,10 +34,7 @@ export class RecipesService {
     private recipeImageRepository: Repository<RecipeImage>,
     @InjectRepository(RecipeReaction)
     private recipeReactionRepository: Repository<RecipeReaction>,
-    @InjectRepository(Ingredient)
-    private ingredientRepository: Repository<Ingredient>,
     private readonly imageService: ImageService,
-    private readonly commentsService: CommentsService,
   ) {}
 
   async createRecipe(
@@ -80,61 +79,37 @@ export class RecipesService {
         .leftJoinAndSelect('recipe.user', 'user')
         .leftJoinAndSelect('recipe.recipeImages', 'recipeImages')
         .leftJoinAndSelect('recipe.recipeReactions', 'recipeReactions')
+        .leftJoinAndSelect('recipe.recipeIngredients', 'recipeIngredients')
+        .leftJoinAndSelect('recipeIngredients.ingredient', 'ingredients')
         .where('recipe.id = :id', { id: recipeId })
         .getOne();
-
       if (!recipeData) throw 404;
 
-      console.log(recipeData);
+      const {
+        __recipeImages__,
+        __recipeIngredients__,
+        __recipeReactions__,
+      }: any = recipeData;
 
-      const { user, userId, recipeImages, recipeReactions, ...recipe } =
-        recipeData;
+      const recipeIngredient = new RecipeIngredientDto(__recipeIngredients__);
+      const recipeReaction = new RecipeReactionDto(
+        __recipeReactions__,
+        reactionUserId,
+      );
+      const recipeImage = new RecipeImageDto(__recipeImages__);
+
+      const result = new GetRecipeDto(
+        recipeData,
+        recipeIngredient.getIngredients,
+        recipeReaction.getCount,
+        recipeReaction.getState,
+        recipeImage.getImageUrls,
+        recipeImage.getDescriptions,
+      );
+
       await this.recipeRepository.update(recipeId, {
-        views: recipe.views + 1,
+        views: recipeData.views + 1,
       });
-
-      const [imageUrls, descriptions] = [[], []];
-      recipeImages.forEach((el) => {
-        imageUrls.push(el.imageUrl);
-        descriptions.push(el.description);
-      });
-
-      const recipeIngredients = await this.recipeIngredientRepository.find({
-        relations: ['ingredient'],
-        where: { recipeId },
-      });
-
-      const ingredients = recipeIngredients.map((el) => {
-        return el.ingredient;
-      });
-
-      const reactionData = await this.recipeReactionRepository.findOne({
-        recipeId,
-        userId: reactionUserId,
-      });
-
-      let reactionState;
-      if (reactionData) {
-        reactionState = 1;
-      } else {
-        reactionState = 0;
-      }
-
-      const result = {
-        user: { id: user.id, nickname: user.nickname },
-        recipe: {
-          ...recipe,
-          imageUrls,
-          descriptions,
-          recipe_reaction_state: reactionState,
-          recipe_reaciton_count: recipeReactions.length,
-          bookmark_state: false,
-        },
-        ingredients: {
-          main: ingredients.filter((el) => el.type === 'main'),
-          sub: ingredients.filter((el) => el.type === 'sub'),
-        },
-      };
 
       return {
         data: result,
@@ -146,16 +121,24 @@ export class RecipesService {
     }
   }
 
-  async updateRecipe(
-    updateRecipeDto: UpdateRecipeReqDto,
-    recipeId: number,
-  ): Promise<UpdateRecipeResDto> {
-    const { title, level, amount, estTime, ingredientId, description } =
-      updateRecipeDto;
-
-    const targetRecipe = await this.recipeRepository.findOne({ id: recipeId });
+  @Transactional()
+  async updateRecipe(params: UpdateRecipeReqDto): Promise<UpdateRecipeResDto> {
+    const {
+      recipeId,
+      title,
+      level,
+      amount,
+      estTime,
+      ingredientId,
+      description,
+    } = params;
 
     try {
+      const targetRecipe = await this.recipeRepository.findOne({
+        id: recipeId,
+      });
+      if (!targetRecipe) throw 404;
+
       // 레시피 테이블 수정
       await this.recipeRepository.update(recipeId, {
         title: title || targetRecipe.title,
@@ -171,16 +154,16 @@ export class RecipesService {
       await this.updateRecipeDesc(description, recipeId);
 
       return {
-        data: { recipeId },
+        data: null,
         statusCode: 200,
-        message: '레시피 수정이 완료되었습니다.',
+        message: statusMessage[200],
       };
-    } catch (e) {
-      throw new BadRequestException('레시피 수정에 실패하였습니다.');
+    } catch (err) {
+      throw new errorHandler[errorHandler[err] ? err : 500]();
     }
   }
 
-  async deleteRecipe(recipeId: number): Promise<DeleteRecipeResDto> {
+  async deleteRecipe(recipeId: number): Promise<ResponseDto> {
     try {
       // 1. AWS S3에서 이미지 객체 삭제
       await this.imageService.deleteById(recipeId, 'recipe');
@@ -194,153 +177,95 @@ export class RecipesService {
       return {
         data: null,
         statusCode: 200,
-        message: '레시피 삭제가 완료되었습니다.',
+        message: statusMessage[200],
       };
-    } catch (e) {
-      throw new BadRequestException('레시피 삭제에 실패하였습니다.');
+    } catch (err) {
+      throw new errorHandler[errorHandler[err] ? err : 500]();
     }
   }
 
-  async matchRecipes(
-    matchRecipeReqDto: MatchRecipeReqDto,
-  ): Promise<MatchRecipeResDto> {
+  async matchRecipes(ingredientIds: number[]): Promise<MatchRecipeResDto> {
     try {
-      // 0. 메인 재료만 뽑아내기 위해 재료정보 탐색하여 'main'만 필터 진행
-      const ingredientsInfo = await this.ingredientRepository.find({
-        where: matchRecipeReqDto.ingredientId.map((id) => {
-          return { id };
-        }),
-      });
-      const mainIngredients = ingredientsInfo.filter(
-        (el) => el.type === 'main',
-      );
+      // 1. recipeIngredients 테이블에서 main 타입의 ingredientId를 가진 레시피만 탐색
+      // 2. recipeIngredients.recipeId 기준으로 그룹핑하고, 그 중에 recipeId 카운트 수가 높은 것, 그 다음 views 수가 높은 순서로 정렬 적용
+      // 3. 20개까지만 데이터 제한
+      const recipeIngredients: any = await this.recipeIngredientRepository
+        .createQueryBuilder('recipeIngredients')
+        .leftJoinAndSelect('recipeIngredients.recipe', 'recipe')
+        .leftJoinAndSelect('recipe.user', 'user')
+        .addSelect('COUNT(recipeIngredients.recipeId)', 'recipeIdCount')
+        .groupBy('recipeIngredients.recipeId')
+        .orderBy('recipeIdCount', 'DESC')
+        .addOrderBy('recipe.views', 'DESC')
+        .limit(20)
+        .orWhere(
+          ingredientIds
+            .filter((el) => el < 100)
+            .map((el) => {
+              return { ingredientId: el };
+            }),
+        )
+        .getMany();
 
-      // 1. 재료에 해당되는 recipeIngredient 전부 조회
-      const recipeIngredients = await this.recipeIngredientRepository.find({
-        relations: ['recipe'],
-        where: mainIngredients.map((el) => {
-          return { ingredientId: el.id };
-        }),
-      });
+      // 4. 위에서는 그룹핑 때문에 함께 조인할 수 없었던 문제가 있었음. 그래서 아직 각 recipe에 필요한 정보를 더 뽑아내기 위해 추가 쿼리 날림.
+      // 위에서 뽑아낸 20개의 레시피에 한해서만 데이터 추출
+      const recipes = await this.recipeRepository
+        .createQueryBuilder('recipe')
+        .leftJoinAndSelect('recipe.recipeIngredients', 'recipeIngredients')
+        .leftJoinAndSelect('recipe.recipeReactions', 'recipeReactions')
+        .leftJoinAndSelect('recipeIngredients.ingredient', 'ingredient')
+        .orWhere(
+          recipeIngredients.map((el) => {
+            return { id: el.recipeId };
+          }),
+        )
+        .getMany();
 
-      // 2. 조회된 recipeId 번호의 개수를 카운트하여, recipeId를 각각 키로하여 객체에 저장
-      // 동시에 views도 객체에 저장
-      const recipeInfo = {};
-      recipeIngredients.forEach((el) => {
-        const recipeId = el.recipeId;
-        const views = el.recipe.views;
-        if (recipeInfo[recipeId] === undefined) {
-          recipeInfo[recipeId] = [1, views];
-        } else {
-          ++recipeInfo[recipeId][0];
-        }
-      });
-
-      // 3. 카운트 수가 높은 순서대로 내림차순 정렬, but 같으면 views 순으로 정렬
-      // 그리고 데이터를 다시 레시피 id 값만 남겨서 재가공
-      const recipe_DESC = Object.entries(recipeInfo)
-        .map((el) => [+el[0], el[1][0], el[1][1]])
-        .sort((a: number[], b: number[]) => {
-          if (b[1] > a[1]) {
-            return 1;
-          } else if (b[1] < a[1]) {
-            return -1;
-          } else if (b[1] === a[1]) {
-            return b[2] - a[2];
-          }
-        })
-        .map((el: number[]) => {
-          return { id: el[0] };
-        });
-
-      // 4. 3번에서 가공된 정렬 순서에 맞게 레시피 데이터 조회
-      // + 유저 정보도 조인해서 조회
-      const recipeData = await this.recipeRepository.find({
-        relations: ['user', 'recipeReactions'],
-        where: recipe_DESC,
+      // 5. 뽑아낸 데이터 합치기
+      const recipeConcatData = recipeIngredients.map((el) => {
+        const idx = recipes.findIndex((el2) => el.recipeId === el2.id);
+        const temp: any = recipes.splice(idx, 1);
+        el.recipeIngredients = temp[0].__recipeIngredients__;
+        el.recipeReactions = temp[0].__recipeReactions__;
+        return el;
       });
 
-      // 5. recipeIngredient 테이블에서 각 recipe 아이디에 부합하는 ingredient를 조회하기 위한 목적
-      const recipeIngredientData = await this.recipeIngredientRepository.find({
-        relations: ['ingredient'],
-        where: recipe_DESC.map((el) => {
-          return { recipeId: el.id };
-        }),
-      });
-
-      // 6. 조회된 ingredient 데이터를 각 recipe 아이디에 맞게 배열 형태로 객체에 저장하는 작업
-      const ingredientInfo = {};
-      recipeIngredientData.forEach((el) => {
-        if (ingredientInfo[el.recipeId] === undefined) {
-          ingredientInfo[el.recipeId] = [el.ingredient];
-        } else {
-          ingredientInfo[el.recipeId].push(el.ingredient);
-        }
-      });
-
-      // 7. 4번에서 완성해둔 recipeData를 map으로 가공하여 ingredient 배열 삽입(메인, 서브 재료 나누기도 진행)
-      // 6번을 통해 이미 ingredientInfo에 각 recipe 아이디에 맞는 ingredient 배열이 완성되어 있음. 이를 활용한 것
-      const result = recipeData.map((el) => {
-        const temp = {
-          id: el.user ? el.user.id : 0,
-          nickname: el.user ? el.user.nickname : '탈퇴한 회원',
-        };
-        const reactions = el.recipeReactions;
-        delete el.userId;
-        delete el.user;
-        delete el.recipeReactions;
-        return {
-          user: { ...temp },
-          recipe: {
-            ...el,
-            recipe_reaciton_count: reactions.length,
-            bookmark_state: false,
-          },
-          ingredients: {
-            main: ingredientInfo[el.id].filter((ele) => ele.type === 'main'),
-            sub: ingredientInfo[el.id].filter((ele) => ele.type === 'sub'),
-          },
-        };
-      });
-
-      const resultSort = [];
-      recipe_DESC.forEach((el) => {
-        const recipe = result.find((recipe) => el.id === recipe.recipe.id);
-        resultSort.push(recipe);
-      });
+      // 6. 요구사항에 맞춰 데이터 전송 형태 핸들링
+      const result = new GetRecipeMatchDto(recipeConcatData);
 
       return {
-        data: resultSort.filter((el, idx) => idx < 20),
+        data: result.getRecipes,
         statusCode: 200,
-        message: '레시피 매칭이 완료되었습니다.',
+        message: statusMessage[200],
       };
     } catch (err) {
-      throw new BadRequestException('레시피 매칭에 실패하였습니다.');
+      throw new errorHandler[errorHandler[err] ? err : 500]();
     }
   }
 
   async updateReaction(
     userId: number,
     recipeId: number,
-  ): Promise<CreateRecipeReactionResDto> {
-    const reactionData = await this.recipeReactionRepository.findOne({
-      recipeId,
-      userId,
-    });
-
-    if (!reactionData) {
-      await this.recipeReactionRepository.save({
-        userId,
+  ): Promise<RecipeReactionResDto> {
+    try {
+      const reactionData = await this.recipeReactionRepository.findOne({
         recipeId,
+        userId,
       });
-      return {
-        data: {
-          reaction_state: 1,
-        },
-        statusCode: 200,
-        message: '레시피 좋아요가 추가되었습니다.',
-      };
-    } else if (reactionData) {
+      if (!reactionData) {
+        await this.recipeReactionRepository.save({
+          userId,
+          recipeId,
+        });
+        return {
+          data: {
+            reaction_state: 1,
+          },
+          statusCode: 200,
+          message: statusMessage[200],
+        };
+      }
+
       await this.recipeReactionRepository.delete({
         userId,
         recipeId,
@@ -350,16 +275,20 @@ export class RecipesService {
           reaction_state: 0,
         },
         statusCode: 200,
-        message: '레시피 좋아요가 삭제되었습니다.',
+        message: statusMessage[200],
       };
-    } else {
-      throw new BadRequestException('레시피 업데이트에 실패하였습니다.');
+    } catch (err) {
+      throw new errorHandler[errorHandler[err] ? err : 500]();
     }
   }
 
-  // 아래는 해당 서비스에서만 쓰이는 private 함수들
-  private async createRecipeIngredientId(ingredientId, recipeId) {
-    const recipeIngredientId = ingredientId.map((id) => {
+  //
+  // 아래부터는 이 서비스 객체에서만 쓰이는 private 함수들
+  private async createRecipeIngredientId(
+    ingredientIds: number[],
+    recipeId: number,
+  ) {
+    const recipeIngredientId = ingredientIds.map((id) => {
       return { ingredientId: id, recipeId };
     });
     const entities = await this.recipeIngredientRepository.create(
@@ -376,20 +305,23 @@ export class RecipesService {
     await this.recipeImageRepository.save(desc);
   }
 
-  private async updateRecipeIngredientId(ingredientId, recipeId) {
+  private async updateRecipeIngredientId(
+    ingredientIds: number[],
+    recipeId: number,
+  ) {
     const ingredients = await this.recipeIngredientRepository.find({
       where: { recipeId },
     });
     // 기존에 갖고있던 재료 길이와 수정된 재료의 길이가 일치 하지 않는 경우
-    if (ingredients.length !== ingredientId.length) {
+    if (ingredients.length !== ingredientIds.length) {
       // 테이블에 있던 기존 데이터는 삭제한다
       await this.recipeIngredientRepository.delete({ recipeId });
 
       // 새롭게 재료 id를 레시피 id 기준으로 추가해준다
-      await this.createRecipeIngredientId(ingredientId, recipeId);
+      await this.createRecipeIngredientId(ingredientIds, recipeId);
     } else {
       for (let i = 0; i < ingredients.length; i++) {
-        ingredients[i].ingredientId = ingredientId[i];
+        ingredients[i].ingredientId = ingredientIds[i];
       }
       await this.recipeIngredientRepository.save(ingredients);
     }

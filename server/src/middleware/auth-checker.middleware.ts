@@ -5,7 +5,7 @@ import axios from 'axios';
 import { NextFunction, Request, Response } from 'express';
 import { errorHandler } from 'src/common/utils';
 import { User } from 'src/entities/user.entity';
-import { UserDto } from 'src/common/dto/user.dto';
+import { UserDto } from 'src/modules/users/dto/user.dto';
 import { Repository } from 'typeorm';
 
 @Injectable()

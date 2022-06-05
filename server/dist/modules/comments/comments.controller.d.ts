@@ -3,7 +3,7 @@ import { CreateCommentReqDto } from './dto/request-dto/create-comment.req.dto';
 import { UpdateCommentReqDto } from './dto/request-dto/update-comment.req.dto';
 import { SeeCommentResDto } from './dto/response-dto/see-comment.res.dto';
 import { CommentReactionResDto } from './dto/response-dto/comment-reaction.res.dto';
-import { UserDto } from 'src/common/dto/user.dto';
+import { UserDto } from 'src/modules/users/dto/user.dto';
 import { CommentAndRecipeIdPathReqDto } from './dto/request-dto/comment-recipe-id-path.req.dto';
 import { RecipeIdPathReqDto } from '../recipes/dto/request-dto/recipe-id-path.req.dto';
 import { CommentReactionReqDto } from './dto/request-dto/comment-reaction.req.dto';

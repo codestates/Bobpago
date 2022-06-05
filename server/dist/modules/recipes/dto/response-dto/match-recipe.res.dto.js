@@ -269,11 +269,5 @@ __decorate([
     }),
     __metadata("design:type", Object)
 ], MatchRecipeResDto.prototype, "data", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        example: '레시피 매칭이 완료되었습니다.',
-    }),
-    __metadata("design:type", String)
-], MatchRecipeResDto.prototype, "message", void 0);
 exports.MatchRecipeResDto = MatchRecipeResDto;
 //# sourceMappingURL=match-recipe.res.dto.js.map

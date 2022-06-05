@@ -22,11 +22,5 @@ __decorate([
     }),
     __metadata("design:type", Object)
 ], UpdateRecipeResDto.prototype, "data", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        example: '레시피 수정이 완료되었습니다.',
-    }),
-    __metadata("design:type", String)
-], UpdateRecipeResDto.prototype, "message", void 0);
 exports.UpdateRecipeResDto = UpdateRecipeResDto;
 //# sourceMappingURL=update-recipe.res.dto.js.map

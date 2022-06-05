@@ -22,4 +22,8 @@ export class RecipeDto {
     this.createdAt = entity.createdAt;
     this.updatedAt = entity.updatedAt;
   }
+
+  public addViews() {
+    this.views = ++this.views;
+  }
 }

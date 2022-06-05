@@ -3,7 +3,7 @@ import { SeeFollowerResDto } from './dto/response-dto/see-follower-res.dto';
 import { SeeFolloweeResDto } from './dto/response-dto/see-followee-res.dto';
 import { SeeOtherUserReqDto } from './dto/request-dto/see-other-user.req.dto';
 import { SeeOtherUserResDto } from './dto/response-dto/see-other-user.res.dto';
-import { UserDto } from 'src/common/dto/user.dto';
+import { UserDto } from 'src/modules/users/dto/user.dto';
 import { FollowUserReqDto } from './dto/request-dto/follow-user.req.dto';
 import { GenerateResponseDto, ResponseDto } from 'src/common/dto/response.dto';
 export declare class UsersController {
