@@ -38,13 +38,13 @@ export class AuthService {
       if (!checkPassword || !user) throw 404;
 
       const payload = { email };
-      // refresh 토큰은 생성해서 db에 저장
+      // refresh 토큰은 생성해서 쿠키에 저장
       const refreshToken = await this.jwtService.sign(payload, {
         secret: process.env.REFRESH_TOKEN_SECRET,
         expiresIn: process.env.REFRESH_TOKEN_EXPIRATION_TIME,
       });
-
       res.cookie('refreshToken', refreshToken);
+
       const result = new UserDto(user); // 필요한 필드만 필터
       const accessToken = await this.jwtService.sign(payload); // access 토큰은 생성해서 반환
 

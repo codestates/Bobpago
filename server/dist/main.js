@@ -12,11 +12,7 @@ async function bootstrap() {
     (0, typeorm_transactional_cls_hooked_1.initializeTransactionalContext)();
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.enableCors({
-        origin: [
-            `${process.env.CLIENT_URL}`,
-            'https://www.bobpago.com',
-            'http://localhost:3001',
-        ],
+        origin: [`${process.env.CLIENT_URL}`, 'https://www.bobpago.com'],
         credentials: true,
     });
     app.use(cookieParser());

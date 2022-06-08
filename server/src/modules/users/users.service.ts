@@ -19,8 +19,6 @@ export class UsersService {
     private usersRepository: Repository<User>,
     @InjectRepository(Follow)
     private followRepository: Repository<Follow>,
-    @InjectRepository(Recipe)
-    private recipeRepository: Repository<Recipe>,
   ) {}
 
   async getUserInfo(userId: number): Promise<SeeOtherUserResDto> {

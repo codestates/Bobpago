@@ -88,7 +88,7 @@ let MeService = class MeService {
             return {
                 data: params,
                 statusCode: 200,
-                message: `내 정보 수정에 성공하였습니다.`,
+                message: utils_1.statusMessage[200],
             };
         }
         catch (err) {
@@ -206,7 +206,7 @@ let MeService = class MeService {
             return {
                 data: null,
                 statusCode: 200,
-                message: '북마크가 삭제 되었습니다.',
+                message: utils_1.statusMessage[200],
             };
         }
         catch (err) {
